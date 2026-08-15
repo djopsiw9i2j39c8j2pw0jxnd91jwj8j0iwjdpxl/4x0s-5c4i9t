@@ -1,0 +1,4728 @@
+Players = game:GetService("Players")
+Workspace = game:GetService("Workspace")
+ReplicatedStorage = game:GetService("ReplicatedStorage")
+ServerStorage = game:GetService("ServerStorage")
+RunService = game:GetService("RunService")
+TweenService = game:GetService("TweenService")
+TeleportService = game:GetService("TeleportService")
+UserInputService = game:GetService("UserInputService")
+VirtualUser = game:GetService("VirtualUser")
+ContextActionService = game:GetService("ContextActionService")
+GuiService = game:GetService("GuiService")
+CoreGui = game:GetService("CoreGui")
+HttpService = game:GetService("HttpService")
+SoundService = game:GetService("SoundService")
+Lighting = game:GetService("Lighting")
+PhysicsService = game:GetService("PhysicsService")
+PathfindingService = game:GetService("PathfindingService")
+LocalizationService = game:GetService("LocalizationService")
+Debris = game:GetService("Debris")
+ServerScriptService = game:GetService("ServerScriptService")
+CollectionService = game:GetService("CollectionService")
+
+MapFolder = Workspace:FindFirstChild("Map")
+IngameFolder = MapFolder and MapFolder:FindFirstChild("Ingame")
+TargetMapFolder = IngameFolder and IngameFolder:FindFirstChild("Map")
+killersFolder = Workspace:WaitForChild("Players"):WaitForChild("Killers")
+survivorsFolder = Workspace:WaitForChild("Players"):WaitForChild("Survivors")
+
+localPlayer = Players.LocalPlayer
+PlayerGui = localPlayer:WaitForChild("PlayerGui", 10)
+playerCharacter = localPlayer.Character or localPlayer.CharacterAdded:Wait()
+
+localPlayer.CharacterAdded:Connect(function(character)
+    playerCharacter = character
+end)
+
+Camera = Workspace.CurrentCamera
+
+local WindUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/SLK-GAMING-MOD/WindUI-Mod/refs/heads/main/WindUI-Mod.luau"))()
+
+WindUI:AddTheme({
+    Name = "Dark",
+    Accent = "#18181b",
+    Dialog = "#18181b", 
+    Outline = "#FFFFFF",
+    Text = "#FFFFFF",
+    Placeholder = "#999999",
+    Background = "#0e0e10",
+    Button = "#52525b",
+    Icon = "#a1a1aa",
+})
+
+WindUI:AddTheme({
+    Name = "Light",
+    Accent = "#f4f4f5",
+    Dialog = "#f4f4f5",
+    Outline = "#000000", 
+    Text = "#000000",
+    Placeholder = "#666666",
+    Background = "#ffffff",
+    Button = "#e4e4e7",
+    Icon = "#52525b",
+})
+
+WindUI:AddTheme({
+    Name = "Gray",
+    Accent = "#374151",
+    Dialog = "#374151",
+    Outline = "#d1d5db", 
+    Text = "#f9fafb",
+    Placeholder = "#9ca3af",
+    Background = "#1f2937",
+    Button = "#4b5563",
+    Icon = "#d1d5db",
+})
+
+WindUI:AddTheme({
+    Name = "Blue",
+    Accent = "#1e40af",
+    Dialog = "#1e3a8a",
+    Outline = "#93c5fd", 
+    Text = "#f0f9ff",
+    Placeholder = "#60a5fa",
+    Background = "#1e293b",
+    Button = "#3b82f6",
+    Icon = "#93c5fd",
+})
+
+WindUI:AddTheme({
+    Name = "Green",
+    Accent = "#059669",
+    Dialog = "#047857",
+    Outline = "#6ee7b7", 
+    Text = "#ecfdf5",
+    Placeholder = "#34d399",
+    Background = "#064e3b",
+    Button = "#10b981",
+    Icon = "#6ee7b7",
+})
+
+WindUI:AddTheme({
+    Name = "Purple",
+    Accent = "#7c3aed",
+    Dialog = "#6d28d9",
+    Outline = "#c4b5fd", 
+    Text = "#faf5ff",
+    Placeholder = "#a78bfa",
+    Background = "#581c87",
+    Button = "#8b5cf6",
+    Icon = "#c4b5fd",
+})
+
+WindUI:SetNotificationLower(true)
+
+WindUI:Localization({
+    Enabled = true,
+    Prefix = "loc:",
+    DefaultLanguage = "en",
+    Translations = {
+        en = {
+            HubTitle = "Axos Hub",
+            GameTitle = "Forsaken - By 1Dev Official",
+            Free = "Beta",
+            ThemeChanged = "Theme Changed",
+            TransparencyTitle = "Transparency",
+            TransparencyDisabled = "Transparency disabled",
+            TransparencyEnabled = "Transparency enabled",
+            About = "About",
+            Features = "Features",
+            Gameplay = "Gameplay",
+            System = "System",
+            Misc = "Misc",
+            Items = "Items",
+            Visual = "Visual",
+            Player = "Player",
+            Teleport = "Teleport",
+            Main = "Main",
+            Server = "Server",
+            Shop = "Shop",
+            Stamina = "Stamina",
+            Status = "Status",
+            Information = "Information",
+            Update = "Update",
+            UpdateDesc = "▪︎ Auto Buy Seed\n▪︎ Auto Buy Gear\n▪︎ Auto Sell All\n▪︎ Fix Fire Network:\n+ Auto Harvest\n+ Auto Steal Fruit\n▪︎ Fix Lag All Toggle",
+            Settings = "Settings",
+            SettingsManager = "Settings Manager",
+            SettingsManagerDesc = "Configure and customize convenient features.",
+            Update_Info = "Update Information",
+            Update_Info_Desc = "Used to update Discord information.",
+            Update_Notify = "Updated!",
+            Update_Notify_Content = "Statistics refreshed",
+            Copy_Discord_Invite = "Copy Discord Invite",
+            Copy_Discord_Invite_Desc = "Use this to copy the Discord group link.",
+            Copy_Discord_Invite_Copied = "Copied!",
+            Copy_Discord_Invite_Content = "Link copied to clipboard",
+            Main_Owner = "Main Owner",
+            Support_Owner = "Support Owner",
+            Security_Owner = "Security Owner",
+            Youtube_Desc = "Copy link youtube for subscribe!",
+            Discord_Desc = "Join our discord for more scripts!",
+            TikTok_Desc = "Copy the link to follow on TikTok!",
+            Copy_Link = "Copy Link",
+            Dev_Script = ">>          Dev Script          <<",
+            My_Link = ">>          My Link          <<",
+            WindowSize = "Window Size",
+            WindowSizeDesc = "Adjust the overall size of the WindUI interface.",
+            OpenButtonScale = "Open Button Scale",
+            OpenButtonScaleDesc = "Adjust the size of the WindUI floating button.",
+            OpenButtonOnlyIcon = "Open Button Only Icon",
+            OpenButtonOnlyIconDesc = "Show only the icon on the WindUI floating button.",
+            ToggleUIKeybind = "Toggle UI Keybind",
+            ToggleUIKeybindDesc = "Customize the keyboard shortcut for toggling WindUI.",
+            AxosToggleSize = "Axos Toggle Size",
+            AxosToggleSizeDesc = "Adjust the size of the Axos Hub mobile button.",
+            ShowAxosToggle = "Show Axos Toggle",
+            ShowAxosToggleDesc = "Show or hide the Axos Hub mobile button.",
+            SelectLanguage = "Select Language",
+            SelectLanguageDesc = "Select your preferred language",
+            Language = "Want to Add a New Language?",
+            LanguageDesc = "If you want to add a new language, visit the Info section and join our Discord server for assistance.",
+            Config_Name = "Config Name",
+            Config_Name_Desc = "Enter the name of the config you want.",
+            Config_List = "Config List",
+            Config_List_Desc = "Select your created config.",
+            Make_Config = "Make Config",
+            Make_Config_Desc = "Click to generate the configuration entered in the input.",
+            Config = "Config",
+            Config_Content = "Please enter config name",
+            Config_Content1 = "Config already exists",
+            Config_Content2 = "Config created successfully",
+            Update_Config = "Update Config",
+            Update_Config_Content = "Click to update the selected config.",
+            Config_Content3 = "No config selected",
+            Config_Content4 = "Config does not exist",
+            Config_Content5 = "Config has been updated.",
+            Load_Config = "Load Config",
+            Load_Config_Desc = "Click to load the selected config.",
+            Config_Content6 = "Please select a config first",
+            Config_Content7 = "Config does not exist",
+            Config_Content8 = "Config has finished loading.",
+            Delete_Config = "Delete Config",
+            Delete_Config_Desc = "Click to delete the selected config.",
+            Config_Content9 = "No config selected",
+            Config_Content10 = "Config has already been deleted",
+            Config_Content11 = "Config deleted successfully.",
+            Auto_Load_Config = "Auto Load Config",
+            Auto_Load_Config_Desc = "Automatically syncs for the first 3 seconds, then auto-saves every 1 second.",
+            Auto_Load = "Auto Load",
+            Config_Content12 = "Please select a config first",
+            Disabled = "Disabled",
+            Config_Content13 = "Switched to Auto Save Config",
+            Languages = "Languages",
+            UI = "UI",
+            Config = "Config",
+            Generator = "Generator",
+            GeneratorDesc = "Functions related to the generator.",
+            SetupStamina = "Setup Stamina",
+            SetupStaminaDesc = "Adjust the stamina-related metrics.",
+            Full_Stamina = "Full Stamina",
+            Full_Stamina_Desc = "Get full 100% stamina.",
+            Infinite_Stamina = "Infinite Stamina",
+            Infinite_Stamina_Desc = "Never run out of stamina.",
+            Max_Stamina_Value = "Max Stamina Value",
+            Max_Stamina_Value_Desc = "Enter custom stamina limit.",
+            Apply_Max_Stamina = "Apply Max Stamina",
+            Apply_Max_Stamina_Desc = "Enable custom stamina limit.",
+            Sprint_Speed_Value = "Sprint Speed Value",
+            Sprint_Speed_Value_Desc = "Adjust your character's sprint speed.",
+            Apply_Sprint_Speed = "Apply Sprint Speed",
+            Apply_Sprint_Speed_Desc = "Enable custom sprint speed settings.",
+            Regen_Value = "Regen Value",
+            Regen_Value_Desc = "Enter regen speed.",
+            Apply_Regen = "Apply Regen",
+            Apply_Regen_Desc = "Enable custom regen.",
+            Drain_Value = "Drain Value",
+            Drain_Value_Desc = "Enter drain speed.",
+            Apply_Drain = "Apply Drain",
+            Apply_Drain_Desc = "Enable custom drain.",
+            Noclip = "Noclip",
+            NoclipDesc = "Toggle collision to walk through walls and other objects.",
+            InfJump = "Infinite Jump",
+            InfJumpDesc = "Jump infinitely without touching the ground.",
+            ForceSpeed = "Force Speed",
+            ForceSpeedDesc = "Override your character's default movement speed.",
+            SetSpeed = "SetSpeed",
+            SetSpeedDesc = "Set the movement speed value used by Force Speed.",
+            JumpPower = "Jump Power",
+            JumpPowerDesc = "Enable or disable a custom jump power value.",
+            SetPower = "Set Power",
+            SetPowerDesc = "Set the jump power value applied when Jump Power is enabled.",
+            StandInTheAir = "Stand In The Air",
+            StandInTheAirDesc = "Allows your character to stand and remain suspended in the air.",
+            StandingHeight = "Standing Height",
+            StandingHeightDesc = "Adjust the height at which your character stands in the air.",
+            SolveSpeed = "Solve Speed",
+            SolveSpeedDesc = "Adjust the auto completion generator speed.",
+            AutoSolve = "Auto Solve",
+            AutoSolveDesc = "Automatically solve generator games.",
+            GeneratorHelper = "Generator Helper",
+            GeneratorHelperDesc = "Show all connections in the game.",
+            Items_Sections = "All functions that make picking up and finding items easier.",
+            Select_Item = "Select Item",
+            Select_Item_Desc = "Choose the item you want to pick up.",
+            Pick_Up_Selected_Item = "Pick Up Selected Item",
+            Pick_Up_Selected_Item_Desc = "Get item you selected in the dropdown.",
+            Pick_Up_Random_Item = "Pick Up Random Item",
+            Pick_Up_Random_Item_Desc = "Pick up random items in the map.",
+            Auto_PickUp_Selected_Item = "Auto PickUp Selected Item",
+            Auto_PickUp_Selected_Item_Desc = "Auto pick up the selected item in the dropdown menu.",
+            Auto_PickUp_Nearest_Item = "Auto PickUp Nearest Item",
+            Auto_PickUp_Nearest_Item_Desc = "Auto picks up the nearest item around you.",
+            TracerSettings = "Tracer Settings",
+            TracerSettingsDesc = "Set the display position of the ESP beam.",
+            ESPMode = "Esp Mode",
+            ESPModeDesc = "Select the display mode for ESP types.",
+            SetupEspText = "Setup Esp Text",
+            SetupEspTextDesc = "Set what will be displayed for ESP text.",
+            EspColor = "Esp Color",
+            EspColorDesc = "Adjust the colors for your ESP.",
+            ESPSurvivors = "Esp Survivors",
+            ESPSurvivorsDesc = "Display ESP for surviving survivors.",
+            EspItems = "ESP Item",
+            EspItemsDesc = "Display ESP for items in the map.",
+            EspFakeGenerator = "ESP Fake Generator",
+            EspFakeGeneratorDesc = "Display ESP for fake generators in the map.",
+            EspGenerator = "ESP Generator",
+            EspGeneratorDesc = "Display ESP for generators in the map.",
+            EspKillers = "ESP Killers",
+            EspKillersDesc = "Display ESP for killers in the map.",
+            EspSentry = "ESP Sentry",
+            EspSentryDesc = "Display ESP for sentries in the map.",
+            EspDispenser = "ESP Dispenser",
+            EspDispenserDesc = "Display ESP for dispensers in the map.",
+            EspTripwire = "ESP Tripwire",
+            EspTripwireDesc = "Display ESP for tripwires in the map.",
+            EspTripmine = "ESP Tripmine",
+            EspTripmineDesc = "Display ESP for Tripmine objects in the map.",
+            EspSpray = "ESP Spray",
+            EspSprayDesc = "Display ESP for sprays in the map.",
+            Screen = "Screen",
+            ScreenDesc = "Change the things on your screen.",
+            Fullbright = "Full Bright",
+            FullbrightDesc = "Improve the brightness of the entire map.",
+            NoFog = "No Fog",
+            NoFogDesc = "Eliminate all the annoying fog.",
+            Custom_Zoom = "Custom Zoom",
+            Custom_Zoom_Desc = "Adjust the camera to allow for a farther zoom.",
+            Min_Zoom_Distance = "Min Zoom",
+            Min_Zoom_Distance_Desc = "Sets the minimum camera zoom distance.",
+            Max_Zoom_Distance = "Max Zoom",
+            Max_Zoom_Distance_Desc = "Sets the maximum camera zoom distance.",
+            Hallucination = "Hallucination",
+            HallucinationDesc = "Functions related to hallucinations.",
+            AntiFakeKillers = "Anti Fake Killers",
+            AntiFakeKillersDesc = "Removes fake killer illusions from appearing.",
+            AntiFakePizza = "Anti Fake Pizza",
+            AntiFakePizzaDesc = "Removes fake pizza illusions from appearing.",
+            AntiFakeDispenser = "Anti Fake Dispenser",
+            AntiFakeDispenserDesc = "Removes fake Dispenser illusions from appearing.",
+            AntiFakeProtect = "Anti Fake Protect",
+            AntiFakeProtectDesc = "Removes fake Protect illusions from appearing.",
+            AntiSubspaceEffect = "Anti Subspace Effect",
+            AntiSubspaceEffectDesc = "Eliminate all annoying effects from subspaces.",
+            AntiSlow = "Anti Slow",
+            AntiSlowDesc = "Remove all annoying slowdown effects.",
+        },
+        vi = {
+            HubTitle = "Axos Hub",
+            GameTitle = "Bị bỏ rơi - Bởi 1Dev Official",
+            Free = "Thử nghiệm",
+            ThemeChanged = "Đã đổi giao diện",
+            TransparencyTitle = "Độ trong suốt",
+            TransparencyDisabled = "Đã tắt độ trong suốt",
+            TransparencyEnabled = "Đã bật độ trong suốt",
+            About = "Giới thiệu",
+            Features = "Tính năng",
+            Gameplay = "Lối chơi",
+            System = "Hệ thống",
+            Misc = "Khác",
+            Items = "Vật phẩm",
+            Visual = "Hiển thị",
+            Player = "Người chơi",
+            Teleport = "Dịch chuyển",
+            Main = "Chính",
+            Server = "Máy chủ",
+            Shop = "Cửa hàng",
+            Stamina = "Thể lực",
+            Status = "Thông số",
+            Information = "Thông tin",
+            Update = "Cập nhật",
+            UpdateDesc = "▪︎ Tự mua hạt giống\n▪︎ Tự mua trang bị\n▪︎ Tự Bán Tất Cả Trái\n▪︎ Sửa Fire Network:\n+ Tự thu hoạch\n+ Tự ăn trộm trái\n▪︎ Sửa lỗi lag toggle",
+            Settings = "Cài đặt",
+            SettingsManager = "Quản lý cài đặt",
+            SettingsManagerDesc = "Cấu hình và tùy chỉnh các tính năng tiện ích.",
+            Update_Info = "Thông tin cập nhật",
+            Update_Info_Desc = "Dùng để cập nhật thông tin Discord.",
+            Update_Notify = "Đã cập nhật!",
+            Update_Notify_Content = "Đã làm mới thống kê",
+            Copy_Discord_Invite = "Sao chép lời mời Discord",
+            Copy_Discord_Invite_Desc = "Dùng để sao chép liên kết nhóm Discord.",
+            Copy_Discord_Invite_Copied = "Đã sao chép!",
+            Copy_Discord_Invite_Content = "Đã sao chép liên kết vào bộ nhớ tạm",
+            Main_Owner = "Chủ sở hữu chính",
+            Support_Owner = "Chủ sở hữu hỗ trợ",
+            Security_Owner = "Chủ sở hữu bảo mật",
+            Youtube_Desc = "Sao chép liên kết YouTube để đăng ký!",
+Discord_Desc = "Tham gia Discord của chúng tôi để nhận thêm nhiều script!",
+            TikTok_Desc = "Sao chép liên kết để theo dõi trên TikTok!",
+            Copy_Link = "Sao chép liên kết",
+            Dev_Script = ">>          Script Nhà Phát Triển          <<",
+            My_Link = ">>          Liên Kết Của Tôi          <<",
+            WindowSize = "Kích thước cửa sổ",
+            WindowSizeDesc = "Điều chỉnh kích thước tổng thể của giao diện WindUI.",
+            OpenButtonScale = "Kích thước nút mở",
+            OpenButtonScaleDesc = "Điều chỉnh kích thước của nút nổi WindUI.",
+            OpenButtonOnlyIcon = "Chỉ hiện biểu tượng nút mở",
+            OpenButtonOnlyIconDesc = "Chỉ hiển thị biểu tượng trên nút nổi WindUI.",
+            ToggleUIKeybind = "Phím bật/tắt giao diện",
+            ToggleUIKeybindDesc = "Tùy chỉnh phím tắt để bật hoặc tắt WindUI.",
+            AxosToggleSize = "Kích thước nút Axos",
+            AxosToggleSizeDesc = "Điều chỉnh kích thước nút nổi của Axos Hub.",
+            ShowAxosToggle = "Hiển thị nút Axos",
+            ShowAxosToggleDesc = "Hiển thị hoặc ẩn nút nổi của Axos Hub.",
+            SelectLanguage = "Chọn ngôn ngữ",
+            SelectLanguageDesc = "Chọn ngôn ngữ bạn muốn sử dụng.",
+            Language = "Muốn thêm ngôn ngữ mới?",
+            LanguageDesc = "Nếu bạn muốn thêm ngôn ngữ mới, hãy vào mục Thông tin và tham gia máy chủ Discord của chúng tôi để được hỗ trợ.",
+            Config_Name = "Tên cấu hình",
+            Config_Name_Desc = "Nhập tên cấu hình bạn muốn tạo.",
+            Config_List = "Danh sách cấu hình",
+            Config_List_Desc = "Chọn cấu hình bạn đã tạo.",
+            Make_Config = "Tạo cấu hình",
+            Make_Config_Desc = "Nhấn để tạo cấu hình theo tên đã nhập.",
+            Config = "Cấu hình",
+            Config_Content = "Vui lòng nhập tên cấu hình",
+            Config_Content1 = "Cấu hình đã tồn tại",
+            Config_Content2 = "Đã tạo cấu hình thành công",
+            Update_Config = "Cập nhật cấu hình",
+            Update_Config_Content = "Nhấn để cập nhật cấu hình đã chọn.",
+            Config_Content3 = "Chưa chọn cấu hình",
+            Config_Content4 = "Cấu hình không tồn tại",
+            Config_Content5 = "Đã cập nhật cấu hình.",
+            Load_Config = "Tải cấu hình",
+Load_Config_Desc = "Nhấn để tải cấu hình đã chọn.",
+            Config_Content6 = "Vui lòng chọn một cấu hình trước",
+            Config_Content7 = "Cấu hình không tồn tại",
+            Config_Content8 = "Đã tải cấu hình thành công.",
+            Delete_Config = "Xóa cấu hình",
+            Delete_Config_Desc = "Nhấn để xóa cấu hình đã chọn.",
+            Config_Content9 = "Chưa chọn cấu hình",
+            Config_Content10 = "Cấu hình đã được xóa trước đó",
+            Config_Content11 = "Đã xóa cấu hình thành công.",
+            Auto_Load_Config = "Tự động tải cấu hình",
+            Auto_Load_Config_Desc = "Tự động đồng bộ trong 3 giây đầu, sau đó tự động lưu mỗi 1 giây.",
+            Auto_Load = "Tự động tải",
+            Config_Content12 = "Vui lòng chọn một cấu hình trước",
+            Disabled = "Đã tắt",
+            Config_Content13 = "Đã chuyển sang Tự động lưu cấu hình",
+            Languages = "Ngôn ngữ",
+            UI = "Giao diện",
+            Config = "Cấu hình",
+            Generator = "Máy phát điện",
+            GeneratorDesc = "Các chức năng liên quan đến máy phát điện.",
+            SetupStamina = "Cài đặt thể lực",
+            SetupStaminaDesc = "Điều chỉnh các chỉ số liên quan đến sức bền.",
+            Full_Stamina = "Đầy thể lực",
+            Full_Stamina_Desc = "Hồi đầy 100% thể lực.",
+            Infinite_Stamina = "Vô hạn thể lực",
+            Infinite_Stamina_Desc = "Không bao giờ hết thể lực khi chạy.",
+            Max_Stamina_Value = "Giá trị stamina tối đa",
+            Max_Stamina_Value_Desc = "Nhập giới hạn thể lực tùy chỉnh.",
+            Apply_Max_Stamina = "Áp dụng stamina tối đa",
+            Apply_Max_Stamina_Desc = "Bật giới hạn thể lực tùy chỉnh.",
+            Sprint_Speed_Value = "Giá trị tốc độ chạy",
+            Sprint_Speed_Value_Desc = "Điều chỉnh tốc độ chạy của nhân vật.",
+            Apply_Sprint_Speed = "Áp dụng tốc độ chạy",
+            Apply_Sprint_Speed_Desc = "Bật cài đặt tốc độ chạy tùy chỉnh.",
+            Regen_Value = "Giá trị hồi phục",
+            Regen_Value_Desc = "Nhập tốc độ hồi phục.",
+            Apply_Regen = "Áp dụng hồi phục",
+            Apply_Regen_Desc = "Bật hồi phục tùy chỉnh.",
+            Drain_Value = "Giá trị tiêu hao",
+            Drain_Value_Desc = "Nhập tốc độ tiêu hao.",
+            Apply_Drain = "Áp dụng tiêu hao",
+            Apply_Drain_Desc = "Bật mức tiêu hao tùy chỉnh.",
+            Noclip = "Xuyên tường",
+            NoclipDesc = "Bật hoặc tắt va chạm để đi xuyên qua tường và các vật thể khác.",
+            InfJump = "Nhảy vô hạn",
+            InfJumpDesc = "Nhảy không giới hạn mà không cần chạm đất.",
+            ForceSpeed = "Ép tốc độ",
+            ForceSpeedDesc = "Ghi đè tốc độ di chuyển mặc định của nhân vật.",
+            SetSpeed = "Đặt tốc độ",
+            SetSpeedDesc = "Đặt giá trị tốc độ di chuyển được sử dụng bởi Ép tốc độ.",
+JumpPower = "Lực nhảy",
+            JumpPowerDesc = "Bật hoặc tắt giá trị lực nhảy tùy chỉnh.",
+            SetPower = "Đặt lực nhảy",
+            SetPowerDesc = "Đặt giá trị lực nhảy được áp dụng khi Lực nhảy được bật.",
+            StandInTheAir = "Đứng trên không",
+            StandInTheAirDesc = "Cho phép nhân vật đứng và lơ lửng trên không.",
+            StandingHeight = "Độ cao đứng",
+            StandingHeightDesc = "Điều chỉnh độ cao mà nhân vật sẽ đứng trên không.",
+            SolveSpeed = "Tốc độ giải",
+            SolveSpeedDesc = "Điều chỉnh tốc độ tự hoàn thành generator.",
+            AutoSolve = "Tự động giải",
+            AutoSolveDesc = "Tự động giải các trò chơi của generator.",
+            GeneratorHelper = "Hỗ trợ generator",
+            GeneratorHelperDesc = "Hiển thị tất cả đường nối của trò chơi.",
+            Items_Sections = "Tất cả chức năng giúp việc nhặt và tìm vật phẩm trở nên dễ dàng hơn.",
+            Select_Item = "Chọn vật phẩm",
+            Select_Item_Desc = "Chọn vật phẩm bạn muốn nhặt.",
+            Pick_Up_Selected_Item = "Nhặt vật phẩm đã chọn",
+            Pick_Up_Selected_Item_Desc = "Nhặt vật phẩm bạn đã chọn trong danh sách.",
+            Pick_Up_Random_Item = "Nhặt vật phẩm ngẫu nhiên",
+            Pick_Up_Random_Item_Desc = "Nhặt các vật phẩm ngẫu nhiên trên bản đồ.",
+            Auto_PickUp_Selected_Item = "Tự động nhặt vật phẩm đã chọn",
+            Auto_PickUp_Selected_Item_Desc = "Tự động nhặt vật phẩm đã chọn trong danh sách.",
+            Auto_PickUp_Nearest_Item = "Tự động nhặt vật phẩm gần nhất",
+            Auto_PickUp_Nearest_Item_Desc = "Tự động nhặt vật phẩm gần bạn nhất.",
+            TracerSettings = "Cài đặt Tracer",
+            TracerSettingsDesc = "Thiết lập vị trí hiển thị của tia ESP.",
+            ESPMode = "Chế độ ESP",
+            ESPModeDesc = "Chọn chế độ hiển thị cho các loại ESP.",
+            SetupEspText = "Thiết lập văn bản ESP",
+            SetupEspTextDesc = "Thiết lập nội dung sẽ được hiển thị cho văn bản ESP.",
+            EspColor = "Màu ESP",
+            EspColorDesc = "Điều chỉnh màu sắc cho ESP của bạn.",
+            ESPSurvivors = "ESP Survivor",
+            ESPSurvivorsDesc = "Hiển thị ESP cho những Survivor còn sống.",
+            EspItem = "ESP Vật phẩm",
+            EspItemDesc = "Hiển thị ESP cho các vật phẩm trong map.",
+            EspFakeGenerator = "ESP Máy phát điện giả",
+            EspFakeGeneratorDesc = "Hiển thị ESP cho các máy phát điện giả trong map.",
+            EspGenerator = "ESP Máy phát điện",
+            EspGeneratorDesc = "Hiển thị ESP cho các máy phát điện trong map.",
+            EspKillers = "ESP Killer",
+            EspKillersDesc = "Hiển thị ESP cho các Killer trong map.",
+            EspSentry = "ESP Sentry",
+            EspSentryDesc = "Hiển thị ESP cho các Sentry trong map.",
+            EspDispenser = "ESP Dispenser",
+            EspDispenserDesc = "Hiển thị ESP cho các Dispenser trong map.",
+            EspTripwire = "ESP Tripwire",
+            EspTripwireDesc = "Hiển thị ESP cho các Tripwire trong map.",
+            EspTripmine = "ESP Tripmine",
+            EspTripmineDesc = "Hiển thị ESP cho các vật thể Tripmine trong map.",
+            EspSpray = "ESP Spray",
+            EspSprayDesc = "Hiển thị ESP cho các Spray trong map.",
+            Screen = "Màn hình",
+            ScreenDesc = "Thay đổi những thứ hiển thị trên màn hình của bạn.",
+            Fullbright = "Tăng sáng tất cả",
+            FullbrightDesc = "Cải thiện độ sáng toàn bộ map",
+            NoFog = "Không xương mù",
+            NoFogDesc = "Loại bỏ toàn bộ xương mù khó chịu",
+            Custom_Zoom = "Chỉnh Sửa Zoom",
+            Custom_Zoom_Desc = "Chỉnh sửa camera để có thể zoom xa hơn.",
+            Min_Zoom_Distance = "Zoom tối thiểu",
+            Min_Zoom_Distance_Desc = "Thiết lập khoảng cách zoom tối thiểu của camera.",
+            Max_Zoom_Distance = "Zoom tối đa",
+            Max_Zoom_Distance_Desc = "Thiết lập khoảng cách zoom tối đa của camera.",
+            Hallucination = "Ảo giác",
+            HallucinationDesc = "Các chức năng liên quan đến ảo giác.",
+            AntiFakeKillers = "Chống sát nhân giả",
+            AntiFakeKillersDesc = "Loại bỏ ảo giác Killer giả xuất hiện.",
+            AntiFakePizza = "Chống pizza giả",
+            AntiFakePizzaDesc = "Loại bỏ ảo giác Pizza giả xuất hiện.",
+            AntiFakeDispenser = "Chống Dispenser giả",
+            AntiFakeDispenserDesc = "Loại bỏ ảo giác Dispenser giả xuất hiện.",
+            AntiFakeProtect = "Chống bảo vệ giả",
+            AntiFakeProtectDesc = "Loại bỏ ảo giác Protect giả xuất hiện.",
+            AntiSubspaceEffect = "Chống hiệu ứng subspace",
+            AntiSubspaceEffectDesc = "Loại bỏ toàn bộ hiệu ứng khó chịu đến từ subspace.",
+            AntiSlow = "Chống chậm",
+            AntiSlowDesc = "Loại bỏ toàn bộ hiệu ứng làm chậm",
+        }
+    }
+})
+
+local themes = {"Dark", "Light", "Gray", "Blue", "Green", "Purple"}
+local currentThemeIndex = 1
+
+if not getgenv().TransparencyEnabled then
+    getgenv().TransparencyEnabled = true
+end
+
+local Window = WindUI:CreateWindow({
+    Title = "loc:HubTitle", 
+    Icon = "rbxassetid://122301429064719", 
+    Background = "rbxassetid://138490861322759",
+    Author = "loc:GameTitle",
+    Folder = "Axos Hub",
+    Size = UDim2.fromOffset(620, 480),
+    Transparent = getgenv().TransparencyEnabled,
+    Theme = "Blue",
+    Resizable = true,
+    SideBarWidth = 150,
+    BackgroundImageTransparency = 0.8,
+    HideSearchBar = false,
+    ScrollBarEnabled = true,
+    User = {
+        Enabled = true,
+        Anonymous = true,
+        Callback = function()
+            currentThemeIndex = currentThemeIndex + 1
+            if currentThemeIndex > #themes then
+                currentThemeIndex = 1
+            end
+            
+            local newTheme = themes[currentThemeIndex]
+            WindUI:SetTheme(newTheme)
+           
+            WindUI:Notify({
+                Title = "loc:ThemeChanged", 
+                Content = "Switched to " .. newTheme .. " theme!", 
+                Duration = 2,
+                Icon = "palette"
+            })
+        end,
+    },
+})
+
+Window:SetToggleKey(Enum.KeyCode.V)
+
+pcall(function()
+    Window:CreateTopbarButton("TransparencyToggle", "eye", function()
+        if getgenv().TransparencyEnabled then
+            getgenv().TransparencyEnabled = false
+            pcall(function() Window:ToggleTransparency(false) end)
+            
+            WindUI:Notify({
+                Title = "loc:TransparencyTitle", 
+                Content = "loc:TransparencyDisabled", 
+                Duration = 3,
+                Icon = "eye"
+            })
+        else
+            getgenv().TransparencyEnabled = true
+            pcall(function() Window:ToggleTransparency(true) end)
+            
+            WindUI:Notify({
+                Title = "loc:TransparencyTitle", 
+                Content = "loc:TransparencyEnabled", 
+                Duration = 3,
+                Icon = "eye-off"
+            })
+        end
+    end, 990)
+end)
+
+local OpenButtonConfig = {
+    Title = "Open Gui",
+    Icon = "monitor",
+
+    CornerRadius = UDim.new(0, 6),
+    StrokeThickness = 2,
+
+    Color = ColorSequence.new({
+        ColorSequenceKeypoint.new(0, Color3.fromRGB(0,140,255)),
+        ColorSequenceKeypoint.new(1, Color3.fromRGB(0,200,120)),
+    }),
+
+    Draggable = true,
+    Scale = 0.9,
+    OnlyIcon = false,
+}
+
+Window:EditOpenButton(OpenButtonConfig)
+
+Window:Tag({Title = "v0.0.1", Icon = "cog", Color = Color3.fromHex("#30ff6a")})
+
+local Tabs = {
+    About = Window:Section({ Title = "loc:About", Opened = true }),
+    Features = Window:Section({ Title = "loc:Features", Opened = true }),
+    Gameplay = Window:Section({ Title = "loc:Gameplay", Opened = true }),
+    System = Window:Section({ Title = "loc:System", Opened = true }),
+}
+
+local TabHandles = {
+    Update = Tabs.About:Tab({ 
+        Title = "loc:Update", Icon = "history", Desc = "Cập Nhật", IconThemed = true, 
+        Locked = false, ShowTabTitle = true, Border = true, LayoutOrder = 1 
+    }),
+
+    Info = Tabs.About:Tab({ 
+        Title = "loc:Information", Icon = "badge-info", Desc = "Thông Tin", IconThemed = true, 
+        Locked = false, ShowTabTitle = true, Border = true, LayoutOrder = 1 
+    }),
+    
+    Main = Tabs.Features:Tab({ 
+        Title = "loc:Main", Icon = "house", Desc = "Phần Chính", IconThemed = true, 
+        Locked = false, ShowTabTitle = true, Border = true, LayoutOrder = 1 
+    }),
+    
+    Stamina = Tabs.Features:Tab({ 
+        Title = "loc:Stamina", Icon = "zap", Desc = "Thể Lực", IconThemed = true, 
+        Locked = false, ShowTabTitle = true, Border = true, LayoutOrder = 1 
+    }),
+    
+    Shop = Tabs.Features:Tab({ 
+        Title = "loc:Shop", Icon = "shopping-cart", Desc = "Cửa Hàng", IconThemed = true, 
+        Locked = false, ShowTabTitle = true, Border = true, LayoutOrder = 1 
+    }),
+    
+    Server = Tabs.Features:Tab({ 
+        Title = "loc:Server", Icon = "server", Desc = "Máy Chủ", IconThemed = true, 
+        Locked = false, ShowTabTitle = true, Border = true, LayoutOrder = 1 
+    }),
+    
+    Items = Tabs.Gameplay:Tab({ 
+        Title = "loc:Status", Icon = "toolbox", Desc = "Thông Số", IconThemed = true, 
+        Locked = false, ShowTabTitle = true, Border = true, LayoutOrder = 1 
+    }),
+    
+    Player = Tabs.Gameplay:Tab({ 
+        Title = "loc:Player", Icon = "user", Desc = "Người Chơi", IconThemed = true, 
+        Locked = false, ShowTabTitle = true, Border = true, LayoutOrder = 1
+    }),
+    
+    Visual = Tabs.Gameplay:Tab({ 
+        Title = "loc:Visual", Icon = "eye", Desc = "Thị Giác", IconThemed = true, 
+        Locked = false, ShowTabTitle = true, Border = true, LayoutOrder = 1
+    }),
+    
+    TP = Tabs.Gameplay:Tab({ 
+        Title = "loc:Teleport", Icon = "map", Desc = "Dịch Chuyển", IconThemed = true, 
+        Locked = false, ShowTabTitle = true, Border = true, LayoutOrder = 1
+    }),
+    
+    Misc = Tabs.System:Tab({ 
+        Title = "loc:Misc", Icon = "menu", Desc = "Linh Tinh", IconThemed = true, 
+        Locked = false, ShowTabTitle = true, Border = true, LayoutOrder = 1 
+    }),
+    
+    Settings = Tabs.System:Tab({ 
+        Title = "loc:Settings", Icon = "settings", Desc = "Cài Đặt", IconThemed = true, 
+        Locked = false, ShowTabTitle = true, Border = true, LayoutOrder = 1
+    }),
+}
+
+local MyUIElements = {}
+
+local ElementConfigs = {
+    {
+        ID = "Generator",
+        Type = "Section",
+        Parent = TabHandles.Main,
+        Config = {
+            Title = "loc:Generator",
+            Desc = "loc:GeneratorDesc",
+            Icon = "user",
+            Box = true,
+            BoxBorder = true,
+            Opened = false,
+            Hover = true,
+        }
+    },
+    
+    {
+        ID = "Items",
+        Type = "Section",
+        Parent = TabHandles.Main,
+        Config = {
+            Title = "loc:Items",
+            Desc = "loc:Items_Sections",
+            Icon = "toolbox",
+            Box = true,
+            BoxBorder = true,
+            Opened = false,
+            Hover = true,
+        }
+    },
+
+    {
+        ID = "SetupStamina",
+        Type = "Section",
+        Parent = TabHandles.Stamina,
+        Config = {
+            Title = "loc:SetupStamina",
+            Desc = "loc:SetupStaminaDesc",
+            Icon = "user",
+            Box = true,
+            BoxBorder = true,
+            Opened = false,
+            Hover = true,
+        }
+    },
+
+    {
+        ID = "TracerSettings",
+        Type = "Section",
+        Parent = TabHandles.Visual,
+        Config = {
+            Title = "loc:TracerSettings",
+            Desc = "loc:TracerSettingsDesc",
+            Icon = "route",
+            Box = true,
+            BoxBorder = true,
+            Opened = false,
+            Hover = true,
+        }
+    },
+
+    {
+        ID = "EspSurvivors",
+        Type = "Section",
+        Parent = TabHandles.Visual,
+        Config = {
+            Title = "loc:ESPSurvivors",
+            Desc = "loc:ESPSurvivorsDesc",
+            Icon = "person-standing",
+            Box = true,
+            BoxBorder = true,
+            Opened = false,
+            Hover = true,
+        }
+    },
+    
+    {
+        ID = "EspKillers",
+        Type = "Section",
+        Parent = TabHandles.Visual,
+        Config = {
+            Title = "loc:EspKillers",
+            Desc = "loc:EspKillersDesc",
+            Icon = "skull",
+            Box = true,
+            BoxBorder = true,
+            Opened = false,
+            Hover = true,
+        }
+    },
+
+    {
+        ID = "EspGenerator",
+        Type = "Section",
+        Parent = TabHandles.Visual,
+        Config = {
+            Title = "loc:EspGenerator",
+            Desc = "loc:EspGeneratorDesc",
+            Icon = "factory",
+            Box = true,
+            BoxBorder = true,
+            Opened = false,
+            Hover = true,
+        }
+    },
+
+    {
+        ID = "EspFakeGenerator",
+        Type = "Section",
+        Parent = TabHandles.Visual,
+        Config = {
+            Title = "loc:EspFakeGenerator",
+            Desc = "loc:EspFakeGeneratorDesc",
+            Icon = "factory",
+            Box = true,
+            BoxBorder = true,
+            Opened = false,
+            Hover = true,
+        }
+    },
+
+    {
+        ID = "EspItems",
+        Type = "Section",
+        Parent = TabHandles.Visual,
+        Config = {
+            Title = "loc:EspItems",
+            Desc = "loc:EspItemsDesc",
+            Icon = "package",
+            Box = true,
+            BoxBorder = true,
+            Opened = false,
+            Hover = true,
+        }
+    },
+
+    {
+        ID = "EspSentry",
+        Type = "Section",
+        Parent = TabHandles.Visual,
+        Config = {
+            Title = "loc:EspSentry",
+            Desc = "loc:EspSentryDesc",
+            Icon = "cctv",
+            Box = true,
+            BoxBorder = true,
+            Opened = false,
+            Hover = true,
+        }
+    },
+
+    {
+        ID = "EspDispenser",
+        Type = "Section",
+        Parent = TabHandles.Visual,
+        Config = {
+            Title = "loc:EspDispenser",
+            Desc = "loc:EspDispenserDesc",
+            Icon = "container",
+            Box = true,
+            BoxBorder = true,
+            Opened = false,
+            Hover = true,
+        }
+    },
+
+    {
+        ID = "EspTripwire",
+        Type = "Section",
+        Parent = TabHandles.Visual,
+        Config = {
+            Title = "loc:EspTripwire",
+            Desc = "loc:EspTripwireDesc",
+            Icon = "waypoints",
+            Box = true,
+            BoxBorder = true,
+            Opened = false,
+            Hover = true,
+        }
+    },
+
+    {
+        ID = "EspTripmine",
+        Type = "Section",
+        Parent = TabHandles.Visual,
+        Config = {
+            Title = "loc:EspTripmine",
+            Desc = "loc:EspTripmineDesc",
+            Icon = "bomb",
+            Box = true,
+            BoxBorder = true,
+            Opened = false,
+            Hover = true,
+        }
+    },
+
+    {
+        ID = "EspSpray",
+        Type = "Section",
+        Parent = TabHandles.Visual,
+        Config = {
+            Title = "loc:EspSpray",
+            Desc = "loc:EspSprayDesc",
+            Icon = "spray-can",
+            Box = true,
+            BoxBorder = true,
+            Opened = false,
+            Hover = true,
+        }
+    },
+
+    {
+        ID = "NormalPower",
+        Type = "Section",
+        Parent = TabHandles.Player,
+        Config = {
+            Title = "loc:NormalPower",
+            Desc = "loc:NormalPowerDesc",
+            Icon = "shield-off",
+            Box = true,
+            BoxBorder = true,
+            Opened = false,
+            Hover = true,
+        }
+    },
+    
+    {
+        ID = "SpeedPower",
+        Type = "Section",
+        Parent = TabHandles.Player,
+        Config = {
+            Title = "loc:SpeedPower",
+            Desc = "loc:SpeedPowerDesc",
+            Icon = "shield-off",
+            Box = true,
+            BoxBorder = true,
+            Opened = false,
+            Hover = true,
+        }
+    },
+    
+    {
+        ID = "JumpPower1",
+        Type = "Section",
+        Parent = TabHandles.Player,
+        Config = {
+            Title = "loc:JumpPower1",
+            Desc = "loc:JumpPower1Desc",
+            Icon = "shield-off",
+            Box = true,
+            BoxBorder = true,
+            Opened = false,
+            Hover = true,
+        }
+    },
+    
+    {
+        ID = "AirPower",
+        Type = "Section",
+        Parent = TabHandles.Player,
+        Config = {
+            Title = "loc:AirPower",
+            Desc = "loc:AirPowerDesc",
+            Icon = "shield-off",
+            Box = true,
+            BoxBorder = true,
+            Opened = false,
+            Hover = true,
+        }
+    },
+    
+    {
+        ID = "Screen",
+        Type = "Section",
+        Parent = TabHandles.Misc,
+        Config = {
+            Title = "loc:Screen",
+            Desc = "loc:ScreenDesc",
+            Icon = "shield-off",
+            Box = true,
+            BoxBorder = true,
+            Opened = false,
+            Hover = true,
+        }
+    },
+    
+    {
+        ID = "Bypass",
+        Type = "Section",
+        Parent = TabHandles.Misc,
+        Config = {
+            Title = "loc:Bypass",
+            Desc = "loc:BypassDesc",
+            Icon = "shield-off",
+            Box = true,
+            BoxBorder = true,
+            Opened = false,
+            Hover = true,
+        }
+    },
+    
+    {
+        ID = "Hallucination",
+        Type = "Section",
+        Parent = TabHandles.Misc,
+        Config = {
+            Title = "loc:Hallucination",
+            Desc = "loc:HallucinationDesc",
+            Icon = "shield-off",
+            Box = true,
+            BoxBorder = true,
+            Opened = false,
+            Hover = true,
+        }
+    },
+    
+    {
+        ID = "SettingsManager", 
+        Type = "MultiSection",
+        Parent = TabHandles.Settings,
+        Config = {
+            Title = "loc:SettingsManager", 
+            Desc = "loc:SettingsManagerDesc", 
+            Icon = "layers", 
+            IconThemed = true, 
+            Opened = false, 
+            Box = true, 
+            BoxBorder = true, 
+            HeaderSize = 42,
+            HeaderPaddingY = 12,
+            HeaderGap = 12,
+            IconSize = 22,
+            HeaderTextSize = 16,
+            ContentPadding = 12,
+            ContentGap = 8,
+            TabsAlignment = "Left", 
+            TabsPadding = 12, 
+            TabsGap = 8, 
+            TabsHeight = 28, 
+        },
+
+        SubTabs = {
+            { ID = "Languages", Title = "loc:Languages", Icon = "languages" },
+            { ID = "UI", Title = "loc:UI", Icon = "monitor" },
+            { ID = "Config", Title = "loc:Config", Icon = "wrench" }
+        }
+    },
+    
+}
+
+for _, item in ipairs(ElementConfigs) do
+    if item.Type == "Section" then
+        local newSection = item.Parent:Section(item.Config)
+
+        if item.ID then
+            MyUIElements[item.ID] = newSection
+        end
+
+    elseif item.Type == "MultiSection" then
+        local newMulti = item.Parent:MultiSection(item.Config)
+        
+        if item.ID then
+            MyUIElements[item.ID] = newMulti
+        end
+
+        if item.SubTabs then
+            newMulti.MySubTabs = {} 
+            
+            for _, subTabConfig in ipairs(item.SubTabs) do
+                local newSubTab = newMulti:Tab({
+                    Title = subTabConfig.Title,
+                    Icon = subTabConfig.Icon
+                })
+
+                if subTabConfig.ID then
+                    newMulti.MySubTabs[subTabConfig.ID] = newSubTab
+                end
+            end
+        end
+    end
+end
+
+Window:SelectTab(1)
+
+TabHandles.Update:Paragraph({
+    Title = "loc:Update",
+    Desc = "loc:UpdateDesc",
+    Icon = "how",
+})
+
+TabHandles.Info:Divider()
+
+if not Core then Core = {} end
+if not Core.Spawn then
+    Core.Spawn = function(_, fn)
+        task.spawn(fn)
+    end
+end
+
+if not Core.Request then
+    Core.Request = function(data)
+        if not data or not data.Url then return nil end
+
+        local ok, res = pcall(function()
+            if request then
+                return request({
+                    Url = data.Url,
+                    Method = data.Method or "GET",
+                    Headers = data.Headers or {
+                        ["User-Agent"] = "Mozilla/5.0"
+                    }
+                })
+            elseif syn and syn.request then
+                return syn.request({
+                    Url = data.Url,
+                    Method = data.Method or "GET",
+                    Headers = data.Headers or {
+                        ["User-Agent"] = "Mozilla/5.0"
+                    }
+                })
+            else
+                return nil
+            end
+        end)
+
+        return ok and res or nil
+    end
+end
+
+local GithubRawUrl = "https://raw.githubusercontent.com/SLK-GAMING-MOD/Open-soure/refs/heads/main/DiscordLink.lua" 
+local InviteCode = "sGVEDYD2y"
+
+local gitRes = Core.Request({ Url = GithubRawUrl })
+if gitRes and gitRes.Body then
+    local fetchedText = string.gsub(gitRes.Body, "^%s*(.-)%s*$", "%1")
+    
+    if fetchedText ~= "" then
+        if string.find(fetchedText, "discord.gg/") then
+            InviteCode = string.match(fetchedText, "discord.gg/([^%s]+)") or fetchedText
+        else
+            InviteCode = fetchedText
+        end
+    end
+end
+
+local DiscordAPI =
+    "https://discord.com/api/v10/invites/" ..
+    InviteCode ..
+    "?with_counts=true&with_expiration=true"
+
+local DiscordInfo = TabHandles.Info:Paragraph({
+    Title = "Loading Discord...",
+    Desc = "Members: --\nOnline: --",
+    Image = "rbxassetid://109995816235688",
+    ImageSize = 42,
+})
+
+TabHandles.Info:Button({
+    Title = "loc:Update_Info",
+    Desc = "loc:Update_Info_Desc",
+    Callback = function()
+        Core.Spawn("UpdateDiscord", function()
+            local res = Core.Request({ Url = DiscordAPI })
+            if not res or not res.Body then return end
+
+            local ok, data = pcall(function()
+                return HttpService:JSONDecode(res.Body)
+            end)
+            if not ok or not data then return end
+
+            DiscordInfo:SetDesc(
+                "Members: " .. tostring(data.approximate_member_count or 0) ..
+                "\nOnline: " .. tostring(data.approximate_presence_count or 0)
+            )
+
+            WindUI:Notify({
+                Title = "loc:Update_Notify",
+                Content = "loc:Update_Notify_Content",
+                Duration = 2,
+                Icon = "refresh-cw"
+            })
+        end)
+    end
+})
+
+TabHandles.Info:Button({
+    Title = "loc:Copy_Discord_Invite",
+    Desc = "loc:Copy_Discord_Invite_Desc",
+    Callback = function()
+        if setclipboard then
+            setclipboard("https://discord.gg/" .. InviteCode)
+        end
+
+        WindUI:Notify({
+            Title = "loc:Copy_Discord_Invite_Copied",
+            Content = "loc:Copy_Discord_Invite_Content",
+            Duration = 2,
+            Icon = "clipboard-check"
+        })
+    end
+})
+
+Core.Spawn("LoadDiscord", function()
+    local res = Core.Request({ Url = DiscordAPI })
+    if not res or not res.Body then
+        DiscordInfo:SetTitle("Discord Server")
+        return
+    end
+
+    local ok, data = pcall(function()
+        return HttpService:JSONDecode(res.Body)
+    end)
+    if not ok or not data then
+        DiscordInfo:SetTitle("Discord Server")
+        return
+    end
+
+    local guild = data.guild
+
+    if guild then
+        DiscordInfo:SetTitle(guild.name or "Discord Server")
+
+        if DiscordInfo.SetImage and guild.icon then
+            DiscordInfo:SetImage(
+                "https://cdn.discordapp.com/icons/" ..
+                guild.id .. "/" ..
+                guild.icon .. ".png"
+            )
+        end
+    end
+
+    DiscordInfo:SetDesc(
+        "Members: " .. tostring(data.approximate_member_count or 0) ..
+        "\nOnline: " .. tostring(data.approximate_presence_count or 0)
+    )
+end)
+
+TabHandles.Info:Divider()
+
+TabHandles.Info:Section({
+    Title = "loc:Dev_Script",
+    TextXAlignment = "Center",
+    TextSize = 17
+})
+
+TabHandles.Info:Divider()
+
+TabHandles.Info:Paragraph({
+    Title = "loc:Main_Owner",
+    Desc = "@72ms.",
+    Image = "rbxassetid://137817619970621",
+    ImageSize = 30,
+})
+
+TabHandles.Info:Divider()
+
+TabHandles.Info:Section({
+    Title = "loc:My_Link",
+    TextXAlignment = "Center",
+    TextSize = 17
+})
+
+TabHandles.Info:Divider()
+
+TabHandles.Info:Paragraph({
+    Title = "Youtube",
+    Desc = "loc:Youtube_Desc",
+    Image = "rbxassetid://122312005360431",
+    ImageSize = 30,
+    Buttons = {
+        {
+            Icon = "copy",
+            Title = "loc:Copy_Link",
+            Callback = function()
+                if setclipboard then
+                    setclipboard("https://www.youtube.com/@1devoffice")
+                end
+            end
+        }
+    }
+})
+
+TabHandles.Info:Paragraph({
+    Title = "Discord",
+    Desc = "loc:Discord_Desc",
+    Image = "rbxassetid://109995816235688",
+    ImageSize = 30,
+    Buttons = {
+        {
+            Icon = "copy",
+            Title = "loc:Copy_Link",
+            Callback = function()
+                if setclipboard then
+                    setclipboard("https://discord.gg/" .. InviteCode)
+                end
+            end
+        }
+    }
+})
+
+TabHandles.Info:Paragraph({
+    Title = "TikTok",
+    Desc = "loc:TikTok_Desc",
+    Image = "rbxassetid://122312005360431",
+    ImageSize = 30,
+    Buttons = {
+        {
+            Icon = "copy",
+            Title = "loc:Copy_Link",
+            Callback = function()
+                if setclipboard then
+                    setclipboard("https://tiktok.com/@idk")
+                end
+            end
+        }
+    }
+})
+
+if getgenv().MyESPFramwork then getgenv().MyESPFramwork:RemoveAllEsp() end
+
+local ESP = { 
+    Objects = {}, 
+    TracerOrigin = "Bottom", 
+    Connection = nil, 
+    PlayerRemovingConn = nil,
+    ViewSizeConn = nil,
+    Config = {
+        MaxDistance = 1000,
+        UpdateInterval = 0.1
+    },
+    Cache = {
+        ViewSize = Camera.ViewportSize,
+        LastUpdate = 0
+    }
+}
+getgenv().MyESPFramwork = ESP
+
+local espFolder = CoreGui:FindFirstChild("MyHybridESP_Folder") or Instance.new("Folder")
+espFolder.Name = "MyHybridESP_Folder"
+espFolder.Parent = CoreGui
+
+local tracerGui = CoreGui:FindFirstChild("MyHybridESP_TracerGui") or Instance.new("ScreenGui")
+tracerGui.Name = "MyHybridESP_TracerGui"
+tracerGui.IgnoreGuiInset = true
+tracerGui.Parent = CoreGui
+
+-- Hàm kiểm tra chính xác xem Object có phải là bản thân không (chống lag/respawn)
+local function IsSelf(obj)
+    if not localPlayer then return false end
+    if obj == localPlayer then return true end
+    
+    local char = localPlayer.Character
+    if char then
+        if obj == char then return true end
+        if typeof(obj) == "Instance" and obj:IsDescendantOf(char) then return true end
+    end
+    return false
+end
+
+local function AllocateDrawings(d)
+    if not d.Drawings then d.Drawings = {} end
+    local draw, set = d.Drawings, d.Settings
+
+    if set.UseHighlight and not draw.Highlight then
+        local h = Instance.new("Highlight")
+        h.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+        h.Parent = CoreGui
+        h.Enabled = false
+        draw.Highlight = h
+    end
+
+    if set.UseText and not draw.TextBill then
+        local tb = Instance.new("BillboardGui")
+        tb.AlwaysOnTop = true
+        tb.Size = UDim2.new(0, 200, 0, 50)
+        tb.StudsOffset = Vector3.new(0, 4, 0)
+        tb.Parent = espFolder
+        tb.Enabled = false
+
+        local label = Instance.new("TextLabel")
+        label.Size = UDim2.new(1, 0, 1, 0)
+        label.BackgroundTransparency = 1
+        label.TextStrokeTransparency = 0
+        label.TextColor3 = Color3.new(1, 1, 1)
+        label.TextSize = 13
+        label.FontFace = Font.new("rbxassetid://12187361116", Enum.FontWeight.Bold)
+        label.Parent = tb
+
+        draw.TextBill = tb
+        draw.TextLabel = label
+    end
+
+    if set.UseBox and not draw.Box then
+        local b = Instance.new("BillboardGui")
+        b.AlwaysOnTop = true
+        b.Size = UDim2.new(4.5, 0, 6.5, 0)
+        b.Parent = espFolder
+        b.Enabled = false
+
+        local frame = Instance.new("Frame")
+        frame.Size = UDim2.new(1, 0, 1, 0)
+        frame.BackgroundTransparency = 1
+        frame.Parent = b
+
+        local stroke = Instance.new("UIStroke")
+        stroke.Thickness = 1.5
+        stroke.Parent = frame
+
+        draw.Box = b
+        draw.BoxStroke = stroke
+    end
+
+    if set.UseTracer and not draw.Tracer then
+        local line = Instance.new("Frame")
+        line.AnchorPoint = Vector2.new(0.5, 0.5)
+        line.BorderSizePixel = 0
+        line.Visible = false
+        line.Parent = tracerGui
+        draw.Tracer = line
+    end
+
+    return draw
+end
+
+local function SetAllVisible(draw, v)
+    if not draw then return end
+    if draw.TextBill and draw.TextBill.Enabled ~= v then draw.TextBill.Enabled = v end
+    if draw.Box and draw.Box.Enabled ~= v then draw.Box.Enabled = v end 
+    if draw.Tracer and draw.Tracer.Visible ~= v then draw.Tracer.Visible = v end
+    if draw.Highlight and draw.Highlight.Enabled ~= v then draw.Highlight.Enabled = v end
+end
+
+function ESP:DangKy(id, obj, settings)
+    if not obj or IsSelf(obj) then return end
+
+    settings = settings or {}
+    if settings.ShowName == nil then settings.ShowName = true end
+    if settings.UseHighlight == nil then settings.UseHighlight = false end
+    settings.Color = settings.Color or Color3.new(1, 1, 1)
+
+    if self.Objects[id] then  
+        self.Objects[id].Settings = settings  
+        self.Objects[id].Object = obj
+        self.Objects[id].BaseName = settings.CustomName or (typeof(obj) == "Instance" and obj.Name or tostring(obj))
+        return  
+    end  
+    
+    local isInst = typeof(obj) == "Instance"  
+    self.Objects[id] = {  
+        Object = obj, Settings = settings, Drawings = nil,
+        IsActive = true, BaseName = settings.CustomName or (isInst and obj.Name or tostring(obj)),  
+        IsInstance = isInst, IsPlayer = isInst and obj:IsA("Player"), DisplayText = ""   
+    }
+end
+
+function ESP:Huy(id)
+    local d = self.Objects[id]
+    if d then
+        if d.Drawings then
+            local draw = d.Drawings
+            if draw.Highlight then draw.Highlight:Destroy() end
+            if draw.TextBill then draw.TextBill:Destroy() end
+            if draw.Box then draw.Box:Destroy() end
+            if draw.Tracer then draw.Tracer:Destroy() end
+        end
+        self.Objects[id] = nil
+    end
+end
+
+function ESP:RemoveAllEsp()
+    for id in pairs(self.Objects) do self:Huy(id) end
+    if self.Connection then self.Connection:Disconnect() end
+    if self.PlayerRemovingConn then self.PlayerRemovingConn:Disconnect() end
+    if self.ViewSizeConn then self.ViewSizeConn:Disconnect() end
+end
+
+ESP.PlayerRemovingConn = Players.PlayerRemoving:Connect(function(p)
+    for id, d in pairs(ESP.Objects) do
+        if d.Object == p then ESP:Huy(id) end
+    end
+end)
+
+ESP.ViewSizeConn = Camera:GetPropertyChangedSignal("ViewportSize"):Connect(function() 
+    ESP.Cache.ViewSize = Camera.ViewportSize 
+end)
+
+local function GetTracerPos()
+    local o = ESP.TracerOrigin
+    local vs = ESP.Cache.ViewSize
+    if o == "Bottom" then return Vector2.new(vs.X * 0.5, vs.Y)
+    elseif o == "Center" then return Vector2.new(vs.X * 0.5, vs.Y * 0.5)
+    elseif o == "Mouse" then return UserInputService:GetMouseLocation()
+    else return Vector2.new(vs.X * 0.5, 0) end
+end
+
+local function GetBoundingInfo(obj)
+    if typeof(obj) ~= "Instance" then return nil, nil, nil end
+
+    if obj:IsA("Player") then
+        if not obj.Character then return nil, nil, nil end
+        obj = obj.Character
+    end
+
+    -- Check lại lần nữa phòng trường hợp player character load sau
+    if IsSelf(obj) then return nil, nil, nil end
+
+    local hum = obj:FindFirstChildOfClass("Humanoid")
+    if hum and hum.Health <= 0 then return nil, nil, nil end
+
+    if obj:IsA("Model") then
+        local cf, size = obj:GetBoundingBox()
+        if size.Magnitude > 0.1 then
+            return cf.Position, size, obj, hum
+        end
+    elseif obj:IsA("BasePart") then
+        return obj.Position, obj.Size, obj, hum
+    end
+
+    return nil, nil, nil
+end
+
+local function UpdateTracerFrame(frame, from, to, color)
+    local distance = (to - from).Magnitude
+    local center = (from + to) / 2
+    local angle = math.atan2(to.Y - from.Y, to.X - from.X)
+
+    frame.Size = UDim2.new(0, distance, 0, 1.5)
+    frame.Position = UDim2.new(0, center.X, 0, center.Y)
+    frame.Rotation = math.deg(angle)
+    frame.BackgroundColor3 = color
+end
+
+ESP.Connection = RunService.RenderStepped:Connect(function()
+    local clock = os.clock()
+    local heavy = (clock - ESP.Cache.LastUpdate) >= ESP.Config.UpdateInterval
+    if heavy then ESP.Cache.LastUpdate = clock end
+
+    local myPos = Camera.CFrame.Position  
+    local playerCharacter = localPlayer.Character
+    if playerCharacter then  
+        local root = playerCharacter:FindFirstChild("HumanoidRootPart") or playerCharacter:FindFirstChild("Head")  
+        if root then myPos = root.Position end  
+    end  
+    
+    local tracerPos = GetTracerPos()  
+
+    for id, d in pairs(ESP.Objects) do  
+        local obj = d.Object  
+
+        if IsSelf(obj) then
+            SetAllVisible(d.Drawings, false)
+            continue
+        end
+        
+        if d.IsInstance and (not obj or not obj.Parent) then  
+            ESP:Huy(id)  
+            continue  
+        end  
+
+        if not d.IsActive then  
+            SetAllVisible(d.Drawings, false) 
+            continue  
+        end  
+
+        local cPos, size, adornee, hum = GetBoundingInfo(obj)
+
+        if not cPos then
+            SetAllVisible(d.Drawings, false)
+            continue
+        end
+
+        local dist = (myPos - cPos).Magnitude   
+
+        if dist > ESP.Config.MaxDistance then  
+            SetAllVisible(d.Drawings, false)
+            continue   
+        end  
+
+        local set = d.Settings  
+        local draw = AllocateDrawings(d)
+        local col = set.Color  
+        local rootPart = obj:IsA("Model") and obj:FindFirstChild("HumanoidRootPart") or adornee
+
+        if heavy and set.UseText then  
+            local tArr = {}  
+            if set.ShowName ~= false then table.insert(tArr, d.BaseName) end  
+            if set.ShowHP and hum then table.insert(tArr, string.format("[%d/%d]", math.floor(hum.Health), math.floor(hum.MaxHealth))) end  
+            if set.ShowDistance then table.insert(tArr, string.format("[%dm]", math.floor(dist))) end  
+            d.DisplayText = table.concat(tArr, " ")  
+        end  
+
+        if set.UseHighlight and draw.Highlight then  
+            if not draw.Highlight.Enabled then draw.Highlight.Enabled = true end  
+            if draw.Highlight.Adornee ~= adornee then draw.Highlight.Adornee = adornee end  
+            if draw.Highlight.FillColor ~= col then draw.Highlight.FillColor = col end  
+        elseif draw.Highlight and draw.Highlight.Enabled then 
+            draw.Highlight.Enabled = false 
+        end  
+
+        if set.UseBox and draw.Box then
+            if not draw.Box.Enabled then draw.Box.Enabled = true end
+            if draw.Box.Adornee ~= rootPart then draw.Box.Adornee = rootPart end
+            if draw.BoxStroke.Color ~= col then draw.BoxStroke.Color = col end
+        elseif draw.Box and draw.Box.Enabled then
+            draw.Box.Enabled = false
+        end
+
+        if set.UseText and draw.TextBill then
+            if not draw.TextBill.Enabled then draw.TextBill.Enabled = true end
+            if draw.TextBill.Adornee ~= rootPart then draw.TextBill.Adornee = rootPart end
+            draw.TextLabel.Text = d.DisplayText
+            if draw.TextLabel.TextColor3 ~= col then draw.TextLabel.TextColor3 = col end
+        elseif draw.TextBill and draw.TextBill.Enabled then
+            draw.TextBill.Enabled = false
+        end
+
+        if set.UseTracer and draw.Tracer then
+            local sPos, on = Camera:WorldToViewportPoint(cPos)
+            if on then
+                if not draw.Tracer.Visible then draw.Tracer.Visible = true end
+                UpdateTracerFrame(draw.Tracer, tracerPos, Vector2.new(sPos.X, sPos.Y), col)
+            else
+                if draw.Tracer.Visible then draw.Tracer.Visible = false end
+            end
+        elseif draw.Tracer and draw.Tracer.Visible then
+            draw.Tracer.Visible = false
+        end
+    end
+end)
+
+-- Generator
+
+local PuzzleBot = {
+    Config = {
+        AutoSolve = false,
+        ShowPath = false,
+        SolveSpeed = 0.08
+    },
+    State = {
+        Watchers = {},
+        ActivePuzzle = nil,
+        LastPuzzle = nil,
+        IsSolving = false
+    },
+    Funcs = {}
+}
+
+function PuzzleBot.Funcs.IsNeighbor(node1, node2)
+    return math.abs(node1.row - node2.row) + math.abs(node1.col - node2.col) == 1
+end
+
+function PuzzleBot.Funcs.GetPuzzle()
+    local current = PuzzleBot.State.ActivePuzzle
+    if current and not current.gameEnded and current.gridFrame and current.gridFrame:IsDescendantOf(game) then
+        return current
+    end
+
+    for _, obj in pairs(getgc(true)) do
+        if type(obj) == "table" and rawget(obj, "targetPairs") and rawget(obj, "Solution") and rawget(obj, "gridFrame") then
+            if not obj.gameEnded and obj.gridFrame:IsDescendantOf(game) then
+                PuzzleBot.State.ActivePuzzle = obj
+                return obj
+            end
+        end
+    end
+    
+    PuzzleBot.State.ActivePuzzle = nil
+    return nil
+end
+
+function PuzzleBot.Funcs.ClearWatchers()
+    for _, conn in pairs(PuzzleBot.State.Watchers) do
+        if conn.Disconnect then conn:Disconnect() end
+    end
+    table.clear(PuzzleBot.State.Watchers)
+end
+
+function PuzzleBot.Funcs.GetOrderedPath(rawSolPath)
+    if not rawSolPath or #rawSolPath <= 1 then return rawSolPath end
+    
+    local pool = {}
+    for _, node in ipairs(rawSolPath) do
+        table.insert(pool, {row = node.row, col = node.col})
+    end
+    
+    local startIndex = 1
+    for i, node in ipairs(pool) do
+        local neighbors = 0
+        for j, other in ipairs(pool) do
+            if i ~= j and PuzzleBot.Funcs.IsNeighbor(node, other) then
+                neighbors = neighbors + 1
+            end
+        end
+        if neighbors == 1 then
+            startIndex = i
+            break
+        end
+    end
+    
+    local ordered = {}
+    local current = table.remove(pool, startIndex)
+    table.insert(ordered, current)
+    
+    while current and #pool > 0 do
+        local foundIdx = nil
+        for i, node in ipairs(pool) do
+            if PuzzleBot.Funcs.IsNeighbor(current, node) then
+                foundIdx = i
+                break
+            end
+        end
+        
+        current = table.remove(pool, foundIdx or 1)
+        table.insert(ordered, current)
+    end
+    
+    return ordered
+end
+
+function PuzzleBot.Funcs.ApplyESP(puzzle)
+    local defaultBtnColor = (puzzle.Settings and puzzle.Settings.defaultButtonColor) or Color3.fromRGB(30, 30, 30)
+
+    for colorIndex, pathCoords in pairs(puzzle.Solution) do
+        local pureColor = (puzzle.colors and puzzle.colors[colorIndex]) or Color3.new(1,1,1)
+        local mixedColor = defaultBtnColor:Lerp(pureColor, 0.3)
+        
+        for _, node in ipairs(pathCoords) do
+            local cell = puzzle.gridFrame:FindFirstChild(tostring(node.row) .. "-" .. tostring(node.col))
+            if cell and cell:FindFirstChild("Button") then
+                local btn = cell.Button
+                local function forceColor()
+                    if PuzzleBot.Config.ShowPath and btn.BackgroundColor3 ~= mixedColor then
+                        btn.BackgroundColor3 = mixedColor
+                        btn.BackgroundTransparency = 0 
+                    end
+                end
+                
+                forceColor()
+                table.insert(PuzzleBot.State.Watchers, btn:GetPropertyChangedSignal("BackgroundColor3"):Connect(forceColor))
+            end
+        end
+    end
+end
+
+function PuzzleBot.Funcs.SolvePuzzle(puzzle)
+    for colorIndex, rawSolPath in pairs(puzzle.Solution) do
+        if not PuzzleBot.Config.AutoSolve or puzzle.gameEnded then break end
+        
+        local orderedSolPath = PuzzleBot.Funcs.GetOrderedPath(rawSolPath)
+        local currentPath = puzzle.paths[colorIndex]
+        local isPerfect = true
+        
+        if not currentPath or #currentPath ~= #orderedSolPath then
+            isPerfect = false
+        else
+            for j, node in ipairs(orderedSolPath) do
+                if not currentPath[j] or currentPath[j].row ~= node.row or currentPath[j].col ~= node.col then
+                    isPerfect = false
+                    break
+                end
+            end
+        end
+
+        if not isPerfect then
+            puzzle.paths[colorIndex] = {}
+            if puzzle.updateGui then puzzle:updateGui() end
+            task.wait(0.1) 
+            
+            for _, node in ipairs(orderedSolPath) do
+                if not PuzzleBot.Config.AutoSolve or puzzle.gameEnded then break end
+                table.insert(puzzle.paths[colorIndex], {row = node.row, col = node.col})
+                if puzzle.updateGui then puzzle:updateGui() end
+                task.wait(PuzzleBot.Config.SolveSpeed) 
+            end
+            task.wait(0.1) 
+        end
+    end
+    
+    if puzzle.checkForWin then puzzle:checkForWin() end
+    PuzzleBot.State.IsSolving = false
+end
+
+MyUIElements.Generator:Input({
+    Title = "loc:SolveSpeed",
+    Desc = "loc:SolveSpeedDesc",
+    Flag = "SolveSpeed_Input",
+    Placeholder = "0.08",
+    Value = 0.08,
+    Numeric = true,
+    Callback = function(val)
+        local speed = tonumber(val)
+        if speed then
+            PuzzleBot.Config.SolveSpeed = math.clamp(speed, 0.08, 10)
+        end
+    end
+})
+
+MyUIElements.Generator:Toggle({
+    Title = "loc:AutoSolve", 
+    Desc = "loc:AutoSolveDesc", 
+    Flag = "AutoSolve_Toggle",
+    Value = false, 
+    Callback = function(val)
+        PuzzleBot.Config.AutoSolve = val
+    end
+})
+
+MyUIElements.Generator:Toggle({
+    Title = "loc:GeneratorHelper", 
+    Desc = "loc:GeneratorHelperDesc", 
+    Flag = "ShowPath_Toggle",
+    Value = false, 
+    Callback = function(val)
+        PuzzleBot.Config.ShowPath = val 
+        if not val then 
+            PuzzleBot.Funcs.ClearWatchers() 
+            local puzzle = PuzzleBot.State.ActivePuzzle
+            if puzzle and puzzle.updateGui then puzzle:updateGui() end
+        end
+    end
+})
+
+task.spawn(function()
+    while task.wait(0.2) do
+        local puzzle = PuzzleBot.Funcs.GetPuzzle()
+
+        if puzzle ~= PuzzleBot.State.LastPuzzle then
+            PuzzleBot.Funcs.ClearWatchers()
+            PuzzleBot.State.LastPuzzle = puzzle
+        end
+
+        if not puzzle then
+            PuzzleBot.State.IsSolving = false
+            continue
+        end
+
+        if PuzzleBot.Config.ShowPath and #PuzzleBot.State.Watchers == 0 then
+            PuzzleBot.Funcs.ApplyESP(puzzle)
+        end
+
+        if PuzzleBot.Config.AutoSolve and not PuzzleBot.State.IsSolving and not puzzle.gameEnded then
+            PuzzleBot.State.IsSolving = true
+            task.spawn(function()
+                PuzzleBot.Funcs.SolvePuzzle(puzzle)
+            end)
+        end
+    end
+end)
+
+-- Items
+
+local ItemBot = {
+    Config = {
+        AutoPickupSelected = false,
+        AutoPickupNearest = false,
+        SelectedItem = nil
+    },
+    State = {
+        LiveCache = {},
+        CachedHash = ""
+    },
+    Funcs = {}
+}
+
+function ItemBot.Funcs.InspectAndCache(obj)
+    if not obj:IsA("ProximityPrompt") then return end
+    
+    local itemRoot = obj.Parent
+    if not itemRoot or itemRoot.Name ~= "ItemRoot" then return end
+    
+    local item = itemRoot.Parent
+    if not item or item:FindFirstChild("Humanoid") then return end
+
+    ItemBot.State.LiveCache[item] = obj
+end
+
+function ItemBot.Funcs.ScanFolder(folder)
+    if not folder then return end
+    
+    for _, obj in ipairs(folder:GetDescendants()) do
+        ItemBot.Funcs.InspectAndCache(obj)
+    end
+    
+    folder.DescendantAdded:Connect(function(desc)
+        task.delay(0.1, function() ItemBot.Funcs.InspectAndCache(desc) end)
+    end)
+end
+
+task.spawn(function()
+    if IngameFolder then ItemBot.Funcs.ScanFolder(IngameFolder) end
+    if TargetMapFolder and TargetMapFolder ~= IngameFolder then 
+        ItemBot.Funcs.ScanFolder(TargetMapFolder) 
+    end
+end)
+
+function ItemBot.Funcs.GetAvailableItems()
+    local validItems = {}
+    for item, prompt in pairs(ItemBot.State.LiveCache) do
+        -- FIX 1: Chỉ xóa khi item thực sự đã bốc hơi khỏi map (bị nhặt/hủy)
+        if item and item.Parent and prompt and prompt.Parent then
+            -- Chỉ hiển thị lên Dropdown nếu nó đang nhặt được
+            if prompt.Enabled then
+                table.insert(validItems, item)
+            end
+        else
+            -- Item không còn tồn tại thì mới dọn rác
+            ItemBot.State.LiveCache[item] = nil
+        end
+    end
+    return validItems
+end
+
+function ItemBot.Funcs.TeleportAndPickup(item)
+    if not item then return end
+    local rootPart = playerCharacter and playerCharacter:FindFirstChild("HumanoidRootPart")
+    if not rootPart then return end
+
+    local prompt = ItemBot.State.LiveCache[item]
+    local itemRoot = item:FindFirstChild("ItemRoot")
+    if not itemRoot or not prompt then return end
+
+    local oldCFrame = rootPart.CFrame
+    rootPart.CFrame = itemRoot.CFrame
+    task.wait(0.25)
+    
+    pcall(function() 
+        local oldLOS = prompt.RequiresLineOfSight
+        prompt.RequiresLineOfSight = false
+        fireproximityprompt(prompt) 
+        
+        task.delay(0.1, function()
+            if prompt and prompt.Parent then prompt.RequiresLineOfSight = oldLOS end
+        end)
+    end)
+    
+    task.wait(0.3)
+    rootPart.CFrame = oldCFrame
+end
+
+function ItemBot.Funcs.PickUpItem(mode, specificName)
+    local rootPart = playerCharacter and playerCharacter:FindFirstChild("HumanoidRootPart")
+    if not rootPart then return end
+
+    local items = ItemBot.Funcs.GetAvailableItems()
+    if #items == 0 then return end
+
+    if mode == "Random" then
+        ItemBot.Funcs.TeleportAndPickup(items[math.random(1, #items)])
+        return
+    end
+
+    local closest, minDist = nil, math.huge
+    for _, item in ipairs(items) do
+        if mode == "Specific" and item.Name ~= specificName then continue end
+        
+        local dist = (rootPart.Position - item.ItemRoot.Position).Magnitude
+        if dist < minDist then 
+            minDist = dist 
+            closest = item 
+        end
+    end
+
+    if closest then ItemBot.Funcs.TeleportAndPickup(closest) end
+end
+
+local ItemDropdown = nil 
+
+task.spawn(function()
+    local tickCount = 0
+    while task.wait(0.5) do
+        local isSurvivor = playerCharacter and playerCharacter.Parent == survivorsFolder
+        
+        if isSurvivor then
+            if ItemBot.Config.AutoPickupNearest then
+                ItemBot.Funcs.PickUpItem("Nearest")
+            elseif ItemBot.Config.AutoPickupSelected and ItemBot.Config.SelectedItem then
+                ItemBot.Funcs.PickUpItem("Specific", ItemBot.Config.SelectedItem)
+            end
+        end
+        
+        tickCount = tickCount + 1
+        if tickCount >= 4 and ItemDropdown then
+            tickCount = 0
+            local items = ItemBot.Funcs.GetAvailableItems()
+            local nameMap, uniqueNames = {}, {}
+            
+            for _, item in ipairs(items) do
+                if not nameMap[item.Name] then
+                    nameMap[item.Name] = true
+                    table.insert(uniqueNames, item.Name)
+                end
+            end
+            
+            local newHash = table.concat(uniqueNames, ",")
+            if ItemBot.State.CachedHash ~= newHash then
+                ItemBot.State.CachedHash = newHash
+                
+                -- FIX 2: Tách pcall ra để đảm bảo UI kiểu gì cũng được update
+                pcall(function() ItemDropdown:SetValues(uniqueNames) end)
+                pcall(function() ItemDropdown:Refresh(uniqueNames, true) end) 
+            end
+        end
+    end
+end)
+
+-- Giao diện UI giữ nguyên bên dưới
+ItemDropdown = MyUIElements.Items:Dropdown({
+    Title = "loc:Select_Item",
+    Desc = "loc:Select_Item_Desc",
+    Flag = "Select_Pickup_Item",
+    Values = {},
+    Value = nil,
+    Callback = function(value)
+        ItemBot.Config.SelectedItem = value
+    end
+})
+
+MyUIElements.Items:Button({
+    Title = "loc:Pick_Up_Selected_Item",
+    Desc = "loc:Pick_Up_Selected_Item_Desc",
+    Callback = function()
+        if playerCharacter and playerCharacter.Parent == survivorsFolder and ItemBot.Config.SelectedItem then
+            ItemBot.Funcs.PickUpItem("Specific", ItemBot.Config.SelectedItem)
+        end
+    end
+})
+
+MyUIElements.Items:Button({
+    Title = "loc:Pick_Up_Random_Item",
+    Desc = "loc:Pick_Up_Random_Item_Desc",
+    Callback = function()
+        if playerCharacter and playerCharacter.Parent == survivorsFolder then
+            ItemBot.Funcs.PickUpItem("Random")
+        end
+    end
+})
+
+MyUIElements.Items:Toggle({
+    Title = "loc:Auto_PickUp_Selected_Item",
+    Desc = "loc:Auto_PickUp_Selected_Item_Desc",
+    Flag = "Auto_PickUp_Selected",
+    Value = false,
+    Callback = function(state)
+        ItemBot.Config.AutoPickupSelected = state
+    end
+})
+
+MyUIElements.Items:Toggle({
+    Title = "loc:Auto_PickUp_Nearest_Item",
+    Desc = "loc:Auto_PickUp_Nearest_Item_Desc",
+    Flag = "Auto_PickUp_Nearest",
+    Value = false,
+    Callback = function(state)
+        ItemBot.Config.AutoPickupNearest = state
+    end
+})
+
+-- Stamina
+
+local StaminaBot = {
+    Config = {
+        InfStamina = false,
+        Max = { Enabled = false, Value = 100 },
+        Regen = { Enabled = false, Value = 20 },
+        Drain = { Enabled = false, Value = 10 },
+        Speed = { Enabled = false, Value = 25 }
+    },
+    State = {
+        ModulePath = ReplicatedStorage:WaitForChild("Systems"):WaitForChild("Character"):WaitForChild("Game"):WaitForChild("Sprinting"),
+        Module = nil,
+        LastForce = 0,
+        ForceDelay = 0.2
+    },
+    Originals = {
+        Max = 100, Regen = 20, Drain = 10, Speed = 25
+    },
+    Funcs = {}
+}
+
+function StaminaBot.Funcs.SafeSet(propUpper, propLower, value)
+    local mod = StaminaBot.State.Module
+    if not mod then return end
+    pcall(function() mod[propUpper] = value end)
+    pcall(function() mod[propLower] = value end)
+end
+
+function StaminaBot.Funcs.LoadModule()
+    if StaminaBot.State.Module then return true end
+
+    local success, mod = pcall(require, StaminaBot.State.ModulePath)
+    if success and mod then
+        StaminaBot.State.Module = mod
+        
+        StaminaBot.Originals.Max = tonumber(mod.MaxStamina) or tonumber(mod.maxStamina) or 100
+        StaminaBot.Originals.Regen = tonumber(mod.StaminaGain) or tonumber(mod.staminaGain) or 20
+        StaminaBot.Originals.Drain = tonumber(mod.StaminaLoss) or tonumber(mod.staminaLoss) or 10
+        StaminaBot.Originals.Speed = tonumber(mod.SprintSpeed) or tonumber(mod.sprintSpeed) or 25
+        return true
+    end
+    return false
+end
+
+function StaminaBot.Funcs.SetStamina(val)
+    local mod = StaminaBot.State.Module
+    if not mod then return end
+    val = tonumber(val) or 0
+
+    pcall(function()
+        if type(mod.SetStamina) == "function" then mod:SetStamina(val)
+        elseif type(mod.UpdateStamina) == "function" then mod:UpdateStamina(val)
+        elseif type(mod.ChangeStamina) == "function" then mod:ChangeStamina(val)
+        else mod.Stamina = val end
+    end)
+    pcall(function() mod.Stamina = val end)
+end
+
+function StaminaBot.Funcs.GetCurrent()
+    local mod = StaminaBot.State.Module
+    return mod and (tonumber(mod.Stamina) or 0) or 0
+end
+
+function StaminaBot.Funcs.ApplyStats()
+    if not StaminaBot.Funcs.LoadModule() then return end
+    local cfg = StaminaBot.Config
+
+    if cfg.Max.Enabled then StaminaBot.Funcs.SafeSet("MaxStamina", "maxStamina", cfg.Max.Value) end
+    if cfg.Regen.Enabled then StaminaBot.Funcs.SafeSet("StaminaGain", "staminaGain", cfg.Regen.Value) end
+    if cfg.Drain.Enabled then StaminaBot.Funcs.SafeSet("StaminaLoss", "staminaLoss", cfg.Drain.Value) end
+    if cfg.Speed.Enabled then StaminaBot.Funcs.SafeSet("SprintSpeed", "sprintSpeed", cfg.Speed.Value) end
+
+    local current = StaminaBot.Funcs.GetCurrent()
+    local maxValue = cfg.Max.Enabled and cfg.Max.Value or StaminaBot.Originals.Max
+
+    if cfg.Max.Enabled then
+        if current > maxValue then
+            StaminaBot.Funcs.SetStamina(maxValue)
+        elseif current <= StaminaBot.Originals.Max and tick() - StaminaBot.State.LastForce >= StaminaBot.State.ForceDelay then
+            StaminaBot.State.LastForce = tick()
+            StaminaBot.Funcs.SetStamina(math.clamp(current, 0, maxValue))
+        end
+    end
+
+    if cfg.InfStamina and current < maxValue then
+        StaminaBot.Funcs.SetStamina(maxValue)
+    end
+end
+
+task.spawn(function()
+    while task.wait(0.1) do
+        local ok = pcall(function() StaminaBot.Funcs.ApplyStats() end)
+        if not ok then StaminaBot.State.Module = nil end
+    end
+end)
+
+localPlayer.CharacterAdded:Connect(function()
+    task.wait(1)
+    StaminaBot.State.Module = nil
+
+    if StaminaBot.Funcs.LoadModule() then
+        StaminaBot.Funcs.ApplyStats()
+        if StaminaBot.Config.Max.Enabled then
+            local current = StaminaBot.Funcs.GetCurrent()
+            if current < StaminaBot.Config.Max.Value then
+                StaminaBot.Funcs.SetStamina(StaminaBot.Config.Max.Value)
+            end
+        end
+    end
+end)
+
+MyUIElements.SetupStamina:Button({
+    Title = "loc:Full_Stamina",
+    Desc = "loc:Full_Stamina_Desc",
+    Callback = function()
+        if StaminaBot.Funcs.LoadModule() then
+            local maxValue = StaminaBot.Config.Max.Enabled and StaminaBot.Config.Max.Value or (tonumber(StaminaBot.State.Module.MaxStamina) or StaminaBot.Originals.Max)
+            StaminaBot.Funcs.SetStamina(maxValue)
+        end
+    end
+})
+
+MyUIElements.SetupStamina:Toggle({
+    Title = "loc:Infinite_Stamina",
+    Desc = "loc:Infinite_Stamina_Desc",
+    Flag = "Inf Stamina",
+    Callback = function(v)
+        StaminaBot.Config.InfStamina = v
+        if v and StaminaBot.Funcs.LoadModule() then
+            local maxValue = StaminaBot.Config.Max.Enabled and StaminaBot.Config.Max.Value or (tonumber(StaminaBot.State.Module.MaxStamina) or StaminaBot.Originals.Max)
+            StaminaBot.Funcs.SetStamina(maxValue)
+        end
+    end
+})
+
+MyUIElements.SetupStamina:Input({
+    Title = "loc:Max_Stamina_Value",
+    Desc = "loc:Max_Stamina_Value_Desc",
+    Flag = "Max Stamina Value",
+    Placeholder = "100",
+    Value = 100,
+    Numeric = true,
+    Callback = function(txt)
+        local num = tonumber(txt)
+        if not num then num = 100 end
+        StaminaBot.Config.Max.Value = math.clamp(num, 1, 999999)
+        if StaminaBot.Config.Max.Enabled then StaminaBot.Funcs.ApplyStats() end
+    end
+})
+
+MyUIElements.SetupStamina:Toggle({
+    Title = "loc:Apply_Max_Stamina",
+    Desc = "loc:Apply_Max_Stamina_Desc",
+    Flag = "Apply Max Stamina",
+    Callback = function(v)
+        StaminaBot.Config.Max.Enabled = v
+        if v then
+            StaminaBot.Funcs.ApplyStats()
+            local current = StaminaBot.Funcs.GetCurrent()
+            if current < StaminaBot.Config.Max.Value then
+                StaminaBot.Funcs.SetStamina(StaminaBot.Config.Max.Value)
+            end
+        else
+            StaminaBot.Funcs.SafeSet("MaxStamina", "maxStamina", StaminaBot.Originals.Max)
+            StaminaBot.Funcs.SetStamina(StaminaBot.Originals.Max)
+        end
+    end
+})
+
+MyUIElements.SetupStamina:Input({
+    Title = "loc:Regen_Value",
+    Desc = "loc:Regen_Value_Desc",
+    Flag = "Regen Value",
+    Placeholder = "20",
+    Value = 20,
+    Numeric = true,
+    Callback = function(txt)
+        local num = tonumber(txt)
+        if not num then num = 1 end
+        StaminaBot.Config.Regen.Value = num
+        if StaminaBot.Config.Regen.Enabled then StaminaBot.Funcs.ApplyStats() end
+    end
+})
+
+MyUIElements.SetupStamina:Toggle({
+    Title = "loc:Apply_Regen",
+    Desc = "loc:Apply_Regen_Desc",
+    Flag = "Apply Regen",
+    Callback = function(v)
+        StaminaBot.Config.Regen.Enabled = v
+        if v then
+            StaminaBot.Funcs.ApplyStats()
+        else
+            StaminaBot.Funcs.SafeSet("StaminaGain", "staminaGain", StaminaBot.Originals.Regen)
+        end
+    end
+})
+
+MyUIElements.SetupStamina:Input({
+    Title = "loc:Drain_Value",
+    Desc = "loc:Drain_Value_Desc",
+    Flag = "Drain Value",
+    Placeholder = "10",
+    Value = 10,
+    Numeric = true,
+    Callback = function(txt)
+        local num = tonumber(txt)
+        if not num then num = 1 end
+        StaminaBot.Config.Drain.Value = num
+        if StaminaBot.Config.Drain.Enabled then StaminaBot.Funcs.ApplyStats() end
+    end
+})
+
+MyUIElements.SetupStamina:Toggle({
+    Title = "loc:Apply_Drain",
+    Desc = "loc:Apply_Drain_Desc",
+    Flag = "Apply Drain",
+    Callback = function(v)
+        StaminaBot.Config.Drain.Enabled = v
+        if v then
+            StaminaBot.Funcs.ApplyStats()
+        else
+            StaminaBot.Funcs.SafeSet("StaminaLoss", "staminaLoss", StaminaBot.Originals.Drain)
+        end
+    end
+})
+
+MyUIElements.SetupStamina:Input({
+    Title = "loc:Sprint_Speed_Value",
+    Desc = "loc:Sprint_Speed_Value_Desc",
+    Flag = "Sprint Speed Value",
+    Placeholder = "25",
+    Value = 25,
+    Numeric = true,
+    Callback = function(txt)
+        local num = tonumber(txt)
+        if not num then num = 25 end
+        StaminaBot.Config.Speed.Value = num
+        if StaminaBot.Config.Speed.Enabled then StaminaBot.Funcs.ApplyStats() end
+    end
+})
+
+MyUIElements.SetupStamina:Toggle({
+    Title = "loc:Apply_Sprint_Speed",
+    Desc = "loc:Apply_Sprint_Speed_Desc",
+    Flag = "Apply Sprint Speed",
+    Callback = function(v)
+        StaminaBot.Config.Speed.Enabled = v
+        if v then
+            StaminaBot.Funcs.ApplyStats()
+        else
+            StaminaBot.Funcs.SafeSet("SprintSpeed", "sprintSpeed", StaminaBot.Originals.Speed)
+        end
+    end
+})
+
+local ESP = getgenv().MyESPFramwork
+
+-- Tracer Settings
+
+MyUIElements.TracerSettings:Dropdown({
+    Title = "loc:TracerSettings",
+    Desc = "loc:TracerSettingsDesc",
+    Flag = "ESP_Global_Tracer_Origin",
+    Values = {"Top", "Bottom", "Center", "Mouse"},
+    Value = "Top",
+    Multi = false,
+    AllowNone = false,
+    Callback = function(selectedValue)
+        if selectedValue == "Top" then 
+            ESP.TracerOrigin = "Top"
+        elseif selectedValue == "Bottom" then 
+            ESP.TracerOrigin = "Bottom"
+        elseif selectedValue == "Center" then 
+            ESP.TracerOrigin = "Center"
+        elseif selectedValue == "Mouse" then 
+            ESP.TracerOrigin = "Mouse" 
+        end
+    end
+})
+
+-- Esp Survivors
+
+local SurvivorESPConfig = {
+    Enabled = false,
+    Types = { Highlight = true, Text = false, Box = false, Tracer = false },
+    TextFormat = { Name = true, HP = false, Distance = false },
+    Color = Color3.fromRGB(50, 255, 50)
+}
+
+local function UpdateSurvivorESP()
+    if SurvivorESPConfig.Enabled then
+        for _, char in pairs(survivorsFolder:GetChildren()) do
+            ESP:DangKy("Survivor_" .. char.Name, char, {
+                UseHighlight = SurvivorESPConfig.Types.Highlight,
+                UseText = SurvivorESPConfig.Types.Text,
+                UseBox = SurvivorESPConfig.Types.Box,
+                UseTracer = SurvivorESPConfig.Types.Tracer,
+                Color = SurvivorESPConfig.Color,
+                ShowName = SurvivorESPConfig.TextFormat.Name,
+                ShowHP = SurvivorESPConfig.TextFormat.HP,
+                ShowDistance = SurvivorESPConfig.TextFormat.Distance,
+                CustomName = char.Name
+            })
+        end
+    else
+        for _, char in pairs(survivorsFolder:GetChildren()) do
+            ESP:Huy("Survivor_" .. char.Name)
+        end
+    end
+end
+
+MyUIElements.EspSurvivors:Dropdown({
+    Title = "loc:ESPMode",
+    Desc = "loc:ESPModeDesc",
+    Flag = "ESP_Survivor_Type_Dropdown",
+    Values = {"Highlight", "Text", "Box", "Tracer"},
+    Value = {"Highlight"},
+    Multi = true,
+    AllowNone = true,
+    Callback = function(selectedValues)
+        SurvivorESPConfig.Types = { Highlight = false, Text = false, Box = false, Tracer = false }
+        for k, v in pairs(selectedValues) do
+            local val = type(k) == "string" and k or v
+            if val == "Highlight" then SurvivorESPConfig.Types.Highlight = true 
+            elseif val == "Text" then SurvivorESPConfig.Types.Text = true 
+            elseif val == "Box" then SurvivorESPConfig.Types.Box = true 
+            elseif val == "Tracer" then SurvivorESPConfig.Types.Tracer = true end
+        end
+        if SurvivorESPConfig.Enabled then UpdateSurvivorESP() end
+    end
+})
+
+MyUIElements.EspSurvivors:Dropdown({
+    Title = "loc:SetupEspText",
+    Desc = "loc:SetupEspTextDesc",
+    Flag = "ESP_Survivor_Text_Format",
+    Values = {"Name", "HP", "Distance"},
+    Value = {"Name"},
+    Multi = true,
+    AllowNone = true,
+    Callback = function(selectedValues)
+        SurvivorESPConfig.TextFormat = { Name = false, HP = false, Distance = false }
+        for k, v in pairs(selectedValues) do
+            local val = type(k) == "string" and k or v
+            if val == "Name" then SurvivorESPConfig.TextFormat.Name = true 
+            elseif val == "HP" then SurvivorESPConfig.TextFormat.HP = true 
+            elseif val == "Distance" then SurvivorESPConfig.TextFormat.Distance = true end
+        end
+        if SurvivorESPConfig.Enabled then UpdateSurvivorESP() end
+    end
+})
+
+MyUIElements.EspSurvivors:Colorpicker({
+    Title = "loc:EspColor",
+    Desc = "loc:EspColorDesc",
+    Flag = "Esp_Survivor_Colorpicker",
+    Default = SurvivorESPConfig.Color,
+    Transparency = 0,
+    Locked = false,
+    Callback = function(color) 
+        SurvivorESPConfig.Color = color
+        if SurvivorESPConfig.Enabled then UpdateSurvivorESP() end
+    end
+})
+
+MyUIElements.EspSurvivors:Toggle({
+    Title = "loc:ESPSurvivors",
+    Desc = "loc:ESPSurvivorsDesc",
+    Flag = "ESP_Survivor_Toggle",
+    Value = false,
+    Callback = function(state)
+        SurvivorESPConfig.Enabled = state
+        UpdateSurvivorESP()
+    end
+})
+
+survivorsFolder.ChildAdded:Connect(function(char)
+    if SurvivorESPConfig.Enabled then
+        task.wait(3) 
+        UpdateSurvivorESP()
+    end
+end)
+
+survivorsFolder.ChildRemoved:Connect(function(char)
+    ESP:Huy("Survivor_" .. char.Name)
+end)
+
+-- Esp Killers
+
+local KillerESPConfig = {
+    Enabled = false,
+    Types = { Highlight = true, Text = false, Box = false, Tracer = false },
+    TextFormat = { Name = true, HP = false, Distance = false },
+    Color = Color3.fromRGB(255, 50, 50)
+}
+
+local function UpdateKillerESP()
+    if KillerESPConfig.Enabled then
+        for _, char in pairs(killersFolder:GetChildren()) do
+            ESP:DangKy("Killer_" .. char.Name, char, {
+                UseHighlight = KillerESPConfig.Types.Highlight,
+                UseText = KillerESPConfig.Types.Text,
+                UseBox = KillerESPConfig.Types.Box,
+                UseTracer = KillerESPConfig.Types.Tracer,
+                Color = KillerESPConfig.Color,
+                ShowName = KillerESPConfig.TextFormat.Name,
+                ShowHP = KillerESPConfig.TextFormat.HP,
+                ShowDistance = KillerESPConfig.TextFormat.Distance,
+                CustomName = char.Name
+            })
+        end
+    else
+        for _, char in pairs(killersFolder:GetChildren()) do
+            ESP:Huy("Killer_" .. char.Name)
+        end
+    end
+end
+
+MyUIElements.EspKillers:Dropdown({
+    Title = "loc:ESPMode",
+    Desc = "loc:ESPModeDesc",
+    Flag = "ESP_Killer_Type_Dropdown",
+    Values = {"Highlight", "Text", "Box", "Tracer"},
+    Value = {"Highlight"},
+    Multi = true,
+    AllowNone = true,
+    Callback = function(selectedValues)
+        KillerESPConfig.Types = { Highlight = false, Text = false, Box = false, Tracer = false }
+        for k, v in pairs(selectedValues) do
+            local val = type(k) == "string" and k or v
+            if val == "Highlight" then KillerESPConfig.Types.Highlight = true 
+            elseif val == "Text" then KillerESPConfig.Types.Text = true 
+            elseif val == "Box" then KillerESPConfig.Types.Box = true 
+            elseif val == "Tracer" then KillerESPConfig.Types.Tracer = true end
+        end
+        if KillerESPConfig.Enabled then UpdateKillerESP() end
+    end
+})
+
+MyUIElements.EspKillers:Dropdown({
+    Title = "loc:SetupEspText",
+    Desc = "loc:SetupEspTextDesc",
+    Flag = "ESP_Killer_Text_Format",
+    Values = {"Name", "HP", "Distance"},
+    Value = {"Name"},
+    Multi = true,
+    AllowNone = true,
+    Callback = function(selectedValues)
+        KillerESPConfig.TextFormat = { Name = false, HP = false, Distance = false }
+        for k, v in pairs(selectedValues) do
+            local val = type(k) == "string" and k or v
+            if val == "Name" then KillerESPConfig.TextFormat.Name = true 
+            elseif val == "HP" then KillerESPConfig.TextFormat.HP = true 
+            elseif val == "Distance" then KillerESPConfig.TextFormat.Distance = true end
+        end
+        if KillerESPConfig.Enabled then UpdateKillerESP() end
+    end
+})
+
+MyUIElements.EspKillers:Colorpicker({
+    Title = "loc:EspColor",
+    Desc = "loc:EspColorDesc",
+    Flag = "Esp_Killer_Colorpicker",
+    Default = KillerESPConfig.Color,
+    Transparency = 0,
+    Locked = false,
+    Callback = function(color) 
+        KillerESPConfig.Color = color
+        if KillerESPConfig.Enabled then UpdateKillerESP() end
+    end
+})
+
+MyUIElements.EspKillers:Toggle({
+    Title = "loc:EspKillers",
+    Desc = "loc:EspKillersDesc",
+    Flag = "ESP_Killer_Toggle",
+    Value = false,
+    Callback = function(state)
+        KillerESPConfig.Enabled = state
+        UpdateKillerESP()
+    end
+})
+
+killersFolder.ChildAdded:Connect(function(char)
+    if KillerESPConfig.Enabled then
+        task.wait(3)
+        UpdateKillerESP()
+    end
+end)
+
+killersFolder.ChildRemoved:Connect(function(char)
+    ESP:Huy("Killer_" .. char.Name)
+end)
+
+-- Generator
+
+local CurrentMap = nil
+
+local function HandleGeneratorESP(obj, isFake, config)
+    task.spawn(function()
+        local prefix = isFake and "FakeGen_" or "Gen_"
+        local defaultName = isFake and "Fake Generator" or "Generator"
+        local id = prefix .. (obj:GetDebugId() or obj.Name)
+        
+        local progress = obj:WaitForChild("Progress", 3)
+        
+        local function UpdateESP()
+            if not config.Enabled then
+                ESP:Huy(id)
+                return
+            end
+            
+            if progress and progress:IsA("NumberValue") and progress.Value >= 100 then
+                ESP:Huy(id)
+                return
+            end
+            
+            local displayName = defaultName
+            if config.TextFormat.Progress and progress and progress:IsA("NumberValue") then
+                displayName = defaultName .. " [" .. math.floor(progress.Value) .. "%]"
+            end
+            
+            ESP:DangKy(id, obj, {
+                UseHighlight = config.Types.Highlight,
+                UseText = config.Types.Text,
+                UseBox = config.Types.Box,
+                UseTracer = config.Types.Tracer,
+                Color = config.Color,
+                ShowName = config.TextFormat.Name,
+                ShowHP = false,
+                ShowDistance = config.TextFormat.Distance,
+                CustomName = displayName
+            })
+        end
+
+        if progress and progress:IsA("NumberValue") then
+            if not progress:GetAttribute("ESP_Watch") then
+                progress:SetAttribute("ESP_Watch", true)
+                progress:GetPropertyChangedSignal("Value"):Connect(function()
+                    if config.Enabled then
+                        UpdateESP()
+                    end
+                end)
+            end
+        end
+        
+        UpdateESP()
+    end)
+end
+
+local GeneratorESPConfig = {
+    Enabled = false,
+    Types = { Highlight = true, Text = false, Box = false, Tracer = false },
+    TextFormat = { Name = true, Progress = false, Distance = false },
+    Color = Color3.fromRGB(255, 215, 0)
+}
+
+local function UpdateGeneratorESP()
+    if not CurrentMap then return end
+
+    if GeneratorESPConfig.Enabled then
+        for _, child in ipairs(CurrentMap:GetChildren()) do
+            if child.Name == "Generator" then
+                HandleGeneratorESP(child, false, GeneratorESPConfig)
+            end
+        end
+    else
+        for _, child in ipairs(CurrentMap:GetChildren()) do
+            if child.Name == "Generator" then
+                ESP:Huy("Gen_" .. (child:GetDebugId() or child.Name))
+            end
+        end
+    end
+end
+
+MyUIElements.EspGenerator:Dropdown({
+    Title = "loc:ESPMode",
+    Desc = "loc:ESPModeDesc",
+    Flag = "ESP_Generator_Type_Dropdown",
+    Values = {"Highlight", "Text", "Box", "Tracer"},
+    Value = {"Highlight"},
+    Multi = true,
+    AllowNone = true,
+    Callback = function(selectedValues)
+        GeneratorESPConfig.Types = { Highlight = false, Text = false, Box = false, Tracer = false }
+        for k, v in pairs(selectedValues) do
+            local val = type(k) == "string" and k or v
+            if val == "Highlight" then GeneratorESPConfig.Types.Highlight = true 
+            elseif val == "Text" then GeneratorESPConfig.Types.Text = true 
+            elseif val == "Box" then GeneratorESPConfig.Types.Box = true 
+            elseif val == "Tracer" then GeneratorESPConfig.Types.Tracer = true end
+        end
+        if GeneratorESPConfig.Enabled then UpdateGeneratorESP() end
+    end
+})
+
+MyUIElements.EspGenerator:Dropdown({
+    Title = "loc:SetupEspText",
+    Desc = "loc:SetupEspTextDesc",
+    Flag = "ESP_Generator_Text_Format",
+    Values = {"Name", "Progress", "Distance"},
+    Value = {"Name"},
+    Multi = true,
+    AllowNone = true,
+    Callback = function(selectedValues)
+        GeneratorESPConfig.TextFormat = { Name = false, Progress = false, Distance = false }
+        for k, v in pairs(selectedValues) do
+            local val = type(k) == "string" and k or v
+            if val == "Name" then GeneratorESPConfig.TextFormat.Name = true 
+            elseif val == "Progress" then GeneratorESPConfig.TextFormat.Progress = true 
+            elseif val == "Distance" then GeneratorESPConfig.TextFormat.Distance = true end
+        end
+        if GeneratorESPConfig.Enabled then UpdateGeneratorESP() end
+    end
+})
+
+MyUIElements.EspGenerator:Colorpicker({
+    Title = "loc:EspColor",
+    Desc = "loc:EspColorDesc",
+    Flag = "Esp_Generator_Colorpicker",
+    Default = GeneratorESPConfig.Color,
+    Transparency = 0,
+    Locked = false,
+    Callback = function(color) 
+        GeneratorESPConfig.Color = color
+        if GeneratorESPConfig.Enabled then UpdateGeneratorESP() end
+    end
+})
+
+MyUIElements.EspGenerator:Toggle({
+    Title = "loc:EspGenerator",
+    Desc = "loc:EspGeneratorDesc",
+    Flag = "ESP_Generator_Toggle",
+    Value = false,
+    Callback = function(state)
+        GeneratorESPConfig.Enabled = state
+        UpdateGeneratorESP()
+    end
+})
+
+local FakeGenESPConfig = {
+    Enabled = false,
+    Types = { Highlight = true, Text = false, Box = false, Tracer = false },
+    TextFormat = { Name = true, Progress = false, Distance = false },
+    Color = Color3.fromRGB(255, 50, 50)
+}
+
+local function UpdateFakeGenESP()
+    if not CurrentMap then return end
+
+    if FakeGenESPConfig.Enabled then
+        for _, child in ipairs(CurrentMap:GetChildren()) do
+            if child.Name == "FakeGenerator" then
+                HandleGeneratorESP(child, true, FakeGenESPConfig)
+            end
+        end
+    else
+        for _, child in ipairs(CurrentMap:GetChildren()) do
+            if child.Name == "FakeGenerator" then
+                ESP:Huy("FakeGen_" .. (child:GetDebugId() or child.Name))
+            end
+        end
+    end
+end
+
+MyUIElements.EspFakeGenerator:Dropdown({
+    Title = "loc:ESPMode",
+    Desc = "loc:ESPModeDesc",
+    Flag = "ESP_FakeGen_Type_Dropdown",
+    Values = {"Highlight", "Text", "Box", "Tracer"},
+    Value = {"Highlight"},
+    Multi = true,
+    AllowNone = true,
+    Callback = function(selectedValues)
+        FakeGenESPConfig.Types = { Highlight = false, Text = false, Box = false, Tracer = false }
+        for k, v in pairs(selectedValues) do
+            local val = type(k) == "string" and k or v
+            if val == "Highlight" then FakeGenESPConfig.Types.Highlight = true 
+            elseif val == "Text" then FakeGenESPConfig.Types.Text = true 
+            elseif val == "Box" then FakeGenESPConfig.Types.Box = true 
+            elseif val == "Tracer" then FakeGenESPConfig.Types.Tracer = true end
+        end
+        if FakeGenESPConfig.Enabled then UpdateFakeGenESP() end
+    end
+})
+
+MyUIElements.EspFakeGenerator:Dropdown({
+    Title = "loc:SetupEspText",
+    Desc = "loc:SetupEspTextDesc",
+    Flag = "ESP_FakeGen_Text_Format",
+    Values = {"Name", "Progress", "Distance"}, 
+    Value = {"Name"},
+    Multi = true,
+    AllowNone = true,
+    Callback = function(selectedValues)
+        FakeGenESPConfig.TextFormat = { Name = false, Progress = false, Distance = false }
+        for k, v in pairs(selectedValues) do
+            local val = type(k) == "string" and k or v
+            if val == "Name" then FakeGenESPConfig.TextFormat.Name = true 
+            elseif val == "Progress" then FakeGenESPConfig.TextFormat.Progress = true 
+            elseif val == "Distance" then FakeGenESPConfig.TextFormat.Distance = true end
+        end
+        if FakeGenESPConfig.Enabled then UpdateFakeGenESP() end
+    end
+})
+
+MyUIElements.EspFakeGenerator:Colorpicker({
+    Title = "loc:EspColor",
+    Desc = "loc:EspColorDesc",
+    Flag = "Esp_FakeGen_Colorpicker",
+    Default = FakeGenESPConfig.Color,
+    Transparency = 0,
+    Locked = false,
+    Callback = function(color) 
+        FakeGenESPConfig.Color = color
+        if FakeGenESPConfig.Enabled then UpdateFakeGenESP() end
+    end
+})
+
+MyUIElements.EspFakeGenerator:Toggle({
+    Title = "loc:EspFakeGenerator",
+    Desc = "loc:EspFakeGeneratorDesc",
+    Flag = "ESP_FakeGen_Toggle",
+    Value = false,
+    Callback = function(state)
+        FakeGenESPConfig.Enabled = state
+        UpdateFakeGenESP()
+    end
+})
+
+local function SetupMapEvents(mapFolder)
+    mapFolder.ChildAdded:Connect(function(child)
+        if child.Name == "Generator" and GeneratorESPConfig.Enabled then
+            HandleGeneratorESP(child, false, GeneratorESPConfig)
+        elseif child.Name == "FakeGenerator" and FakeGenESPConfig.Enabled then
+            HandleGeneratorESP(child, true, FakeGenESPConfig)
+        end
+    end)
+
+    mapFolder.ChildRemoved:Connect(function(child)
+        if child.Name == "Generator" then
+            ESP:Huy("Gen_" .. (child:GetDebugId() or child.Name))
+        elseif child.Name == "FakeGenerator" then
+            ESP:Huy("FakeGen_" .. (child:GetDebugId() or child.Name))
+        end
+    end)
+end
+
+for _, child in ipairs(IngameFolder:GetChildren()) do
+    if child.Name == "Map" then
+        CurrentMap = child
+        SetupMapEvents(child)
+        break
+    end
+end
+
+IngameFolder.ChildAdded:Connect(function(child)
+    if child.Name == "Map" then
+        CurrentMap = child
+        SetupMapEvents(child)
+        task.wait(1) 
+        UpdateGeneratorESP()
+        UpdateFakeGenESP()
+    end
+end)
+
+IngameFolder.ChildRemoved:Connect(function(child)
+    if child.Name == "Map" then
+        CurrentMap = nil
+    end
+end)
+
+-- Esp Items
+
+local ItemESPConfig = {
+    Enabled = false,
+    Types = { Highlight = true, Text = true, Box = false, Tracer = false },
+    TextFormat = { Name = true, HP = false, Distance = true },
+    Color = Color3.fromRGB(255, 215, 0)
+}
+
+local function GetItemObjects()
+    return ItemBot.Funcs.GetAvailableItems()
+end
+
+local function UpdateItemESP()
+    if ItemESPConfig.Enabled then
+        for idx, obj in pairs(GetItemObjects()) do
+            -- Dùng GetDebugId() kết hợp Name để tạo ID độc nhất như logic mẫu của bro
+            ESP:DangKy("ItemESP_" .. (obj:GetDebugId() or obj.Name .. "_" .. idx), obj, {
+                UseHighlight = ItemESPConfig.Types.Highlight,
+                UseText = ItemESPConfig.Types.Text,
+                UseBox = ItemESPConfig.Types.Box,
+                UseTracer = ItemESPConfig.Types.Tracer,
+                Color = ItemESPConfig.Color,
+                ShowName = ItemESPConfig.TextFormat.Name,
+                ShowHP = ItemESPConfig.TextFormat.HP,
+                ShowDistance = ItemESPConfig.TextFormat.Distance,
+                CustomName = obj.Name -- Khác với Sentry, Item nên giữ nguyên Name gốc
+            })
+        end
+    else
+        for idx, obj in pairs(GetItemObjects()) do
+            ESP:Huy("ItemESP_" .. (obj:GetDebugId() or obj.Name .. "_" .. idx))
+        end
+    end
+end
+
+MyUIElements.EspItems:Dropdown({
+    Title = "loc:ESPMode",
+    Desc = "loc:ESPModeDesc",
+    Flag = "ESP_Item_Type_Dropdown",
+    Values = {"Highlight", "Text", "Box", "Tracer"},
+    Value = {"Highlight"},
+    Multi = true,
+    AllowNone = true,
+    Callback = function(selectedValues)
+        ItemESPConfig.Types = { Highlight = false, Text = false, Box = false, Tracer = false }
+        for k, v in pairs(selectedValues) do
+            local val = type(k) == "string" and k or v
+            if val == "Highlight" then ItemESPConfig.Types.Highlight = true 
+            elseif val == "Text" then ItemESPConfig.Types.Text = true 
+            elseif val == "Box" then ItemESPConfig.Types.Box = true 
+            elseif val == "Tracer" then ItemESPConfig.Types.Tracer = true end
+        end
+        if ItemESPConfig.Enabled then UpdateItemESP() end
+    end
+})
+
+MyUIElements.EspItems:Dropdown({
+    Title = "loc:SetupEspText",
+    Desc = "loc:SetupEspTextDesc",
+    Flag = "ESP_Item_Text_Format",
+    Values = {"Name", "HP", "Distance"},
+    Value = {"Name"},
+    Multi = true,
+    AllowNone = true,
+    Callback = function(selectedValues)
+        ItemESPConfig.TextFormat = { Name = false, HP = false, Distance = false }
+        for k, v in pairs(selectedValues) do
+            local val = type(k) == "string" and k or v
+            if val == "Name" then ItemESPConfig.TextFormat.Name = true 
+            elseif val == "HP" then ItemESPConfig.TextFormat.HP = true 
+            elseif val == "Distance" then ItemESPConfig.TextFormat.Distance = true end
+        end
+        if ItemESPConfig.Enabled then UpdateItemESP() end
+    end
+})
+
+MyUIElements.EspItems:Colorpicker({
+    Title = "loc:EspColor",
+    Desc = "loc:EspColorDesc",
+    Flag = "Esp_Item_Colorpicker",
+    Default = ItemESPConfig.Color,
+    Transparency = 0,
+    Locked = false,
+    Callback = function(color) 
+        ItemESPConfig.Color = color
+        if ItemESPConfig.Enabled then UpdateItemESP() end
+    end
+})
+
+MyUIElements.EspItems:Toggle({
+    Title = "loc:EspItems",
+    Desc = "loc:EspItems",
+    Flag = "ESP_Item_Toggle",
+    Value = false,
+    Callback = function(state)
+        ItemESPConfig.Enabled = state
+        UpdateItemESP()
+    end
+})
+
+task.spawn(function()
+    while task.wait(0.5) do
+        if ItemESPConfig.Enabled then
+            UpdateItemESP()
+            
+            -- Xóa ESP rác khi item đã bị nhặt mất
+            local currentItems = GetItemObjects()
+            for id, data in pairs(ESP.Objects) do
+                if string.sub(id, 1, 8) == "ItemESP_" then
+                    local stillExists = false
+                    for _, obj in pairs(currentItems) do
+                        if id == "ItemESP_" .. (obj:GetDebugId() or obj.Name) then
+                            stillExists = true
+                            break
+                        end
+                    end
+                    if not stillExists then
+                        ESP:Huy(id)
+                    end
+                end
+            end
+        end
+    end
+end)
+
+-- Esp Sentry
+
+local SentryESPConfig = {
+    Enabled = false,
+    Types = { Highlight = true, Text = false, Box = false, Tracer = false },
+    TextFormat = { Name = true, HP = false, Distance = false },
+    Color = Color3.fromRGB(255, 170, 0)
+}
+
+local function GetSentryObjects()
+    local list = {}
+    for _, child in pairs(IngameFolder:GetChildren()) do
+        if child.Name == "BuildermanSentry" then
+            table.insert(list, child)
+        end
+    end
+    return list
+end
+
+local function UpdateSentryESP()
+    if SentryESPConfig.Enabled then
+        for idx, obj in pairs(GetSentryObjects()) do
+            ESP:DangKy("Sentry_" .. (obj:GetDebugId() or obj.Name .. "_" .. idx), obj, {
+                UseHighlight = SentryESPConfig.Types.Highlight,
+                UseText = SentryESPConfig.Types.Text,
+                UseBox = SentryESPConfig.Types.Box,
+                UseTracer = SentryESPConfig.Types.Tracer,
+                Color = SentryESPConfig.Color,
+                ShowName = SentryESPConfig.TextFormat.Name,
+                ShowHP = SentryESPConfig.TextFormat.HP,
+                ShowDistance = SentryESPConfig.TextFormat.Distance,
+                CustomName = "Sentry"
+            })
+        end
+    else
+        for idx, obj in pairs(GetSentryObjects()) do
+            ESP:Huy("Sentry_" .. (obj:GetDebugId() or obj.Name .. "_" .. idx))
+        end
+    end
+end
+
+MyUIElements.EspSentry:Dropdown({
+    Title = "loc:ESPMode",
+    Desc = "loc:ESPModeDesc",
+    Flag = "ESP_Sentry_Type_Dropdown",
+    Values = {"Highlight", "Text", "Box", "Tracer"},
+    Value = {"Highlight"},
+    Multi = true,
+    AllowNone = true,
+    Callback = function(selectedValues)
+        SentryESPConfig.Types = { Highlight = false, Text = false, Box = false, Tracer = false }
+        for k, v in pairs(selectedValues) do
+            local val = type(k) == "string" and k or v
+            if val == "Highlight" then SentryESPConfig.Types.Highlight = true 
+            elseif val == "Text" then SentryESPConfig.Types.Text = true 
+            elseif val == "Box" then SentryESPConfig.Types.Box = true 
+            elseif val == "Tracer" then SentryESPConfig.Types.Tracer = true end
+        end
+        if SentryESPConfig.Enabled then UpdateSentryESP() end
+    end
+})
+
+MyUIElements.EspSentry:Dropdown({
+    Title = "loc:SetupEspText",
+    Desc = "loc:SetupEspTextDesc",
+    Flag = "ESP_Sentry_Text_Format",
+    Values = {"Name", "HP", "Distance"},
+    Value = {"Name"},
+    Multi = true,
+    AllowNone = true,
+    Callback = function(selectedValues)
+        SentryESPConfig.TextFormat = { Name = false, HP = false, Distance = false }
+        for k, v in pairs(selectedValues) do
+            local val = type(k) == "string" and k or v
+            if val == "Name" then SentryESPConfig.TextFormat.Name = true 
+            elseif val == "HP" then SentryESPConfig.TextFormat.HP = true 
+            elseif val == "Distance" then SentryESPConfig.TextFormat.Distance = true end
+        end
+        if SentryESPConfig.Enabled then UpdateSentryESP() end
+    end
+})
+
+MyUIElements.EspSentry:Colorpicker({
+    Title = "loc:EspColor",
+    Desc = "loc:EspColorDesc",
+    Flag = "Esp_Sentry_Colorpicker",
+    Default = SentryESPConfig.Color,
+    Transparency = 0,
+    Locked = false,
+    Callback = function(color) 
+        SentryESPConfig.Color = color
+        if SentryESPConfig.Enabled then UpdateSentryESP() end
+    end
+})
+
+MyUIElements.EspSentry:Toggle({
+    Title = "loc:EspSentry",
+    Desc = "loc:EspSentryDesc",
+    Flag = "ESP_Sentry_Toggle",
+    Value = false,
+    Callback = function(state)
+        SentryESPConfig.Enabled = state
+        UpdateSentryESP()
+    end
+})
+
+IngameFolder.ChildAdded:Connect(function(child)
+    if SentryESPConfig.Enabled and child.Name == "BuildermanSentry" then
+        task.wait(0.5)
+        UpdateSentryESP()
+    end
+end)
+
+IngameFolder.ChildRemoved:Connect(function(child)
+    if child.Name == "BuildermanSentry" then
+        ESP:Huy("Sentry_" .. (child:GetDebugId() or child.Name))
+    end
+end)
+
+-- Esp Dispenser
+
+local DispenserESPConfig = {
+    Enabled = false,
+    Types = { Highlight = true, Text = false, Box = false, Tracer = false },
+    TextFormat = { Name = true, HP = false, Distance = false },
+    Color = Color3.fromRGB(0, 220, 255)
+}
+
+local function GetDispenserObjects()
+    local list = {}
+    for _, child in pairs(IngameFolder:GetChildren()) do
+        if child.Name == "BuildermanDispenser" then
+            table.insert(list, child)
+        end
+    end
+    return list
+end
+
+local function UpdateDispenserESP()
+    if DispenserESPConfig.Enabled then
+        for idx, obj in pairs(GetDispenserObjects()) do
+            ESP:DangKy("Dispenser_" .. (obj:GetDebugId() or obj.Name .. "_" .. idx), obj, {
+                UseHighlight = DispenserESPConfig.Types.Highlight,
+                UseText = DispenserESPConfig.Types.Text,
+                UseBox = DispenserESPConfig.Types.Box,
+                UseTracer = DispenserESPConfig.Types.Tracer,
+                Color = DispenserESPConfig.Color,
+                ShowName = DispenserESPConfig.TextFormat.Name,
+                ShowHP = DispenserESPConfig.TextFormat.HP,
+                ShowDistance = DispenserESPConfig.TextFormat.Distance,
+                CustomName = "Dispenser"
+            })
+        end
+    else
+        for idx, obj in pairs(GetDispenserObjects()) do
+            ESP:Huy("Dispenser_" .. (obj:GetDebugId() or obj.Name .. "_" .. idx))
+        end
+    end
+end
+
+MyUIElements.EspDispenser:Dropdown({
+    Title = "loc:ESPMode",
+    Desc = "loc:ESPModeDesc",
+    Flag = "ESP_Dispenser_Type_Dropdown",
+    Values = {"Highlight", "Text", "Box", "Tracer"},
+    Value = {"Highlight"},
+    Multi = true,
+    AllowNone = true,
+    Callback = function(selectedValues)
+        DispenserESPConfig.Types = { Highlight = false, Text = false, Box = false, Tracer = false }
+        for k, v in pairs(selectedValues) do
+            local val = type(k) == "string" and k or v
+            if val == "Highlight" then DispenserESPConfig.Types.Highlight = true 
+            elseif val == "Text" then DispenserESPConfig.Types.Text = true 
+            elseif val == "Box" then DispenserESPConfig.Types.Box = true 
+            elseif val == "Tracer" then DispenserESPConfig.Types.Tracer = true end
+        end
+        if DispenserESPConfig.Enabled then UpdateDispenserESP() end
+    end
+})
+
+MyUIElements.EspDispenser:Dropdown({
+    Title = "loc:SetupEspText",
+    Desc = "loc:SetupEspTextDesc",
+    Flag = "ESP_Dispenser_Text_Format",
+    Values = {"Name", "HP", "Distance"},
+    Value = {"Name"},
+    Multi = true,
+    AllowNone = true,
+    Callback = function(selectedValues)
+        DispenserESPConfig.TextFormat = { Name = false, HP = false, Distance = false }
+        for k, v in pairs(selectedValues) do
+            local val = type(k) == "string" and k or v
+            if val == "Name" then DispenserESPConfig.TextFormat.Name = true 
+            elseif val == "HP" then DispenserESPConfig.TextFormat.HP = true 
+            elseif val == "Distance" then DispenserESPConfig.TextFormat.Distance = true end
+        end
+        if DispenserESPConfig.Enabled then UpdateDispenserESP() end
+    end
+})
+
+MyUIElements.EspDispenser:Colorpicker({
+    Title = "loc:EspColor",
+    Desc = "loc:EspColorDesc",
+    Flag = "Esp_Dispenser_Colorpicker",
+    Default = DispenserESPConfig.Color,
+    Transparency = 0,
+    Locked = false,
+    Callback = function(color) 
+        DispenserESPConfig.Color = color
+        if DispenserESPConfig.Enabled then UpdateDispenserESP() end
+    end
+})
+
+MyUIElements.EspDispenser:Toggle({
+    Title = "loc:EspDispenser",
+    Desc = "loc:EspDispenserDesc",
+    Flag = "ESP_Dispenser_Toggle",
+    Value = false,
+    Callback = function(state)
+        DispenserESPConfig.Enabled = state
+        UpdateDispenserESP()
+    end
+})
+
+IngameFolder.ChildAdded:Connect(function(child)
+    if DispenserESPConfig.Enabled and child.Name == "BuildermanDispenser" then
+        task.wait(0.5)
+        UpdateDispenserESP()
+    end
+end)
+
+IngameFolder.ChildRemoved:Connect(function(child)
+    if child.Name == "BuildermanDispenser" then
+        ESP:Huy("Dispenser_" .. (child:GetDebugId() or child.Name))
+    end
+end)
+
+-- Esp Tripwire
+
+local TripwireESPConfig = {
+    Enabled = false,
+    Types = { Highlight = true, Text = false, Box = false, Tracer = false },
+    TextFormat = { Name = true, HP = false, Distance = false },
+    Color = Color3.fromRGB(255, 0, 0)
+}
+
+local function GetTripwireObjects()
+    local list = {}
+    for _, child in pairs(IngameFolder:GetChildren()) do
+        if child.Name:match("TaphTripwire$") then
+            table.insert(list, child)
+        end
+    end
+    return list
+end
+
+local function UpdateTripwireESP()
+    if TripwireESPConfig.Enabled then
+        for idx, obj in pairs(GetTripwireObjects()) do
+            local owner = obj.Name:gsub("TaphTripwire$", "")
+            local dispName = owner ~= "" and (owner .. "'s Tripwire") or "Tripwire"
+            
+            ESP:DangKy("Tripwire_" .. (obj:GetDebugId() or obj.Name .. "_" .. idx), obj, {
+                UseHighlight = TripwireESPConfig.Types.Highlight,
+                UseText = TripwireESPConfig.Types.Text,
+                UseBox = TripwireESPConfig.Types.Box,
+                UseTracer = TripwireESPConfig.Types.Tracer,
+                Color = TripwireESPConfig.Color,
+                ShowName = TripwireESPConfig.TextFormat.Name,
+                ShowHP = TripwireESPConfig.TextFormat.HP,
+                ShowDistance = TripwireESPConfig.TextFormat.Distance,
+                CustomName = dispName
+            })
+        end
+    else
+        for idx, obj in pairs(GetTripwireObjects()) do
+            ESP:Huy("Tripwire_" .. (obj:GetDebugId() or obj.Name .. "_" .. idx))
+        end
+    end
+end
+
+MyUIElements.EspTripwire:Dropdown({
+    Title = "loc:ESPMode",
+    Desc = "loc:ESPModeDesc",
+    Flag = "ESP_Tripwire_Type_Dropdown",
+    Values = {"Highlight", "Text", "Box", "Tracer"},
+    Value = {"Highlight"},
+    Multi = true,
+    AllowNone = true,
+    Callback = function(selectedValues)
+        TripwireESPConfig.Types = { Highlight = false, Text = false, Box = false, Tracer = false }
+        for k, v in pairs(selectedValues) do
+            local val = type(k) == "string" and k or v
+            if val == "Highlight" then TripwireESPConfig.Types.Highlight = true 
+            elseif val == "Text" then TripwireESPConfig.Types.Text = true 
+            elseif val == "Box" then TripwireESPConfig.Types.Box = true 
+            elseif val == "Tracer" then TripwireESPConfig.Types.Tracer = true end
+        end
+        if TripwireESPConfig.Enabled then UpdateTripwireESP() end
+    end
+})
+
+MyUIElements.EspTripwire:Dropdown({
+    Title = "loc:SetupEspText",
+    Desc = "loc:SetupEspTextDesc",
+    Flag = "ESP_Tripwire_Text_Format",
+    Values = {"Name", "HP", "Distance"},
+    Value = {"Name"},
+    Multi = true,
+    AllowNone = true,
+    Callback = function(selectedValues)
+        TripwireESPConfig.TextFormat = { Name = false, HP = false, Distance = false }
+        for k, v in pairs(selectedValues) do
+            local val = type(k) == "string" and k or v
+            if val == "Name" then TripwireESPConfig.TextFormat.Name = true 
+            elseif val == "HP" then TripwireESPConfig.TextFormat.HP = true 
+            elseif val == "Distance" then TripwireESPConfig.TextFormat.Distance = true end
+        end
+        if TripwireESPConfig.Enabled then UpdateTripwireESP() end
+    end
+})
+
+MyUIElements.EspTripwire:Colorpicker({
+    Title = "loc:EspColor",
+    Desc = "loc:EspColorDesc",
+    Flag = "Esp_Tripwire_Colorpicker",
+    Default = TripwireESPConfig.Color,
+    Transparency = 0,
+    Locked = false,
+    Callback = function(color) 
+        TripwireESPConfig.Color = color
+        if TripwireESPConfig.Enabled then UpdateTripwireESP() end
+    end
+})
+
+MyUIElements.EspTripwire:Toggle({
+    Title = "loc:EspTripwire",
+    Desc = "loc:EspTripwireDesc",
+    Flag = "ESP_Tripwire_Toggle",
+    Value = false,
+    Callback = function(state)
+        TripwireESPConfig.Enabled = state
+        UpdateTripwireESP()
+    end
+})
+
+IngameFolder.ChildAdded:Connect(function(child)
+    if TripwireESPConfig.Enabled and child.Name:match("TaphTripwire$") then
+        task.wait(0.5)
+        UpdateTripwireESP()
+    end
+end)
+
+IngameFolder.ChildRemoved:Connect(function(child)
+    if child.Name:match("TaphTripwire$") then
+        ESP:Huy("Tripwire_" .. (child:GetDebugId() or child.Name))
+    end
+end)
+
+-- Esp Tripmime
+
+local TripmineESPConfig = {
+    Enabled = false,
+    Types = { Highlight = true, Text = false, Box = false, Tracer = false },
+    TextFormat = { Name = true, HP = false, Distance = false },
+    Color = Color3.fromRGB(200, 0, 255)
+}
+
+local function GetTripmineObjects()
+    local list = {}
+    for _, child in pairs(IngameFolder:GetChildren()) do
+        if child.Name == "SubspaceTripmine" then
+            table.insert(list, child)
+        end
+    end
+    return list
+end
+
+local function UpdateTripmineESP()
+    if TripmineESPConfig.Enabled then
+        for idx, obj in pairs(GetTripmineObjects()) do
+            ESP:DangKy("Tripmine_" .. (obj:GetDebugId() or obj.Name .. "_" .. idx), obj, {
+                UseHighlight = TripmineESPConfig.Types.Highlight,
+                UseText = TripmineESPConfig.Types.Text,
+                UseBox = TripmineESPConfig.Types.Box,
+                UseTracer = TripmineESPConfig.Types.Tracer,
+                Color = TripmineESPConfig.Color,
+                ShowName = TripmineESPConfig.TextFormat.Name,
+                ShowHP = TripmineESPConfig.TextFormat.HP,
+                ShowDistance = TripmineESPConfig.TextFormat.Distance,
+                CustomName = "Subspace Tripmine"
+            })
+        end
+    else
+        for idx, obj in pairs(GetTripmineObjects()) do
+            ESP:Huy("Tripmine_" .. (obj:GetDebugId() or obj.Name .. "_" .. idx))
+        end
+    end
+end
+
+MyUIElements.EspTripmine:Dropdown({
+    Title = "loc:ESPMode",
+    Desc = "loc:ESPModeDesc",
+    Flag = "ESP_Tripmine_Type_Dropdown",
+    Values = {"Highlight", "Text", "Box", "Tracer"},
+    Value = {"Highlight"},
+    Multi = true,
+    AllowNone = true,
+    Callback = function(selectedValues)
+        TripmineESPConfig.Types = { Highlight = false, Text = false, Box = false, Tracer = false }
+        for k, v in pairs(selectedValues) do
+            local val = type(k) == "string" and k or v
+            if val == "Highlight" then TripmineESPConfig.Types.Highlight = true 
+            elseif val == "Text" then TripmineESPConfig.Types.Text = true 
+            elseif val == "Box" then TripmineESPConfig.Types.Box = true 
+            elseif val == "Tracer" then TripmineESPConfig.Types.Tracer = true end
+        end
+        if TripmineESPConfig.Enabled then UpdateTripmineESP() end
+    end
+})
+
+MyUIElements.EspTripmine:Dropdown({
+    Title = "loc:SetupEspText",
+    Desc = "loc:SetupEspTextDesc",
+    Flag = "ESP_Tripmine_Text_Format",
+    Values = {"Name", "HP", "Distance"},
+    Value = {"Name"},
+    Multi = true,
+    AllowNone = true,
+    Callback = function(selectedValues)
+        TripmineESPConfig.TextFormat = { Name = false, HP = false, Distance = false }
+        for k, v in pairs(selectedValues) do
+            local val = type(k) == "string" and k or v
+            if val == "Name" then TripmineESPConfig.TextFormat.Name = true 
+            elseif val == "HP" then TripmineESPConfig.TextFormat.HP = true 
+            elseif val == "Distance" then TripmineESPConfig.TextFormat.Distance = true end
+        end
+        if TripmineESPConfig.Enabled then UpdateTripmineESP() end
+    end
+})
+
+MyUIElements.EspTripmine:Colorpicker({
+    Title = "loc:EspColor",
+    Desc = "loc:EspColorDesc",
+    Flag = "Esp_Tripmine_Colorpicker",
+    Default = TripmineESPConfig.Color,
+    Transparency = 0,
+    Locked = false,
+    Callback = function(color) 
+        TripmineESPConfig.Color = color
+        if TripmineESPConfig.Enabled then UpdateTripmineESP() end
+    end
+})
+
+MyUIElements.EspTripmine:Toggle({
+    Title = "loc:EspTripmine",
+    Desc = "loc:EspTripmineDesc",
+    Flag = "ESP_Tripmine_Toggle",
+    Value = false,
+    Callback = function(state)
+        TripmineESPConfig.Enabled = state
+        UpdateTripmineESP()
+    end
+})
+
+IngameFolder.ChildAdded:Connect(function(child)
+    if TripmineESPConfig.Enabled and child.Name == "SubspaceTripmine" then
+        task.wait(0.5)
+        UpdateTripmineESP()
+    end
+end)
+
+IngameFolder.ChildRemoved:Connect(function(child)
+    if child.Name == "SubspaceTripmine" then
+        ESP:Huy("Tripmine_" .. (child:GetDebugId() or child.Name))
+    end
+end)
+
+-- Esp Spray
+
+local SprayESPConfig = {
+    Enabled = false,
+    Types = { Highlight = true, Text = false, Box = false, Tracer = false },
+    TextFormat = { Name = true, HP = false, Distance = false },
+    Color = Color3.fromRGB(0, 255, 100)
+}
+
+local function GetSprayObjects()
+    local list = {}
+    for _, child in pairs(IngameFolder:GetChildren()) do
+        if child.Name:match("Spray$") then
+            table.insert(list, child)
+        end
+    end
+    return list
+end
+
+local function UpdateSprayESP()
+    if SprayESPConfig.Enabled then
+        for idx, obj in pairs(GetSprayObjects()) do
+            local owner = obj.Name:gsub("Spray$", "")
+            local dispName = owner ~= "" and (owner .. "'s Spray") or "Spray"
+
+            ESP:DangKy("Spray_" .. (obj:GetDebugId() or obj.Name .. "_" .. idx), obj, {
+                UseHighlight = SprayESPConfig.Types.Highlight,
+                UseText = SprayESPConfig.Types.Text,
+                UseBox = SprayESPConfig.Types.Box,
+                UseTracer = SprayESPConfig.Types.Tracer,
+                Color = SprayESPConfig.Color,
+                ShowName = SprayESPConfig.TextFormat.Name,
+                ShowHP = SprayESPConfig.TextFormat.HP,
+                ShowDistance = SprayESPConfig.TextFormat.Distance,
+                CustomName = dispName
+            })
+        end
+    else
+        for idx, obj in pairs(GetSprayObjects()) do
+            ESP:Huy("Spray_" .. (obj:GetDebugId() or obj.Name .. "_" .. idx))
+        end
+    end
+end
+
+MyUIElements.EspSpray:Dropdown({
+    Title = "loc:ESPMode",
+    Desc = "loc:ESPModeDesc",
+    Flag = "ESP_Spray_Type_Dropdown",
+    Values = {"Highlight", "Text", "Box", "Tracer"},
+    Value = {"Highlight"},
+    Multi = true,
+    AllowNone = true,
+    Callback = function(selectedValues)
+        SprayESPConfig.Types = { Highlight = false, Text = false, Box = false, Tracer = false }
+        for k, v in pairs(selectedValues) do
+            local val = type(k) == "string" and k or v
+            if val == "Highlight" then SprayESPConfig.Types.Highlight = true 
+            elseif val == "Text" then SprayESPConfig.Types.Text = true 
+            elseif val == "Box" then SprayESPConfig.Types.Box = true 
+            elseif val == "Tracer" then SprayESPConfig.Types.Tracer = true end
+        end
+        if SprayESPConfig.Enabled then UpdateSprayESP() end
+    end
+})
+
+MyUIElements.EspSpray:Dropdown({
+    Title = "loc:SetupEspText",
+    Desc = "loc:SetupEspTextDesc",
+    Flag = "ESP_Spray_Text_Format",
+    Values = {"Name", "HP", "Distance"},
+    Value = {"Name"},
+    Multi = true,
+    AllowNone = true,
+    Callback = function(selectedValues)
+        SprayESPConfig.TextFormat = { Name = false, HP = false, Distance = false }
+        for k, v in pairs(selectedValues) do
+            local val = type(k) == "string" and k or v
+            if val == "Name" then SprayESPConfig.TextFormat.Name = true 
+            elseif val == "HP" then SprayESPConfig.TextFormat.HP = true 
+            elseif val == "Distance" then SprayESPConfig.TextFormat.Distance = true end
+        end
+        if SprayESPConfig.Enabled then UpdateSprayESP() end
+    end
+})
+
+MyUIElements.EspSpray:Colorpicker({
+    Title = "loc:EspColor",
+    Desc = "loc:EspColorDesc",
+    Flag = "Esp_Spray_Colorpicker",
+    Default = SprayESPConfig.Color,
+    Transparency = 0,
+    Locked = false,
+    Callback = function(color) 
+        SprayESPConfig.Color = color
+        if SprayESPConfig.Enabled then UpdateSprayESP() end
+    end
+})
+
+MyUIElements.EspSpray:Toggle({
+    Title = "loc:EspSpray",
+    Desc = "loc:EspSprayDesc",
+    Flag = "ESP_Spray_Toggle",
+    Value = false,
+    Callback = function(state)
+        SprayESPConfig.Enabled = state
+        UpdateSprayESP()
+    end
+})
+
+IngameFolder.ChildAdded:Connect(function(child)
+    if SprayESPConfig.Enabled and child.Name:match("Spray$") then
+        task.wait(0.5)
+        UpdateSprayESP()
+    end
+end)
+
+IngameFolder.ChildRemoved:Connect(function(child)
+    if child.Name:match("Spray$") then
+        ESP:Huy("Spray_" .. (child:GetDebugId() or child.Name))
+    end
+end)
+
+local Toggles = {
+    Noclip = false,
+    InfJump = false,
+    Speed = false,
+    Jump = false,
+    Float = false
+}
+
+local Values = {
+    Speed = 70,
+    Jump = 70,
+    FloatHeight = 0
+}
+
+local BaseFloatOriginY = 0
+local activeTween = nil
+
+local floatPlatform = Instance.new("Part")
+floatPlatform.Size = Vector3.new(7, 1, 7) 
+floatPlatform.Anchored = true
+floatPlatform.CanCollide = true
+floatPlatform.Material = Enum.Material.Neon
+floatPlatform.Color = Color3.fromRGB(0, 255, 255)
+floatPlatform.Transparency = 0.5
+floatPlatform.CastShadow = false
+
+local function tweenPlatformHeight(targetY)
+    if activeTween then activeTween:Cancel() end
+    
+    local distance = math.abs(targetY - floatPlatform.Position.Y)
+    
+    local dynamicTime = distance * 0.02
+    
+    if dynamicTime < 0.01 then dynamicTime = 0.01 end
+    
+    local tweenInfo = TweenInfo.new(dynamicTime, Enum.EasingStyle.Linear, Enum.EasingDirection.Out)
+    local targetCFrame = CFrame.new(floatPlatform.Position.X, targetY, floatPlatform.Position.Z)
+    
+    activeTween = TweenService:Create(floatPlatform, tweenInfo, {CFrame = targetCFrame})
+    activeTween:Play()
+end
+
+MyUIElements.NormalPower:Toggle({
+    Title = "loc:Noclip",
+    Desc = "loc:NoclipDesc",
+    Flag = "Noclip",
+    Value = false,
+    Callback = function(state) 
+        Toggles.Noclip = state
+    end
+})
+
+MyUIElements.NormalPower:Toggle({
+    Title = "loc:InfJump",
+    Desc = "loc:InfJumpDesc",
+    Flag = "InfJump",
+    Value = false,
+    Callback = function(state) 
+        Toggles.InfJump = state
+    end
+})
+
+MyUIElements.SpeedPower:Toggle({
+    Title = "loc:ForceSpeed",
+    Desc = "loc:ForceSpeedDesc",
+    Flag = "ForceSpeed",
+    Value = false,
+    Callback = function(state) 
+        Toggles.Speed = state
+    end
+})
+
+MyUIElements.SpeedPower:Slider({
+    Title = "loc:SetSpeed",
+    Desc = "loc:SetSpeedDesc",
+    Flag = "SetSpeed",
+    Step = 1,
+    Value = { Min = 1, Max = 300, Default = 70 },
+    Callback = function(value)
+        Values.Speed = value
+    end
+})
+
+MyUIElements.JumpPower1:Toggle({
+    Title = "loc:JumpPower",
+    Desc = "loc:JumpPowerDesc",
+    Flag = "JumpPower",
+    Value = false,
+    Callback = function(state) 
+        Toggles.Jump = state
+        if not state and playerCharacter then
+            local humanoid = playerCharacter:FindFirstChildOfClass("Humanoid")
+            if humanoid then
+                humanoid.JumpPower = 50 
+            end
+        end
+    end
+})
+
+MyUIElements.JumpPower1:Slider({
+    Title = "loc:SetPower",
+    Desc = "loc:SetPowerDesc",
+    Flag = "SetPower",
+    Step = 1,
+    Value = { Min = 1, Max = 300, Default = 70 },
+    Callback = function(value)
+        Values.Jump = value
+    end
+})
+
+MyUIElements.AirPower:Toggle({
+    Title = "loc:StandInTheAir",
+    Desc = "loc:StandInTheAirDesc",
+    Flag = "StandInTheAir",
+    Value = false,
+    Callback = function(state) 
+        Toggles.Float = state
+        if state then
+            if playerCharacter and playerCharacter:FindFirstChild("HumanoidRootPart") then
+                BaseFloatOriginY = playerCharacter.HumanoidRootPart.Position.Y - 3.2
+                
+                floatPlatform.CFrame = CFrame.new(playerCharacter.HumanoidRootPart.Position.X, BaseFloatOriginY, playerCharacter.HumanoidRootPart.Position.Z)
+                floatPlatform.Parent = Workspace
+
+                if Values.FloatHeight > 0 then
+                    tweenPlatformHeight(BaseFloatOriginY + Values.FloatHeight)
+                end
+            end
+        else
+     
+            floatPlatform.Parent = nil
+            if activeTween then activeTween:Cancel() end
+        end
+    end
+})
+
+MyUIElements.AirPower:Slider({
+    Title = "loc:StandingHeight",
+    Desc = "loc:StandingHeightDesc",
+    Flag = "StandingHeight",
+    Step = 1,
+    Value = { Min = 0, Max = 300, Default = 0 }, 
+    Callback = function(value)
+        Values.FloatHeight = value
+        if Toggles.Float and floatPlatform.Parent == Workspace then
+            local targetY = BaseFloatOriginY + value
+            tweenPlatformHeight(targetY)
+        end
+    end
+})
+
+RunService.Stepped:Connect(function()
+    if Toggles.Noclip and playerCharacter then
+        for _, part in pairs(playerCharacter:GetDescendants()) do
+            if part:IsA("BasePart") and part.CanCollide then
+                part.CanCollide = false
+            end
+        end
+    end
+end)
+
+UserInputService.JumpRequest:Connect(function()
+    if Toggles.InfJump and playerCharacter then
+        local humanoid = playerCharacter:FindFirstChildOfClass("Humanoid")
+        if humanoid then
+            humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+        end
+    end
+end)
+
+RunService.Heartbeat:Connect(function()
+    if not playerCharacter then return end
+    local humanoid = playerCharacter:FindFirstChildOfClass("Humanoid")
+    local hrp = playerCharacter:FindFirstChild("HumanoidRootPart")
+    
+    if humanoid and hrp then
+        
+        if Toggles.Speed and humanoid.MoveDirection.Magnitude > 0 then
+            local moveDir = humanoid.MoveDirection
+            hrp.AssemblyLinearVelocity = Vector3.new(moveDir.X * Values.Speed, hrp.AssemblyLinearVelocity.Y, moveDir.Z * Values.Speed)
+        end
+
+        if Toggles.Float and floatPlatform.Parent == Workspace then
+            
+            if hrp.Position.Y < (floatPlatform.Position.Y + 0.5) then
+                hrp.CFrame = CFrame.new(hrp.Position.X, floatPlatform.Position.Y + 3.2, hrp.Position.Z)
+                hrp.AssemblyLinearVelocity = Vector3.new(hrp.AssemblyLinearVelocity.X, 0, hrp.AssemblyLinearVelocity.Z)
+            end
+            
+            floatPlatform.CFrame = CFrame.new(hrp.Position.X, floatPlatform.Position.Y, hrp.Position.Z)
+        end
+    end
+end)
+
+-- Screen
+
+local VisualBot = {
+    Config = {
+        Fullbright = false,
+        NoFog = false,
+        EnableZoom = false,
+        ZoomMin = 0.5,
+        ZoomMax = 100000
+    },
+    Originals = {
+        Ambient = game.Lighting.Ambient,
+        OutdoorAmbient = game.Lighting.OutdoorAmbient,
+        Brightness = game.Lighting.Brightness,
+        ClockTime = game.Lighting.ClockTime,
+        GlobalShadows = game.Lighting.GlobalShadows,
+        FogEnd = game.Lighting.FogEnd,
+        ZoomMin = game.Players.LocalPlayer.CameraMinZoomDistance,
+        ZoomMax = game.Players.LocalPlayer.CameraMaxZoomDistance,
+        Atmospheres = {}
+    },
+    Funcs = {}
+}
+
+for _, v in pairs(game.Lighting:GetChildren()) do
+    if v:IsA("Atmosphere") then
+        VisualBot.Originals.Atmospheres[v] = v.Density
+    end
+end
+
+function VisualBot.Funcs.UpdateCamera()
+    local lp = game.Players.LocalPlayer
+    if VisualBot.Config.EnableZoom then
+        lp.CameraMinZoomDistance = VisualBot.Config.ZoomMin
+        lp.CameraMaxZoomDistance = VisualBot.Config.ZoomMax
+    else
+        lp.CameraMinZoomDistance = VisualBot.Originals.ZoomMin
+        lp.CameraMaxZoomDistance = VisualBot.Originals.ZoomMax
+    end
+end
+
+function VisualBot.Funcs.RestoreLighting()
+    local l = game.Lighting
+    if not VisualBot.Config.Fullbright then
+        l.Ambient = VisualBot.Originals.Ambient
+        l.OutdoorAmbient = VisualBot.Originals.OutdoorAmbient
+        l.Brightness = VisualBot.Originals.Brightness
+        l.ClockTime = VisualBot.Originals.ClockTime
+        l.GlobalShadows = VisualBot.Originals.GlobalShadows
+    end
+    
+    if not VisualBot.Config.NoFog then
+        l.FogEnd = VisualBot.Originals.FogEnd
+        for atmo, density in pairs(VisualBot.Originals.Atmospheres) do
+            if atmo and atmo.Parent then
+                atmo.Density = density
+            end
+        end
+    end
+end
+
+task.spawn(function()
+    while task.wait(0.5) do
+        local l = game.Lighting
+        
+        if VisualBot.Config.Fullbright then
+            l.Ambient = Color3.new(1, 1, 1)
+            l.OutdoorAmbient = Color3.new(1, 1, 1)
+            l.Brightness = 2
+            l.ClockTime = 14
+            l.GlobalShadows = false
+        end
+        
+        if VisualBot.Config.NoFog then
+            l.FogEnd = 100000
+            for _, v in pairs(l:GetChildren()) do
+                if v:IsA("Atmosphere") then
+                    v.Density = 0
+                end
+            end
+        end
+    end
+end)
+
+MyUIElements.Screen:Toggle({
+    Title = "loc:Fullbright",
+    Desc = "loc:FullbrightDesc",
+    Flag = "Toggle_Fullbright",
+    Value = false,
+    Callback = function(state)
+        VisualBot.Config.Fullbright = state
+        if not state then VisualBot.Funcs.RestoreLighting() end
+    end
+})
+
+MyUIElements.Screen:Toggle({
+    Title = "loc:NoFog",
+    Desc = "loc:NoFogDesc",
+    Flag = "Toggle_NoFog",
+    Value = false,
+    Callback = function(state)
+        VisualBot.Config.NoFog = state
+        if not state then VisualBot.Funcs.RestoreLighting() end
+    end
+})
+
+MyUIElements.Screen:Toggle({
+    Title = "loc:Custom_Zoom",
+    Desc = "loc:Custom_Zoom_Desc",
+    Flag = "Toggle_Zoom",
+    Value = false,
+    Callback = function(state)
+        VisualBot.Config.EnableZoom = state
+        VisualBot.Funcs.UpdateCamera()
+    end
+})
+
+MyUIElements.Screen:Input({
+    Title = "loc:Min_Zoom_Distance",
+    Desc = "loc:Min_Zoom_Distance_Desc",
+    Flag = "ZoomMin_Input",
+    Placeholder = "0.5",
+    Value = 0.5,
+    Numeric = true,
+    Callback = function(val)
+        local num = tonumber(val)
+        if num then
+            VisualBot.Config.ZoomMin = num
+            if VisualBot.Config.EnableZoom then 
+                VisualBot.Funcs.UpdateCamera() 
+            end
+        end
+    end
+})
+
+MyUIElements.Screen:Input({
+    Title = "loc:Max_Zoom_Distance",
+    Desc = "loc:Max_Zoom_Distance_Desc",
+    Flag = "ZoomMax_Input",
+    Placeholder = "100000",
+    Value = 100000,
+    Numeric = true,
+    Callback = function(val)
+        local num = tonumber(val)
+        if num then
+            VisualBot.Config.ZoomMax = num
+            if VisualBot.Config.EnableZoom then 
+                VisualBot.Funcs.UpdateCamera() 
+            end
+        end
+    end
+})
+
+local AntiSubspaceConfig = { Enabled = false }
+
+local function ClearSubspaceEffects()
+    local blur = game.Lighting:FindFirstChild("SubspaceVFXBlur")
+    if blur then
+        blur.Enabled = false
+        blur.Parent = nil 
+    end
+
+    local cc = game.Lighting:FindFirstChild("SubspaceVFXColorCorrection")
+    if cc then
+        cc.Enabled = false
+        cc.Parent = nil
+    end
+
+    if blur or cc then
+        for _, v in pairs(game.Lighting:GetChildren()) do
+            if v:GetAttribute("originalVal") ~= nil then
+                v.Enabled = v:GetAttribute("originalVal")
+            end
+        end
+    end
+
+    local char = game.Players.LocalPlayer.Character
+    if char and char:GetAttribute("MuteChaseThemes") then
+        char:SetAttribute("MuteChaseThemes", false)
+    end
+end
+
+task.spawn(function()
+    while task.wait(0.25) do
+        if AntiSubspaceConfig.Enabled then
+            ClearSubspaceEffects()
+        end
+    end
+end)
+
+MyUIElements.Bypass:Toggle({
+    Title = "loc:AntiSubspaceEffect",
+    Desc = "loc:AntiSubspaceEffectDesc",
+    Flag = "Anti_Subspace_Toggle",
+    Value = false,
+    Callback = function(state)
+        AntiSubspaceConfig.Enabled = state
+        if state then 
+            ClearSubspaceEffects()
+        end
+    end
+})
+
+local AntiSlowFeature = {
+    Enabled = false,
+    Connections = {}
+}
+
+function AntiSlowFeature:HideUI()
+    pcall(function()
+        local mainUI = PlayerGui:FindFirstChild("MainUI")
+        if not mainUI then return end
+
+        local status = mainUI:FindFirstChild("StatusContainer")
+        if not status then return end
+
+        local slowUI = status:FindFirstChild("Slowness")
+        if slowUI and slowUI.Visible then
+            slowUI.Visible = false
+        end
+    end)
+end
+
+function AntiSlowFeature:ClearConnections()
+    for _, conn in ipairs(self.Connections) do
+        if conn.Connected then
+            conn:Disconnect()
+        end
+    end
+    table.clear(self.Connections)
+end
+
+function AntiSlowFeature:OnSpeedChanged(val)
+    if self.Enabled and val:IsA("NumberValue") and val.Value < 1 then
+        val.Value = 1
+        self:HideUI()
+    end
+end
+
+function AntiSlowFeature:HookSurvivor(survivor)
+    if survivor:GetAttribute("Username") ~= localPlayer.Name then return end
+    
+    local speedFolder = survivor:WaitForChild("SpeedMultipliers", 3)
+    if not speedFolder then return end
+
+    for _, val in ipairs(speedFolder:GetChildren()) do
+        self:OnSpeedChanged(val)
+        table.insert(self.Connections, val:GetPropertyChangedSignal("Value"):Connect(function()
+            self:OnSpeedChanged(val)
+        end))
+    end
+
+    table.insert(self.Connections, speedFolder.ChildAdded:Connect(function(val)
+        task.defer(function()
+            self:OnSpeedChanged(val)
+            table.insert(self.Connections, val:GetPropertyChangedSignal("Value"):Connect(function()
+                self:OnSpeedChanged(val)
+            end))
+        end)
+    end))
+end
+
+MyUIElements.Screen:Toggle({
+    Title = "loc:AntiSlow",
+    Desc = "loc:AntiSlowDesc",
+    Flag = "ToggleAntiSlow",
+    Value = false,
+    Callback = function(state)
+        AntiSlowFeature.Enabled = state
+        
+        if AntiSlowFeature.Enabled then
+            for _, survivor in ipairs(survivorsFolder:GetChildren()) do
+                AntiSlowFeature:HookSurvivor(survivor)
+            end
+            
+            table.insert(AntiSlowFeature.Connections, survivorsFolder.ChildAdded:Connect(function(survivor)
+                AntiSlowFeature:HookSurvivor(survivor)
+            end))
+        else
+            AntiSlowFeature:ClearConnections()
+        end
+    end
+})
+
+getgenv().AntiFakeState = getgenv().AntiFakeState or {
+    Killers = false,
+    Pizza = false,
+    Dispenser = false,
+    Protect = false
+}
+
+getgenv().AntiFakeLoopRunning = getgenv().AntiFakeLoopRunning or false
+
+local function UpdateAntiFakeLoop()
+    if getgenv().AntiFakeLoopRunning then return end
+
+    local hasActiveToggle = false
+    for _, state in pairs(getgenv().AntiFakeState) do
+        if state then hasActiveToggle = true; break end
+    end
+    
+    if not hasActiveToggle then return end
+
+    getgenv().AntiFakeLoopRunning = true
+
+    task.spawn(function()
+        while getgenv().AntiFakeLoopRunning do
+            task.wait(0.2)
+            
+            local keepRunning = false
+            for _, state in pairs(getgenv().AntiFakeState) do
+                if state then keepRunning = true; break end
+            end
+
+            if not keepRunning then
+                getgenv().AntiFakeLoopRunning = false
+                break
+            end
+
+            if getgenv().AntiFakeState.Killers then
+                if killersFolder then
+                    for _, killer in ipairs(killersFolder:GetChildren()) do
+                        if killer:GetAttribute("Undetectable") == true then
+                            killer:Destroy()
+                        end
+                    end
+                end
+                
+                local hitboxesFolder = Workspace:FindFirstChild("Hitboxes")
+                if hitboxesFolder then
+                    for _, hb in ipairs(hitboxesFolder:GetChildren()) do
+                        if hb.Name == "SIKE&Hitbox" or hb.Name == "SIKEHitbox" then
+                            hb:Destroy()
+                        end
+                    end
+                end
+                
+                for _, sound in ipairs(SoundService:GetDescendants()) do
+                    if sound:IsA("Sound") and string.find(sound.Name, "FakeLayer") then
+                        sound:Stop()
+                        sound:Destroy()
+                    end
+                end
+            end
+
+            if getgenv().AntiFakeState.Pizza or getgenv().AntiFakeState.Dispenser or getgenv().AntiFakeState.Protect then
+                if IngameFolder then
+                    for _, item in ipairs(IngameFolder:GetChildren()) do
+                        if getgenv().AntiFakeState.Pizza and item.Name == "Pizza" and not item:FindFirstChild("PizzaJoint") then
+                            item:Destroy()
+                        
+                        elseif getgenv().AntiFakeState.Dispenser and string.find(item.Name, "Dispenser") then
+                            item:Destroy()
+                            
+                        elseif getgenv().AntiFakeState.Protect and item.Name == "TheEvilNoliOOOOO" then
+                            item:Destroy()
+                        end
+                    end
+                end
+            end
+
+            if getgenv().AntiFakeState.Protect then
+                for _, effect in ipairs(Lighting:GetChildren()) do
+                    if effect:IsA("BlurEffect") and effect.Size >= 34 then
+                        effect:Destroy()
+                    end
+                end
+            end
+        end
+    end)
+end
+
+MyUIElements.Hallucination:Toggle({
+    Title = "loc:AntiFakeKillers",
+    Desc = "loc:AntiFakeKillersDesc",
+    Flag = "Toggle_AntiFakeKiller",
+    Value = false,
+    Callback = function(state)
+        getgenv().AntiFakeState.Killers = state
+        if state then UpdateAntiFakeLoop() end
+    end
+})
+
+MyUIElements.Hallucination:Toggle({
+    Title = "loc:AntiFakePizza",
+    Desc = "loc:AntiFakePizzaDesc",
+    Flag = "Toggle_AntiPizza",
+    Value = false,
+    Callback = function(state)
+        getgenv().AntiFakeState.Pizza = state
+        if state then UpdateAntiFakeLoop() end
+    end
+})
+
+MyUIElements.Hallucination:Toggle({
+    Title = "loc:AntiFakeDispenser",
+    Desc = "loc:AntiFakeDispenserDesc",
+    Flag = "Toggle_AntiDispenser",
+    Value = false,
+    Callback = function(state)
+        getgenv().AntiFakeState.Dispenser = state
+        if state then UpdateAntiFakeLoop() end
+    end
+})
+
+MyUIElements.Hallucination:Toggle({
+    Title = "loc:AntiFakeProtect",
+    Desc = "loc:AntiFakeProtectDesc",
+    Flag = "Toggle_AntiJumpscare",
+    Value = false,
+    Callback = function(state)
+        getgenv().AntiFakeState.Protect = state
+        if state then UpdateAntiFakeLoop() end
+    end
+})
+
+MyUIElements.SettingsManager.MySubTabs.Languages:Paragraph({
+    Title = "loc:Language",
+    Desc = "loc:LanguageDesc",
+    Icon = "how",
+})
+
+local LanguageMap = {
+    ["Tiếng Việt"] = "vi",
+    ["English"] = "en"
+}
+
+MyUIElements.SettingsManager.MySubTabs.Languages:Dropdown({
+    Title = "loc:SelectLanguage",
+    Desc = "loc:SelectLanguageDesc",
+    Values = {"Tiếng Việt", "English"},
+    Value = "English",
+    Flag = "LanguageDropdown",
+    Callback = function(Value)
+        local selectedCode = LanguageMap[Value]
+        if selectedCode then
+            WindUI:SetLanguage(selectedCode)
+        end
+    end,
+})
+
+MyUIElements.SettingsManager.MySubTabs.UI:Input({
+    Title = "loc:WindowSize",
+    Desc = "loc:WindowSizeDesc",
+    Flag = "WindowSize",
+    Value = "620, 480",
+    Placeholder = "Nhập X, Y...",
+    Type = "Input",
+    Callback = function(input)
+        local x, y = string.match(input, "(%d+)[^%d]+(%d+)")
+        if x and y then
+            Window:SetSize(UDim2.fromOffset(tonumber(x), tonumber(y)))
+        end
+    end
+})
+
+MyUIElements.SettingsManager.MySubTabs.UI:Input({
+    Title = "loc:OpenButtonScale",
+    Desc = "loc:OpenButtonScaleDesc",
+    Flag = "OpenButtonScale",
+    Value = tostring(OpenButtonConfig.Scale),
+    Placeholder = "0.9",
+    Type = "Input",
+    Callback = function(input)
+        local scale = tonumber(input)
+        if scale then
+            OpenButtonConfig.Scale = scale
+            Window:EditOpenButton(OpenButtonConfig)
+        end
+    end
+})
+
+MyUIElements.SettingsManager.MySubTabs.UI:Toggle({
+    Title = "loc:OpenButtonOnlyIcon",
+    Desc = "loc:OpenButtonOnlyIconDesc",
+    Flag = "OpenButtonOnlyIcon",
+    Value = OpenButtonConfig.OnlyIcon,
+    Callback = function(state)
+        OpenButtonConfig.OnlyIcon = state
+        Window:EditOpenButton(OpenButtonConfig)
+    end
+})
+
+MyUIElements.SettingsManager.MySubTabs.UI:Keybind({
+    Title = "loc:ToggleUIKeybind",
+    Desc = "loc:ToggleUIKeybindDesc",
+    Flag = "ToggleUIKeybind",
+    Value = "V",
+    Callback = function(key)
+        Window:SetToggleKey(Enum.KeyCode[key])
+    end
+})
+
+local AxosToggle = {
+    State = {
+        isDragging = false,
+        isDragMove = false,
+        dragInput = nil,
+        dragStartPos = nil,
+        startGuiPos = nil,
+        guiName = "AxosHub_ToggleUI",
+        BaseSizeX = 50,
+        BaseSizeY = 50,
+        ReferenceWidth = 1280,
+        MinScale = 0.8,
+        MaxScale = 1.15
+    }
+}
+
+local State = AxosToggle.State
+
+if CoreGui:FindFirstChild(State.guiName) then
+    CoreGui[State.guiName]:Destroy()
+end
+
+local Screen = Instance.new("ScreenGui")
+Screen.Name = State.guiName
+Screen.Parent = CoreGui
+Screen.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+Screen.ResetOnSpawn = false
+
+local Btn = Instance.new("ImageButton")
+Btn.Name = "ToggleButton"
+Btn.Parent = Screen
+
+Btn.BackgroundColor3 = Color3.fromRGB(30, 41, 59)
+Btn.Position = UDim2.fromOffset(15, 15)
+Btn.Size = UDim2.fromOffset(State.BaseSizeX, State.BaseSizeY)
+
+Btn.BorderSizePixel = 0
+Btn.Image = "rbxassetid://81224092275973"
+
+local Corner = Instance.new("UICorner")
+Corner.CornerRadius = UDim.new(0, 12)
+Corner.Parent = Btn
+
+
+local Stroke = Instance.new("UIStroke")
+Stroke.Thickness = 2
+Stroke.Color = Color3.fromRGB(59, 130, 246)
+Stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+Stroke.Parent = Btn
+
+local UIScale = Instance.new("UIScale")
+UIScale.Name = "ResponsiveScale"
+UIScale.Parent = Btn
+UIScale.Scale = 1
+
+local function UpdateUIScale()
+    local camera = Workspace.CurrentCamera
+    if not camera then
+        UIScale.Scale = 1
+        return
+    end
+
+    local viewport = camera.ViewportSize
+    local width = viewport.X
+
+    if width <= 0 then
+        UIScale.Scale = 1
+        return
+    end
+
+    local scale = width / State.ReferenceWidth
+
+    scale = math.clamp(
+        scale,
+        State.MinScale,
+        State.MaxScale
+    )
+
+    UIScale.Scale = scale
+end
+
+UpdateUIScale()
+
+Workspace.CurrentCamera:GetPropertyChangedSignal("ViewportSize"):Connect(function()
+    UpdateUIScale()
+end)
+
+local Tweens = {
+    InBg = TweenService:Create(
+        Btn,
+        TweenInfo.new(0.2, Enum.EasingStyle.Quad),
+        {
+            BackgroundColor3 = Color3.fromRGB(51, 65, 85)
+        }
+    ),
+
+    InStroke = TweenService:Create(
+        Stroke,
+        TweenInfo.new(0.2, Enum.EasingStyle.Quad),
+        {
+            Color = Color3.fromRGB(96, 165, 250)
+        }
+    ),
+
+    OutBg = TweenService:Create(
+        Btn,
+        TweenInfo.new(0.2, Enum.EasingStyle.Quad),
+        {
+            BackgroundColor3 = Color3.fromRGB(30, 41, 59)
+        }
+    ),
+
+    OutStroke = TweenService:Create(
+        Stroke,
+        TweenInfo.new(0.2, Enum.EasingStyle.Quad),
+        {
+            Color = Color3.fromRGB(59, 130, 246)
+        }
+    )
+}
+
+function AxosToggle.UpdatePosition(input)
+    local state = AxosToggle.State
+
+    if not state.dragStartPos or not state.startGuiPos then
+        return
+    end
+
+    local delta = input.Position - state.dragStartPos
+
+    if delta.Magnitude > 5 then
+        state.isDragMove = true
+    end
+
+    Btn.Position = UDim2.new(
+        state.startGuiPos.X.Scale,
+        state.startGuiPos.X.Offset + delta.X,
+
+        state.startGuiPos.Y.Scale,
+        state.startGuiPos.Y.Offset + delta.Y
+    )
+end
+
+function AxosToggle.Began(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1
+        or input.UserInputType == Enum.UserInputType.Touch then
+
+        local state = AxosToggle.State
+
+        state.isDragging = true
+        state.isDragMove = false
+        state.dragStartPos = input.Position
+        state.startGuiPos = Btn.Position
+        state.dragInput = input
+    end
+end
+
+function AxosToggle.Ended(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1
+        or input.UserInputType == Enum.UserInputType.Touch then
+
+        local state = AxosToggle.State
+
+        state.isDragging = false
+
+        if not state.isDragMove then
+            if Window and typeof(Window.Toggle) == "function" then
+                Window:Toggle()
+            end
+        end
+
+        state.isDragMove = false
+        state.dragInput = nil
+    end
+end
+
+Btn.InputBegan:Connect(AxosToggle.Began)
+
+Btn.InputEnded:Connect(AxosToggle.Ended)
+
+Btn.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement
+        or input.UserInputType == Enum.UserInputType.Touch then
+
+        AxosToggle.State.dragInput = input
+    end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+    local state = AxosToggle.State
+
+    if state.isDragging and input == state.dragInput then
+        AxosToggle.UpdatePosition(input)
+    end
+end)
+
+Btn.MouseEnter:Connect(function()
+    Tweens.InBg:Play()
+    Tweens.InStroke:Play()
+end)
+
+Btn.MouseLeave:Connect(function()
+    Tweens.OutBg:Play()
+    Tweens.OutStroke:Play()
+end)
+
+MyUIElements.SettingsManager.MySubTabs.UI:Input({
+    Title = "loc:AxosToggleSize",
+    Desc = "loc:AxosToggleSizeDesc",
+    Flag = "AxosToggleSize",
+
+    Value = "50, 50",
+    Placeholder = "50, 50",
+    Type = "Input",
+
+    Callback = function(input)
+        local x, y = string.match(
+            tostring(input),
+            "(%d+)[^%d]+(%d+)"
+        )
+
+        x = tonumber(x)
+        y = tonumber(y)
+
+        if x and y then
+            x = math.clamp(x, 25, 150)
+            y = math.clamp(y, 25, 150)
+
+            State.BaseSizeX = x
+            State.BaseSizeY = y
+
+            Btn.Size = UDim2.fromOffset(x, y)
+        end
+    end
+})
+
+MyUIElements.SettingsManager.MySubTabs.UI:Toggle({
+    Title = "loc:ShowAxosToggle",
+    Desc = "loc:ShowAxosToggleDesc",
+    Flag = "ShowAxosToggle",
+    Value = true,
+
+    Callback = function(state)
+        Screen.Enabled = state
+    end
+})
+
+local ConfigManager = Window.ConfigManager
+local AUTOLOAD_FILE = "Forsaken.txt"
+local AUTOLOAD_CLONE = "ForsakenOff.txt"
+
+local ConfigState = {
+    Name = "",
+    Selected = nil,
+    CurrentObject = nil,
+    AutoLoad = false,
+    AutoSaveLoop = nil
+}
+
+local ConfigDropdownElement = nil
+
+local function NotifyConfig(title, content, icon)
+    WindUI:Notify({ Title = title, Content = content, Duration = 3, Icon = icon })
+end
+
+local function GetConfigs()
+    return ConfigManager:AllConfigs()
+end
+
+local function RefreshDropdown()
+    if not ConfigDropdownElement then return end
+    
+    local configs = GetConfigs()
+    ConfigDropdownElement:Refresh(configs)
+    
+    local targetValue = ConfigState.Selected
+    if ConfigDropdownElement.Set then
+        ConfigDropdownElement:Set(targetValue)
+    elseif ConfigDropdownElement.SetValue then
+        ConfigDropdownElement:SetValue(targetValue)
+    end
+end
+
+local function ConfigExists(name)
+    if not name or name == "" then return false end
+    
+    local list = GetConfigs()
+    for i = 1, #list do
+        if list[i] == name then return true end
+    end
+    return false
+end
+
+local function SaveAutoLoad(configName, state)
+    if not writefile then return end
+    
+    local dataString = string.format("%s|%s", configName or "", state and "1" or "0")
+    writefile(AUTOLOAD_FILE, dataString)
+
+    if state and isfile and isfile(AUTOLOAD_CLONE) then
+        pcall(delfile, AUTOLOAD_CLONE)
+    end
+end
+
+local function LoadAutoLoad()
+    if (isfile and isfile(AUTOLOAD_CLONE)) or not (readfile and isfile and isfile(AUTOLOAD_FILE)) then
+        return "", false
+    end
+
+    local success, result = pcall(readfile, AUTOLOAD_FILE)
+    if not success then return "", false end
+
+    local name, toggle = tostring(result):match("^(.-)|?(%d?)$")
+    return name or "", toggle == "1"
+end
+
+local function ExecuteConfigAction(name, action)
+    local success, cfg = pcall(function() return ConfigManager:CreateConfig(name) end)
+    if not success or not cfg then return false end
+
+    local actionSuccess = pcall(function()
+        if action == "Save" then cfg:Save() else cfg:Load() end
+    end)
+
+    if actionSuccess then
+        ConfigState.CurrentObject = cfg
+        Window.CurrentConfig = cfg
+    end
+    return actionSuccess
+end
+
+local function StopConfigLoops()
+    if ConfigState.AutoSaveLoop then
+        task.cancel(ConfigState.AutoSaveLoop)
+        ConfigState.AutoSaveLoop = nil
+    end
+end
+
+local function StartAutoSave()
+    StopConfigLoops()
+
+    ConfigState.AutoSaveLoop = task.spawn(function()
+        task.wait(1)
+        if not ConfigState.AutoLoad then return end
+        
+        local selected = ConfigState.Selected
+        if selected and ConfigExists(selected) then
+            ExecuteConfigAction(selected, "Save")
+            ExecuteConfigAction(selected, "Load")
+        end
+
+        NotifyConfig("loc:Auto_Load", "loc:Config_Content13", "refresh-cw")
+
+        while ConfigState.AutoLoad do
+            task.wait(5)
+            local currentSelected = ConfigState.Selected
+            if currentSelected and ConfigExists(currentSelected) then
+                ExecuteConfigAction(currentSelected, "Save")
+            end
+        end
+    end)
+end
+
+local function OnConfigNameChanged(v)
+    ConfigState.Name = tostring(v or "")
+end
+
+local function OnConfigSelected(v)
+    ConfigState.Selected = v
+end
+
+local function OnMakeConfigPressed()
+    local name = ConfigState.Name
+    if name == "" then return NotifyConfig("loc:Config", "loc:Config_Content", "circle-alert") end
+    if ConfigExists(name) then return NotifyConfig("loc:Config", "loc:Config_Content1", "circle-alert") end
+
+    if not ExecuteConfigAction(name, "Save") then
+        return NotifyConfig("loc:Config", "Failed to create config", "circle-alert")
+    end
+
+    ConfigState.Selected = name
+    RefreshDropdown()
+    NotifyConfig("loc:Config", "loc:Config_Content2", "check")
+end
+
+local function OnUpdateConfigPressed()
+    local selected = ConfigState.Selected
+    if not selected then return NotifyConfig("loc:Config", "loc:Config_Content3", "circle-alert") end
+    if not ConfigExists(selected) then return NotifyConfig("loc:Config", "loc:Config_Content4", "circle-alert") end
+
+    if ExecuteConfigAction(selected, "Save") then
+        NotifyConfig("loc:Config", "loc:Config_Content5", "refresh-cw")
+    end
+end
+
+local function OnLoadConfigPressed()
+    local selected = ConfigState.Selected
+    if not selected then return NotifyConfig("loc:Config", "loc:Config_Content6", "circle-alert") end
+    if not ConfigExists(selected) then return NotifyConfig("loc:Config", "loc:Config_Content7", "circle-alert") end
+
+    if ExecuteConfigAction(selected, "Load") then
+        NotifyConfig("loc:Config", "loc:Config_Content8", "check")
+    end
+end
+
+local function OnDeleteConfigPressed()
+    local selected = ConfigState.Selected
+    if not selected then return NotifyConfig("loc:Config", "loc:Config_Content9", "circle-alert") end
+    if not ConfigExists(selected) then return NotifyConfig("loc:Config", "loc:Config_Content10", "circle-alert") end
+
+    local success, cfg = pcall(function() return ConfigManager:CreateConfig(selected) end)
+    if success and cfg then pcall(function() cfg:Delete() end) end
+
+    ConfigState.Selected = nil
+    ConfigState.CurrentObject = nil
+    RefreshDropdown()
+    NotifyConfig("loc:Config", "loc:Config_Content11", "trash")
+end
+
+local function OnAutoLoadToggled(state)
+    ConfigState.AutoLoad = state
+    StopConfigLoops()
+
+    if not state then
+        if writefile then writefile(AUTOLOAD_CLONE, "") end
+        NotifyConfig("loc:Auto_Load", "loc:Disabled", "x")
+        return
+    end
+
+    local selected = ConfigState.Selected
+    if not selected then
+        ConfigState.AutoLoad = false
+        NotifyConfig("loc:Auto_Load", "loc:Config_Content12", "circle-alert")
+        return
+    end
+
+    SaveAutoLoad(selected, true)
+    NotifyConfig("loc:Auto_Load", "Enabled: " .. selected, "check")
+    StartAutoSave()
+end
+
+MyUIElements.SettingsManager.MySubTabs.Config:Input({
+    Title = "loc:Config_Name", Desc = "loc:Config_Name_Desc", Flag = "Config Name",
+    Placeholder = "Enter new config name", Value = "", Callback = OnConfigNameChanged
+})
+
+ConfigDropdownElement = MyUIElements.SettingsManager.MySubTabs.Config:Dropdown({
+    Title = "loc:Config_List", Desc = "loc:Config_List_Desc", Flag = "Config List",
+    Values = GetConfigs(), Value = nil, Callback = OnConfigSelected
+})
+
+MyUIElements.SettingsManager.MySubTabs.Config:Button({ Title = "loc:Make_Config", Desc = "loc:Make_Config_Desc", Callback = OnMakeConfigPressed })
+MyUIElements.SettingsManager.MySubTabs.Config:Button({ Title = "loc:Update_Config", Desc = "loc:Update_Config_Content", Callback = OnUpdateConfigPressed })
+MyUIElements.SettingsManager.MySubTabs.Config:Button({ Title = "loc:Load_Config", Desc = "loc:Load_Config_Desc", Callback = OnLoadConfigPressed })
+MyUIElements.SettingsManager.MySubTabs.Config:Button({ Title = "loc:Delete_Config", Desc = "loc:Delete_Config_Desc", Callback = OnDeleteConfigPressed })
+
+MyUIElements.SettingsManager.MySubTabs.Config:Toggle({
+    Title = "loc:Auto_Load_Config", Desc = "loc:Auto_Load_Config_Desc", Flag = "Auto Load Config v2",
+    Value = false, Callback = OnAutoLoadToggled
+})
+
+task.delay(1, function()
+    local saved, enabled = LoadAutoLoad()
+    if saved == "" or not ConfigExists(saved) then return end
+
+    ConfigState.Selected = saved
+    ConfigState.AutoLoad = enabled
+
+    ExecuteConfigAction(saved, "Load")
+    RefreshDropdown()
+
+    if enabled then
+        StartAutoSave()
+        NotifyConfig("loc:Auto_Load", "Loaded: " .. saved .. " (enabled)", "check")
+    else
+        NotifyConfig("loc:Auto_Load", "Loaded: " .. saved .. " (disabled)", "circle-alert")
+    end
+end)
+
+getgenv().showpingandfps = getgenv().showpingandfps ~= false
+
+if getgenv().showpingandfps then
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/SLK-GAMING-MOD/Open-soure/refs/heads/main/fps%2Bping.luau"))()
+end     
