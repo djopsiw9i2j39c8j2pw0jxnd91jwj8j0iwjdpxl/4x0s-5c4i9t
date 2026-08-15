@@ -323,6 +323,22 @@ WindUI:Localization({
             AntiSubspaceEffectDesc = "Eliminate all annoying effects from subspaces.",
             AntiSlow = "Anti Slow",
             AntiSlowDesc = "Remove all annoying slowdown effects.",
+            Bypass = "Bypass",
+            BypassDesc = "Ignore some game mechanics.",
+            ShowChat = "Show Chat",
+            ShowChatDesc = "Show the chat box whenever the game hides it.",
+            Camlock = "Camlock",
+            CamlockDesc = "Functions used to lock onto targets more easily.",
+            Camlock_Survivor = "Camlock Survivor",
+            Camlock_Survivor_Desc = "Automatically camlock the nearest survivor without being blocked by anti-cheat.",
+            Show_Quick_Button = "Show Quick Button",
+            Show_Quick_Button_Desc = "Create a GUI button so you can quickly toggle aimlock on and off.",
+            Camera_Height = "Camera Height",
+            Camera_Height_Desc = "Adjust the camera height to make it easier to see.",
+            Aim_Part = "Aim Part",
+            Aim_Part_Desc = "Select the target body part when starting the target lock.",
+            Switch_Target = "Switch Target",
+            Switch_Target_Desc = "Switch to a different target that is closer to you.",
         },
         vi = {
             HubTitle = "Axos Hub",
@@ -529,7 +545,23 @@ JumpPower = "Lực nhảy",
             AntiSubspaceEffect = "Chống hiệu ứng subspace",
             AntiSubspaceEffectDesc = "Loại bỏ toàn bộ hiệu ứng khó chịu đến từ subspace.",
             AntiSlow = "Chống chậm",
-            AntiSlowDesc = "Loại bỏ toàn bộ hiệu ứng làm chậm",
+            AntiSlowDesc = "Loại bỏ toàn bộ hiệu ứng làm chậm khó chịu.",
+            Bypass = "Vượt qua",
+            BypassDesc = "Vượt qua một số cơ chế trò chơi.",
+            ShowChat = "Hiện khung chat",
+            ShowChatDesc = "Hiển thị khung chat mỗi khi bị game ẩn mất",
+            Camlock = "Khóa camera",
+            CamlockDesc = "Các chức năng dùng để khóa mục tiêu dễ dàng hơn.",
+            Camlock_Survivor = "Camlock Survivor",
+            Camlock_Survivor_Desc = "Tự động camlock Survivor gần nhất mà không bị anti-cheat chặn.",
+            Show_Quick_Button = "Hiển thị nút nhanh",
+            Show_Quick_Button_Desc = "Tạo nút GUI để bạn có thể nhanh chóng bật hoặc tắt aimlock.",
+            Camera_Height = "Độ cao camera",
+            Camera_Height_Desc = "Điều chỉnh độ cao camera để dễ quan sát hơn.",
+            Aim_Part = "Bộ phận ngắm",
+            Aim_Part_Desc = "Chọn bộ phận cơ thể của mục tiêu khi bắt đầu khóa mục tiêu.",
+            Switch_Target = "Đổi mục tiêu",
+            Switch_Target_Desc = "Chuyển sang một mục tiêu khác gần bạn hơn.",
         }
     }
 })
@@ -606,8 +638,8 @@ pcall(function()
 end)
 
 local OpenButtonConfig = {
-    Title = "Open Gui",
-    Icon = "monitor",
+    Title = "Open",
+    Icon = "rbxassetid://122301429064719",
 
     CornerRadius = UDim.new(0, 6),
     StrokeThickness = 2,
@@ -624,7 +656,7 @@ local OpenButtonConfig = {
 
 Window:EditOpenButton(OpenButtonConfig)
 
-Window:Tag({Title = "v0.0.1", Icon = "cog", Color = Color3.fromHex("#30ff6a")})
+Window:Tag({Title = "v0.0.2", Icon = "cog", Color = Color3.fromHex("#30ff6a")})
 
 local Tabs = {
     About = Window:Section({ Title = "loc:About", Opened = true }),
@@ -909,6 +941,21 @@ local ElementConfigs = {
     },
 
     {
+        ID = "Camlock",
+        Type = "Section",
+        Parent = TabHandles.Player,
+        Config = {
+            Title = "loc:Camlock",
+            Desc = "loc:CamlockDesc",
+            Icon = "shield-off",
+            Box = true,
+            BoxBorder = true,
+            Opened = false,
+            Hover = true,
+        }
+    },
+
+    {
         ID = "NormalPower",
         Type = "Section",
         Parent = TabHandles.Player,
@@ -975,7 +1022,7 @@ local ElementConfigs = {
         Config = {
             Title = "loc:Screen",
             Desc = "loc:ScreenDesc",
-            Icon = "shield-off",
+            Icon = "monitor",
             Box = true,
             BoxBorder = true,
             Opened = false,
@@ -1005,7 +1052,7 @@ local ElementConfigs = {
         Config = {
             Title = "loc:Hallucination",
             Desc = "loc:HallucinationDesc",
-            Icon = "shield-off",
+            Icon = "scan-eye",
             Box = true,
             BoxBorder = true,
             Opened = false,
@@ -1343,7 +1390,6 @@ tracerGui.Name = "MyHybridESP_TracerGui"
 tracerGui.IgnoreGuiInset = true
 tracerGui.Parent = CoreGui
 
--- Hàm kiểm tra chính xác xem Object có phải là bản thân không (chống lag/respawn)
 local function IsSelf(obj)
     if not localPlayer then return false end
     if obj == localPlayer then return true end
@@ -1500,7 +1546,6 @@ local function GetBoundingInfo(obj)
         obj = obj.Character
     end
 
-    -- Check lại lần nữa phòng trường hợp player character load sau
     if IsSelf(obj) then return nil, nil, nil end
 
     local hum = obj:FindFirstChildOfClass("Humanoid")
@@ -1633,7 +1678,7 @@ local PuzzleBot = {
     Config = {
         AutoSolve = false,
         ShowPath = false,
-        SolveSpeed = 0.08
+        SolveSpeed = 0.01
     },
     State = {
         Watchers = {},
@@ -1783,13 +1828,13 @@ MyUIElements.Generator:Input({
     Title = "loc:SolveSpeed",
     Desc = "loc:SolveSpeedDesc",
     Flag = "SolveSpeed_Input",
-    Placeholder = "0.08",
-    Value = 0.08,
+    Placeholder = "0.01",
+    Value = 0.01,
     Numeric = true,
     Callback = function(val)
         local speed = tonumber(val)
         if speed then
-            PuzzleBot.Config.SolveSpeed = math.clamp(speed, 0.08, 10)
+            PuzzleBot.Config.SolveSpeed = math.clamp(speed, 0.01, 10)
         end
     end
 })
@@ -1895,14 +1940,11 @@ end)
 function ItemBot.Funcs.GetAvailableItems()
     local validItems = {}
     for item, prompt in pairs(ItemBot.State.LiveCache) do
-        -- FIX 1: Chỉ xóa khi item thực sự đã bốc hơi khỏi map (bị nhặt/hủy)
         if item and item.Parent and prompt and prompt.Parent then
-            -- Chỉ hiển thị lên Dropdown nếu nó đang nhặt được
             if prompt.Enabled then
                 table.insert(validItems, item)
             end
         else
-            -- Item không còn tồn tại thì mới dọn rác
             ItemBot.State.LiveCache[item] = nil
         end
     end
@@ -1994,7 +2036,6 @@ task.spawn(function()
             if ItemBot.State.CachedHash ~= newHash then
                 ItemBot.State.CachedHash = newHash
                 
-                -- FIX 2: Tách pcall ra để đảm bảo UI kiểu gì cũng được update
                 pcall(function() ItemDropdown:SetValues(uniqueNames) end)
                 pcall(function() ItemDropdown:Refresh(uniqueNames, true) end) 
             end
@@ -2002,7 +2043,6 @@ task.spawn(function()
     end
 end)
 
--- Giao diện UI giữ nguyên bên dưới
 ItemDropdown = MyUIElements.Items:Dropdown({
     Title = "loc:Select_Item",
     Desc = "loc:Select_Item_Desc",
@@ -2844,7 +2884,6 @@ end
 local function UpdateItemESP()
     if ItemESPConfig.Enabled then
         for idx, obj in pairs(GetItemObjects()) do
-            -- Dùng GetDebugId() kết hợp Name để tạo ID độc nhất như logic mẫu của bro
             ESP:DangKy("ItemESP_" .. (obj:GetDebugId() or obj.Name .. "_" .. idx), obj, {
                 UseHighlight = ItemESPConfig.Types.Highlight,
                 UseText = ItemESPConfig.Types.Text,
@@ -2854,7 +2893,7 @@ local function UpdateItemESP()
                 ShowName = ItemESPConfig.TextFormat.Name,
                 ShowHP = ItemESPConfig.TextFormat.HP,
                 ShowDistance = ItemESPConfig.TextFormat.Distance,
-                CustomName = obj.Name -- Khác với Sentry, Item nên giữ nguyên Name gốc
+                CustomName = obj.Name
             })
         end
     else
@@ -2934,7 +2973,6 @@ task.spawn(function()
         if ItemESPConfig.Enabled then
             UpdateItemESP()
             
-            -- Xóa ESP rác khi item đã bị nhặt mất
             local currentItems = GetItemObjects()
             for id, data in pairs(ESP.Objects) do
                 if string.sub(id, 1, 8) == "ItemESP_" then
@@ -3555,6 +3593,277 @@ IngameFolder.ChildRemoved:Connect(function(child)
     end
 end)
 
+local CamlockBot = {
+    Config = {
+        Enabled = false,
+        ZoomDistance = 10,
+        HeightOffset = 1.5,
+        AimPart = "Head",
+        QuickGuiVisible = false
+    },
+    State = {
+        Target = nil,
+        OriginalCameraSubject = nil,
+        CustomCFrame = nil,
+        PinchTouches = {},
+        LastPinchDistance = nil,
+        DragInput = nil,
+        DragStart = nil,
+        StartPos = nil,
+        TotalDragDist = 0
+    },
+    UI = {
+        Frame = nil,
+        Button = nil,
+        Stroke = nil
+    },
+    Connections = {},
+    RenderKey = "KillerCamlock_SyncRender"
+}
+
+function CamlockBot:Tween(obj, props, duration)
+    if obj then TweenService:Create(obj, TweenInfo.new(duration or 0.2, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), props):Play() end
+end
+
+function CamlockBot:GetAimPos(model)
+    if not model then return nil end
+    local partMap = {
+        ["Head"] = "Head", ["Torso"] = "UpperTorso",
+        ["Left Arm"] = "LeftHand", ["Right Arm"] = "RightHand",
+        ["Left Leg"] = "LeftFoot", ["Right Leg"] = "RightFoot"
+    }
+    local p = model:FindFirstChild(partMap[self.Config.AimPart] or "Head") or model:FindFirstChild(self.Config.AimPart) or model:FindFirstChild("HumanoidRootPart")
+    return p and p.Position
+end
+
+function CamlockBot:IsKiller()
+    return playerCharacter and playerCharacter:IsDescendantOf(killersFolder)
+end
+
+function CamlockBot:GetNearest()
+    if not survivorsFolder or not playerCharacter then return nil end
+    local myRoot = playerCharacter:FindFirstChild("HumanoidRootPart")
+    if not myRoot then return nil end
+
+    local nearest, minDist = nil, math.huge
+    for _, s in ipairs(survivorsFolder:GetChildren()) do
+        local h, r = s:FindFirstChild("Humanoid"), s:FindFirstChild("HumanoidRootPart")
+        if h and r and h.Health > 0 then
+            local d = (r.Position - myRoot.Position).Magnitude
+            if d < minDist then minDist = d; nearest = r end
+        end
+    end
+    return nearest
+end
+
+function CamlockBot:UpdateQuickUI()
+    if not self.UI.Button then return end
+    if self.Config.Enabled then
+        self.UI.Button.Text = "CAMLOCK: ON"
+        self:Tween(self.UI.Button, {TextColor3 = Color3.fromRGB(255, 75, 75)}, 0.3)
+        self:Tween(self.UI.Stroke, {Color = Color3.fromRGB(255, 75, 75)}, 0.3)
+    else
+        self.UI.Button.Text = "CAMLOCK: OFF"
+        self:Tween(self.UI.Button, {TextColor3 = Color3.fromRGB(200, 200, 200)}, 0.3)
+        self:Tween(self.UI.Stroke, {Color = Color3.fromRGB(60, 60, 60)}, 0.3)
+    end
+end
+
+function CamlockBot:SetupQuickGui()
+    if CoreGui:FindFirstChild("QuickCamlock") then CoreGui.QuickCamlock:Destroy() end
+
+    local sgui = Instance.new("ScreenGui", CoreGui)
+    sgui.Name = "QuickCamlock"
+    sgui.ResetOnSpawn = false
+    sgui.Enabled = self.Config.QuickGuiVisible
+
+    self.UI.Frame = Instance.new("Frame", sgui)
+    self.UI.Frame.Size, self.UI.Frame.Position = UDim2.new(0, 130, 0, 45), UDim2.new(0.85, 0, 0.5, 0)
+    self.UI.Frame.BackgroundColor3, self.UI.Frame.BorderSizePixel = Color3.fromRGB(20, 20, 20), 0
+    self.UI.Frame.AnchorPoint, self.UI.Frame.Active = Vector2.new(0.5, 0.5), true
+    Instance.new("UICorner", self.UI.Frame).CornerRadius = UDim.new(0, 12)
+
+    self.UI.Stroke = Instance.new("UIStroke", self.UI.Frame)
+    self.UI.Stroke.Thickness, self.UI.Stroke.Color = 2, Color3.fromRGB(60, 60, 60)
+
+    self.UI.Button = Instance.new("TextButton", self.UI.Frame)
+    self.UI.Button.Size, self.UI.Button.BackgroundTransparency = UDim2.new(1, 0, 1, 0), 1
+    self.UI.Button.Font, self.UI.Button.TextSize = Enum.Font.GothamBold, 14
+
+    local CLICK_THRESHOLD = 20
+
+    self.UI.Button.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            self:Tween(self.UI.Frame, {Size = UDim2.new(0, 120, 0, 40)}, 0.1)
+            self.State.DragInput, self.State.DragStart, self.State.StartPos = input, input.Position, self.UI.Frame.Position
+            self.State.TotalDragDist = 0
+        end
+    end)
+
+    self.UI.Button.InputEnded:Connect(function(input)
+        if input == self.State.DragInput then
+            self:Tween(self.UI.Frame, {Size = UDim2.new(0, 130, 0, 45)}, 0.15)
+            
+            if self.State.TotalDragDist < CLICK_THRESHOLD then 
+                self:Toggle(not self.Config.Enabled)
+            end
+            self.State.DragInput = nil 
+        end
+    end)
+
+    UserInputService.InputChanged:Connect(function(input)
+        if self.State.DragInput == input then
+            local delta = input.Position - self.State.DragStart
+            self.State.TotalDragDist = self.State.TotalDragDist + delta.Magnitude
+            
+            if self.State.TotalDragDist > 5 then
+                self.UI.Frame.Position = UDim2.new(self.State.StartPos.X.Scale, self.State.StartPos.X.Offset + delta.X, self.State.StartPos.Y.Scale, self.State.StartPos.Y.Offset + delta.Y)
+            end
+        end
+    end)
+
+    self:UpdateQuickUI()
+end
+
+function CamlockBot:Toggle(state)
+    self.Config.Enabled = state
+    self:UpdateQuickUI()
+
+    if not state then
+        RunService:UnbindFromRenderStep(self.RenderKey)
+        for _, c in ipairs(self.Connections) do if c.Connected then c:Disconnect() end end
+        table.clear(self.Connections)
+        self.State.PinchTouches, self.State.LastPinchDistance = {}, nil
+        
+        if Camera and self.State.OriginalCameraSubject then
+            Camera.CameraType, Camera.CameraSubject = Enum.CameraType.Custom, self.State.OriginalCameraSubject
+            self.State.OriginalCameraSubject, self.State.Target, self.State.CustomCFrame = nil, nil, nil
+        end
+        return
+    end
+
+    if not Camera or self.State.OriginalCameraSubject then return end
+    self.State.OriginalCameraSubject = Camera.CameraSubject
+    self.State.CustomCFrame = Camera.CFrame 
+
+    -- Vòng lặp khóa mục tiêu
+    RunService:BindToRenderStep(self.RenderKey, 250, function()
+        if not self:IsKiller() then
+            if Camera.CameraType == Enum.CameraType.Scriptable then Camera.CameraType = Enum.CameraType.Custom end
+            return
+        end
+
+        if not (self.State.Target and self.State.Target.Parent and self.State.Target.Parent:FindFirstChild("Humanoid") and self.State.Target.Parent.Humanoid.Health > 0) then
+            self.State.Target = self:GetNearest()
+            if not self.State.Target and Camera.CameraType == Enum.CameraType.Scriptable then Camera.CameraType = Enum.CameraType.Custom end
+            return
+        end
+
+        local myRoot = playerCharacter and playerCharacter:FindFirstChild("HumanoidRootPart")
+        if not myRoot then return end
+
+        local aimPos = self:GetAimPos(self.State.Target.Parent) or self.State.Target.Position
+        local anchorPos = myRoot.Position + Vector3.new(0, self.Config.HeightOffset, 0)
+        
+        local targetDir = (aimPos - anchorPos).Unit
+        local currentDir = self.State.CustomCFrame and self.State.CustomCFrame.LookVector or Camera.CFrame.LookVector
+        local smoothDir = currentDir:Lerp(targetDir, 0.2).Unit 
+        
+        local camPos = anchorPos - smoothDir * self.Config.ZoomDistance
+        self.State.CustomCFrame = CFrame.lookAt(camPos, camPos + smoothDir)
+
+        Camera.CameraType, Camera.CFrame, Camera.Focus = Enum.CameraType.Scriptable, self.State.CustomCFrame, CFrame.new(aimPos)
+    end)
+
+    table.insert(self.Connections, UserInputService.InputChanged:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseWheel then self.Config.ZoomDistance = math.clamp(self.Config.ZoomDistance - input.Position.Z * 2, 2, 30) end
+    end))
+
+    table.insert(self.Connections, UserInputService.TouchStarted:Connect(function(t, gp)
+        if gp then return end
+        table.insert(self.State.PinchTouches, t)
+        if #self.State.PinchTouches == 2 then self.State.LastPinchDistance = (self.State.PinchTouches[1].Position - self.State.PinchTouches[2].Position).Magnitude end
+    end))
+
+    table.insert(self.Connections, UserInputService.TouchMoved:Connect(function(t, gp)
+        if gp then return end
+        for i, touch in ipairs(self.State.PinchTouches) do if touch == t then self.State.PinchTouches[i] = t break end end
+        if #self.State.PinchTouches == 2 and self.State.LastPinchDistance then
+            local newDist = (self.State.PinchTouches[1].Position - self.State.PinchTouches[2].Position).Magnitude
+            self.Config.ZoomDistance = math.clamp(self.Config.ZoomDistance - (newDist - self.State.LastPinchDistance) / 20, 2, 30)
+            self.State.LastPinchDistance = newDist
+        end
+    end))
+
+    table.insert(self.Connections, UserInputService.TouchEnded:Connect(function(t)
+        for i, touch in ipairs(self.State.PinchTouches) do if touch == t then table.remove(self.State.PinchTouches, i) break end end
+        if #self.State.PinchTouches < 2 then self.State.LastPinchDistance = nil end
+    end))
+end
+
+function CamlockBot:SetUIVisible(state)
+    self.Config.QuickGuiVisible = state
+    local sgui = CoreGui:FindFirstChild("QuickCamlock")
+    if not sgui or not self.UI.Frame then return end
+
+    if state then
+        sgui.Enabled = true
+        self.UI.Frame.Position = UDim2.new(0.95, 50, self.UI.Frame.Position.Y.Scale, self.UI.Frame.Position.Y.Offset)
+        self.UI.Frame.BackgroundTransparency, self.UI.Button.TextTransparency, self.UI.Stroke.Transparency = 1, 1, 1
+        self:Tween(self.UI.Frame, {Position = UDim2.new(0.85, 0, self.UI.Frame.Position.Y.Scale, self.UI.Frame.Position.Y.Offset), BackgroundTransparency = 0}, 0.4)
+        self:Tween(self.UI.Button, {TextTransparency = 0}, 0.4)
+        self:Tween(self.UI.Stroke, {Transparency = 0}, 0.4)
+    else
+        self:Tween(self.UI.Frame, {Position = UDim2.new(0.95, 50, self.UI.Frame.Position.Y.Scale, self.UI.Frame.Position.Y.Offset), BackgroundTransparency = 1}, 0.3)
+        self:Tween(self.UI.Button, {TextTransparency = 1}, 0.3)
+        self:Tween(self.UI.Stroke, {Transparency = 1}, 0.3)
+        task.delay(0.3, function() sgui.Enabled = false end)
+    end
+end
+
+CamlockBot:SetupQuickGui()
+localPlayer.CharacterAdded:Connect(function() if CamlockBot.Config.Enabled then CamlockBot:Toggle(false) end end)
+
+MyUIElements.Camlock:Toggle({
+    Title = "loc:Camlock_Survivor",
+    Desc = "loc:Camlock_Survivor_Desc",
+    Flag = "KillerCamlock",
+    Value = false,
+    Callback = function(state) CamlockBot:Toggle(state) end
+})
+
+MyUIElements.Camlock:Toggle({
+    Title = "loc:Show_Quick_Button",
+    Desc = "loc:Show_Quick_Button_Desc",
+    Flag = "KillerCamlockQuickBtn",
+    Value = false,
+    Callback = function(state) CamlockBot:SetUIVisible(state) end
+})
+
+MyUIElements.Camlock:Input({
+    Title = "loc:Camera_Height",
+    Desc = "loc:Camera_Height_Desc",
+    Flag = "KillerCamHeight",
+    Placeholder = "Ví dụ: 1.5",
+    Value = "1.5",
+    Callback = function(value) CamlockBot.Config.HeightOffset = tonumber(value) or 1.5 end
+})
+
+MyUIElements.Camlock:Dropdown({
+    Title = "loc:Aim_Part",
+    Desc = "loc:Aim_Part_Desc",
+    Flag = "KillerAimPart",
+    Values = {"Head", "Torso", "Left Arm", "Right Arm", "Left Leg", "Right Leg"},
+    Value = "Head",
+    Callback = function(value) CamlockBot.Config.AimPart = value end
+})
+
+MyUIElements.Camlock:Button({
+    Title = "loc:Switch_Target",
+    Desc = "loc:Switch_Target_Desc",
+    Callback = function() if CamlockBot.Config.Enabled then CamlockBot.State.Target = CamlockBot:GetNearest() end end
+})
+
 local Toggles = {
     Noclip = false,
     InfJump = false,
@@ -3760,49 +4069,45 @@ local VisualBot = {
         ZoomMax = 100000
     },
     Originals = {
-        Ambient = game.Lighting.Ambient,
-        OutdoorAmbient = game.Lighting.OutdoorAmbient,
-        Brightness = game.Lighting.Brightness,
-        ClockTime = game.Lighting.ClockTime,
-        GlobalShadows = game.Lighting.GlobalShadows,
-        FogEnd = game.Lighting.FogEnd,
-        ZoomMin = game.Players.LocalPlayer.CameraMinZoomDistance,
-        ZoomMax = game.Players.LocalPlayer.CameraMaxZoomDistance,
+        Ambient = Lighting.Ambient,
+        OutdoorAmbient = Lighting.OutdoorAmbient,
+        Brightness = Lighting.Brightness,
+        GlobalShadows = Lighting.GlobalShadows,
+        FogEnd = Lighting.FogEnd,
+        ZoomMin = localPlayer.CameraMinZoomDistance,
+        ZoomMax = localPlayer.CameraMaxZoomDistance,
         Atmospheres = {}
     },
-    Funcs = {}
+    Connections = {}
 }
 
-for _, v in pairs(game.Lighting:GetChildren()) do
+for _, v in ipairs(Lighting:GetChildren()) do
     if v:IsA("Atmosphere") then
         VisualBot.Originals.Atmospheres[v] = v.Density
     end
 end
 
-function VisualBot.Funcs.UpdateCamera()
-    local lp = game.Players.LocalPlayer
-    if VisualBot.Config.EnableZoom then
-        lp.CameraMinZoomDistance = VisualBot.Config.ZoomMin
-        lp.CameraMaxZoomDistance = VisualBot.Config.ZoomMax
+function VisualBot:UpdateCamera()
+    if self.Config.EnableZoom then
+        localPlayer.CameraMinZoomDistance = self.Config.ZoomMin
+        localPlayer.CameraMaxZoomDistance = self.Config.ZoomMax
     else
-        lp.CameraMinZoomDistance = VisualBot.Originals.ZoomMin
-        lp.CameraMaxZoomDistance = VisualBot.Originals.ZoomMax
+        localPlayer.CameraMinZoomDistance = self.Originals.ZoomMin
+        localPlayer.CameraMaxZoomDistance = self.Originals.ZoomMax
     end
 end
 
-function VisualBot.Funcs.RestoreLighting()
-    local l = game.Lighting
-    if not VisualBot.Config.Fullbright then
-        l.Ambient = VisualBot.Originals.Ambient
-        l.OutdoorAmbient = VisualBot.Originals.OutdoorAmbient
-        l.Brightness = VisualBot.Originals.Brightness
-        l.ClockTime = VisualBot.Originals.ClockTime
-        l.GlobalShadows = VisualBot.Originals.GlobalShadows
+function VisualBot:RestoreLighting()
+    if not self.Config.Fullbright then
+        Lighting.Ambient = self.Originals.Ambient
+        Lighting.OutdoorAmbient = self.Originals.OutdoorAmbient
+        Lighting.Brightness = self.Originals.Brightness
+        Lighting.GlobalShadows = self.Originals.GlobalShadows
     end
     
-    if not VisualBot.Config.NoFog then
-        l.FogEnd = VisualBot.Originals.FogEnd
-        for atmo, density in pairs(VisualBot.Originals.Atmospheres) do
+    if not self.Config.NoFog then
+        Lighting.FogEnd = self.Originals.FogEnd
+        for atmo, density in pairs(self.Originals.Atmospheres) do
             if atmo and atmo.Parent then
                 atmo.Density = density
             end
@@ -3810,28 +4115,58 @@ function VisualBot.Funcs.RestoreLighting()
     end
 end
 
-task.spawn(function()
-    while task.wait(0.5) do
-        local l = game.Lighting
-        
-        if VisualBot.Config.Fullbright then
-            l.Ambient = Color3.new(1, 1, 1)
-            l.OutdoorAmbient = Color3.new(1, 1, 1)
-            l.Brightness = 2
-            l.ClockTime = 14
-            l.GlobalShadows = false
-        end
-        
-        if VisualBot.Config.NoFog then
-            l.FogEnd = 100000
-            for _, v in pairs(l:GetChildren()) do
-                if v:IsA("Atmosphere") then
-                    v.Density = 0
+function VisualBot:UpdateLightingEngine()
+    if not self.Connections.LightingLoop then
+        self.Connections.LightingLoop = RunService.Heartbeat:Connect(function()
+            if self.Config.Fullbright then
+                Lighting.Ambient = Color3.fromRGB(150, 150, 150)
+                Lighting.OutdoorAmbient = Color3.fromRGB(150, 150, 150)
+                Lighting.GlobalShadows = false
+            end
+            
+            if self.Config.NoFog then
+                Lighting.FogEnd = 100000
+                for _, v in ipairs(Lighting:GetChildren()) do
+                    if v:IsA("Atmosphere") then
+                        v.Density = 0
+                    end
                 end
             end
+        end)
+    end
+end
+
+function VisualBot:StopLightingEngine()
+    if not self.Config.Fullbright and not self.Config.NoFog then
+        if self.Connections.LightingLoop then
+            self.Connections.LightingLoop:Disconnect()
+            self.Connections.LightingLoop = nil
         end
     end
-end)
+end
+
+function VisualBot:ForceShowChat()
+    pcall(function()
+        local textChatService = game:GetService("TextChatService")
+        local chatConfig = textChatService:FindFirstChild("ChatWindowConfiguration")
+        
+        if chatConfig then
+            chatConfig.Enabled = true
+            
+            if not self.Connections.ChatConn then
+                self.Connections.ChatConn = chatConfig:GetPropertyChangedSignal("Enabled"):Connect(function()
+                    if not chatConfig.Enabled then 
+                        chatConfig.Enabled = true 
+                    end
+                end)
+            end
+        end
+        
+        pcall(function()
+            game:GetService("StarterGui"):SetCore("ChatWindowVisible", true)
+        end)
+    end)
+end
 
 MyUIElements.Screen:Toggle({
     Title = "loc:Fullbright",
@@ -3840,7 +4175,12 @@ MyUIElements.Screen:Toggle({
     Value = false,
     Callback = function(state)
         VisualBot.Config.Fullbright = state
-        if not state then VisualBot.Funcs.RestoreLighting() end
+        if state then
+            VisualBot:UpdateLightingEngine()
+        else
+            VisualBot:RestoreLighting()
+            VisualBot:StopLightingEngine()
+        end
     end
 })
 
@@ -3851,7 +4191,12 @@ MyUIElements.Screen:Toggle({
     Value = false,
     Callback = function(state)
         VisualBot.Config.NoFog = state
-        if not state then VisualBot.Funcs.RestoreLighting() end
+        if state then
+            VisualBot:UpdateLightingEngine()
+        else
+            VisualBot:RestoreLighting()
+            VisualBot:StopLightingEngine()
+        end
     end
 })
 
@@ -3862,7 +4207,7 @@ MyUIElements.Screen:Toggle({
     Value = false,
     Callback = function(state)
         VisualBot.Config.EnableZoom = state
-        VisualBot.Funcs.UpdateCamera()
+        VisualBot:UpdateCamera()
     end
 })
 
@@ -3877,9 +4222,7 @@ MyUIElements.Screen:Input({
         local num = tonumber(val)
         if num then
             VisualBot.Config.ZoomMin = num
-            if VisualBot.Config.EnableZoom then 
-                VisualBot.Funcs.UpdateCamera() 
-            end
+            if VisualBot.Config.EnableZoom then VisualBot:UpdateCamera() end
         end
     end
 })
@@ -3895,10 +4238,16 @@ MyUIElements.Screen:Input({
         local num = tonumber(val)
         if num then
             VisualBot.Config.ZoomMax = num
-            if VisualBot.Config.EnableZoom then 
-                VisualBot.Funcs.UpdateCamera() 
-            end
+            if VisualBot.Config.EnableZoom then VisualBot:UpdateCamera() end
         end
+    end
+})
+
+MyUIElements.Bypass:Button({
+    Title = "loc:ShowChat",
+    Desc = "loc:ShowChatDesc",
+    Callback = function()
+        VisualBot:ForceShowChat()
     end
 })
 
@@ -4011,7 +4360,7 @@ function AntiSlowFeature:HookSurvivor(survivor)
     end))
 end
 
-MyUIElements.Screen:Toggle({
+MyUIElements.Bypass:Toggle({
     Title = "loc:AntiSlow",
     Desc = "loc:AntiSlowDesc",
     Flag = "ToggleAntiSlow",
