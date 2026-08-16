@@ -238,20 +238,14 @@ WindUI:Localization({
             Apply_Drain_Desc = "Enable custom drain.",
             Noclip = "Noclip",
             NoclipDesc = "Toggle collision to walk through walls and other objects.",
-            InfJump = "Infinite Jump",
-            InfJumpDesc = "Jump infinitely without touching the ground.",
-            ForceSpeed = "Force Speed",
-            ForceSpeedDesc = "Override your character's default movement speed.",
-            SetSpeed = "SetSpeed",
-            SetSpeedDesc = "Set the movement speed value used by Force Speed.",
-            JumpPower = "Jump Power",
-            JumpPowerDesc = "Enable or disable a custom jump power value.",
-            SetPower = "Set Power",
-            SetPowerDesc = "Set the jump power value applied when Jump Power is enabled.",
-            StandInTheAir = "Stand In The Air",
-            StandInTheAirDesc = "Allows your character to stand and remain suspended in the air.",
-            StandingHeight = "Standing Height",
-            StandingHeightDesc = "Adjust the height at which your character stands in the air.",
+            Speed = "Teleport Speed",
+            SpeedDesc = "Increase your speed to overcome the game's limits.",
+            SetSpeed = "Set Speed",
+            SetSpeedDesc = "Adjust your own movement speed.",
+            Flying = "Flying Hack",
+            FlyingDesc = "Unlock incredibly powerful and smooth flight capabilities.",
+            FlyingSpeed = "Flying Speed",
+            FlyingSpeedDesc = "Adjust your character's flight speed.",
             SolveSpeed = "Solve Speed",
             SolveSpeedDesc = "Adjust the auto completion generator speed.",
             AutoSolve = "Auto Solve",
@@ -461,20 +455,14 @@ Load_Config_Desc = "Nhấn để tải cấu hình đã chọn.",
             Apply_Drain_Desc = "Bật mức tiêu hao tùy chỉnh.",
             Noclip = "Xuyên tường",
             NoclipDesc = "Bật hoặc tắt va chạm để đi xuyên qua tường và các vật thể khác.",
-            InfJump = "Nhảy vô hạn",
-            InfJumpDesc = "Nhảy không giới hạn mà không cần chạm đất.",
-            ForceSpeed = "Ép tốc độ",
-            ForceSpeedDesc = "Ghi đè tốc độ di chuyển mặc định của nhân vật.",
+            Speed = "Tốc độ dịch chuyển",
+            SpeedDesc = "Tăng tốc độ để vượt qua giới hạn của trò chơi.",
             SetSpeed = "Đặt tốc độ",
-            SetSpeedDesc = "Đặt giá trị tốc độ di chuyển được sử dụng bởi Ép tốc độ.",
-JumpPower = "Lực nhảy",
-            JumpPowerDesc = "Bật hoặc tắt giá trị lực nhảy tùy chỉnh.",
-            SetPower = "Đặt lực nhảy",
-            SetPowerDesc = "Đặt giá trị lực nhảy được áp dụng khi Lực nhảy được bật.",
-            StandInTheAir = "Đứng trên không",
-            StandInTheAirDesc = "Cho phép nhân vật đứng và lơ lửng trên không.",
-            StandingHeight = "Độ cao đứng",
-            StandingHeightDesc = "Điều chỉnh độ cao mà nhân vật sẽ đứng trên không.",
+            SetSpeedDesc = "Điều chỉnh tốc độ di chuyển của bạn.",
+            Flying = "Hack bay",
+            FlyingDesc = "Mở khóa khả năng bay mạnh mẽ và mượt mà.",
+            FlyingSpeed = "Tốc độ bay",
+            FlyingSpeedDesc = "Điều chỉnh tốc độ bay của nhân vật.",
             SolveSpeed = "Tốc độ giải",
             SolveSpeedDesc = "Điều chỉnh tốc độ tự hoàn thành generator.",
             AutoSolve = "Tự động giải",
@@ -638,7 +626,7 @@ pcall(function()
 end)
 
 local OpenButtonConfig = {
-    Title = "Open",
+    Title = "Open Script",
     Icon = "rbxassetid://122301429064719",
 
     CornerRadius = UDim.new(0, 6),
@@ -656,7 +644,7 @@ local OpenButtonConfig = {
 
 Window:EditOpenButton(OpenButtonConfig)
 
-Window:Tag({Title = "v0.0.2", Icon = "cog", Color = Color3.fromHex("#30ff6a")})
+Window:Tag({Title = "v0.0.3", Icon = "cog", Color = Color3.fromHex("#30ff6a")})
 
 local Tabs = {
     About = Window:Section({ Title = "loc:About", Opened = true }),
@@ -767,6 +755,21 @@ local ElementConfigs = {
         Config = {
             Title = "loc:SetupStamina",
             Desc = "loc:SetupStaminaDesc",
+            Icon = "user",
+            Box = true,
+            BoxBorder = true,
+            Opened = false,
+            Hover = true,
+        }
+    },
+
+    {
+        ID = "Server",
+        Type = "Section",
+        Parent = TabHandles.Server,
+        Config = {
+            Title = "loc:Server",
+            Desc = "loc:ServerDesc",
             Icon = "user",
             Box = true,
             BoxBorder = true,
@@ -947,7 +950,7 @@ local ElementConfigs = {
         Config = {
             Title = "loc:Camlock",
             Desc = "loc:CamlockDesc",
-            Icon = "shield-off",
+            Icon = "crosshair",
             Box = true,
             BoxBorder = true,
             Opened = false,
@@ -956,13 +959,13 @@ local ElementConfigs = {
     },
 
     {
-        ID = "NormalPower",
+        ID = "Noclip",
         Type = "Section",
         Parent = TabHandles.Player,
         Config = {
-            Title = "loc:NormalPower",
-            Desc = "loc:NormalPowerDesc",
-            Icon = "shield-off",
+            Title = "loc:Noclip",
+            Desc = "loc:NoclipDesc",
+            Icon = "ghost",
             Box = true,
             BoxBorder = true,
             Opened = false,
@@ -971,13 +974,13 @@ local ElementConfigs = {
     },
     
     {
-        ID = "SpeedPower",
+        ID = "Speed",
         Type = "Section",
         Parent = TabHandles.Player,
         Config = {
-            Title = "loc:SpeedPower",
-            Desc = "loc:SpeedPowerDesc",
-            Icon = "shield-off",
+            Title = "loc:Speed",
+            Desc = "loc:SpeedDesc",
+            Icon = "zap",
             Box = true,
             BoxBorder = true,
             Opened = false,
@@ -986,28 +989,13 @@ local ElementConfigs = {
     },
     
     {
-        ID = "JumpPower1",
+        ID = "Flying",
         Type = "Section",
         Parent = TabHandles.Player,
         Config = {
-            Title = "loc:JumpPower1",
-            Desc = "loc:JumpPower1Desc",
-            Icon = "shield-off",
-            Box = true,
-            BoxBorder = true,
-            Opened = false,
-            Hover = true,
-        }
-    },
-    
-    {
-        ID = "AirPower",
-        Type = "Section",
-        Parent = TabHandles.Player,
-        Config = {
-            Title = "loc:AirPower",
-            Desc = "loc:AirPowerDesc",
-            Icon = "shield-off",
+            Title = "loc:Flying",
+            Desc = "loc:FlyingDesc",
+            Icon = "feather",
             Box = true,
             BoxBorder = true,
             Opened = false,
@@ -2347,6 +2335,93 @@ MyUIElements.SetupStamina:Toggle({
             StaminaBot.Funcs.ApplyStats()
         else
             StaminaBot.Funcs.SafeSet("SprintSpeed", "sprintSpeed", StaminaBot.Originals.Speed)
+        end
+    end
+})
+
+-- [ QUẢN LÝ SERVER - BẢN GỌN NHẸ / NGUYÊN BẢN ]
+local ServerManager = {
+    ManualJobId = ""
+}
+
+-- Hàm Random Hop trực tiếp, bấm là nhảy không qua UI trung gian
+function ServerManager:RandomHop()
+    local url = "https://games.roblox.com/v1/games/" .. tostring(game.PlaceId) .. "/servers/Public?sortOrder=Asc&limit=100"
+    
+    local response = nil
+    pcall(function()
+        response = request({
+            Url = url,
+            Method = "GET"
+        })
+    end)
+    
+    if response and response.StatusCode == 200 then
+        local data = HttpService:JSONDecode(response.Body)
+        if data and data.data then
+            local validServers = {}
+            for _, srv in ipairs(data.data) do
+                if srv.playing and srv.maxPlayers and srv.playing < srv.maxPlayers and srv.id ~= game.JobId then
+                    table.insert(validServers, srv)
+                end
+            end
+            
+            if #validServers > 0 then
+                local randomServer = validServers[math.random(1, #validServers)]
+                TeleportService:TeleportToPlaceInstance(game.PlaceId, randomServer.id, localPlayer)
+            end
+        end
+    end
+end
+
+-- ================= GIAO DIỆN UI =================
+
+-- Nút Nhảy Server
+MyUIElements.Server:Button({
+    Title = "loc:Random_Server",
+    Desc = "Nhảy sang server ngẫu nhiên",
+    Callback = function()
+        ServerManager:RandomHop()
+    end
+})
+
+-- Nút Rejoin Server hiện tại
+MyUIElements.Server:Button({
+    Title = "loc:Rejoin_Server",
+    Desc = "Vào lại server này",
+    Callback = function()
+        TeleportService:TeleportToPlaceInstance(game.PlaceId, game.JobId, localPlayer)
+    end
+})
+
+-- Nhập & Join theo JobId
+MyUIElements.Server:Input({
+    Title = "loc:Input_Server_ID",
+    Desc = "Dán JobId để join",
+    Flag = "Server_ID_Input",
+    Placeholder = "JobId...",
+    Callback = function(val)
+        ServerManager.ManualJobId = val
+    end
+})
+
+MyUIElements.Server:Button({
+    Title = "loc:Join_ID_Server",
+    Desc = "Join theo JobId",
+    Callback = function()
+        if ServerManager.ManualJobId ~= "" then
+            TeleportService:TeleportToPlaceInstance(game.PlaceId, ServerManager.ManualJobId, localPlayer)
+        end
+    end
+})
+
+-- Copy JobId
+MyUIElements.Server:Button({
+    Title = "loc:Copy_Current_ID",
+    Desc = "Copy JobId hiện tại",
+    Callback = function()
+        if setclipboard then
+            setclipboard(tostring(game.JobId))
         end
     end
 })
@@ -3864,197 +3939,91 @@ MyUIElements.Camlock:Button({
     Callback = function() if CamlockBot.Config.Enabled then CamlockBot.State.Target = CamlockBot:GetNearest() end end
 })
 
-local Toggles = {
-    Noclip = false,
-    InfJump = false,
-    Speed = false,
-    Jump = false,
-    Float = false
+local PowerManager = {
+    Toggles = { Noclip = false, Speed = false, Fly = false },
+    Values = { Speed = 70, FlySpeed = 50 },
+    AntiGravity = nil
 }
 
-local Values = {
-    Speed = 70,
-    Jump = 70,
-    FloatHeight = 0
-}
-
-local BaseFloatOriginY = 0
-local activeTween = nil
-
-local floatPlatform = Instance.new("Part")
-floatPlatform.Size = Vector3.new(7, 1, 7) 
-floatPlatform.Anchored = true
-floatPlatform.CanCollide = true
-floatPlatform.Material = Enum.Material.Neon
-floatPlatform.Color = Color3.fromRGB(0, 255, 255)
-floatPlatform.Transparency = 0.5
-floatPlatform.CastShadow = false
-
-local function tweenPlatformHeight(targetY)
-    if activeTween then activeTween:Cancel() end
-    
-    local distance = math.abs(targetY - floatPlatform.Position.Y)
-    
-    local dynamicTime = distance * 0.02
-    
-    if dynamicTime < 0.01 then dynamicTime = 0.01 end
-    
-    local tweenInfo = TweenInfo.new(dynamicTime, Enum.EasingStyle.Linear, Enum.EasingDirection.Out)
-    local targetCFrame = CFrame.new(floatPlatform.Position.X, targetY, floatPlatform.Position.Z)
-    
-    activeTween = TweenService:Create(floatPlatform, tweenInfo, {CFrame = targetCFrame})
-    activeTween:Play()
+function PowerManager:UpdateNoclip()
+    if not playerCharacter then return end
+    for _, part in pairs(playerCharacter:GetDescendants()) do
+        if part:IsA("BasePart") then
+            part.CanCollide = not self.Toggles.Noclip
+        end
+    end
 end
 
-MyUIElements.NormalPower:Toggle({
-    Title = "loc:Noclip",
-    Desc = "loc:NoclipDesc",
-    Flag = "Noclip",
-    Value = false,
+MyUIElements.Noclip:Toggle({
+    Title = "loc:Noclip", Desc = "loc:NoclipDesc", Flag = "Noclip", Value = false,
     Callback = function(state) 
-        Toggles.Noclip = state
+        PowerManager.Toggles.Noclip = state
+        PowerManager:UpdateNoclip()
     end
 })
 
-MyUIElements.NormalPower:Toggle({
-    Title = "loc:InfJump",
-    Desc = "loc:InfJumpDesc",
-    Flag = "InfJump",
-    Value = false,
-    Callback = function(state) 
-        Toggles.InfJump = state
-    end
+MyUIElements.Speed:Toggle({
+    Title = "loc:Speed", Desc = "loc:SpeedDesc", Flag = "ForceSpeed", Value = false,
+    Callback = function(state) PowerManager.Toggles.Speed = state end
 })
 
-MyUIElements.SpeedPower:Toggle({
-    Title = "loc:ForceSpeed",
-    Desc = "loc:ForceSpeedDesc",
-    Flag = "ForceSpeed",
-    Value = false,
-    Callback = function(state) 
-        Toggles.Speed = state
-    end
-})
-
-MyUIElements.SpeedPower:Slider({
-    Title = "loc:SetSpeed",
-    Desc = "loc:SetSpeedDesc",
-    Flag = "SetSpeed",
-    Step = 1,
+MyUIElements.Speed:Slider({
+    Title = "loc:SetSpeed", Desc = "loc:SetSpeedDesc", Flag = "SetSpeed", Step = 1,
     Value = { Min = 1, Max = 300, Default = 70 },
-    Callback = function(value)
-        Values.Speed = value
-    end
+    Callback = function(v) PowerManager.Values.Speed = v end
 })
 
-MyUIElements.JumpPower1:Toggle({
-    Title = "loc:JumpPower",
-    Desc = "loc:JumpPowerDesc",
-    Flag = "JumpPower",
-    Value = false,
+MyUIElements.Flying:Toggle({
+    Title = "loc:Flying", Desc = "loc:FlyingDesc", Flag = "FlyingToggle", Value = false,
     Callback = function(state) 
-        Toggles.Jump = state
-        if not state and playerCharacter then
-            local humanoid = playerCharacter:FindFirstChildOfClass("Humanoid")
-            if humanoid then
-                humanoid.JumpPower = 50 
-            end
+        PowerManager.Toggles.Fly = state
+        if not state and PowerManager.AntiGravity then
+            PowerManager.AntiGravity:Destroy()
+            PowerManager.AntiGravity = nil
         end
     end
 })
 
-MyUIElements.JumpPower1:Slider({
-    Title = "loc:SetPower",
-    Desc = "loc:SetPowerDesc",
-    Flag = "SetPower",
-    Step = 1,
-    Value = { Min = 1, Max = 300, Default = 70 },
-    Callback = function(value)
-        Values.Jump = value
-    end
+MyUIElements.Flying:Slider({
+    Title = "loc:FlyingSpeed", Desc = "loc:FlyingSpeedDesc", Flag = "FlyingSpeed", Step = 1,
+    Value = { Min = 1, Max = 300, Default = 50 },
+    Callback = function(v) PowerManager.Values.FlySpeed = v end
 })
 
-MyUIElements.AirPower:Toggle({
-    Title = "loc:StandInTheAir",
-    Desc = "loc:StandInTheAirDesc",
-    Flag = "StandInTheAir",
-    Value = false,
-    Callback = function(state) 
-        Toggles.Float = state
-        if state then
-            if playerCharacter and playerCharacter:FindFirstChild("HumanoidRootPart") then
-                BaseFloatOriginY = playerCharacter.HumanoidRootPart.Position.Y - 3.2
-                
-                floatPlatform.CFrame = CFrame.new(playerCharacter.HumanoidRootPart.Position.X, BaseFloatOriginY, playerCharacter.HumanoidRootPart.Position.Z)
-                floatPlatform.Parent = Workspace
-
-                if Values.FloatHeight > 0 then
-                    tweenPlatformHeight(BaseFloatOriginY + Values.FloatHeight)
-                end
-            end
-        else
-     
-            floatPlatform.Parent = nil
-            if activeTween then activeTween:Cancel() end
-        end
-    end
-})
-
-MyUIElements.AirPower:Slider({
-    Title = "loc:StandingHeight",
-    Desc = "loc:StandingHeightDesc",
-    Flag = "StandingHeight",
-    Step = 1,
-    Value = { Min = 0, Max = 300, Default = 0 }, 
-    Callback = function(value)
-        Values.FloatHeight = value
-        if Toggles.Float and floatPlatform.Parent == Workspace then
-            local targetY = BaseFloatOriginY + value
-            tweenPlatformHeight(targetY)
-        end
-    end
-})
-
-RunService.Stepped:Connect(function()
-    if Toggles.Noclip and playerCharacter then
-        for _, part in pairs(playerCharacter:GetDescendants()) do
-            if part:IsA("BasePart") and part.CanCollide then
-                part.CanCollide = false
-            end
-        end
-    end
-end)
-
-UserInputService.JumpRequest:Connect(function()
-    if Toggles.InfJump and playerCharacter then
-        local humanoid = playerCharacter:FindFirstChildOfClass("Humanoid")
-        if humanoid then
-            humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
-        end
-    end
-end)
-
-RunService.Heartbeat:Connect(function()
+RunService.Heartbeat:Connect(function(dt)
     if not playerCharacter then return end
     local humanoid = playerCharacter:FindFirstChildOfClass("Humanoid")
     local hrp = playerCharacter:FindFirstChild("HumanoidRootPart")
-    
-    if humanoid and hrp then
-        
-        if Toggles.Speed and humanoid.MoveDirection.Magnitude > 0 then
-            local moveDir = humanoid.MoveDirection
-            hrp.AssemblyLinearVelocity = Vector3.new(moveDir.X * Values.Speed, hrp.AssemblyLinearVelocity.Y, moveDir.Z * Values.Speed)
+    if not humanoid or not hrp then return end
+
+    if PowerManager.Toggles.Fly then
+        if not PowerManager.AntiGravity then
+            PowerManager.AntiGravity = Instance.new("BodyVelocity", hrp)
+            PowerManager.AntiGravity.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
+            PowerManager.AntiGravity.Velocity = Vector3.zero
         end
 
-        if Toggles.Float and floatPlatform.Parent == Workspace then
+        local moveDir = humanoid.MoveDirection
+        if moveDir.Magnitude > 0 then
+            local cam = Workspace.CurrentCamera
+            local _, rotY, _ = cam.CFrame:ToEulerAnglesYXZ()
+            local flatCam = CFrame.Angles(0, rotY, 0)
             
-            if hrp.Position.Y < (floatPlatform.Position.Y + 0.5) then
-                hrp.CFrame = CFrame.new(hrp.Position.X, floatPlatform.Position.Y + 3.2, hrp.Position.Z)
-                hrp.AssemblyLinearVelocity = Vector3.new(hrp.AssemblyLinearVelocity.X, 0, hrp.AssemblyLinearVelocity.Z)
-            end
+            local move3D = (cam.CFrame.LookVector * moveDir:Dot(flatCam.LookVector)) + 
+                           (cam.CFrame.RightVector * moveDir:Dot(flatCam.RightVector))
             
-            floatPlatform.CFrame = CFrame.new(hrp.Position.X, floatPlatform.Position.Y, hrp.Position.Z)
+            hrp.CFrame = hrp.CFrame + (move3D.Unit * PowerManager.Values.FlySpeed * dt)
         end
+        hrp.AssemblyLinearVelocity = Vector3.zero
+
+    elseif PowerManager.Toggles.Speed and humanoid.MoveDirection.Magnitude > 0 then
+        hrp.CFrame = hrp.CFrame + (humanoid.MoveDirection * PowerManager.Values.Speed * dt)
+    end
+end)
+
+playerCharacter.DescendantAdded:Connect(function(part)
+    if PowerManager.Toggles.Noclip and part:IsA("BasePart") then
+        part.CanCollide = false
     end
 end)
 
@@ -4382,135 +4351,59 @@ MyUIElements.Bypass:Toggle({
     end
 })
 
-getgenv().AntiFakeState = getgenv().AntiFakeState or {
-    Killers = false,
-    Pizza = false,
-    Dispenser = false,
-    Protect = false
+local CONFIG = {
+    Enabled = false,
+    BlockAll = true,
+    Blocked = {FakeNoli = true, FakeLayer = true, FakePizza = true, FakeDispenser = true, FakeForcefield = true, IncorrectGenerators = true, IncorrectTimer = true, Screamer = true}
 }
 
-getgenv().AntiFakeLoopRunning = getgenv().AntiFakeLoopRunning or false
+if not hookfunction or not newcclosure then return end
 
-local function UpdateAntiFakeLoop()
-    if getgenv().AntiFakeLoopRunning then return end
+local HallucinationClass = ReplicatedStorage:FindFirstChild("HallucinationClass", true)
+if not HallucinationClass then return end
 
-    local hasActiveToggle = false
-    for _, state in pairs(getgenv().AntiFakeState) do
-        if state then hasActiveToggle = true; break end
+local BlockedModules = {}
+
+for _, module in ipairs(HallucinationClass:GetChildren()) do
+    if module:IsA("ModuleScript") and (CONFIG.BlockAll or CONFIG.Blocked[module.Name]) then
+        BlockedModules[module] = true
     end
-    
-    if not hasActiveToggle then return end
-
-    getgenv().AntiFakeLoopRunning = true
-
-    task.spawn(function()
-        while getgenv().AntiFakeLoopRunning do
-            task.wait(0.2)
-            
-            local keepRunning = false
-            for _, state in pairs(getgenv().AntiFakeState) do
-                if state then keepRunning = true; break end
-            end
-
-            if not keepRunning then
-                getgenv().AntiFakeLoopRunning = false
-                break
-            end
-
-            if getgenv().AntiFakeState.Killers then
-                if killersFolder then
-                    for _, killer in ipairs(killersFolder:GetChildren()) do
-                        if killer:GetAttribute("Undetectable") == true then
-                            killer:Destroy()
-                        end
-                    end
-                end
-                
-                local hitboxesFolder = Workspace:FindFirstChild("Hitboxes")
-                if hitboxesFolder then
-                    for _, hb in ipairs(hitboxesFolder:GetChildren()) do
-                        if hb.Name == "SIKE&Hitbox" or hb.Name == "SIKEHitbox" then
-                            hb:Destroy()
-                        end
-                    end
-                end
-                
-                for _, sound in ipairs(SoundService:GetDescendants()) do
-                    if sound:IsA("Sound") and string.find(sound.Name, "FakeLayer") then
-                        sound:Stop()
-                        sound:Destroy()
-                    end
-                end
-            end
-
-            if getgenv().AntiFakeState.Pizza or getgenv().AntiFakeState.Dispenser or getgenv().AntiFakeState.Protect then
-                if IngameFolder then
-                    for _, item in ipairs(IngameFolder:GetChildren()) do
-                        if getgenv().AntiFakeState.Pizza and item.Name == "Pizza" and not item:FindFirstChild("PizzaJoint") then
-                            item:Destroy()
-                        
-                        elseif getgenv().AntiFakeState.Dispenser and string.find(item.Name, "Dispenser") then
-                            item:Destroy()
-                            
-                        elseif getgenv().AntiFakeState.Protect and item.Name == "TheEvilNoliOOOOO" then
-                            item:Destroy()
-                        end
-                    end
-                end
-            end
-
-            if getgenv().AntiFakeState.Protect then
-                for _, effect in ipairs(Lighting:GetChildren()) do
-                    if effect:IsA("BlurEffect") and effect.Size >= 34 then
-                        effect:Destroy()
-                    end
-                end
-            end
-        end
-    end)
 end
 
-MyUIElements.Hallucination:Toggle({
-    Title = "loc:AntiFakeKillers",
-    Desc = "loc:AntiFakeKillersDesc",
-    Flag = "Toggle_AntiFakeKiller",
-    Value = false,
-    Callback = function(state)
-        getgenv().AntiFakeState.Killers = state
-        if state then UpdateAntiFakeLoop() end
+HallucinationClass.ChildAdded:Connect(function(child)
+    if child:IsA("ModuleScript") and (CONFIG.BlockAll or CONFIG.Blocked[child.Name]) then
+        BlockedModules[child] = true
     end
-})
+end)
+
+local FakeModule = {
+    Condition = function() return false end,
+    new = function()
+        return {Init = function() end, Destroy = function() end, Clean = function() end}
+    end
+}
+
+local OriginalRequire
+OriginalRequire = hookfunction(require, newcclosure(function(module)
+    if CONFIG.Enabled and typeof(module) == "Instance" and module:IsA("ModuleScript") and BlockedModules[module] then
+        return FakeModule
+    end
+    return OriginalRequire(module)
+end))
 
 MyUIElements.Hallucination:Toggle({
-    Title = "loc:AntiFakePizza",
-    Desc = "loc:AntiFakePizzaDesc",
-    Flag = "Toggle_AntiPizza",
-    Value = false,
+    Title = "Anti Hallucination",
+    Desc = "Chặn hiệu ứng ảo giác",
+    Flag = "Anti_Hallucination_Toggle",
+    Value = CONFIG.Enabled,
     Callback = function(state)
-        getgenv().AntiFakeState.Pizza = state
-        if state then UpdateAntiFakeLoop() end
-    end
-})
-
-MyUIElements.Hallucination:Toggle({
-    Title = "loc:AntiFakeDispenser",
-    Desc = "loc:AntiFakeDispenserDesc",
-    Flag = "Toggle_AntiDispenser",
-    Value = false,
-    Callback = function(state)
-        getgenv().AntiFakeState.Dispenser = state
-        if state then UpdateAntiFakeLoop() end
-    end
-})
-
-MyUIElements.Hallucination:Toggle({
-    Title = "loc:AntiFakeProtect",
-    Desc = "loc:AntiFakeProtectDesc",
-    Flag = "Toggle_AntiJumpscare",
-    Value = false,
-    Callback = function(state)
-        getgenv().AntiFakeState.Protect = state
-        if state then UpdateAntiFakeLoop() end
+        CONFIG.Enabled = state
+        if state then
+            task.defer(function()
+                local evilNoli = Workspace:FindFirstChild("TheEvilNoliOOOOO", true)
+                if evilNoli then evilNoli:Destroy() end
+            end)
+        end
     end
 })
 
