@@ -333,6 +333,16 @@ WindUI:Localization({
             Aim_Part_Desc = "Select the target body part when starting the target lock.",
             Switch_Target = "Switch Target",
             Switch_Target_Desc = "Switch to a different target that is closer to you.",
+            ShowSwitchButton = "Show Switch Button",
+            ShowSwitchButtonDesc = "Show the quick target switching button for aimlock.",
+            ButtonSize = "Button Size",
+            ButtonSizeDesc = "Customize the size to suit your needs.",
+            AimlockSpeed = "Aimlock Speed",
+            AimlockSpeedDesc = "Adjust the maximum aimlock speed from 0-1.",
+            AntiHallucination = "Anti Hallucination",
+            AntiHallucinationDesc = "Remove fake objects and effects created by hallucinations.",
+            AntiBlindness = "Anti Blindness",
+            AntiBlindnessDesc = "Prevent blindness effects from blocking your vision.",
         },
         vi = {
             HubTitle = "Axos Hub",
@@ -550,6 +560,16 @@ Load_Config_Desc = "Nhấn để tải cấu hình đã chọn.",
             Aim_Part_Desc = "Chọn bộ phận cơ thể của mục tiêu khi bắt đầu khóa mục tiêu.",
             Switch_Target = "Đổi mục tiêu",
             Switch_Target_Desc = "Chuyển sang một mục tiêu khác gần bạn hơn.",
+            ShowSwitchButton = "Hiển thị nút chuyển mục tiêu",
+            ShowSwitchButtonDesc = "Hiển thị nút chuyển mục tiêu nhanh cho aimlock.",
+            ButtonSize = "Kích thước nút",
+            ButtonSizeDesc = "Tùy chỉnh kích thước theo nhu cầu của bạn.",
+            AimlockSpeed = "Tốc độ aimlock",
+            AimlockSpeedDesc = "Điều chỉnh tốc độ aimlock tối đa từ 0-1.",
+            AntiHallucination = "Chống ảo giác",
+            AntiHallucinationDesc = "Loại bỏ các vật thể và hiệu ứng giả được tạo ra bởi ảo giác.",
+            AntiBlindness = "Chống mù",
+            AntiBlindnessDesc = "Ngăn hiệu ứng mù che khuất tầm nhìn của bạn.",
         }
     }
 })
@@ -626,7 +646,7 @@ pcall(function()
 end)
 
 local OpenButtonConfig = {
-    Title = "Open Script",
+    Title = "Main UI",
     Icon = "rbxassetid://122301429064719",
 
     CornerRadius = UDim.new(0, 6),
@@ -3670,28 +3690,14 @@ end)
 
 local CamlockBot = {
     Config = {
-        Enabled = false,
-        ZoomDistance = 10,
-        HeightOffset = 1.5,
-        AimPart = "Head",
-        QuickGuiVisible = false
+        Enabled = false, ZoomDistance = 10, HeightOffset = 1.5,
+        AimPart = "Head", QuickGuiVisible = false, SwitchGuiVisible = false, UIScale = 1, Smoothness = 1
     },
     State = {
-        Target = nil,
-        OriginalCameraSubject = nil,
-        CustomCFrame = nil,
-        PinchTouches = {},
-        LastPinchDistance = nil,
-        DragInput = nil,
-        DragStart = nil,
-        StartPos = nil,
-        TotalDragDist = 0
+        Target = nil, OriginalCameraSubject = nil, CustomCFrame = nil,
+        PinchTouches = {}, LastPinchDistance = nil
     },
-    UI = {
-        Frame = nil,
-        Button = nil,
-        Stroke = nil
-    },
+    UI = { Frame = nil, Button = nil, Stroke = nil, SwitchFrame = nil, SwitchButton = nil, SwitchStroke = nil },
     Connections = {},
     RenderKey = "KillerCamlock_SyncRender"
 }
@@ -3702,12 +3708,7 @@ end
 
 function CamlockBot:GetAimPos(model)
     if not model then return nil end
-    local partMap = {
-        ["Head"] = "Head", ["Torso"] = "UpperTorso",
-        ["Left Arm"] = "LeftHand", ["Right Arm"] = "RightHand",
-        ["Left Leg"] = "LeftFoot", ["Right Leg"] = "RightFoot"
-    }
-    local p = model:FindFirstChild(partMap[self.Config.AimPart] or "Head") or model:FindFirstChild(self.Config.AimPart) or model:FindFirstChild("HumanoidRootPart")
+    local p = model:FindFirstChild(self.Config.AimPart) or model:FindFirstChild("Head") or model:FindFirstChild("HumanoidRootPart")
     return p and p.Position
 end
 
@@ -3715,86 +3716,130 @@ function CamlockBot:IsKiller()
     return playerCharacter and playerCharacter:IsDescendantOf(killersFolder)
 end
 
-function CamlockBot:GetNearest()
-    if not survivorsFolder or not playerCharacter then return nil end
+-- Gộp logic tìm mục tiêu vào 1 hàm duy nhất
+function CamlockBot:GetAllTargets()
+    if not survivorsFolder or not playerCharacter then return {} end
     local myRoot = playerCharacter:FindFirstChild("HumanoidRootPart")
-    if not myRoot then return nil end
+    if not myRoot then return {} end
 
-    local nearest, minDist = nil, math.huge
+    local targets = {}
     for _, s in ipairs(survivorsFolder:GetChildren()) do
         local h, r = s:FindFirstChild("Humanoid"), s:FindFirstChild("HumanoidRootPart")
         if h and r and h.Health > 0 then
-            local d = (r.Position - myRoot.Position).Magnitude
-            if d < minDist then minDist = d; nearest = r end
+            table.insert(targets, {r = r, d = (r.Position - myRoot.Position).Magnitude})
         end
     end
-    return nearest
+    table.sort(targets, function(a, b) return a.d < b.d end)
+    return targets
+end
+
+function CamlockBot:GetNearest()
+    local t = self:GetAllTargets()
+    return t[1] and t[1].r or nil
+end
+
+function CamlockBot:GetNextTarget()
+    local targets = self:GetAllTargets()
+    if #targets == 0 then return nil end
+    if #targets == 1 then return targets[1].r end
+
+    for i, t in ipairs(targets) do
+        if t.r == self.State.Target then
+            return targets[(i % #targets) + 1].r -- Thuật toán gộp Next Index gọn nhẹ
+        end
+    end
+    return targets[1].r
 end
 
 function CamlockBot:UpdateQuickUI()
     if not self.UI.Button then return end
-    if self.Config.Enabled then
-        self.UI.Button.Text = "CAMLOCK: ON"
-        self:Tween(self.UI.Button, {TextColor3 = Color3.fromRGB(255, 75, 75)}, 0.3)
-        self:Tween(self.UI.Stroke, {Color = Color3.fromRGB(255, 75, 75)}, 0.3)
-    else
-        self.UI.Button.Text = "CAMLOCK: OFF"
-        self:Tween(self.UI.Button, {TextColor3 = Color3.fromRGB(200, 200, 200)}, 0.3)
-        self:Tween(self.UI.Stroke, {Color = Color3.fromRGB(60, 60, 60)}, 0.3)
+    local state = self.Config.Enabled
+    self.UI.Button.Text = state and "CAMLOCK: ON" or "CAMLOCK: OFF"
+    self:Tween(self.UI.Button, {TextColor3 = state and Color3.fromRGB(255, 75, 75) or Color3.fromRGB(200, 200, 200)}, 0.3)
+    self:Tween(self.UI.Stroke, {Color = state and Color3.fromRGB(255, 75, 75) or Color3.fromRGB(60, 60, 60)}, 0.3)
+end
+
+function CamlockBot:UpdateUISize()
+    local s = self.Config.UIScale
+    local size = UDim2.new(0, 130 * s, 0, 45 * s)
+    if self.UI.Frame then
+        self:Tween(self.UI.Frame, {Size = size}, 0.2)
+        if self.UI.Button then self.UI.Button.TextSize = 14 * s end
+    end
+    if self.UI.SwitchFrame then
+        self:Tween(self.UI.SwitchFrame, {Size = size}, 0.2)
+        if self.UI.SwitchButton then self.UI.SwitchButton.TextSize = 14 * s end
     end
 end
 
-function CamlockBot:SetupQuickGui()
-    if CoreGui:FindFirstChild("QuickCamlock") then CoreGui.QuickCamlock:Destroy() end
-
-    local sgui = Instance.new("ScreenGui", CoreGui)
-    sgui.Name = "QuickCamlock"
-    sgui.ResetOnSpawn = false
-    sgui.Enabled = self.Config.QuickGuiVisible
-
-    self.UI.Frame = Instance.new("Frame", sgui)
-    self.UI.Frame.Size, self.UI.Frame.Position = UDim2.new(0, 130, 0, 45), UDim2.new(0.85, 0, 0.5, 0)
-    self.UI.Frame.BackgroundColor3, self.UI.Frame.BorderSizePixel = Color3.fromRGB(20, 20, 20), 0
-    self.UI.Frame.AnchorPoint, self.UI.Frame.Active = Vector2.new(0.5, 0.5), true
-    Instance.new("UICorner", self.UI.Frame).CornerRadius = UDim.new(0, 12)
-
-    self.UI.Stroke = Instance.new("UIStroke", self.UI.Frame)
-    self.UI.Stroke.Thickness, self.UI.Stroke.Color = 2, Color3.fromRGB(60, 60, 60)
-
-    self.UI.Button = Instance.new("TextButton", self.UI.Frame)
-    self.UI.Button.Size, self.UI.Button.BackgroundTransparency = UDim2.new(1, 0, 1, 0), 1
-    self.UI.Button.Font, self.UI.Button.TextSize = Enum.Font.GothamBold, 14
-
-    local CLICK_THRESHOLD = 20
-
-    self.UI.Button.InputBegan:Connect(function(input)
+local function MakeDraggableAndClickable(frame, button, onClick)
+    local dragInput, dragging, startPos, dragStart, dragDist = nil, false, nil, nil, 0
+    
+    button.InputBegan:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-            self:Tween(self.UI.Frame, {Size = UDim2.new(0, 120, 0, 40)}, 0.1)
-            self.State.DragInput, self.State.DragStart, self.State.StartPos = input, input.Position, self.UI.Frame.Position
-            self.State.TotalDragDist = 0
-        end
-    end)
-
-    self.UI.Button.InputEnded:Connect(function(input)
-        if input == self.State.DragInput then
-            self:Tween(self.UI.Frame, {Size = UDim2.new(0, 130, 0, 45)}, 0.15)
-            
-            if self.State.TotalDragDist < CLICK_THRESHOLD then 
-                self:Toggle(not self.Config.Enabled)
-            end
-            self.State.DragInput = nil 
+            dragging, dragInput, dragStart, startPos, dragDist = true, input, input.Position, frame.Position, 0
+            CamlockBot:Tween(frame, {Size = UDim2.new(0, (130 - 10) * CamlockBot.Config.UIScale, 0, (45 - 5) * CamlockBot.Config.UIScale)}, 0.1)
         end
     end)
 
     UserInputService.InputChanged:Connect(function(input)
-        if self.State.DragInput == input then
-            local delta = input.Position - self.State.DragStart
-            self.State.TotalDragDist = self.State.TotalDragDist + delta.Magnitude
-            
-            if self.State.TotalDragDist > 5 then
-                self.UI.Frame.Position = UDim2.new(self.State.StartPos.X.Scale, self.State.StartPos.X.Offset + delta.X, self.State.StartPos.Y.Scale, self.State.StartPos.Y.Offset + delta.Y)
-            end
+        if input == dragInput and dragging then
+            local delta = input.Position - dragStart
+            dragDist = delta.Magnitude
+            if dragDist > 5 then frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y) end
         end
+    end)
+
+    UserInputService.InputEnded:Connect(function(input)
+        if input == dragInput then
+            dragging, dragInput = false, nil
+            CamlockBot:Tween(frame, {Size = UDim2.new(0, 130 * CamlockBot.Config.UIScale, 0, 45 * CamlockBot.Config.UIScale)}, 0.15)
+            if dragDist < 10 and onClick then onClick() end
+        end
+    end)
+end
+
+-- Hàm gộp tái sử dụng để đẻ UI không bị lặp code
+function CamlockBot:CreateUIBtn(sgui, yPos, text)
+    local frame = Instance.new("Frame", sgui)
+    frame.Size, frame.Position = UDim2.new(0, 130 * self.Config.UIScale, 0, 45 * self.Config.UIScale), UDim2.new(0.85, 0, yPos, 0)
+    frame.BackgroundColor3, frame.BorderSizePixel, frame.Active = Color3.fromRGB(20, 20, 20), 0, true
+    frame.AnchorPoint = Vector2.new(0.5, 0.5)
+    Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 12)
+
+    local stroke = Instance.new("UIStroke", frame)
+    stroke.Thickness, stroke.Color = 2, Color3.fromRGB(60, 60, 60)
+
+    local btn = Instance.new("TextButton", frame)
+    btn.Size, btn.BackgroundTransparency = UDim2.new(1, 0, 1, 0), 1
+    btn.Font, btn.TextSize = Enum.Font.GothamBold, 14 * self.Config.UIScale
+    if text then btn.Text, btn.TextColor3 = text, Color3.fromRGB(200, 200, 200) end
+
+    return frame, btn, stroke
+end
+
+function CamlockBot:SetupQuickGui()
+    if CoreGui:FindFirstChild("QuickCamlock") then CoreGui.QuickCamlock:Destroy() end
+    local sgui = Instance.new("ScreenGui", CoreGui)
+    sgui.Name, sgui.ResetOnSpawn = "QuickCamlock", false
+
+    self.UI.Frame, self.UI.Button, self.UI.Stroke = self:CreateUIBtn(sgui, 0.45, nil)
+    self.UI.Frame.Visible = self.Config.QuickGuiVisible
+
+    self.UI.SwitchFrame, self.UI.SwitchButton, self.UI.SwitchStroke = self:CreateUIBtn(sgui, 0.55, "ĐỔI MỤC TIÊU")
+    self.UI.SwitchFrame.Visible = self.Config.SwitchGuiVisible
+
+    MakeDraggableAndClickable(self.UI.Frame, self.UI.Button, function() self:Toggle(not self.Config.Enabled) end)
+    MakeDraggableAndClickable(self.UI.SwitchFrame, self.UI.SwitchButton, function() 
+        if self.Config.Enabled then 
+            self.State.Target = self:GetNextTarget()
+            self:Tween(self.UI.SwitchButton, {TextColor3 = Color3.fromRGB(255, 255, 255)}, 0.1)
+            self:Tween(self.UI.SwitchStroke, {Color = Color3.fromRGB(255, 170, 0)}, 0.1)
+            task.delay(0.2, function()
+                if self.UI.SwitchButton then self:Tween(self.UI.SwitchButton, {TextColor3 = Color3.fromRGB(200, 200, 200)}, 0.2) end
+                if self.UI.SwitchStroke then self:Tween(self.UI.SwitchStroke, {Color = Color3.fromRGB(60, 60, 60)}, 0.2) end
+            end)
+        end 
     end)
 
     self:UpdateQuickUI()
@@ -3821,7 +3866,6 @@ function CamlockBot:Toggle(state)
     self.State.OriginalCameraSubject = Camera.CameraSubject
     self.State.CustomCFrame = Camera.CFrame 
 
-    -- Vòng lặp khóa mục tiêu
     RunService:BindToRenderStep(self.RenderKey, 250, function()
         if not self:IsKiller() then
             if Camera.CameraType == Enum.CameraType.Scriptable then Camera.CameraType = Enum.CameraType.Custom end
@@ -3842,11 +3886,11 @@ function CamlockBot:Toggle(state)
         
         local targetDir = (aimPos - anchorPos).Unit
         local currentDir = self.State.CustomCFrame and self.State.CustomCFrame.LookVector or Camera.CFrame.LookVector
-        local smoothDir = currentDir:Lerp(targetDir, 0.2).Unit 
         
+        local smoothDir = currentDir:Lerp(targetDir, self.Config.Smoothness).Unit 
         local camPos = anchorPos - smoothDir * self.Config.ZoomDistance
+        
         self.State.CustomCFrame = CFrame.lookAt(camPos, camPos + smoothDir)
-
         Camera.CameraType, Camera.CFrame, Camera.Focus = Enum.CameraType.Scriptable, self.State.CustomCFrame, CFrame.new(aimPos)
     end)
 
@@ -3876,28 +3920,42 @@ function CamlockBot:Toggle(state)
     end))
 end
 
-function CamlockBot:SetUIVisible(state)
-    self.Config.QuickGuiVisible = state
-    local sgui = CoreGui:FindFirstChild("QuickCamlock")
-    if not sgui or not self.UI.Frame then return end
+-- Đã gộp sạch sẽ logic hiệu ứng lặp
+function CamlockBot:SetUIVisible(uiFrame, state)
+    if not uiFrame then return end
+    
+    local cPos = uiFrame.Position
+    local targetPos = state and cPos or UDim2.new(1.3, 0, cPos.Y.Scale, cPos.Y.Offset)
+    local targetTrans = state and 0 or 1
 
     if state then
-        sgui.Enabled = true
-        self.UI.Frame.Position = UDim2.new(0.95, 50, self.UI.Frame.Position.Y.Scale, self.UI.Frame.Position.Y.Offset)
-        self.UI.Frame.BackgroundTransparency, self.UI.Button.TextTransparency, self.UI.Stroke.Transparency = 1, 1, 1
-        self:Tween(self.UI.Frame, {Position = UDim2.new(0.85, 0, self.UI.Frame.Position.Y.Scale, self.UI.Frame.Position.Y.Offset), BackgroundTransparency = 0}, 0.4)
-        self:Tween(self.UI.Button, {TextTransparency = 0}, 0.4)
-        self:Tween(self.UI.Stroke, {Transparency = 0}, 0.4)
-    else
-        self:Tween(self.UI.Frame, {Position = UDim2.new(0.95, 50, self.UI.Frame.Position.Y.Scale, self.UI.Frame.Position.Y.Offset), BackgroundTransparency = 1}, 0.3)
-        self:Tween(self.UI.Button, {TextTransparency = 1}, 0.3)
-        self:Tween(self.UI.Stroke, {Transparency = 1}, 0.3)
-        task.delay(0.3, function() sgui.Enabled = false end)
+        uiFrame.Visible = true
+        uiFrame.Position = UDim2.new(1.3, 0, cPos.Y.Scale, cPos.Y.Offset)
+        uiFrame.BackgroundTransparency = 1
+    end
+    
+    self:Tween(uiFrame, {Position = targetPos, BackgroundTransparency = targetTrans}, 0.35)
+    for _, child in ipairs(uiFrame:GetChildren()) do
+        if child:IsA("TextButton") then self:Tween(child, {TextTransparency = targetTrans}, 0.35) end
+        if child:IsA("UIStroke") then self:Tween(child, {Transparency = targetTrans}, 0.35) end
+    end
+
+    if not state then
+        task.delay(0.35, function() 
+            uiFrame.Visible = false 
+            uiFrame.Position = cPos -- Giữ vị trí cũ ngầm
+        end)
     end
 end
 
 CamlockBot:SetupQuickGui()
 localPlayer.CharacterAdded:Connect(function() if CamlockBot.Config.Enabled then CamlockBot:Toggle(false) end end)
+
+MyUIElements.Camlock:Button({
+    Title = "loc:Switch_Target",
+    Desc = "loc:Switch_Target_Desc",
+    Callback = function() if CamlockBot.Config.Enabled then CamlockBot.State.Target = CamlockBot:GetNextTarget() end end
+})
 
 MyUIElements.Camlock:Toggle({
     Title = "loc:Camlock_Survivor",
@@ -3909,10 +3967,45 @@ MyUIElements.Camlock:Toggle({
 
 MyUIElements.Camlock:Toggle({
     Title = "loc:Show_Quick_Button",
-    Desc = "loc:Show_Quick_Button_Desc",
+    Desc = "Hiện nút bật tắt nhanh trên màn hình",
     Flag = "KillerCamlockQuickBtn",
     Value = false,
-    Callback = function(state) CamlockBot:SetUIVisible(state) end
+    Callback = function(state) 
+        CamlockBot.Config.QuickGuiVisible = state
+        CamlockBot:SetUIVisible(CamlockBot.UI.Frame, state) 
+    end
+})
+
+MyUIElements.Camlock:Toggle({
+    Title = "loc:ShowSwitchButton",
+    Desc = "loc:ShowSwitchButtonDesc",
+    Flag = "KillerCamlockSwitchBtn",
+    Value = false,
+    Callback = function(state) 
+        CamlockBot.Config.SwitchGuiVisible = state
+        CamlockBot:SetUIVisible(CamlockBot.UI.SwitchFrame, state) 
+    end
+})
+
+MyUIElements.Camlock:Input({
+    Title = "loc:ButtonSize",
+    Desc = "loc:ButtonSizeDesc",
+    Flag = "KillerCamUIScale",
+    Placeholder = "1",
+    Value = "1",
+    Callback = function(value) 
+        CamlockBot.Config.UIScale = tonumber(value) or 1
+        CamlockBot:UpdateUISize()
+    end
+})
+
+MyUIElements.Camlock:Input({
+    Title = "loc:AimlockSpeed",
+    Desc = "loc:AimlockSpeedDesc",
+    Flag = "KillerCamSmooth",
+    Placeholder = "1",
+    Value = "1",
+    Callback = function(value) CamlockBot.Config.Smoothness = math.clamp(tonumber(value) or 1, 0.1, 1) end
 })
 
 MyUIElements.Camlock:Input({
@@ -3931,12 +4024,6 @@ MyUIElements.Camlock:Dropdown({
     Values = {"Head", "Torso", "Left Arm", "Right Arm", "Left Leg", "Right Leg"},
     Value = "Head",
     Callback = function(value) CamlockBot.Config.AimPart = value end
-})
-
-MyUIElements.Camlock:Button({
-    Title = "loc:Switch_Target",
-    Desc = "loc:Switch_Target_Desc",
-    Callback = function() if CamlockBot.Config.Enabled then CamlockBot.State.Target = CamlockBot:GetNearest() end end
 })
 
 local PowerManager = {
@@ -4220,39 +4307,54 @@ MyUIElements.Bypass:Button({
     end
 })
 
-local AntiSubspaceConfig = { Enabled = false }
+local BypassSystem = {
+    Config = { AntiSubspace = false, AntiBlindness = false },
+    Core = { Lighting = game.Lighting, Player = game.Players.LocalPlayer }
+}
 
-local function ClearSubspaceEffects()
-    local blur = game.Lighting:FindFirstChild("SubspaceVFXBlur")
-    if blur then
-        blur.Enabled = false
-        blur.Parent = nil 
+function BypassSystem:SafeDestroy(parent, name)
+    local effect = parent:FindFirstChild(name)
+    if effect then
+        effect.Enabled = false
+        effect:Destroy()
+        return true
     end
+    return false
+end
 
-    local cc = game.Lighting:FindFirstChild("SubspaceVFXColorCorrection")
-    if cc then
-        cc.Enabled = false
-        cc.Parent = nil
-    end
+function BypassSystem:ProcessVFX()
+    local light = self.Core.Lighting
+    
+    if self.Config.AntiSubspace then
+        local removedBlur = self:SafeDestroy(light, "SubspaceVFXBlur")
+        local removedCC = self:SafeDestroy(light, "SubspaceVFXColorCorrection")
 
-    if blur or cc then
-        for _, v in pairs(game.Lighting:GetChildren()) do
-            if v:GetAttribute("originalVal") ~= nil then
-                v.Enabled = v:GetAttribute("originalVal")
+        if removedBlur or removedCC then
+            for _, v in ipairs(light:GetChildren()) do
+                local origVal = v:GetAttribute("originalVal")
+                if origVal ~= nil then v.Enabled = origVal end
             end
+        end
+
+        local char = self.Core.Player.Character
+        if char and char:GetAttribute("MuteChaseThemes") then
+            char:SetAttribute("MuteChaseThemes", false)
         end
     end
 
-    local char = game.Players.LocalPlayer.Character
-    if char and char:GetAttribute("MuteChaseThemes") then
-        char:SetAttribute("MuteChaseThemes", false)
+    if self.Config.AntiBlindness then
+        self:SafeDestroy(light, "BlindnessBlur")
+        
+        if light.ExposureCompensation < -2 or light.ExposureCompensation > 2 then
+            light.ExposureCompensation = 0 
+        end
     end
 end
 
 task.spawn(function()
     while task.wait(0.25) do
-        if AntiSubspaceConfig.Enabled then
-            ClearSubspaceEffects()
+        if BypassSystem.Config.AntiSubspace or BypassSystem.Config.AntiBlindness then
+            BypassSystem:ProcessVFX()
         end
     end
 end)
@@ -4263,10 +4365,19 @@ MyUIElements.Bypass:Toggle({
     Flag = "Anti_Subspace_Toggle",
     Value = false,
     Callback = function(state)
-        AntiSubspaceConfig.Enabled = state
-        if state then 
-            ClearSubspaceEffects()
-        end
+        BypassSystem.Config.AntiSubspace = state
+        if state then BypassSystem:ProcessVFX() end
+    end
+})
+
+MyUIElements.Bypass:Toggle({
+    Title = "loc:AntiBlindness",
+    Desc = "loc:AntiBlindnessDesc",
+    Flag = "Anti_Blindness_Toggle",
+    Value = false,
+    Callback = function(state)
+        BypassSystem.Config.AntiBlindness = state
+        if state then BypassSystem:ProcessVFX() end
     end
 })
 
@@ -4392,8 +4503,8 @@ OriginalRequire = hookfunction(require, newcclosure(function(module)
 end))
 
 MyUIElements.Hallucination:Toggle({
-    Title = "Anti Hallucination",
-    Desc = "Chặn hiệu ứng ảo giác",
+    Title = "loc:AntiHallucination",
+    Desc = "loc:AntiHallucinationDesc",
     Flag = "Anti_Hallucination_Toggle",
     Value = CONFIG.Enabled,
     Callback = function(state)
