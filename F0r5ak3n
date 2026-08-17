@@ -343,6 +343,17 @@ WindUI:Localization({
             AntiHallucinationDesc = "Remove fake objects and effects created by hallucinations.",
             AntiBlindness = "Anti Blindness",
             AntiBlindnessDesc = "Prevent blindness effects from blocking your vision.",
+            ServerDesc = "All functions related to the game server.",
+            Copy_Current_ID = "Copy Current ID",
+            Copy_Current_ID_Desc = "Copy the ID of the current server.",
+            Join_ID_Server = "Join ID Server",
+            Join_ID_Server_Desc = "Join a server using its ID.",
+            Input_Server_ID = "Input Server ID",
+            Input_Server_ID_Desc = "Enter the server ID you want to join.",
+            Rejoin_Server = "Rejoin Server",
+            Rejoin_Server_Desc = "Rejoin the current server.",
+            Random_Server = "Random Server",
+            Random_Server_Desc = "Join a random server.",
         },
         vi = {
             HubTitle = "Axos Hub",
@@ -570,6 +581,17 @@ Load_Config_Desc = "Nhấn để tải cấu hình đã chọn.",
             AntiHallucinationDesc = "Loại bỏ các vật thể và hiệu ứng giả được tạo ra bởi ảo giác.",
             AntiBlindness = "Chống mù",
             AntiBlindnessDesc = "Ngăn hiệu ứng mù che khuất tầm nhìn của bạn.",
+            ServerDesc = "Tất cả các chức năng liên quan đến máy chủ trò chơi.",
+            Copy_Current_ID = "Sao chép ID hiện tại",
+            Copy_Current_ID_Desc = "Sao chép ID của server hiện tại.",
+            Join_ID_Server = "Tham gia server bằng ID",
+            Join_ID_Server_Desc = "Tham gia server bằng ID của server.",
+            Input_Server_ID = "Nhập ID server",
+            Input_Server_ID_Desc = "Nhập ID của server bạn muốn tham gia.",
+            Rejoin_Server = "Vào lại server",
+            Rejoin_Server_Desc = "Tham gia lại server hiện tại.",
+            Random_Server = "Server ngẫu nhiên",
+            Random_Server_Desc = "Tham gia một server ngẫu nhiên.",
         }
     }
 })
@@ -664,7 +686,7 @@ local OpenButtonConfig = {
 
 Window:EditOpenButton(OpenButtonConfig)
 
-Window:Tag({Title = "v0.0.3", Icon = "cog", Color = Color3.fromHex("#30ff6a")})
+Window:Tag({Title = "v0.0.4", Icon = "cog", Color = Color3.fromHex("#30ff6a")})
 
 local Tabs = {
     About = Window:Section({ Title = "loc:About", Opened = true }),
@@ -1370,314 +1392,427 @@ TabHandles.Info:Paragraph({
     }
 })
 
-if getgenv().MyESPFramwork then getgenv().MyESPFramwork:RemoveAllEsp() end
+if getgenv().MyESPFramwork then
+    getgenv().MyESPFramwork:RemoveAllEsp()
+end
 
-local ESP = { 
-    Objects = {}, 
-    TracerOrigin = "Bottom", 
-    Connection = nil, 
+ESP = {
+    Objects = {},
+    TracerOrigin = "Bottom",
+    Connection = nil,
     PlayerRemovingConn = nil,
     ViewSizeConn = nil,
+    PendingRemove = {},
     Config = {
         MaxDistance = 1000,
-        UpdateInterval = 0.1
+        UpdateInterval = 0.12
     },
     Cache = {
         ViewSize = Camera.ViewportSize,
-        LastUpdate = 0
+        Elapsed = 0,
+        LocalRoot = nil
+    },
+    Gui = {},
+    Defaults = {
+        ShowName = true,
+        UseHighlight = false,
+        UseText = false,
+        UseBox = false,
+        UseTracer = false,
+        ShowHP = false,
+        ShowDistance = false,
+        Color = Color3.new(1, 1, 1)
     }
 }
 getgenv().MyESPFramwork = ESP
 
-local espFolder = CoreGui:FindFirstChild("MyHybridESP_Folder") or Instance.new("Folder")
-espFolder.Name = "MyHybridESP_Folder"
-espFolder.Parent = CoreGui
+ESP.Gui.Folder = CoreGui:FindFirstChild("MyHybridESP_Folder") or Instance.new("Folder")
+ESP.Gui.Folder.Name = "MyHybridESP_Folder"
+ESP.Gui.Folder.Parent = CoreGui
 
-local tracerGui = CoreGui:FindFirstChild("MyHybridESP_TracerGui") or Instance.new("ScreenGui")
-tracerGui.Name = "MyHybridESP_TracerGui"
-tracerGui.IgnoreGuiInset = true
-tracerGui.Parent = CoreGui
+ESP.Gui.TracerGui = CoreGui:FindFirstChild("MyHybridESP_TracerGui") or Instance.new("ScreenGui")
+ESP.Gui.TracerGui.Name = "MyHybridESP_TracerGui"
+ESP.Gui.TracerGui.IgnoreGuiInset = true
+ESP.Gui.TracerGui.Parent = CoreGui
 
-local function IsSelf(obj)
+function ESP:SetProp(obj, key, value)
+    if obj and obj[key] ~= value then
+        obj[key] = value
+    end
+end
+
+function ESP:IsSelf(obj)
     if not localPlayer then return false end
     if obj == localPlayer then return true end
-    
-    local char = localPlayer.Character
-    if char then
-        if obj == char then return true end
-        if typeof(obj) == "Instance" and obj:IsDescendantOf(char) then return true end
+
+    if playerCharacter then
+        if obj == playerCharacter then return true end
+        if typeof(obj) == "Instance" and obj:IsDescendantOf(playerCharacter) then return true end
     end
+
     return false
 end
 
-local function AllocateDrawings(d)
-    if not d.Drawings then d.Drawings = {} end
-    local draw, set = d.Drawings, d.Settings
-
-    if set.UseHighlight and not draw.Highlight then
-        local h = Instance.new("Highlight")
-        h.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
-        h.Parent = CoreGui
-        h.Enabled = false
-        draw.Highlight = h
+function ESP:GetLocalPosition()
+    if not playerCharacter or not playerCharacter.Parent then
+        self.Cache.LocalRoot = nil
+        return Camera.CFrame.Position
     end
 
-    if set.UseText and not draw.TextBill then
-        local tb = Instance.new("BillboardGui")
-        tb.AlwaysOnTop = true
-        tb.Size = UDim2.new(0, 200, 0, 50)
-        tb.StudsOffset = Vector3.new(0, 4, 0)
-        tb.Parent = espFolder
-        tb.Enabled = false
-
-        local label = Instance.new("TextLabel")
-        label.Size = UDim2.new(1, 0, 1, 0)
-        label.BackgroundTransparency = 1
-        label.TextStrokeTransparency = 0
-        label.TextColor3 = Color3.new(1, 1, 1)
-        label.TextSize = 13
-        label.FontFace = Font.new("rbxassetid://12187361116", Enum.FontWeight.Bold)
-        label.Parent = tb
-
-        draw.TextBill = tb
-        draw.TextLabel = label
+    if not self.Cache.LocalRoot or not self.Cache.LocalRoot:IsDescendantOf(playerCharacter) then
+        self.Cache.LocalRoot = playerCharacter:FindFirstChild("HumanoidRootPart") or playerCharacter:FindFirstChild("Head")
     end
 
-    if set.UseBox and not draw.Box then
-        local b = Instance.new("BillboardGui")
-        b.AlwaysOnTop = true
-        b.Size = UDim2.new(4.5, 0, 6.5, 0)
-        b.Parent = espFolder
-        b.Enabled = false
-
-        local frame = Instance.new("Frame")
-        frame.Size = UDim2.new(1, 0, 1, 0)
-        frame.BackgroundTransparency = 1
-        frame.Parent = b
-
-        local stroke = Instance.new("UIStroke")
-        stroke.Thickness = 1.5
-        stroke.Parent = frame
-
-        draw.Box = b
-        draw.BoxStroke = stroke
-    end
-
-    if set.UseTracer and not draw.Tracer then
-        local line = Instance.new("Frame")
-        line.AnchorPoint = Vector2.new(0.5, 0.5)
-        line.BorderSizePixel = 0
-        line.Visible = false
-        line.Parent = tracerGui
-        draw.Tracer = line
-    end
-
-    return draw
+    return self.Cache.LocalRoot and self.Cache.LocalRoot.Position or Camera.CFrame.Position
 end
 
-local function SetAllVisible(draw, v)
+function ESP:GetTracerPos()
+    if self.TracerOrigin == "Mouse" then
+        return UserInputService:GetMouseLocation()
+    end
+
+    self.Cache.MidX = self.Cache.ViewSize.X * 0.5
+    if self.TracerOrigin == "Center" then return Vector2.new(self.Cache.MidX, self.Cache.ViewSize.Y * 0.5) end
+    if self.TracerOrigin == "Top" then return Vector2.new(self.Cache.MidX, 0) end
+    return Vector2.new(self.Cache.MidX, self.Cache.ViewSize.Y)
+end
+
+function ESP:AllocateDrawings(d)
+    d.Drawings = d.Drawings or {}
+    d.State = d.State or {}
+    d.Cache = d.Cache or {}
+
+    if d.Settings.UseHighlight and not d.Drawings.Highlight then
+        d.Drawings.Highlight = Instance.new("Highlight")
+        d.Drawings.Highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+        d.Drawings.Highlight.Enabled = false
+        d.Drawings.Highlight.Parent = CoreGui
+    end
+
+    if d.Settings.UseText and not d.Drawings.TextBill then
+        d.Drawings.TextBill = Instance.new("BillboardGui")
+        d.Drawings.TextBill.AlwaysOnTop = true
+        d.Drawings.TextBill.Size = UDim2.new(0, 200, 0, 50)
+        d.Drawings.TextBill.StudsOffset = Vector3.new(0, 4, 0)
+        d.Drawings.TextBill.Enabled = false
+        d.Drawings.TextBill.Parent = self.Gui.Folder
+
+        d.Drawings.TextLabel = Instance.new("TextLabel")
+        d.Drawings.TextLabel.Size = UDim2.new(1, 0, 1, 0)
+        d.Drawings.TextLabel.BackgroundTransparency = 1
+        d.Drawings.TextLabel.TextStrokeTransparency = 0
+        d.Drawings.TextLabel.TextColor3 = Color3.new(1, 1, 1)
+        d.Drawings.TextLabel.TextSize = 13
+        d.Drawings.TextLabel.FontFace = Font.new("rbxassetid://12187361116", Enum.FontWeight.Bold)
+        d.Drawings.TextLabel.Parent = d.Drawings.TextBill
+    end
+
+    if d.Settings.UseBox and not d.Drawings.Box then
+        d.Drawings.Box = Instance.new("BillboardGui")
+        d.Drawings.Box.AlwaysOnTop = true
+        d.Drawings.Box.Size = UDim2.new(4.5, 0, 6.5, 0)
+        d.Drawings.Box.Enabled = false
+        d.Drawings.Box.Parent = self.Gui.Folder
+
+        d.Drawings.BoxFrame = Instance.new("Frame")
+        d.Drawings.BoxFrame.Size = UDim2.new(1, 0, 1, 0)
+        d.Drawings.BoxFrame.BackgroundTransparency = 1
+        d.Drawings.BoxFrame.Parent = d.Drawings.Box
+
+        d.Drawings.BoxStroke = Instance.new("UIStroke")
+        d.Drawings.BoxStroke.Thickness = 1.5
+        d.Drawings.BoxStroke.Parent = d.Drawings.BoxFrame
+    end
+
+    if d.Settings.UseTracer and not d.Drawings.Tracer then
+        d.Drawings.Tracer = Instance.new("Frame")
+        d.Drawings.Tracer.AnchorPoint = Vector2.new(0.5, 0.5)
+        d.Drawings.Tracer.BorderSizePixel = 0
+        d.Drawings.Tracer.Visible = false
+        d.Drawings.Tracer.Parent = self.Gui.TracerGui
+    end
+
+    return d.Drawings
+end
+
+function ESP:SetAllVisible(draw, value)
     if not draw then return end
-    if draw.TextBill and draw.TextBill.Enabled ~= v then draw.TextBill.Enabled = v end
-    if draw.Box and draw.Box.Enabled ~= v then draw.Box.Enabled = v end 
-    if draw.Tracer and draw.Tracer.Visible ~= v then draw.Tracer.Visible = v end
-    if draw.Highlight and draw.Highlight.Enabled ~= v then draw.Highlight.Enabled = v end
+    if draw.TextBill then self:SetProp(draw.TextBill, "Enabled", value) end
+    if draw.Box then self:SetProp(draw.Box, "Enabled", value) end
+    if draw.Tracer then self:SetProp(draw.Tracer, "Visible", value) end
+    if draw.Highlight then self:SetProp(draw.Highlight, "Enabled", value) end
+end
+
+function ESP:BuildText(d, dist)
+    d.Cache.TextParts = d.Cache.TextParts or {}
+    d.Cache.TextParts[1] = d.Settings.ShowName ~= false and d.BaseName or nil
+    d.Cache.TextParts[2] = (d.Settings.ShowHP and d.Cache.Humanoid) and string.format("[%d/%d]", math.floor(d.Cache.Humanoid.Health), math.floor(d.Cache.Humanoid.MaxHealth)) or nil
+    d.Cache.TextParts[3] = d.Settings.ShowDistance and string.format("[%dm]", math.floor(dist)) or nil
+
+    self.Cache.CleanText = {}
+    for i = 1, 3 do
+        if d.Cache.TextParts[i] then
+            self.Cache.CleanText[#self.Cache.CleanText + 1] = d.Cache.TextParts[i]
+        end
+    end
+    return table.concat(self.Cache.CleanText, " ")
+end
+
+function ESP:ClearTargetCache(d)
+    d.Cache.Root = nil
+    d.Cache.Adornee = nil
+    d.Cache.Humanoid = nil
+    return false
+end
+
+function ESP:GetFallbackPart(obj)
+    if obj:IsA("BasePart") then return obj end
+    return obj:FindFirstChild("HumanoidRootPart") or 
+           obj.PrimaryPart or 
+           obj:FindFirstChild("Head") or 
+           obj:FindFirstChild("UpperTorso") or 
+           obj:FindFirstChild("Torso") or
+           obj:FindFirstChildWhichIsA("BasePart", true)
+end
+
+function ESP:RefreshTargetCache(d)
+    d.Cache = d.Cache or {}
+
+    if not d.IsInstance or not d.Object or not d.Object.Parent then
+        return self:ClearTargetCache(d)
+    end
+
+    d.Cache.Target = d.Object
+
+    if d.IsPlayer then
+        d.Cache.Target = d.Object.Character
+        if not d.Cache.Target then
+            return self:ClearTargetCache(d)
+        end
+    end
+
+    if self:IsSelf(d.Cache.Target) then
+        return self:ClearTargetCache(d)
+    end
+
+    if d.Cache.Target:IsA("Model") then
+        if not d.Cache.Root or not d.Cache.Root.Parent or not d.Cache.Root:IsDescendantOf(d.Cache.Target) then
+            d.Cache.Root = self:GetFallbackPart(d.Cache.Target)
+        end
+
+        if not d.Cache.Humanoid or not d.Cache.Humanoid.Parent or not d.Cache.Humanoid:IsDescendantOf(d.Cache.Target) then
+            d.Cache.Humanoid = d.Cache.Target:FindFirstChildOfClass("Humanoid")
+        end
+
+        d.Cache.Adornee = d.Cache.Target
+    elseif d.Cache.Target:IsA("BasePart") then
+        d.Cache.Root = d.Cache.Target
+        d.Cache.Adornee = d.Cache.Target
+        
+        if not d.Cache.Humanoid or not d.Cache.Humanoid.Parent or d.Cache.Humanoid.Parent ~= d.Cache.Target.Parent then
+            d.Cache.Humanoid = d.Cache.Target.Parent and d.Cache.Target.Parent:FindFirstChildOfClass("Humanoid") or nil
+        end
+    else
+        return self:ClearTargetCache(d)
+    end
+
+    if d.Cache.Humanoid and d.Cache.Humanoid.Health <= 0 then
+        return false
+    end
+
+    return d.Cache.Root ~= nil
+end
+
+function ESP:UpdateTracer(frame, fromPos, toPos, color)
+    self.Cache.dX = toPos.X - fromPos.X
+    self.Cache.dY = toPos.Y - fromPos.Y
+    self.Cache.Length = (toPos - fromPos).Magnitude
+
+    self:SetProp(frame, "Size", UDim2.new(0, self.Cache.Length, 0, 1.5))
+    self:SetProp(frame, "Position", UDim2.new(0, (fromPos.X + toPos.X) * 0.5, 0, (fromPos.Y + toPos.Y) * 0.5))
+    self:SetProp(frame, "Rotation", math.deg(math.atan2(self.Cache.dY, self.Cache.dX)))
+    self:SetProp(frame, "BackgroundColor3", color)
+end
+
+function ESP:QueueRemove(id)
+    self.PendingRemove[#self.PendingRemove + 1] = id
+end
+
+function ESP:FlushRemoveQueue()
+    for i = 1, #self.PendingRemove do
+        self:Huy(self.PendingRemove[i])
+        self.PendingRemove[i] = nil
+    end
+end
+
+function ESP:ApplyDefaults(settings)
+    settings = settings or {}
+    for key, value in next, self.Defaults do
+        if settings[key] == nil then
+            settings[key] = value
+        end
+    end
+    settings.CustomName = settings.CustomName or nil
+    return settings
 end
 
 function ESP:DangKy(id, obj, settings)
-    if not obj or IsSelf(obj) then return end
+    if not obj or self:IsSelf(obj) then return end
+    settings = self:ApplyDefaults(settings)
 
-    settings = settings or {}
-    if settings.ShowName == nil then settings.ShowName = true end
-    if settings.UseHighlight == nil then settings.UseHighlight = false end
-    settings.Color = settings.Color or Color3.new(1, 1, 1)
-
-    if self.Objects[id] then  
-        self.Objects[id].Settings = settings  
+    if self.Objects[id] then
         self.Objects[id].Object = obj
+        self.Objects[id].Settings = settings
         self.Objects[id].BaseName = settings.CustomName or (typeof(obj) == "Instance" and obj.Name or tostring(obj))
-        return  
-    end  
-    
-    local isInst = typeof(obj) == "Instance"  
-    self.Objects[id] = {  
-        Object = obj, Settings = settings, Drawings = nil,
-        IsActive = true, BaseName = settings.CustomName or (isInst and obj.Name or tostring(obj)),  
-        IsInstance = isInst, IsPlayer = isInst and obj:IsA("Player"), DisplayText = ""   
+        self.Objects[id].IsInstance = typeof(obj) == "Instance"
+        self.Objects[id].IsPlayer = self.Objects[id].IsInstance and obj:IsA("Player")
+        return
+    end
+
+    self.Objects[id] = {
+        Object = obj,
+        Settings = settings,
+        Drawings = nil,
+        State = {},
+        Cache = {},
+        IsActive = true,
+        IsInstance = typeof(obj) == "Instance",
+        IsPlayer = typeof(obj) == "Instance" and obj:IsA("Player"),
+        BaseName = settings.CustomName or (typeof(obj) == "Instance" and obj.Name or tostring(obj)),
+        DisplayText = ""
     }
 end
 
 function ESP:Huy(id)
-    local d = self.Objects[id]
-    if d then
-        if d.Drawings then
-            local draw = d.Drawings
-            if draw.Highlight then draw.Highlight:Destroy() end
-            if draw.TextBill then draw.TextBill:Destroy() end
-            if draw.Box then draw.Box:Destroy() end
-            if draw.Tracer then draw.Tracer:Destroy() end
-        end
-        self.Objects[id] = nil
+    if not self.Objects[id] then return end
+    if self.Objects[id].Drawings then
+        if self.Objects[id].Drawings.Highlight then self.Objects[id].Drawings.Highlight:Destroy() end
+        if self.Objects[id].Drawings.TextBill then self.Objects[id].Drawings.TextBill:Destroy() end
+        if self.Objects[id].Drawings.Box then self.Objects[id].Drawings.Box:Destroy() end
+        if self.Objects[id].Drawings.Tracer then self.Objects[id].Drawings.Tracer:Destroy() end
     end
+    self.Objects[id] = nil
 end
 
 function ESP:RemoveAllEsp()
-    for id in pairs(self.Objects) do self:Huy(id) end
-    if self.Connection then self.Connection:Disconnect() end
-    if self.PlayerRemovingConn then self.PlayerRemovingConn:Disconnect() end
-    if self.ViewSizeConn then self.ViewSizeConn:Disconnect() end
+    for id in next, self.Objects do self:Huy(id) end
+    if self.Connection then self.Connection:Disconnect() self.Connection = nil end
+    if self.PlayerRemovingConn then self.PlayerRemovingConn:Disconnect() self.PlayerRemovingConn = nil end
+    if self.ViewSizeConn then self.ViewSizeConn:Disconnect() self.ViewSizeConn = nil end
 end
 
 ESP.PlayerRemovingConn = Players.PlayerRemoving:Connect(function(p)
-    for id, d in pairs(ESP.Objects) do
+    for id, d in next, ESP.Objects do
         if d.Object == p then ESP:Huy(id) end
     end
 end)
 
-ESP.ViewSizeConn = Camera:GetPropertyChangedSignal("ViewportSize"):Connect(function() 
-    ESP.Cache.ViewSize = Camera.ViewportSize 
+ESP.ViewSizeConn = Camera:GetPropertyChangedSignal("ViewportSize"):Connect(function()
+    ESP.Cache.ViewSize = Camera.ViewportSize
 end)
 
-local function GetTracerPos()
-    local o = ESP.TracerOrigin
-    local vs = ESP.Cache.ViewSize
-    if o == "Bottom" then return Vector2.new(vs.X * 0.5, vs.Y)
-    elseif o == "Center" then return Vector2.new(vs.X * 0.5, vs.Y * 0.5)
-    elseif o == "Mouse" then return UserInputService:GetMouseLocation()
-    else return Vector2.new(vs.X * 0.5, 0) end
-end
+ESP.Connection = RunService.RenderStepped:Connect(function(dt)
+    ESP.Cache.Elapsed = ESP.Cache.Elapsed + dt
+    ESP.Cache.HeavyUpdate = ESP.Cache.Elapsed >= ESP.Config.UpdateInterval
 
-local function GetBoundingInfo(obj)
-    if typeof(obj) ~= "Instance" then return nil, nil, nil end
+    if ESP.Cache.HeavyUpdate then ESP.Cache.Elapsed = 0 end
 
-    if obj:IsA("Player") then
-        if not obj.Character then return nil, nil, nil end
-        obj = obj.Character
-    end
+    ESP.Cache.LocalPosition = ESP:GetLocalPosition()
+    ESP.Cache.TracerPosition = ESP:GetTracerPos()
 
-    if IsSelf(obj) then return nil, nil, nil end
-
-    local hum = obj:FindFirstChildOfClass("Humanoid")
-    if hum and hum.Health <= 0 then return nil, nil, nil end
-
-    if obj:IsA("Model") then
-        local cf, size = obj:GetBoundingBox()
-        if size.Magnitude > 0.1 then
-            return cf.Position, size, obj, hum
-        end
-    elseif obj:IsA("BasePart") then
-        return obj.Position, obj.Size, obj, hum
-    end
-
-    return nil, nil, nil
-end
-
-local function UpdateTracerFrame(frame, from, to, color)
-    local distance = (to - from).Magnitude
-    local center = (from + to) / 2
-    local angle = math.atan2(to.Y - from.Y, to.X - from.X)
-
-    frame.Size = UDim2.new(0, distance, 0, 1.5)
-    frame.Position = UDim2.new(0, center.X, 0, center.Y)
-    frame.Rotation = math.deg(angle)
-    frame.BackgroundColor3 = color
-end
-
-ESP.Connection = RunService.RenderStepped:Connect(function()
-    local clock = os.clock()
-    local heavy = (clock - ESP.Cache.LastUpdate) >= ESP.Config.UpdateInterval
-    if heavy then ESP.Cache.LastUpdate = clock end
-
-    local myPos = Camera.CFrame.Position  
-    local playerCharacter = localPlayer.Character
-    if playerCharacter then  
-        local root = playerCharacter:FindFirstChild("HumanoidRootPart") or playerCharacter:FindFirstChild("Head")  
-        if root then myPos = root.Position end  
-    end  
-    
-    local tracerPos = GetTracerPos()  
-
-    for id, d in pairs(ESP.Objects) do  
-        local obj = d.Object  
-
-        if IsSelf(obj) then
-            SetAllVisible(d.Drawings, false)
-            continue
-        end
-        
-        if d.IsInstance and (not obj or not obj.Parent) then  
-            ESP:Huy(id)  
-            continue  
-        end  
-
-        if not d.IsActive then  
-            SetAllVisible(d.Drawings, false) 
-            continue  
-        end  
-
-        local cPos, size, adornee, hum = GetBoundingInfo(obj)
-
-        if not cPos then
-            SetAllVisible(d.Drawings, false)
+    for id, d in next, ESP.Objects do
+        if not d.IsActive then
+            ESP:SetAllVisible(d.Drawings, false)
             continue
         end
 
-        local dist = (myPos - cPos).Magnitude   
-
-        if dist > ESP.Config.MaxDistance then  
-            SetAllVisible(d.Drawings, false)
-            continue   
-        end  
-
-        local set = d.Settings  
-        local draw = AllocateDrawings(d)
-        local col = set.Color  
-        local rootPart = obj:IsA("Model") and obj:FindFirstChild("HumanoidRootPart") or adornee
-
-        if heavy and set.UseText then  
-            local tArr = {}  
-            if set.ShowName ~= false then table.insert(tArr, d.BaseName) end  
-            if set.ShowHP and hum then table.insert(tArr, string.format("[%d/%d]", math.floor(hum.Health), math.floor(hum.MaxHealth))) end  
-            if set.ShowDistance then table.insert(tArr, string.format("[%dm]", math.floor(dist))) end  
-            d.DisplayText = table.concat(tArr, " ")  
-        end  
-
-        if set.UseHighlight and draw.Highlight then  
-            if not draw.Highlight.Enabled then draw.Highlight.Enabled = true end  
-            if draw.Highlight.Adornee ~= adornee then draw.Highlight.Adornee = adornee end  
-            if draw.Highlight.FillColor ~= col then draw.Highlight.FillColor = col end  
-        elseif draw.Highlight and draw.Highlight.Enabled then 
-            draw.Highlight.Enabled = false 
-        end  
-
-        if set.UseBox and draw.Box then
-            if not draw.Box.Enabled then draw.Box.Enabled = true end
-            if draw.Box.Adornee ~= rootPart then draw.Box.Adornee = rootPart end
-            if draw.BoxStroke.Color ~= col then draw.BoxStroke.Color = col end
-        elseif draw.Box and draw.Box.Enabled then
-            draw.Box.Enabled = false
+        if d.IsInstance and (not d.Object or not d.Object.Parent) then
+            ESP:QueueRemove(id)
+            continue
         end
 
-        if set.UseText and draw.TextBill then
-            if not draw.TextBill.Enabled then draw.TextBill.Enabled = true end
-            if draw.TextBill.Adornee ~= rootPart then draw.TextBill.Adornee = rootPart end
-            draw.TextLabel.Text = d.DisplayText
-            if draw.TextLabel.TextColor3 ~= col then draw.TextLabel.TextColor3 = col end
-        elseif draw.TextBill and draw.TextBill.Enabled then
-            draw.TextBill.Enabled = false
+        if ESP:IsSelf(d.Object) then
+            ESP:SetAllVisible(d.Drawings, false)
+            continue
         end
 
-        if set.UseTracer and draw.Tracer then
-            local sPos, on = Camera:WorldToViewportPoint(cPos)
-            if on then
-                if not draw.Tracer.Visible then draw.Tracer.Visible = true end
-                UpdateTracerFrame(draw.Tracer, tracerPos, Vector2.new(sPos.X, sPos.Y), col)
-            else
-                if draw.Tracer.Visible then draw.Tracer.Visible = false end
+        if ESP.Cache.HeavyUpdate or not d.Cache.Root then
+            ESP:RefreshTargetCache(d)
+        end
+
+        if not d.Cache.Root or not d.Cache.Root.Parent then
+            ESP:SetAllVisible(d.Drawings, false)
+            continue
+        end
+
+        if d.Cache.Humanoid and d.Cache.Humanoid.Health <= 0 then
+            ESP:SetAllVisible(d.Drawings, false)
+            continue
+        end
+
+        d.Cache.Position = d.Cache.Root.Position
+        d.Cache.Distance = (ESP.Cache.LocalPosition - d.Cache.Position).Magnitude
+
+        if d.Cache.Distance > ESP.Config.MaxDistance then
+            ESP:SetAllVisible(d.Drawings, false)
+            continue
+        end
+
+        ESP:AllocateDrawings(d)
+        d.Cache.Color = d.Settings.Color
+
+        if ESP.Cache.HeavyUpdate and d.Settings.UseText then
+            d.DisplayText = ESP:BuildText(d, d.Cache.Distance)
+        end
+
+        if d.Settings.UseHighlight and d.Drawings.Highlight then
+            ESP:SetProp(d.Drawings.Highlight, "Enabled", true)
+            ESP:SetProp(d.Drawings.Highlight, "Adornee", d.Cache.Adornee)
+            ESP:SetProp(d.Drawings.Highlight, "FillColor", d.Cache.Color)
+        elseif d.Drawings and d.Drawings.Highlight then
+            ESP:SetProp(d.Drawings.Highlight, "Enabled", false)
+        end
+
+        if d.Settings.UseBox and d.Drawings.Box then
+            ESP:SetProp(d.Drawings.Box, "Enabled", true)
+            ESP:SetProp(d.Drawings.Box, "Adornee", d.Cache.Root)
+            ESP:SetProp(d.Drawings.BoxStroke, "Color", d.Cache.Color)
+        elseif d.Drawings and d.Drawings.Box then
+            ESP:SetProp(d.Drawings.Box, "Enabled", false)
+        end
+
+        if d.Settings.UseText and d.Drawings.TextBill then
+            ESP:SetProp(d.Drawings.TextBill, "Enabled", true)
+            ESP:SetProp(d.Drawings.TextBill, "Adornee", d.Cache.Root)
+
+            if d.Drawings.TextLabel.Text ~= d.DisplayText then
+                d.Drawings.TextLabel.Text = d.DisplayText
             end
-        elseif draw.Tracer and draw.Tracer.Visible then
-            draw.Tracer.Visible = false
+            ESP:SetProp(d.Drawings.TextLabel, "TextColor3", d.Cache.Color)
+        elseif d.Drawings and d.Drawings.TextBill then
+            ESP:SetProp(d.Drawings.TextBill, "Enabled", false)
+        end
+
+        if d.Settings.UseTracer and d.Drawings.Tracer then
+            d.Cache.ScreenPos, d.Cache.OnScreen = Camera:WorldToViewportPoint(d.Cache.Position)
+
+            if d.Cache.OnScreen then
+                ESP:SetProp(d.Drawings.Tracer, "Visible", true)
+                ESP:UpdateTracer(
+                    d.Drawings.Tracer,
+                    ESP.Cache.TracerPosition,
+                    Vector2.new(d.Cache.ScreenPos.X, d.Cache.ScreenPos.Y),
+                    d.Cache.Color
+                )
+            else
+                ESP:SetProp(d.Drawings.Tracer, "Visible", false)
+            end
+        elseif d.Drawings and d.Drawings.Tracer then
+            ESP:SetProp(d.Drawings.Tracer, "Visible", false)
         end
     end
+
+    ESP:FlushRemoveQueue()
 end)
 
 -- Generator
@@ -2359,12 +2494,10 @@ MyUIElements.SetupStamina:Toggle({
     end
 })
 
--- [ QUẢN LÝ SERVER - BẢN GỌN NHẸ / NGUYÊN BẢN ]
 local ServerManager = {
     ManualJobId = ""
 }
 
--- Hàm Random Hop trực tiếp, bấm là nhảy không qua UI trung gian
 function ServerManager:RandomHop()
     local url = "https://games.roblox.com/v1/games/" .. tostring(game.PlaceId) .. "/servers/Public?sortOrder=Asc&limit=100"
     
@@ -2394,30 +2527,25 @@ function ServerManager:RandomHop()
     end
 end
 
--- ================= GIAO DIỆN UI =================
-
--- Nút Nhảy Server
 MyUIElements.Server:Button({
     Title = "loc:Random_Server",
-    Desc = "Nhảy sang server ngẫu nhiên",
+    Desc = "loc:Random_Server_Desc",
     Callback = function()
         ServerManager:RandomHop()
     end
 })
 
--- Nút Rejoin Server hiện tại
 MyUIElements.Server:Button({
     Title = "loc:Rejoin_Server",
-    Desc = "Vào lại server này",
+    Desc = "loc:Rejoin_Server_Desc",
     Callback = function()
         TeleportService:TeleportToPlaceInstance(game.PlaceId, game.JobId, localPlayer)
     end
 })
 
--- Nhập & Join theo JobId
 MyUIElements.Server:Input({
     Title = "loc:Input_Server_ID",
-    Desc = "Dán JobId để join",
+    Desc = "loc:Input_Server_ID_Desc",
     Flag = "Server_ID_Input",
     Placeholder = "JobId...",
     Callback = function(val)
@@ -2427,7 +2555,7 @@ MyUIElements.Server:Input({
 
 MyUIElements.Server:Button({
     Title = "loc:Join_ID_Server",
-    Desc = "Join theo JobId",
+    Desc = "loc:Join_ID_Server_Desc",
     Callback = function()
         if ServerManager.ManualJobId ~= "" then
             TeleportService:TeleportToPlaceInstance(game.PlaceId, ServerManager.ManualJobId, localPlayer)
@@ -2435,10 +2563,9 @@ MyUIElements.Server:Button({
     end
 })
 
--- Copy JobId
 MyUIElements.Server:Button({
     Title = "loc:Copy_Current_ID",
-    Desc = "Copy JobId hiện tại",
+    Desc = "loc:Copy_Current_ID_Desc",
     Callback = function()
         if setclipboard then
             setclipboard(tostring(game.JobId))
@@ -3716,7 +3843,6 @@ function CamlockBot:IsKiller()
     return playerCharacter and playerCharacter:IsDescendantOf(killersFolder)
 end
 
--- Gộp logic tìm mục tiêu vào 1 hàm duy nhất
 function CamlockBot:GetAllTargets()
     if not survivorsFolder or not playerCharacter then return {} end
     local myRoot = playerCharacter:FindFirstChild("HumanoidRootPart")
@@ -3745,7 +3871,7 @@ function CamlockBot:GetNextTarget()
 
     for i, t in ipairs(targets) do
         if t.r == self.State.Target then
-            return targets[(i % #targets) + 1].r -- Thuật toán gộp Next Index gọn nhẹ
+            return targets[(i % #targets) + 1].r
         end
     end
     return targets[1].r
@@ -3799,7 +3925,6 @@ local function MakeDraggableAndClickable(frame, button, onClick)
     end)
 end
 
--- Hàm gộp tái sử dụng để đẻ UI không bị lặp code
 function CamlockBot:CreateUIBtn(sgui, yPos, text)
     local frame = Instance.new("Frame", sgui)
     frame.Size, frame.Position = UDim2.new(0, 130 * self.Config.UIScale, 0, 45 * self.Config.UIScale), UDim2.new(0.85, 0, yPos, 0)
@@ -3920,7 +4045,6 @@ function CamlockBot:Toggle(state)
     end))
 end
 
--- Đã gộp sạch sẽ logic hiệu ứng lặp
 function CamlockBot:SetUIVisible(uiFrame, state)
     if not uiFrame then return end
     
@@ -3943,7 +4067,7 @@ function CamlockBot:SetUIVisible(uiFrame, state)
     if not state then
         task.delay(0.35, function() 
             uiFrame.Visible = false 
-            uiFrame.Position = cPos -- Giữ vị trí cũ ngầm
+            uiFrame.Position = cPos
         end)
     end
 end
@@ -4026,26 +4150,17 @@ MyUIElements.Camlock:Dropdown({
     Callback = function(value) CamlockBot.Config.AimPart = value end
 })
 
-local PowerManager = {
+PowerManager = {
     Toggles = { Noclip = false, Speed = false, Fly = false },
     Values = { Speed = 70, FlySpeed = 50 },
+    Cache = {},
     AntiGravity = nil
 }
-
-function PowerManager:UpdateNoclip()
-    if not playerCharacter then return end
-    for _, part in pairs(playerCharacter:GetDescendants()) do
-        if part:IsA("BasePart") then
-            part.CanCollide = not self.Toggles.Noclip
-        end
-    end
-end
 
 MyUIElements.Noclip:Toggle({
     Title = "loc:Noclip", Desc = "loc:NoclipDesc", Flag = "Noclip", Value = false,
     Callback = function(state) 
         PowerManager.Toggles.Noclip = state
-        PowerManager:UpdateNoclip()
     end
 })
 
@@ -4064,9 +4179,26 @@ MyUIElements.Flying:Toggle({
     Title = "loc:Flying", Desc = "loc:FlyingDesc", Flag = "FlyingToggle", Value = false,
     Callback = function(state) 
         PowerManager.Toggles.Fly = state
-        if not state and PowerManager.AntiGravity then
-            PowerManager.AntiGravity:Destroy()
-            PowerManager.AntiGravity = nil
+        
+        if not state then
+            if PowerManager.AntiGravity then
+                PowerManager.AntiGravity:Destroy()
+                PowerManager.AntiGravity = nil
+            end
+            
+            if playerCharacter then
+                PowerManager.Cache.Root = playerCharacter:FindFirstChild("HumanoidRootPart")
+                PowerManager.Cache.Hum = playerCharacter:FindFirstChildOfClass("Humanoid")
+                
+                if PowerManager.Cache.Root then
+                    PowerManager.Cache.Root.AssemblyLinearVelocity = Vector3.zero
+                    PowerManager.Cache.Root.AssemblyAngularVelocity = Vector3.zero
+                end
+                
+                if PowerManager.Cache.Hum then
+                    PowerManager.Cache.Hum:ChangeState(Enum.HumanoidStateType.GettingUp)
+                end
+            end
         end
     end
 })
@@ -4077,40 +4209,50 @@ MyUIElements.Flying:Slider({
     Callback = function(v) PowerManager.Values.FlySpeed = v end
 })
 
+RunService.Stepped:Connect(function()
+    if PowerManager.Toggles.Noclip and playerCharacter then
+        PowerManager.Cache.Parts = playerCharacter:GetDescendants()
+        for i = 1, #PowerManager.Cache.Parts do
+            PowerManager.Cache.Part = PowerManager.Cache.Parts[i]
+            if PowerManager.Cache.Part:IsA("BasePart") then
+                PowerManager.Cache.Part.CanCollide = false
+            end
+        end
+    end
+end)
+
 RunService.Heartbeat:Connect(function(dt)
     if not playerCharacter then return end
-    local humanoid = playerCharacter:FindFirstChildOfClass("Humanoid")
-    local hrp = playerCharacter:FindFirstChild("HumanoidRootPart")
-    if not humanoid or not hrp then return end
+    
+    PowerManager.Cache.Hum = playerCharacter:FindFirstChildOfClass("Humanoid")
+    PowerManager.Cache.Root = playerCharacter:FindFirstChild("HumanoidRootPart")
+    
+    if not PowerManager.Cache.Hum or not PowerManager.Cache.Root then return end
 
     if PowerManager.Toggles.Fly then
         if not PowerManager.AntiGravity then
-            PowerManager.AntiGravity = Instance.new("BodyVelocity", hrp)
+            PowerManager.AntiGravity = Instance.new("BodyVelocity", PowerManager.Cache.Root)
             PowerManager.AntiGravity.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
             PowerManager.AntiGravity.Velocity = Vector3.zero
         end
 
-        local moveDir = humanoid.MoveDirection
-        if moveDir.Magnitude > 0 then
-            local cam = Workspace.CurrentCamera
-            local _, rotY, _ = cam.CFrame:ToEulerAnglesYXZ()
-            local flatCam = CFrame.Angles(0, rotY, 0)
+        PowerManager.Cache.MoveDir = PowerManager.Cache.Hum.MoveDirection
+        if PowerManager.Cache.MoveDir.Magnitude > 0 then
+            PowerManager.Cache.RotY = select(2, Camera.CFrame:ToEulerAnglesYXZ())
+            PowerManager.Cache.FlatCam = CFrame.Angles(0, PowerManager.Cache.RotY, 0)
             
-            local move3D = (cam.CFrame.LookVector * moveDir:Dot(flatCam.LookVector)) + 
-                           (cam.CFrame.RightVector * moveDir:Dot(flatCam.RightVector))
+            PowerManager.Cache.Move3D = (Camera.CFrame.LookVector * PowerManager.Cache.MoveDir:Dot(PowerManager.Cache.FlatCam.LookVector)) + 
+                                        (Camera.CFrame.RightVector * PowerManager.Cache.MoveDir:Dot(PowerManager.Cache.FlatCam.RightVector))
             
-            hrp.CFrame = hrp.CFrame + (move3D.Unit * PowerManager.Values.FlySpeed * dt)
+            PowerManager.Cache.Root.CFrame = PowerManager.Cache.Root.CFrame + (PowerManager.Cache.Move3D.Unit * PowerManager.Values.FlySpeed * dt)
         end
-        hrp.AssemblyLinearVelocity = Vector3.zero
+        PowerManager.Cache.Root.AssemblyLinearVelocity = Vector3.zero
 
-    elseif PowerManager.Toggles.Speed and humanoid.MoveDirection.Magnitude > 0 then
-        hrp.CFrame = hrp.CFrame + (humanoid.MoveDirection * PowerManager.Values.Speed * dt)
-    end
-end)
-
-playerCharacter.DescendantAdded:Connect(function(part)
-    if PowerManager.Toggles.Noclip and part:IsA("BasePart") then
-        part.CanCollide = false
+    elseif PowerManager.Toggles.Speed and PowerManager.Cache.Hum.MoveDirection.Magnitude > 0 then
+        PowerManager.Cache.Root.CFrame = PowerManager.Cache.Root.CFrame + (PowerManager.Cache.Hum.MoveDirection * PowerManager.Values.Speed * dt)
+        
+        PowerManager.Cache.CurrentVel = PowerManager.Cache.Root.AssemblyLinearVelocity
+        PowerManager.Cache.Root.AssemblyLinearVelocity = Vector3.new(0, PowerManager.Cache.CurrentVel.Y, 0)
     end
 end)
 
