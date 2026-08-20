@@ -354,6 +354,10 @@ WindUI:Localization({
             Rejoin_Server_Desc = "Rejoin the current server.",
             Random_Server = "Random Server",
             Random_Server_Desc = "Join a random server.",
+            AutoMinigame = "Auto Azure Game",
+            AutoMinigameDesc = "Auto complete the minigame with the tree planted by Azure.",
+            AntiAFK = "Anti AFK",
+            AntiAFKDesc = "Ignore the game's AFK detection mechanism.",
         },
         vi = {
             HubTitle = "Axos Hub",
@@ -592,6 +596,10 @@ Load_Config_Desc = "Nhấn để tải cấu hình đã chọn.",
             Rejoin_Server_Desc = "Tham gia lại server hiện tại.",
             Random_Server = "Server ngẫu nhiên",
             Random_Server_Desc = "Tham gia một server ngẫu nhiên.",
+            AutoMinigame = "Tự làm azure game",
+            AutoMinigameDesc = "Tự động hoàn thành trò chơi nhỏ với cái cây do Azure trồng.",
+            AntiAFK = "Chống AFK",
+            AntiAFKDesc = "Bỏ qua cơ chế phát hiện AFK của trò chơi.",
         }
     }
 })
@@ -686,7 +694,7 @@ local OpenButtonConfig = {
 
 Window:EditOpenButton(OpenButtonConfig)
 
-Window:Tag({Title = "v0.0.4", Icon = "cog", Color = Color3.fromHex("#30ff6a")})
+Window:Tag({Title = "v0.0.5", Icon = "cog", Color = Color3.fromHex("#30ff6a")})
 
 local Tabs = {
     About = Window:Section({ Title = "loc:About", Opened = true }),
@@ -761,6 +769,21 @@ local MyUIElements = {}
 
 local ElementConfigs = {
     {
+        ID = "AutoFarm",
+        Type = "Section",
+        Parent = TabHandles.Main,
+        Config = {
+            Title = "loc:AutoFarm",
+            Desc = "loc:AutoFarm",
+            Icon = "user",
+            Box = true,
+            BoxBorder = true,
+            Opened = false,
+            Hover = true,
+        }
+    },
+
+    {
         ID = "Generator",
         Type = "Section",
         Parent = TabHandles.Main,
@@ -783,6 +806,21 @@ local ElementConfigs = {
             Title = "loc:Items",
             Desc = "loc:Items_Sections",
             Icon = "toolbox",
+            Box = true,
+            BoxBorder = true,
+            Opened = false,
+            Hover = true,
+        }
+    },
+    
+    {
+        ID = "AutoMiniGame",
+        Type = "Section",
+        Parent = TabHandles.Main,
+        Config = {
+            Title = "loc:AutoMiniGame",
+            Desc = "loc:AutoMiniGameDesc",
+            Icon = "user",
             Box = true,
             BoxBorder = true,
             Opened = false,
@@ -1815,6 +1853,240 @@ ESP.Connection = RunService.RenderStepped:Connect(function(dt)
     ESP:FlushRemoveQueue()
 end)
 
+Farm = {
+    AutoKillerFarm = false,
+    AutoFarmGen = false,
+    SafeModeGen = true,
+    SafeRangeGen = 45,
+    Target = nil,
+    LastPos = nil,
+    CurrentGen = nil,
+    CurrentMap = nil,
+    LoadTime = 0,
+    IsHolding = false
+}
+
+function Farm.GetEntity(char)
+    if not char then return nil, false end
+    local hrp = char:FindFirstChild("HumanoidRootPart")
+    local hum = char:FindFirstChildWhichIsA("Humanoid")
+    return hrp, (hum and hum.Health > 0)
+end
+
+function Farm.IsKillerNear(pos)
+    if not Farm.SafeModeGen then return false end
+    for _, k in pairs(killersFolder:GetChildren()) do
+        local hrp, alive = Farm.GetEntity(k)
+        if hrp and alive and (hrp.Position - pos).Magnitude <= Farm.SafeRangeGen then
+            return true
+        end
+    end
+    return false
+end
+
+function Farm.IsOccupied(pos, me)
+    for _, s in pairs(survivorsFolder:GetChildren()) do
+        if s ~= me then
+            local hrp, alive = Farm.GetEntity(s)
+            if hrp and alive and (hrp.Position - pos).Magnitude < 2.5 then
+                return true
+            end
+        end
+    end
+    return false
+end
+
+-- Rule 3: Gộp chung FindNearestSurvivor và FindNearestSurvivorExcept làm 1 logic
+function Farm.FindSurvivor(hrp, me, exclude)
+    local best, minDist = nil, math.huge
+    for _, s in pairs(survivorsFolder:GetChildren()) do
+        if s ~= me then
+            local sHrp, alive = Farm.GetEntity(s)
+            if sHrp and alive and sHrp ~= exclude then
+                local dist = (sHrp.Position - hrp.Position).Magnitude
+                if dist < minDist then
+                    minDist = dist
+                    best = sHrp
+                end
+            end
+        end
+    end
+    return best
+end
+
+function Farm.ChangeTarget()
+    local me = Players.LocalPlayer.Character
+    local hrp = Farm.GetEntity(me)
+    if not hrp then return end
+
+    local newTarget = Farm.FindSurvivor(hrp, me, Farm.Target)
+
+    -- Giữ nguyên target cũ nếu nó vẫn hợp lệ
+    if not newTarget and Farm.Target and Farm.Target.Parent and Farm.Target:IsDescendantOf(survivorsFolder) and select(2, Farm.GetEntity(Farm.Target.Parent)) then
+        return
+    end
+    Farm.Target = newTarget or Farm.FindSurvivor(hrp, me)
+end
+
+function Farm.ProcKiller()
+    local me = Players.LocalPlayer.Character
+    local hrp, alive = Farm.GetEntity(me)
+
+    if not (me and me:IsDescendantOf(killersFolder) and alive) then
+        Farm.Target = nil
+        return
+    end
+
+    if not (Farm.Target and Farm.Target.Parent and Farm.Target:IsDescendantOf(survivorsFolder) and select(2, Farm.GetEntity(Farm.Target.Parent))) then
+        Farm.Target = Farm.FindSurvivor(hrp, me)
+    end
+
+    if Farm.Target then
+        hrp.CFrame = CFrame.lookAt((Farm.Target.CFrame * CFrame.new(0, 0, 3)).Position, Farm.Target.Position)
+    end
+end
+
+function Farm.FindSafeGen()
+    local mapFolder = Workspace:FindFirstChild("Map")
+    local inGame = mapFolder and mapFolder:FindFirstChild("Ingame") and mapFolder.Ingame:FindFirstChild("Map")
+    
+    if inGame and inGame ~= Farm.CurrentMap then
+        Farm.CurrentMap = inGame
+        Farm.LoadTime = tick()
+    end
+    if not inGame then return end
+
+    for _, gen in pairs(inGame:GetChildren()) do
+        if gen.Name == "Generator" and gen:FindFirstChild("Progress") and gen.Progress.Value < 100 then
+            local part = gen.PrimaryPart or gen:FindFirstChildWhichIsA("BasePart")
+            if part and not Farm.IsKillerNear(part.Position) then
+                return gen, part
+            end
+        end
+    end
+end
+
+function Farm.GetSafePos(part, me)
+    local positions = {
+        part.CFrame * CFrame.new(0,0,-6),
+        part.CFrame * CFrame.new(6,0,0),
+        part.CFrame * CFrame.new(-6,0,0)
+    }
+    for _, posCF in pairs(positions) do
+        if not Farm.IsOccupied(posCF.Position, me) and not Farm.IsKillerNear(posCF.Position) then
+            return CFrame.lookAt(posCF.Position, part.Position)
+        end
+    end
+end
+
+function Farm.HandlePrompt(gen)
+    local prompt = gen:FindFirstChild("Main") and gen.Main:FindFirstChild("Prompt")
+    if prompt and prompt:IsA("ProximityPrompt") and (tick() - Farm.LoadTime) >= 3 and not Farm.IsHolding then
+        Farm.IsHolding = true
+        task.spawn(function()
+            pcall(function()
+                prompt.HoldDuration = 0.125
+                prompt:InputHoldBegin()
+                task.wait(0.125)
+                if prompt.Parent then prompt:InputHoldEnd() end
+            end)
+            Farm.IsHolding = false
+        end)
+    end
+end
+
+function Farm.ProcGen()
+    if Farm.IsHolding then return end
+    
+    local me = Players.LocalPlayer.Character
+    local hrp, alive = Farm.GetEntity(me)
+    
+    if not (me and me:IsDescendantOf(survivorsFolder) and alive and hrp) then 
+        Farm.LastPos = nil
+        Farm.CurrentGen = nil
+        return 
+    end
+
+    local foundGen, genPart = Farm.FindSafeGen()
+    if not foundGen then return end
+
+    local valid = Farm.LastPos and (hrp.Position - Farm.LastPos.Position).Magnitude < 3 and not Farm.IsOccupied(Farm.LastPos.Position, me)
+
+    if not valid or Farm.CurrentGen ~= foundGen then
+        local pos = Farm.GetSafePos(genPart, me)
+        if pos then
+            Farm.LastPos = pos
+            Farm.CurrentGen = foundGen
+            hrp.CFrame = pos
+        end
+    end
+
+    Farm.HandlePrompt(foundGen)
+end
+
+task.spawn(function()
+    while task.wait(0.08) do
+        if Farm.AutoKillerFarm then Farm.ProcKiller() end
+    end
+end)
+
+task.spawn(function()
+    while task.wait(0.5) do
+        if Farm.AutoFarmGen then Farm.ProcGen() end
+    end
+end)
+
+MyUIElements.AutoFarm:Button({
+    Title = "loc:Change_Target",
+    Desc = "loc:Change_Target_Desc",
+    Callback = function()
+        if Farm.AutoKillerFarm then Farm.ChangeTarget() end
+    end
+})
+
+MyUIElements.AutoFarm:Toggle({
+    Title = "loc:Auto_Kill_The_Survivors",
+    Desc = "loc:Auto_Kill_The_Survivors_Desc",
+    Flag = "Auto Killers Farm",
+    Value = false,
+    Callback = function(state)
+        Farm.AutoKillerFarm = state
+        if not state then Farm.Target = nil end
+    end
+})
+
+MyUIElements.AutoFarm:Toggle({
+    Title = "loc:Auto_Farm_Generator",
+    Desc = "loc:Auto_Farm_Generator_Desc",
+    Flag = "Auto Farm Generator",
+    Value = false,
+    Callback = function(state) 
+        Farm.AutoFarmGen = state 
+    end
+})
+
+MyUIElements.AutoFarm:Toggle({
+    Title = "loc:Safe_Mode_Enable",
+    Desc = "loc:Safe_Mode_Enable_Desc",
+    Flag = "Safe Mode Generator",
+    Value = true,
+    Callback = function(state) 
+        Farm.SafeModeGen = state 
+    end
+})
+
+MyUIElements.AutoFarm:Input({
+    Title = "loc:Set_Safe_Range",
+    Desc = "loc:Set_Safe_Range_Desc",
+    Flag = "Safe Range Generator",
+    Placeholder = "45",
+    Value = 45,
+    Numeric = true,
+    Callback = function(val) 
+        Farm.SafeRangeGen = tonumber(val) or 45 
+    end
+})
+
 -- Generator
 
 local PuzzleBot = {
@@ -2234,6 +2506,101 @@ MyUIElements.Items:Toggle({
     Value = false,
     Callback = function(state)
         ItemBot.Config.AutoPickupNearest = state
+    end
+})
+
+AutoQTEManager = {
+    Construct = { Enabled = false, Hooked = false },
+    Bloodhook = { Enabled = false, LoopActive = false, LastButton = nil },
+    Targets = {"cl_ConstructQTE", "ConstructQTE"},
+    NosHookRemote = ReplicatedStorage:FindFirstChild("Remotes") and ReplicatedStorage.Remotes:FindFirstChild("NosHookQTE") or ReplicatedStorage:FindFirstChild("NosHookQTE", true)
+}
+
+function AutoQTEManager:TryHookConstruct()
+    if self.Construct.Hooked then return end
+    
+    for i = 1, #self.Targets do
+        self.Module = ReplicatedStorage:FindFirstChild(self.Targets[i], true)
+        if self.Module then break end
+    end
+    
+    if self.Module and self.Module:IsA("ModuleScript") then
+        self.Success, self.Data = pcall(require, self.Module)
+        
+        if self.Success and type(self.Data) == "table" and self.Data.new then
+            self.Data.OriginalNew = self.Data.new
+            
+            self.Data.new = function(...)
+                AutoQTEManager.TempInstance = AutoQTEManager.Data.OriginalNew(...)
+                
+                if AutoQTEManager.Construct.Enabled then
+                    task.spawn(function(qte)
+                        task.wait(0.1)
+                        if type(qte) == "table" and qte.AddProgress then
+                            qte:AddProgress(100)
+                        end
+                    end, AutoQTEManager.TempInstance)
+                end
+                
+                return AutoQTEManager.TempInstance
+            end
+            
+            self.Construct.Hooked = true
+        end
+    end
+end
+
+function AutoQTEManager:HandleBloodhook(state)
+    self.Bloodhook.Enabled = state
+    
+    if state and self.NosHookRemote and not self.Bloodhook.LoopActive then
+        self.Bloodhook.LoopActive = true
+        
+        task.spawn(function()
+            while AutoQTEManager.Bloodhook.Enabled do
+                -- Dùng đường dẫn tĩnh bro cho để tối ưu tài nguyên, check từng cấp tránh lỗi nil
+                AutoQTEManager.TempUI = Players.LocalPlayer.PlayerGui:FindFirstChild("TemporaryUI")
+                AutoQTEManager.QTE = AutoQTEManager.TempUI and AutoQTEManager.TempUI:FindFirstChild("QTE")
+                AutoQTEManager.ActiveButton = AutoQTEManager.QTE and AutoQTEManager.QTE:FindFirstChild("ActiveButton")
+                
+                if AutoQTEManager.ActiveButton and AutoQTEManager.ActiveButton.Visible then
+                    -- Check xem nút này đã Fire chưa để tránh spam server trong lúc để nút làm màu
+                    if AutoQTEManager.Bloodhook.LastButton ~= AutoQTEManager.ActiveButton then
+                        AutoQTEManager.NosHookRemote:FireServer(true)
+                        AutoQTEManager.Bloodhook.LastButton = AutoQTEManager.ActiveButton
+                    end
+                else
+                    -- Reset lại khi không còn nút nào trên màn hình
+                    AutoQTEManager.Bloodhook.LastButton = nil
+                end
+                
+                task.wait(0.1)
+            end
+            AutoQTEManager.Bloodhook.LoopActive = false
+        end)
+    end
+end
+
+MyUIElements.AutoMiniGame:Toggle({
+    Title = "loc:AutoMinigame", 
+    Desc = "loc:AutoMinigameDesc", 
+    Flag = "AutoQTE_Construct", 
+    Value = false,
+    Callback = function(state)
+        AutoQTEManager.Construct.Enabled = state
+        if state then 
+            AutoQTEManager:TryHookConstruct() 
+        end
+    end
+})
+
+MyUIElements.AutoMiniGame:Toggle({
+    Title = "Auto Bloodhook QTE", 
+    Desc = "Tự động hoàn thành minigame kéo mục tiêu", 
+    Flag = "AutoQTE_Bloodhook", 
+    Value = false,
+    Callback = function(state)
+        AutoQTEManager:HandleBloodhook(state)
     end
 })
 
@@ -4446,6 +4813,88 @@ MyUIElements.Bypass:Button({
     Desc = "loc:ShowChatDesc",
     Callback = function()
         VisualBot:ForceShowChat()
+    end
+})
+
+-- Gom toàn bộ trạng thái vào 1 table để triệt tiêu biến local
+AFKBypass = {
+    Enabled = false,
+    Initialized = false,
+    OldHooks = {},
+    Loop = nil,
+    NetworkMod = nil,
+    Method = ""
+}
+
+-- Tách logic chặn Remote ra function riêng (DRY & Không local)
+function HookNetwork(self, name, ...)
+    if AFKBypass.Enabled and name == "AFKInsanity" then
+        return -- Chặn hoàn toàn tín hiệu báo AFK lên server
+    end
+    return AFKBypass.OldHooks.FireServer(self, name, ...)
+end
+
+-- Tách logic fake input ra function riêng (DRY & Không local)
+function HookNamecall(self, ...)
+    AFKBypass.Method = getnamecallmethod()
+    -- Lừa hàm GetKeysPressed của game là ta luôn đang giữ phím Space
+    if AFKBypass.Enabled and not checkcaller() and self == UserInputService and AFKBypass.Method == "GetKeysPressed" then
+        return {Enum.KeyCode.Space}
+    end
+    return AFKBypass.OldHooks.Namecall(self, ...)
+end
+
+-- Function khởi tạo Hook, chỉ chạy 1 lần duy nhất
+function InitAFK()
+    if AFKBypass.Initialized then return end
+    AFKBypass.Initialized = true
+    
+    -- Hook vào thẳng Module Network của game (đúng đường dẫn trong source bro gửi)
+    AFKBypass.NetworkMod = require(ReplicatedStorage.Modules.Network.Network)
+    AFKBypass.OldHooks.FireServer = AFKBypass.NetworkMod.FireServerConnection
+    AFKBypass.NetworkMod.FireServerConnection = HookNetwork
+    
+    -- Hook namecall để bypass GetKeysPressed
+    AFKBypass.OldHooks.Namecall = hookmetamethod(game, "__namecall", HookNamecall)
+end
+
+-- Function trị triệt để lỗi AFK do văng cửa sổ (Tab out)
+function ForceWindowFocus()
+    if not getconnections then return end
+    -- Bắn event báo game rằng người chơi đang focus màn hình liên tục
+    for _, conn in ipairs(getconnections(UserInputService.WindowFocused)) do
+        conn:Fire()
+    end
+end
+
+-- Tích hợp vào UI của bro
+MyUIElements.Bypass:Toggle({
+    Title = "loc:AntiAFK",
+    Desc = "loc:AntiAFKDesc",
+    Flag = "ToggleAntiAFK",
+    Value = true,
+    Callback = function(state)
+        AFKBypass.Enabled = state
+        
+        if state then
+            InitAFK()
+            ForceWindowFocus()
+            
+            -- Lặp lại việc force focus để chống Tab-out
+            if not AFKBypass.Loop then
+                AFKBypass.Loop = RunService.Heartbeat:Connect(function()
+                    if AFKBypass.Enabled then
+                        ForceWindowFocus()
+                    end
+                end)
+            end
+        else
+            -- Tắt gọn gàng, tránh lặp lại loop (áp dụng đúng Rule 3)
+            if AFKBypass.Loop then
+                AFKBypass.Loop:Disconnect()
+                AFKBypass.Loop = nil
+            end
+        end
     end
 })
 
