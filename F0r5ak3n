@@ -138,10 +138,12 @@ WindUI:Localization({
             Server = "Server",
             Shop = "Shop",
             Stamina = "Stamina",
+            Survivors = "Survivors",
+            Killers = "Killers",
             Status = "Status",
             Information = "Information",
             Update = "Update",
-            UpdateDesc = "▪︎ Auto Buy Seed\n▪︎ Auto Buy Gear\n▪︎ Auto Sell All\n▪︎ Fix Fire Network:\n+ Auto Harvest\n+ Auto Steal Fruit\n▪︎ Fix Lag All Toggle",
+            UpdateDesc = "None Update",
             Settings = "Settings",
             SettingsManager = "Settings Manager",
             SettingsManagerDesc = "Configure and customize convenient features.",
@@ -153,15 +155,6 @@ WindUI:Localization({
             Copy_Discord_Invite_Desc = "Use this to copy the Discord group link.",
             Copy_Discord_Invite_Copied = "Copied!",
             Copy_Discord_Invite_Content = "Link copied to clipboard",
-            Main_Owner = "Main Owner",
-            Support_Owner = "Support Owner",
-            Security_Owner = "Security Owner",
-            Youtube_Desc = "Copy link youtube for subscribe!",
-            Discord_Desc = "Join our discord for more scripts!",
-            TikTok_Desc = "Copy the link to follow on TikTok!",
-            Copy_Link = "Copy Link",
-            Dev_Script = ">>          Dev Script          <<",
-            My_Link = ">>          My Link          <<",
             WindowSize = "Window Size",
             WindowSizeDesc = "Adjust the overall size of the WindUI interface.",
             OpenButtonScale = "Open Button Scale",
@@ -204,11 +197,12 @@ WindUI:Localization({
             Config_Content10 = "Config has already been deleted",
             Config_Content11 = "Config deleted successfully.",
             Auto_Load_Config = "Auto Load Config",
-            Auto_Load_Config_Desc = "Automatically syncs for the first 3 seconds, then auto-saves every 1 second.",
-            Auto_Load = "Auto Load",
-            Config_Content12 = "Please select a config first",
-            Disabled = "Disabled",
-            Config_Content13 = "Switched to Auto Save Config",
+            Auto_Load_Config_Desc = "Auto load the config every time the script is restarted.",
+            AutoLoad_Enabled = "Auto Load enabled",
+            AutoLoad_Disabled = "Auto Load disabled",
+            AutoLoad_NoSelection = "No config selected for Auto Load",
+            AutoLoad_NotExist = "Config not found, please select again",
+            AutoLoad_LoadFailed = "Failed to load config, please try again",
             Languages = "Languages",
             UI = "UI",
             Config = "Config",
@@ -358,6 +352,22 @@ WindUI:Localization({
             AutoMinigameDesc = "Auto complete the minigame with the tree planted by Azure.",
             AntiAFK = "Anti AFK",
             AntiAFKDesc = "Ignore the game's AFK detection mechanism.",
+            TeleportHeight = "Teleport Height",
+            TeleportHeightDesc = "Set the height used when teleporting.",
+            TeleportUp = "Teleport Up",
+            TeleportUpDesc = "Teleport upward from your current position.",
+            SelectSurvivors = "Select Survivor",
+            SelectSurvivorsDesc = "Select a survivor to teleport to.",
+            TeleportToSurvivors = "Teleport To Survivor",
+            TeleportToSurvivorsDesc = "Teleport to the selected survivor.",
+            SelectKiller = "Select Killer",
+            SelectKillerDesc = "Select a killer to teleport to.",
+            TeleportToKillers = "Teleport To Killer",
+            TeleportToKillersDesc = "Teleport to the selected killer.",
+            SelectGenerator = "Select Generator",
+            SelectGeneratorDesc = "Select a generator to teleport to.",
+            TeleportToGenerator = "Teleport To Generator",
+            TeleportToGeneratorDesc = "Teleport to the selected generator.",
         },
         vi = {
             HubTitle = "Axos Hub",
@@ -380,10 +390,12 @@ WindUI:Localization({
             Server = "Máy chủ",
             Shop = "Cửa hàng",
             Stamina = "Thể lực",
+            Survivors = "Kẻ sống sót",
+            Killers = "Sát Nhân",
             Status = "Thông số",
             Information = "Thông tin",
             Update = "Cập nhật",
-            UpdateDesc = "▪︎ Tự mua hạt giống\n▪︎ Tự mua trang bị\n▪︎ Tự Bán Tất Cả Trái\n▪︎ Sửa Fire Network:\n+ Tự thu hoạch\n+ Tự ăn trộm trái\n▪︎ Sửa lỗi lag toggle",
+            UpdateDesc = "Không có update",
             Settings = "Cài đặt",
             SettingsManager = "Quản lý cài đặt",
             SettingsManagerDesc = "Cấu hình và tùy chỉnh các tính năng tiện ích.",
@@ -395,15 +407,6 @@ WindUI:Localization({
             Copy_Discord_Invite_Desc = "Dùng để sao chép liên kết nhóm Discord.",
             Copy_Discord_Invite_Copied = "Đã sao chép!",
             Copy_Discord_Invite_Content = "Đã sao chép liên kết vào bộ nhớ tạm",
-            Main_Owner = "Chủ sở hữu chính",
-            Support_Owner = "Chủ sở hữu hỗ trợ",
-            Security_Owner = "Chủ sở hữu bảo mật",
-            Youtube_Desc = "Sao chép liên kết YouTube để đăng ký!",
-Discord_Desc = "Tham gia Discord của chúng tôi để nhận thêm nhiều script!",
-            TikTok_Desc = "Sao chép liên kết để theo dõi trên TikTok!",
-            Copy_Link = "Sao chép liên kết",
-            Dev_Script = ">>          Script Nhà Phát Triển          <<",
-            My_Link = ">>          Liên Kết Của Tôi          <<",
             WindowSize = "Kích thước cửa sổ",
             WindowSizeDesc = "Điều chỉnh kích thước tổng thể của giao diện WindUI.",
             OpenButtonScale = "Kích thước nút mở",
@@ -446,11 +449,13 @@ Load_Config_Desc = "Nhấn để tải cấu hình đã chọn.",
             Config_Content10 = "Cấu hình đã được xóa trước đó",
             Config_Content11 = "Đã xóa cấu hình thành công.",
             Auto_Load_Config = "Tự động tải cấu hình",
-            Auto_Load_Config_Desc = "Tự động đồng bộ trong 3 giây đầu, sau đó tự động lưu mỗi 1 giây.",
-            Auto_Load = "Tự động tải",
-            Config_Content12 = "Vui lòng chọn một cấu hình trước",
-            Disabled = "Đã tắt",
+            Auto_Load_Config_Desc = "Tự động tải cấu hình mỗi khi bật lại script.",
             Config_Content13 = "Đã chuyển sang Tự động lưu cấu hình",
+            AutoLoad_Enabled = "Đã bật Auto Load",
+            AutoLoad_Disabled = "Đã tắt Auto Load",
+            AutoLoad_NoSelection = "Chưa chọn config để bật Auto Load",
+            AutoLoad_NotExist = "Config không tồn tại, vui lòng chọn lại",
+            AutoLoad_LoadFailed = "Không thể load config, vui lòng thử lại",
             Languages = "Ngôn ngữ",
             UI = "Giao diện",
             Config = "Cấu hình",
@@ -600,6 +605,22 @@ Load_Config_Desc = "Nhấn để tải cấu hình đã chọn.",
             AutoMinigameDesc = "Tự động hoàn thành trò chơi nhỏ với cái cây do Azure trồng.",
             AntiAFK = "Chống AFK",
             AntiAFKDesc = "Bỏ qua cơ chế phát hiện AFK của trò chơi.",
+            TeleportHeight = "Độ cao dịch chuyển",
+            TeleportHeightDesc = "Đặt độ cao khi dịch chuyển.",
+            TeleportUp = "Dịch chuyển lên",
+            TeleportUpDesc = "Dịch chuyển lên trên từ vị trí hiện tại.",
+            SelectSurvivors = "Chọn Survivor",
+            SelectSurvivorsDesc = "Chọn Survivor để dịch chuyển đến.",
+            TeleportToSurvivors = "Dịch chuyển đến Survivor",
+            TeleportToSurvivorsDesc = "Dịch chuyển đến Survivor đã chọn.",
+            SelectKiller = "Chọn Killer",
+            SelectKillerDesc = "Chọn Killer để dịch chuyển đến.",
+            TeleportToKillers = "Dịch chuyển đến Killer",
+            TeleportToKillersDesc = "Dịch chuyển đến Killer đã chọn.",
+            SelectGenerator = "Chọn máy phát điện",
+            SelectGeneratorDesc = "Chọn máy phát điện để dịch chuyển đến.",
+            TeleportToGenerator = "Dịch chuyển đến máy phát điện",
+            TeleportToGeneratorDesc = "Dịch chuyển đến máy phát điện đã chọn.",
         }
     }
 })
@@ -618,6 +639,7 @@ local Window = WindUI:CreateWindow({
     Author = "loc:GameTitle",
     Folder = "Axos Hub",
     Size = UDim2.fromOffset(620, 480),
+    MinSize = Vector2.new(620, 480),
     Transparent = getgenv().TransparencyEnabled,
     Theme = "Blue",
     Resizable = true,
@@ -694,7 +716,7 @@ local OpenButtonConfig = {
 
 Window:EditOpenButton(OpenButtonConfig)
 
-Window:Tag({Title = "v0.0.5", Icon = "cog", Color = Color3.fromHex("#30ff6a")})
+Window:Tag({Title = "v0.0.6", Icon = "cog", Color = Color3.fromHex("#30ff6a")})
 
 local Tabs = {
     About = Window:Section({ Title = "loc:About", Opened = true }),
@@ -724,8 +746,13 @@ local TabHandles = {
         Locked = false, ShowTabTitle = true, Border = true, LayoutOrder = 1 
     }),
     
-    Shop = Tabs.Features:Tab({ 
-        Title = "loc:Shop", Icon = "shopping-cart", Desc = "Cửa Hàng", IconThemed = true, 
+    Survivors = Tabs.Features:Tab({ 
+        Title = "loc:Survivors", Icon = "footprints", Desc = "Người sống sót", IconThemed = true, 
+        Locked = false, ShowTabTitle = true, Border = true, LayoutOrder = 1 
+    }),
+    
+    Killers = Tabs.Features:Tab({ 
+        Title = "loc:Killers", Icon = "swords", Desc = "Sát nhân", IconThemed = true, 
         Locked = false, ShowTabTitle = true, Border = true, LayoutOrder = 1 
     }),
     
@@ -734,7 +761,7 @@ local TabHandles = {
         Locked = false, ShowTabTitle = true, Border = true, LayoutOrder = 1 
     }),
     
-    Items = Tabs.Gameplay:Tab({ 
+    Status = Tabs.Gameplay:Tab({ 
         Title = "loc:Status", Icon = "toolbox", Desc = "Thông Số", IconThemed = true, 
         Locked = false, ShowTabTitle = true, Border = true, LayoutOrder = 1 
     }),
@@ -1024,6 +1051,66 @@ local ElementConfigs = {
     },
 
     {
+        ID = "TeleportUp",
+        Type = "Section",
+        Parent = TabHandles.TP,
+        Config = {
+            Title = "loc:TeleportUp",
+            Desc = "loc:TeleportUpDesc",
+            Icon = "arrow-up",
+            Box = true,
+            BoxBorder = true,
+            Opened = false,
+            Hover = true,
+        }
+    },
+
+    {
+        ID = "TeleportToGenerator",
+        Type = "Section",
+        Parent = TabHandles.TP,
+        Config = {
+            Title = "loc:TeleportToGenerator",
+            Desc = "loc:TeleportToGeneratorDesc",
+            Icon = "factory",
+            Box = true,
+            BoxBorder = true,
+            Opened = false,
+            Hover = true,
+        }
+    },
+
+    {
+        ID = "TeleportToSurvivors",
+        Type = "Section",
+        Parent = TabHandles.TP,
+        Config = {
+            Title = "loc:TeleportToSurvivors",
+            Desc = "loc:TeleportToSurvivorsDesc",
+            Icon = "person-standing",
+            Box = true,
+            BoxBorder = true,
+            Opened = false,
+            Hover = true,
+        }
+    },
+
+    {
+        ID = "TeleportToKillers",
+        Type = "Section",
+        Parent = TabHandles.TP,
+        Config = {
+            Title = "loc:TeleportToKillers",
+            Desc = "loc:TeleportToKillersDesc",
+            Icon = "skull",
+            Box = true,
+            BoxBorder = true,
+            Opened = false,
+            Hover = true,
+        }
+    },
+
+    {
         ID = "Camlock",
         Type = "Section",
         Parent = TabHandles.Player,
@@ -1241,7 +1328,7 @@ if not Core.Request then
     end
 end
 
-local GithubRawUrl = "https://raw.githubusercontent.com/SLK-GAMING-MOD/Open-soure/refs/heads/main/DiscordLink.lua" 
+local GithubRawUrl = "https://raw.githubusercontent.com/SLK-GAMING-MOD/Open-soure/refs/heads/main/AxosDiscordLink.lua" 
 local InviteCode = "sGVEDYD2y"
 
 local gitRes = Core.Request({ Url = GithubRawUrl })
@@ -1265,7 +1352,7 @@ local DiscordAPI =
 local DiscordInfo = TabHandles.Info:Paragraph({
     Title = "Loading Discord...",
     Desc = "Members: --\nOnline: --",
-    Image = "rbxassetid://109995816235688",
+    Image = "rbxassetid://81224092275973",
     ImageSize = 42,
 })
 
@@ -1350,85 +1437,6 @@ Core.Spawn("LoadDiscord", function()
 end)
 
 TabHandles.Info:Divider()
-
-TabHandles.Info:Section({
-    Title = "loc:Dev_Script",
-    TextXAlignment = "Center",
-    TextSize = 17
-})
-
-TabHandles.Info:Divider()
-
-TabHandles.Info:Paragraph({
-    Title = "loc:Main_Owner",
-    Desc = "@72ms.",
-    Image = "rbxassetid://137817619970621",
-    ImageSize = 30,
-})
-
-TabHandles.Info:Divider()
-
-TabHandles.Info:Section({
-    Title = "loc:My_Link",
-    TextXAlignment = "Center",
-    TextSize = 17
-})
-
-TabHandles.Info:Divider()
-
-TabHandles.Info:Paragraph({
-    Title = "Youtube",
-    Desc = "loc:Youtube_Desc",
-    Image = "rbxassetid://122312005360431",
-    ImageSize = 30,
-    Buttons = {
-        {
-            Icon = "copy",
-            Title = "loc:Copy_Link",
-            Callback = function()
-                if setclipboard then
-                    setclipboard("https://www.youtube.com/@1devoffice")
-                end
-            end
-        }
-    }
-})
-
-TabHandles.Info:Paragraph({
-    Title = "Discord",
-    Desc = "loc:Discord_Desc",
-    Image = "rbxassetid://109995816235688",
-    ImageSize = 30,
-    Buttons = {
-        {
-            Icon = "copy",
-            Title = "loc:Copy_Link",
-            Callback = function()
-                if setclipboard then
-                    setclipboard("https://discord.gg/" .. InviteCode)
-                end
-            end
-        }
-    }
-})
-
-TabHandles.Info:Paragraph({
-    Title = "TikTok",
-    Desc = "loc:TikTok_Desc",
-    Image = "rbxassetid://122312005360431",
-    ImageSize = 30,
-    Buttons = {
-        {
-            Icon = "copy",
-            Title = "loc:Copy_Link",
-            Callback = function()
-                if setclipboard then
-                    setclipboard("https://tiktok.com/@idk")
-                end
-            end
-        }
-    }
-})
 
 if getgenv().MyESPFramwork then
     getgenv().MyESPFramwork:RemoveAllEsp()
@@ -1866,29 +1874,27 @@ Farm = {
     IsHolding = false
 }
 
-function Farm.GetEntity(char)
+Farm.GetEntity = function(char)
     if not char then return nil, false end
-    local hrp = char:FindFirstChild("HumanoidRootPart")
-    local hum = char:FindFirstChildWhichIsA("Humanoid")
-    return hrp, (hum and hum.Health > 0)
+    return char:FindFirstChild("HumanoidRootPart"), (char:FindFirstChildWhichIsA("Humanoid") and char:FindFirstChildWhichIsA("Humanoid").Health > 0)
 end
 
-function Farm.IsKillerNear(pos)
+Farm.IsKillerNear = function(pos)
     if not Farm.SafeModeGen then return false end
     for _, k in pairs(killersFolder:GetChildren()) do
-        local hrp, alive = Farm.GetEntity(k)
-        if hrp and alive and (hrp.Position - pos).Magnitude <= Farm.SafeRangeGen then
+        Farm.TempHrp, Farm.TempAlive = Farm.GetEntity(k)
+        if Farm.TempHrp and Farm.TempAlive and (Farm.TempHrp.Position - pos).Magnitude <= Farm.SafeRangeGen then
             return true
         end
     end
     return false
 end
 
-function Farm.IsOccupied(pos, me)
+Farm.IsOccupied = function(pos, me)
     for _, s in pairs(survivorsFolder:GetChildren()) do
         if s ~= me then
-            local hrp, alive = Farm.GetEntity(s)
-            if hrp and alive and (hrp.Position - pos).Magnitude < 2.5 then
+            Farm.TempHrp, Farm.TempAlive = Farm.GetEntity(s)
+            if Farm.TempHrp and Farm.TempAlive and (Farm.TempHrp.Position - pos).Magnitude < 2.5 then
                 return true
             end
         end
@@ -1896,132 +1902,126 @@ function Farm.IsOccupied(pos, me)
     return false
 end
 
--- Rule 3: Gộp chung FindNearestSurvivor và FindNearestSurvivorExcept làm 1 logic
-function Farm.FindSurvivor(hrp, me, exclude)
-    local best, minDist = nil, math.huge
+Farm.FindSurvivor = function(hrp, me, exclude)
+    Farm.BestTarget = nil
+    Farm.MinDist = math.huge
     for _, s in pairs(survivorsFolder:GetChildren()) do
         if s ~= me then
-            local sHrp, alive = Farm.GetEntity(s)
-            if sHrp and alive and sHrp ~= exclude then
-                local dist = (sHrp.Position - hrp.Position).Magnitude
-                if dist < minDist then
-                    minDist = dist
-                    best = sHrp
+            Farm.TempHrp, Farm.TempAlive = Farm.GetEntity(s)
+            if Farm.TempHrp and Farm.TempAlive and Farm.TempHrp ~= exclude then
+                Farm.CurrentDist = (Farm.TempHrp.Position - hrp.Position).Magnitude
+                if Farm.CurrentDist < Farm.MinDist then
+                    Farm.MinDist = Farm.CurrentDist
+                    Farm.BestTarget = Farm.TempHrp
                 end
             end
         end
     end
-    return best
+    return Farm.BestTarget
 end
 
-function Farm.ChangeTarget()
-    local me = Players.LocalPlayer.Character
-    local hrp = Farm.GetEntity(me)
-    if not hrp then return end
+Farm.ChangeTarget = function()
+    Farm.TempHrp = Farm.GetEntity(localPlayer.Character)
+    if not Farm.TempHrp then return end
 
-    local newTarget = Farm.FindSurvivor(hrp, me, Farm.Target)
+    Farm.NewTarget = Farm.FindSurvivor(Farm.TempHrp, localPlayer.Character, Farm.Target)
 
-    -- Giữ nguyên target cũ nếu nó vẫn hợp lệ
-    if not newTarget and Farm.Target and Farm.Target.Parent and Farm.Target:IsDescendantOf(survivorsFolder) and select(2, Farm.GetEntity(Farm.Target.Parent)) then
+    if not Farm.NewTarget and Farm.Target and Farm.Target.Parent and Farm.Target:IsDescendantOf(survivorsFolder) and select(2, Farm.GetEntity(Farm.Target.Parent)) then
         return
     end
-    Farm.Target = newTarget or Farm.FindSurvivor(hrp, me)
+    Farm.Target = Farm.NewTarget or Farm.FindSurvivor(Farm.TempHrp, localPlayer.Character)
 end
 
-function Farm.ProcKiller()
-    local me = Players.LocalPlayer.Character
-    local hrp, alive = Farm.GetEntity(me)
+Farm.ProcKiller = function()
+    Farm.TempHrp, Farm.TempAlive = Farm.GetEntity(localPlayer.Character)
 
-    if not (me and me:IsDescendantOf(killersFolder) and alive) then
+    if not (localPlayer.Character and localPlayer.Character:IsDescendantOf(killersFolder) and Farm.TempAlive) then
         Farm.Target = nil
         return
     end
 
     if not (Farm.Target and Farm.Target.Parent and Farm.Target:IsDescendantOf(survivorsFolder) and select(2, Farm.GetEntity(Farm.Target.Parent))) then
-        Farm.Target = Farm.FindSurvivor(hrp, me)
+        Farm.Target = Farm.FindSurvivor(Farm.TempHrp, localPlayer.Character)
     end
 
     if Farm.Target then
-        hrp.CFrame = CFrame.lookAt((Farm.Target.CFrame * CFrame.new(0, 0, 3)).Position, Farm.Target.Position)
+        Farm.TempHrp.CFrame = CFrame.lookAt((Farm.Target.CFrame * CFrame.new(0, 0, 3)).Position, Farm.Target.Position)
     end
 end
 
-function Farm.FindSafeGen()
-    local mapFolder = Workspace:FindFirstChild("Map")
-    local inGame = mapFolder and mapFolder:FindFirstChild("Ingame") and mapFolder.Ingame:FindFirstChild("Map")
-    
-    if inGame and inGame ~= Farm.CurrentMap then
-        Farm.CurrentMap = inGame
+Farm.FindSafeGen = function()
+    if TargetMapFolder and TargetMapFolder ~= Farm.CurrentMap then
+        Farm.CurrentMap = TargetMapFolder
         Farm.LoadTime = tick()
     end
-    if not inGame then return end
+    
+    if not TargetMapFolder then return end
 
-    for _, gen in pairs(inGame:GetChildren()) do
+    for _, gen in pairs(TargetMapFolder:GetChildren()) do
         if gen.Name == "Generator" and gen:FindFirstChild("Progress") and gen.Progress.Value < 100 then
-            local part = gen.PrimaryPart or gen:FindFirstChildWhichIsA("BasePart")
-            if part and not Farm.IsKillerNear(part.Position) then
-                return gen, part
+            Farm.GenPart = gen.PrimaryPart or gen:FindFirstChildWhichIsA("BasePart")
+            if Farm.GenPart and not Farm.IsKillerNear(Farm.GenPart.Position) then
+                return gen, Farm.GenPart
             end
         end
     end
 end
 
-function Farm.GetSafePos(part, me)
-    local positions = {
-        part.CFrame * CFrame.new(0,0,-6),
-        part.CFrame * CFrame.new(6,0,0),
-        part.CFrame * CFrame.new(-6,0,0)
+Farm.GetSafePos = function(part, me)
+    Farm.Positions = {
+        part.CFrame * CFrame.new(0, 0, -6),
+        part.CFrame * CFrame.new(6, 0, 0),
+        part.CFrame * CFrame.new(-6, 0, 0)
     }
-    for _, posCF in pairs(positions) do
+    for _, posCF in pairs(Farm.Positions) do
         if not Farm.IsOccupied(posCF.Position, me) and not Farm.IsKillerNear(posCF.Position) then
             return CFrame.lookAt(posCF.Position, part.Position)
         end
     end
 end
 
-function Farm.HandlePrompt(gen)
-    local prompt = gen:FindFirstChild("Main") and gen.Main:FindFirstChild("Prompt")
-    if prompt and prompt:IsA("ProximityPrompt") and (tick() - Farm.LoadTime) >= 3 and not Farm.IsHolding then
+Farm.HandlePrompt = function(gen)
+    Farm.Prompt = gen:FindFirstChild("Main") and gen.Main:FindFirstChild("Prompt")
+    if Farm.Prompt and Farm.Prompt:IsA("ProximityPrompt") and (tick() - Farm.LoadTime) >= 3 and not Farm.IsHolding then
         Farm.IsHolding = true
         task.spawn(function()
             pcall(function()
-                prompt.HoldDuration = 0.125
-                prompt:InputHoldBegin()
+                Farm.Prompt.HoldDuration = 0.125
+                Farm.Prompt:InputHoldBegin()
                 task.wait(0.125)
-                if prompt.Parent then prompt:InputHoldEnd() end
+                if Farm.Prompt.Parent then Farm.Prompt:InputHoldEnd() end
             end)
             Farm.IsHolding = false
         end)
     end
 end
 
-function Farm.ProcGen()
+Farm.ProcGen = function()
     if Farm.IsHolding then return end
     
-    local me = Players.LocalPlayer.Character
-    local hrp, alive = Farm.GetEntity(me)
+    Farm.TempHrp, Farm.TempAlive = Farm.GetEntity(localPlayer.Character)
     
-    if not (me and me:IsDescendantOf(survivorsFolder) and alive and hrp) then 
+    if not (localPlayer.Character and localPlayer.Character:IsDescendantOf(survivorsFolder) and Farm.TempAlive and Farm.TempHrp) then 
         Farm.LastPos = nil
         Farm.CurrentGen = nil
         return 
     end
 
-    local foundGen, genPart = Farm.FindSafeGen()
-    if not foundGen then return end
+    Farm.FoundGen, Farm.GenPart = Farm.FindSafeGen()
+    if not Farm.FoundGen then return end
 
-    local valid = Farm.LastPos and (hrp.Position - Farm.LastPos.Position).Magnitude < 3 and not Farm.IsOccupied(Farm.LastPos.Position, me)
+    Farm.IsValid = Farm.LastPos and (Farm.TempHrp.Position - Farm.LastPos.Position).Magnitude < 3 and not Farm.IsOccupied(Farm.LastPos.Position, localPlayer.Character)
 
-    if not valid or Farm.CurrentGen ~= foundGen then
-        local pos = Farm.GetSafePos(genPart, me)
-        if pos then
-            Farm.LastPos = pos
-            Farm.CurrentGen = foundGen
-            hrp.CFrame = pos
+    if not Farm.IsValid or Farm.CurrentGen ~= Farm.FoundGen then
+        Farm.NewPos = Farm.GetSafePos(Farm.GenPart, localPlayer.Character)
+        if Farm.NewPos then
+            Farm.LastPos = Farm.NewPos
+            Farm.CurrentGen = Farm.FoundGen
+            Farm.TempHrp.CFrame = Farm.NewPos
         end
     end
 
-    Farm.HandlePrompt(foundGen)
+    Farm.HandlePrompt(Farm.FoundGen)
 end
 
 task.spawn(function()
@@ -2942,9 +2942,445 @@ MyUIElements.Server:Button({
 
 local ESP = getgenv().MyESPFramwork
 
--- Tracer Settings
+local ESPManager = {
+    ESP = ESP,
+    UI = MyUIElements,
+    State = {
+        CurrentMap = nil
+    },
+    Constants = {
+        Modes = {"Highlight", "Text", "Box", "Tracer"},
+        TextBasic = {"Name", "HP", "Distance"},
+        TextProgress = {"Name", "Progress", "Distance"},
+        TracerOrigin = {
+            Top = "Top",
+            Bottom = "Bottom",
+            Center = "Center",
+            Mouse = "Mouse"
+        }
+    },
+    Entries = {},
+    FolderRouters = {},
+    Connections = {
+        Global = {},
+        Map = {}
+    },
+    MapEntryKeys = {"Generator", "FakeGenerator"}
+}
 
-MyUIElements.TracerSettings:Dropdown({
+function ESPManager:CreateBoolMap(values, defaults)
+    local map = {}
+    for _, value in pairs(values or {}) do
+        map[value] = defaults and defaults[value] or false
+    end
+    return map
+end
+
+function ESPManager:BoolMapToArray(map, values)
+    local selected = {}
+    for _, value in pairs(values or {}) do
+        if map and map[value] then
+            selected[#selected + 1] = value
+        end
+    end
+    return selected
+end
+
+function ESPManager:ApplySelection(target, values, selectedValues)
+    for _, value in pairs(values or {}) do
+        target[value] = false
+    end
+
+    for key, value in pairs(selectedValues or {}) do
+        local selected = type(key) == "string" and key or value
+        if target[selected] ~= nil then
+            target[selected] = true
+        end
+    end
+end
+
+function ESPManager:GetObjectDebugId(object)
+    if not object then
+        return "Unknown"
+    end
+
+    local success, result = pcall(object.GetDebugId, object)
+    if success and result then
+        return result
+    end
+
+    return object.Name or "Unknown"
+end
+
+function ESPManager:GetObjectId(entry, object)
+    return entry.IdPrefix .. self:GetObjectDebugId(object)
+end
+
+function ESPManager:GetChildrenMatching(parent, checker)
+    local list = {}
+    if not parent then
+        return list
+    end
+
+    for _, child in pairs(parent:GetChildren()) do
+        if not checker or checker(child) then
+            list[#list + 1] = child
+        end
+    end
+
+    return list
+end
+
+function ESPManager:GetProgressValue(entry, object)
+    if not entry.ProgressChild or not object then
+        return nil
+    end
+
+    local progress = object:FindFirstChild(entry.ProgressChild)
+    if progress and progress:IsA("NumberValue") then
+        return progress
+    end
+
+    return nil
+end
+
+function ESPManager:ShouldRender(entry, object, progress)
+    if entry.ShouldRenderObject then
+        return entry.ShouldRenderObject(self, entry, object, progress)
+    end
+    return true
+end
+
+function ESPManager:GetDisplayName(entry, object, progress)
+    if entry.GetDisplayName then
+        return entry.GetDisplayName(self, entry, object, progress)
+    end
+    return object.Name
+end
+
+function ESPManager:GetESPOptions(entry, object, progress)
+    return {
+        UseHighlight = entry.Config.Types.Highlight,
+        UseText = entry.Config.Types.Text,
+        UseBox = entry.Config.Types.Box,
+        UseTracer = entry.Config.Types.Tracer,
+        Color = entry.Config.Color,
+        ShowName = entry.Config.TextFormat.Name or false,
+        ShowHP = entry.Config.TextFormat.HP or false,
+        ShowDistance = entry.Config.TextFormat.Distance or false,
+        CustomName = self:GetDisplayName(entry, object, progress)
+    }
+end
+
+function ESPManager:DisconnectConnection(connection)
+    if connection then
+        connection:Disconnect()
+    end
+end
+
+function ESPManager:DisconnectConnectionTable(connectionTable)
+    for key, connection in pairs(connectionTable or {}) do
+        self:DisconnectConnection(connection)
+        connectionTable[key] = nil
+    end
+end
+
+function ESPManager:UnregisterObject(entry, id)
+    self.ESP:Huy(id)
+    entry.ActiveIds[id] = nil
+
+    if entry.Watched[id] then
+        self:DisconnectConnection(entry.Watched[id])
+        entry.Watched[id] = nil
+    end
+end
+
+function ESPManager:ClearEntry(entry)
+    for id in pairs(entry.ActiveIds) do
+        self:UnregisterObject(entry, id)
+    end
+
+    for id in pairs(entry.Watched) do
+        if entry.Watched[id] then
+            self:DisconnectConnection(entry.Watched[id])
+            entry.Watched[id] = nil
+        end
+    end
+end
+
+function ESPManager:WatchProgress(entry, object, id, progress)
+    if not progress or entry.Watched[id] then
+        return
+    end
+
+    entry.Watched[id] = progress:GetPropertyChangedSignal("Value"):Connect(function()
+        if not entry.Config.Enabled then
+            self:UnregisterObject(entry, id)
+            return
+        end
+
+        if object and object.Parent then
+            self:RegisterObject(entry, object, id)
+        else
+            self:UnregisterObject(entry, id)
+        end
+    end)
+end
+
+function ESPManager:RegisterObject(entry, object, id)
+    if not object then
+        return
+    end
+
+    id = id or self:GetObjectId(entry, object)
+    local progress = self:GetProgressValue(entry, object)
+
+    if progress then
+        self:WatchProgress(entry, object, id, progress)
+    end
+
+    if not self:ShouldRender(entry, object, progress) then
+        self:UnregisterObject(entry, id)
+        return
+    end
+
+    self.ESP:DangKy(id, object, self:GetESPOptions(entry, object, progress))
+    entry.ActiveIds[id] = true
+end
+
+function ESPManager:UpdateEntry(entry)
+    if not entry then
+        return
+    end
+
+    if not entry.Config.Enabled then
+        self:ClearEntry(entry)
+        return
+    end
+
+    local liveIds = {}
+
+    for _, object in pairs(entry.GetObjects(self, entry) or {}) do
+        if object and (not entry.Matcher or entry.Matcher(self, entry, object)) then
+            local id = self:GetObjectId(entry, object)
+            liveIds[id] = true
+            self:RegisterObject(entry, object, id)
+        end
+    end
+
+    for id in pairs(entry.ActiveIds) do
+        if not liveIds[id] then
+            self:UnregisterObject(entry, id)
+        end
+    end
+end
+
+function ESPManager:UpdateEntryByKey(key)
+    self:UpdateEntry(self.Entries[key])
+end
+
+function ESPManager:AddFolderRoute(folder, route)
+    if not folder then
+        return
+    end
+
+    if not self.FolderRouters[folder] then
+        self.FolderRouters[folder] = {
+            Folder = folder,
+            Routes = {},
+            Connections = {}
+        }
+    end
+
+    self.FolderRouters[folder].Routes[#self.FolderRouters[folder].Routes + 1] = route
+end
+
+function ESPManager:StartFolderRouter(folder)
+    local router = self.FolderRouters[folder]
+    if not router or router.Connections.Added then
+        return
+    end
+
+    router.Connections.Added = folder.ChildAdded:Connect(function(child)
+        for _, route in pairs(router.Routes) do
+            local entry = self.Entries[route.EntryKey]
+            if entry and (not route.Match or route.Match(child)) and entry.Config.Enabled then
+                task.delay(route.Delay or 0, function()
+                    if entry.Config.Enabled and child.Parent == folder then
+                        if route.SingleObject then
+                            self:RegisterObject(entry, child)
+                        else
+                            self:UpdateEntry(entry)
+                        end
+                    end
+                end)
+            end
+        end
+    end)
+
+    router.Connections.Removed = folder.ChildRemoved:Connect(function(child)
+        for _, route in pairs(router.Routes) do
+            local entry = self.Entries[route.EntryKey]
+            if entry and (not route.Match or route.Match(child)) then
+                self:UnregisterObject(entry, self:GetObjectId(entry, child))
+            end
+        end
+    end)
+end
+
+function ESPManager:StartAllFolderRouters()
+    for folder in pairs(self.FolderRouters) do
+        self:StartFolderRouter(folder)
+    end
+end
+
+function ESPManager:BindEntryUI(entry)
+    entry.UI:Dropdown({
+        Title = "loc:ESPMode",
+        Desc = "loc:ESPModeDesc",
+        Flag = entry.Flags.Type,
+        Values = self.Constants.Modes,
+        Value = self:BoolMapToArray(entry.Config.Types, self.Constants.Modes),
+        Multi = true,
+        AllowNone = true,
+        Callback = function(selectedValues)
+            self:ApplySelection(entry.Config.Types, self.Constants.Modes, selectedValues)
+            self:UpdateEntry(entry)
+        end
+    })
+
+    entry.UI:Dropdown({
+        Title = "loc:SetupEspText",
+        Desc = "loc:SetupEspTextDesc",
+        Flag = entry.Flags.Text,
+        Values = entry.TextValues,
+        Value = self:BoolMapToArray(entry.Config.TextFormat, entry.TextValues),
+        Multi = true,
+        AllowNone = true,
+        Callback = function(selectedValues)
+            self:ApplySelection(entry.Config.TextFormat, entry.TextValues, selectedValues)
+            self:UpdateEntry(entry)
+        end
+    })
+
+    entry.UI:Colorpicker({
+        Title = "loc:EspColor",
+        Desc = "loc:EspColorDesc",
+        Flag = entry.Flags.Color,
+        Default = entry.Config.Color,
+        Transparency = 0,
+        Locked = false,
+        Callback = function(color)
+            entry.Config.Color = color
+            self:UpdateEntry(entry)
+        end
+    })
+
+    entry.UI:Toggle({
+        Title = entry.Toggle.Title,
+        Desc = entry.Toggle.Desc,
+        Flag = entry.Flags.Toggle,
+        Value = false,
+        Callback = function(state)
+            entry.Config.Enabled = state
+            self:UpdateEntry(entry)
+        end
+    })
+end
+
+function ESPManager:AddEntry(key, data)
+    data.Key = key
+    data.ActiveIds = {}
+    data.Watched = {}
+    data.Config = {
+        Enabled = false,
+        Types = self:CreateBoolMap(self.Constants.Modes, data.DefaultTypes),
+        TextFormat = self:CreateBoolMap(data.TextValues, data.DefaultText),
+        Color = data.DefaultColor
+    }
+
+    if not data.GetObjects then
+        data.GetObjects = function(manager, entry)
+            local source = entry.UseCurrentMap and manager.State.CurrentMap or entry.SourceFolder
+            return manager:GetChildrenMatching(source, function(object)
+                return not entry.Matcher or entry.Matcher(manager, entry, object)
+            end)
+        end
+    end
+
+    self.Entries[key] = data
+    self:BindEntryUI(data)
+    return data
+end
+
+function ESPManager:SetCurrentMap(mapFolder)
+    if self.State.CurrentMap == mapFolder then
+        return
+    end
+
+    for _, key in pairs(self.MapEntryKeys) do
+        self:ClearEntry(self.Entries[key])
+    end
+
+    self:DisconnectConnectionTable(self.Connections.Map)
+    self.State.CurrentMap = mapFolder
+
+    if not mapFolder then
+        return
+    end
+
+    self.Connections.Map.Added = mapFolder.ChildAdded:Connect(function(child)
+        for _, key in pairs(self.MapEntryKeys) do
+            local entry = self.Entries[key]
+            if entry and entry.Matcher(self, entry, child) and entry.Config.Enabled then
+                task.delay(entry.AddDelay or 0, function()
+                    if self.State.CurrentMap == mapFolder and child.Parent == mapFolder and entry.Config.Enabled then
+                        self:RegisterObject(entry, child)
+                    end
+                end)
+            end
+        end
+    end)
+
+    self.Connections.Map.Removed = mapFolder.ChildRemoved:Connect(function(child)
+        for _, key in pairs(self.MapEntryKeys) do
+            local entry = self.Entries[key]
+            if entry and entry.Matcher(self, entry, child) then
+                self:UnregisterObject(entry, self:GetObjectId(entry, child))
+            end
+        end
+    end)
+
+    task.delay(1, function()
+        if self.State.CurrentMap == mapFolder then
+            for _, key in pairs(self.MapEntryKeys) do
+                self:UpdateEntryByKey(key)
+            end
+        end
+    end)
+end
+
+function ESPManager:StartPolling()
+    task.spawn(function()
+        while task.wait(0.5) do
+            for _, entry in pairs(self.Entries) do
+                if entry.PollInterval and entry.Config.Enabled then
+                    entry._LastPoll = entry._LastPoll or 0
+                    entry._LastPoll = entry._LastPoll + 0.5
+
+                    if entry._LastPoll >= entry.PollInterval then
+                        entry._LastPoll = 0
+                        self:UpdateEntry(entry)
+                    end
+                end
+            end
+        end
+    end)
+end
+
+self = ESPManager
+
+ESPManager.UI.TracerSettings:Dropdown({
     Title = "loc:TracerSettings",
     Desc = "loc:TracerSettingsDesc",
     Flag = "ESP_Global_Tracer_Origin",
@@ -2953,1234 +3389,530 @@ MyUIElements.TracerSettings:Dropdown({
     Multi = false,
     AllowNone = false,
     Callback = function(selectedValue)
-        if selectedValue == "Top" then 
-            ESP.TracerOrigin = "Top"
-        elseif selectedValue == "Bottom" then 
-            ESP.TracerOrigin = "Bottom"
-        elseif selectedValue == "Center" then 
-            ESP.TracerOrigin = "Center"
-        elseif selectedValue == "Mouse" then 
-            ESP.TracerOrigin = "Mouse" 
-        end
+        ESP.TracerOrigin = ESPManager.Constants.TracerOrigin[selectedValue] or "Top"
     end
 })
 
--- Esp Survivors
-
-local SurvivorESPConfig = {
-    Enabled = false,
-    Types = { Highlight = true, Text = false, Box = false, Tracer = false },
-    TextFormat = { Name = true, HP = false, Distance = false },
-    Color = Color3.fromRGB(50, 255, 50)
-}
-
-local function UpdateSurvivorESP()
-    if SurvivorESPConfig.Enabled then
-        for _, char in pairs(survivorsFolder:GetChildren()) do
-            ESP:DangKy("Survivor_" .. char.Name, char, {
-                UseHighlight = SurvivorESPConfig.Types.Highlight,
-                UseText = SurvivorESPConfig.Types.Text,
-                UseBox = SurvivorESPConfig.Types.Box,
-                UseTracer = SurvivorESPConfig.Types.Tracer,
-                Color = SurvivorESPConfig.Color,
-                ShowName = SurvivorESPConfig.TextFormat.Name,
-                ShowHP = SurvivorESPConfig.TextFormat.HP,
-                ShowDistance = SurvivorESPConfig.TextFormat.Distance,
-                CustomName = char.Name
-            })
-        end
-    else
-        for _, char in pairs(survivorsFolder:GetChildren()) do
-            ESP:Huy("Survivor_" .. char.Name)
-        end
+ESPManager:AddEntry("Survivor", {
+    UI = ESPManager.UI.EspSurvivors,
+    Flags = {
+        Type = "ESP_Survivor_Type_Dropdown",
+        Text = "ESP_Survivor_Text_Format",
+        Color = "Esp_Survivor_Colorpicker",
+        Toggle = "ESP_Survivor_Toggle"
+    },
+    Toggle = {
+        Title = "loc:ESPSurvivors",
+        Desc = "loc:ESPSurvivorsDesc"
+    },
+    IdPrefix = "Survivor_",
+    DefaultColor = Color3.fromRGB(50, 255, 50),
+    DefaultTypes = {Highlight = true, Text = false, Box = false, Tracer = false},
+    DefaultText = {Name = true, HP = false, Distance = false},
+    TextValues = ESPManager.Constants.TextBasic,
+    SourceFolder = survivorsFolder,
+    Matcher = function()
+        return true
+    end,
+    GetDisplayName = function(_, _, object)
+        return object.Name
     end
+})
+
+ESPManager:AddEntry("Killer", {
+    UI = ESPManager.UI.EspKillers,
+    Flags = {
+        Type = "ESP_Killer_Type_Dropdown",
+        Text = "ESP_Killer_Text_Format",
+        Color = "Esp_Killer_Colorpicker",
+        Toggle = "ESP_Killer_Toggle"
+    },
+    Toggle = {
+        Title = "loc:EspKillers",
+        Desc = "loc:EspKillersDesc"
+    },
+    IdPrefix = "Killer_",
+    DefaultColor = Color3.fromRGB(255, 50, 50),
+    DefaultTypes = {Highlight = true, Text = false, Box = false, Tracer = false},
+    DefaultText = {Name = true, HP = false, Distance = false},
+    TextValues = ESPManager.Constants.TextBasic,
+    SourceFolder = killersFolder,
+    Matcher = function()
+        return true
+    end,
+    GetDisplayName = function(_, _, object)
+        return object.Name
+    end
+})
+
+ESPManager:AddEntry("Generator", {
+    UI = ESPManager.UI.EspGenerator,
+    Flags = {
+        Type = "ESP_Generator_Type_Dropdown",
+        Text = "ESP_Generator_Text_Format",
+        Color = "Esp_Generator_Colorpicker",
+        Toggle = "ESP_Generator_Toggle"
+    },
+    Toggle = {
+        Title = "loc:EspGenerator",
+        Desc = "loc:EspGeneratorDesc"
+    },
+    IdPrefix = "Gen_",
+    DefaultColor = Color3.fromRGB(255, 215, 0),
+    DefaultTypes = {Highlight = true, Text = false, Box = false, Tracer = false},
+    DefaultText = {Name = true, Progress = false, Distance = false},
+    TextValues = ESPManager.Constants.TextProgress,
+    UseCurrentMap = true,
+    AddDelay = 0,
+    ProgressChild = "Progress",
+    Matcher = function(_, _, object)
+        return object.Name == "Generator"
+    end,
+    ShouldRenderObject = function(_, _, _, progress)
+        return not (progress and progress.Value >= 100)
+    end,
+    GetDisplayName = function(_, entry, _, progress)
+        if entry.Config.TextFormat.Progress and progress then
+            return "Generator [" .. math.floor(progress.Value) .. "%]"
+        end
+        return "Generator"
+    end
+})
+
+ESPManager:AddEntry("FakeGenerator", {
+    UI = ESPManager.UI.EspFakeGenerator,
+    Flags = {
+        Type = "ESP_FakeGen_Type_Dropdown",
+        Text = "ESP_FakeGen_Text_Format",
+        Color = "Esp_FakeGen_Colorpicker",
+        Toggle = "ESP_FakeGen_Toggle"
+    },
+    Toggle = {
+        Title = "loc:EspFakeGenerator",
+        Desc = "loc:EspFakeGeneratorDesc"
+    },
+    IdPrefix = "FakeGen_",
+    DefaultColor = Color3.fromRGB(255, 50, 50),
+    DefaultTypes = {Highlight = true, Text = false, Box = false, Tracer = false},
+    DefaultText = {Name = true, Progress = false, Distance = false},
+    TextValues = ESPManager.Constants.TextProgress,
+    UseCurrentMap = true,
+    AddDelay = 0,
+    ProgressChild = "Progress",
+    Matcher = function(_, _, object)
+        return object.Name == "FakeGenerator"
+    end,
+    ShouldRenderObject = function(_, _, _, progress)
+        return not (progress and progress.Value >= 100)
+    end,
+    GetDisplayName = function(_, entry, _, progress)
+        if entry.Config.TextFormat.Progress and progress then
+            return "Fake Generator [" .. math.floor(progress.Value) .. "%]"
+        end
+        return "Fake Generator"
+    end
+})
+
+ESPManager:AddEntry("Item", {
+    UI = ESPManager.UI.EspItems,
+    Flags = {
+        Type = "ESP_Item_Type_Dropdown",
+        Text = "ESP_Item_Text_Format",
+        Color = "Esp_Item_Colorpicker",
+        Toggle = "ESP_Item_Toggle"
+    },
+    Toggle = {
+        Title = "loc:EspItems",
+        Desc = "loc:EspItems"
+    },
+    IdPrefix = "ItemESP_",
+    DefaultColor = Color3.fromRGB(255, 215, 0),
+    DefaultTypes = {Highlight = true, Text = true, Box = false, Tracer = false},
+    DefaultText = {Name = true, HP = false, Distance = true},
+    TextValues = ESPManager.Constants.TextBasic,
+    PollInterval = 0.5,
+    GetObjects = function()
+        return ItemBot.Funcs.GetAvailableItems() or {}
+    end,
+    GetDisplayName = function(_, _, object)
+        return object.Name
+    end
+})
+
+ESPManager:AddEntry("Sentry", {
+    UI = ESPManager.UI.EspSentry,
+    Flags = {
+        Type = "ESP_Sentry_Type_Dropdown",
+        Text = "ESP_Sentry_Text_Format",
+        Color = "Esp_Sentry_Colorpicker",
+        Toggle = "ESP_Sentry_Toggle"
+    },
+    Toggle = {
+        Title = "loc:EspSentry",
+        Desc = "loc:EspSentryDesc"
+    },
+    IdPrefix = "Sentry_",
+    DefaultColor = Color3.fromRGB(255, 170, 0),
+    DefaultTypes = {Highlight = true, Text = false, Box = false, Tracer = false},
+    DefaultText = {Name = true, HP = false, Distance = false},
+    TextValues = ESPManager.Constants.TextBasic,
+    SourceFolder = IngameFolder,
+    AddDelay = 0.5,
+    Matcher = function(_, _, object)
+        return object.Name == "BuildermanSentry"
+    end,
+    GetDisplayName = function()
+        return "Sentry"
+    end
+})
+
+ESPManager:AddEntry("Dispenser", {
+    UI = ESPManager.UI.EspDispenser,
+    Flags = {
+        Type = "ESP_Dispenser_Type_Dropdown",
+        Text = "ESP_Dispenser_Text_Format",
+        Color = "Esp_Dispenser_Colorpicker",
+        Toggle = "ESP_Dispenser_Toggle"
+    },
+    Toggle = {
+        Title = "loc:EspDispenser",
+        Desc = "loc:EspDispenserDesc"
+    },
+    IdPrefix = "Dispenser_",
+    DefaultColor = Color3.fromRGB(0, 220, 255),
+    DefaultTypes = {Highlight = true, Text = false, Box = false, Tracer = false},
+    DefaultText = {Name = true, HP = false, Distance = false},
+    TextValues = ESPManager.Constants.TextBasic,
+    SourceFolder = IngameFolder,
+    AddDelay = 0.5,
+    Matcher = function(_, _, object)
+        return object.Name == "BuildermanDispenser"
+    end,
+    GetDisplayName = function()
+        return "Dispenser"
+    end
+})
+
+ESPManager:AddEntry("Tripwire", {
+    UI = ESPManager.UI.EspTripwire,
+    Flags = {
+        Type = "ESP_Tripwire_Type_Dropdown",
+        Text = "ESP_Tripwire_Text_Format",
+        Color = "Esp_Tripwire_Colorpicker",
+        Toggle = "ESP_Tripwire_Toggle"
+    },
+    Toggle = {
+        Title = "loc:EspTripwire",
+        Desc = "loc:EspTripwireDesc"
+    },
+    IdPrefix = "Tripwire_",
+    DefaultColor = Color3.fromRGB(255, 0, 0),
+    DefaultTypes = {Highlight = true, Text = false, Box = false, Tracer = false},
+    DefaultText = {Name = true, HP = false, Distance = false},
+    TextValues = ESPManager.Constants.TextBasic,
+    SourceFolder = IngameFolder,
+    AddDelay = 0.5,
+    Matcher = function(_, _, object)
+        return object.Name:match("TaphTripwire$") ~= nil
+    end,
+    GetDisplayName = function(_, _, object)
+        local owner = object.Name:gsub("TaphTripwire$", "")
+        return owner ~= "" and (owner .. "'s Tripwire") or "Tripwire"
+    end
+})
+
+ESPManager:AddEntry("Tripmine", {
+    UI = ESPManager.UI.EspTripmine,
+    Flags = {
+        Type = "ESP_Tripmine_Type_Dropdown",
+        Text = "ESP_Tripmine_Text_Format",
+        Color = "Esp_Tripmine_Colorpicker",
+        Toggle = "ESP_Tripmine_Toggle"
+    },
+    Toggle = {
+        Title = "loc:EspTripmine",
+        Desc = "loc:EspTripmineDesc"
+    },
+    IdPrefix = "Tripmine_",
+    DefaultColor = Color3.fromRGB(200, 0, 255),
+    DefaultTypes = {Highlight = true, Text = false, Box = false, Tracer = false},
+    DefaultText = {Name = true, HP = false, Distance = false},
+    TextValues = ESPManager.Constants.TextBasic,
+    SourceFolder = IngameFolder,
+    AddDelay = 0.5,
+    Matcher = function(_, _, object)
+        return object.Name == "SubspaceTripmine"
+    end,
+    GetDisplayName = function()
+        return "Subspace Tripmine"
+    end
+})
+
+ESPManager:AddEntry("Spray", {
+    UI = ESPManager.UI.EspSpray,
+    Flags = {
+        Type = "ESP_Spray_Type_Dropdown",
+        Text = "ESP_Spray_Text_Format",
+        Color = "Esp_Spray_Colorpicker",
+        Toggle = "ESP_Spray_Toggle"
+    },
+    Toggle = {
+        Title = "loc:EspSpray",
+        Desc = "loc:EspSprayDesc"
+    },
+    IdPrefix = "Spray_",
+    DefaultColor = Color3.fromRGB(0, 255, 100),
+    DefaultTypes = {Highlight = true, Text = false, Box = false, Tracer = false},
+    DefaultText = {Name = true, HP = false, Distance = false},
+    TextValues = ESPManager.Constants.TextBasic,
+    SourceFolder = IngameFolder,
+    AddDelay = 0.5,
+    Matcher = function(_, _, object)
+        return object.Name:match("Spray$") ~= nil
+    end,
+    GetDisplayName = function(_, _, object)
+        local owner = object.Name:gsub("Spray$", "")
+        return owner ~= "" and (owner .. "'s Spray") or "Spray"
+    end
+})
+
+ESPManager:AddFolderRoute(survivorsFolder, {
+    EntryKey = "Survivor",
+    Delay = 3,
+    Match = function()
+        return true
+    end
+})
+
+ESPManager:AddFolderRoute(killersFolder, {
+    EntryKey = "Killer",
+    Delay = 3,
+    Match = function()
+        return true
+    end
+})
+
+for _, key in pairs({"Sentry", "Dispenser", "Tripwire", "Tripmine", "Spray"}) do
+    ESPManager:AddFolderRoute(IngameFolder, {
+        EntryKey = key,
+        Delay = ESPManager.Entries[key].AddDelay or 0,
+        Match = function(child)
+            return ESPManager.Entries[key].Matcher(ESPManager, ESPManager.Entries[key], child)
+        end
+    })
 end
 
-MyUIElements.EspSurvivors:Dropdown({
-    Title = "loc:ESPMode",
-    Desc = "loc:ESPModeDesc",
-    Flag = "ESP_Survivor_Type_Dropdown",
-    Values = {"Highlight", "Text", "Box", "Tracer"},
-    Value = {"Highlight"},
-    Multi = true,
-    AllowNone = true,
-    Callback = function(selectedValues)
-        SurvivorESPConfig.Types = { Highlight = false, Text = false, Box = false, Tracer = false }
-        for k, v in pairs(selectedValues) do
-            local val = type(k) == "string" and k or v
-            if val == "Highlight" then SurvivorESPConfig.Types.Highlight = true 
-            elseif val == "Text" then SurvivorESPConfig.Types.Text = true 
-            elseif val == "Box" then SurvivorESPConfig.Types.Box = true 
-            elseif val == "Tracer" then SurvivorESPConfig.Types.Tracer = true end
-        end
-        if SurvivorESPConfig.Enabled then UpdateSurvivorESP() end
-    end
-})
+ESPManager:StartAllFolderRouters()
+ESPManager:StartPolling()
 
-MyUIElements.EspSurvivors:Dropdown({
-    Title = "loc:SetupEspText",
-    Desc = "loc:SetupEspTextDesc",
-    Flag = "ESP_Survivor_Text_Format",
-    Values = {"Name", "HP", "Distance"},
-    Value = {"Name"},
-    Multi = true,
-    AllowNone = true,
-    Callback = function(selectedValues)
-        SurvivorESPConfig.TextFormat = { Name = false, HP = false, Distance = false }
-        for k, v in pairs(selectedValues) do
-            local val = type(k) == "string" and k or v
-            if val == "Name" then SurvivorESPConfig.TextFormat.Name = true 
-            elseif val == "HP" then SurvivorESPConfig.TextFormat.HP = true 
-            elseif val == "Distance" then SurvivorESPConfig.TextFormat.Distance = true end
-        end
-        if SurvivorESPConfig.Enabled then UpdateSurvivorESP() end
-    end
-})
-
-MyUIElements.EspSurvivors:Colorpicker({
-    Title = "loc:EspColor",
-    Desc = "loc:EspColorDesc",
-    Flag = "Esp_Survivor_Colorpicker",
-    Default = SurvivorESPConfig.Color,
-    Transparency = 0,
-    Locked = false,
-    Callback = function(color) 
-        SurvivorESPConfig.Color = color
-        if SurvivorESPConfig.Enabled then UpdateSurvivorESP() end
-    end
-})
-
-MyUIElements.EspSurvivors:Toggle({
-    Title = "loc:ESPSurvivors",
-    Desc = "loc:ESPSurvivorsDesc",
-    Flag = "ESP_Survivor_Toggle",
-    Value = false,
-    Callback = function(state)
-        SurvivorESPConfig.Enabled = state
-        UpdateSurvivorESP()
-    end
-})
-
-survivorsFolder.ChildAdded:Connect(function(char)
-    if SurvivorESPConfig.Enabled then
-        task.wait(3) 
-        UpdateSurvivorESP()
-    end
-end)
-
-survivorsFolder.ChildRemoved:Connect(function(char)
-    ESP:Huy("Survivor_" .. char.Name)
-end)
-
--- Esp Killers
-
-local KillerESPConfig = {
-    Enabled = false,
-    Types = { Highlight = true, Text = false, Box = false, Tracer = false },
-    TextFormat = { Name = true, HP = false, Distance = false },
-    Color = Color3.fromRGB(255, 50, 50)
-}
-
-local function UpdateKillerESP()
-    if KillerESPConfig.Enabled then
-        for _, char in pairs(killersFolder:GetChildren()) do
-            ESP:DangKy("Killer_" .. char.Name, char, {
-                UseHighlight = KillerESPConfig.Types.Highlight,
-                UseText = KillerESPConfig.Types.Text,
-                UseBox = KillerESPConfig.Types.Box,
-                UseTracer = KillerESPConfig.Types.Tracer,
-                Color = KillerESPConfig.Color,
-                ShowName = KillerESPConfig.TextFormat.Name,
-                ShowHP = KillerESPConfig.TextFormat.HP,
-                ShowDistance = KillerESPConfig.TextFormat.Distance,
-                CustomName = char.Name
-            })
-        end
-    else
-        for _, char in pairs(killersFolder:GetChildren()) do
-            ESP:Huy("Killer_" .. char.Name)
-        end
-    end
-end
-
-MyUIElements.EspKillers:Dropdown({
-    Title = "loc:ESPMode",
-    Desc = "loc:ESPModeDesc",
-    Flag = "ESP_Killer_Type_Dropdown",
-    Values = {"Highlight", "Text", "Box", "Tracer"},
-    Value = {"Highlight"},
-    Multi = true,
-    AllowNone = true,
-    Callback = function(selectedValues)
-        KillerESPConfig.Types = { Highlight = false, Text = false, Box = false, Tracer = false }
-        for k, v in pairs(selectedValues) do
-            local val = type(k) == "string" and k or v
-            if val == "Highlight" then KillerESPConfig.Types.Highlight = true 
-            elseif val == "Text" then KillerESPConfig.Types.Text = true 
-            elseif val == "Box" then KillerESPConfig.Types.Box = true 
-            elseif val == "Tracer" then KillerESPConfig.Types.Tracer = true end
-        end
-        if KillerESPConfig.Enabled then UpdateKillerESP() end
-    end
-})
-
-MyUIElements.EspKillers:Dropdown({
-    Title = "loc:SetupEspText",
-    Desc = "loc:SetupEspTextDesc",
-    Flag = "ESP_Killer_Text_Format",
-    Values = {"Name", "HP", "Distance"},
-    Value = {"Name"},
-    Multi = true,
-    AllowNone = true,
-    Callback = function(selectedValues)
-        KillerESPConfig.TextFormat = { Name = false, HP = false, Distance = false }
-        for k, v in pairs(selectedValues) do
-            local val = type(k) == "string" and k or v
-            if val == "Name" then KillerESPConfig.TextFormat.Name = true 
-            elseif val == "HP" then KillerESPConfig.TextFormat.HP = true 
-            elseif val == "Distance" then KillerESPConfig.TextFormat.Distance = true end
-        end
-        if KillerESPConfig.Enabled then UpdateKillerESP() end
-    end
-})
-
-MyUIElements.EspKillers:Colorpicker({
-    Title = "loc:EspColor",
-    Desc = "loc:EspColorDesc",
-    Flag = "Esp_Killer_Colorpicker",
-    Default = KillerESPConfig.Color,
-    Transparency = 0,
-    Locked = false,
-    Callback = function(color) 
-        KillerESPConfig.Color = color
-        if KillerESPConfig.Enabled then UpdateKillerESP() end
-    end
-})
-
-MyUIElements.EspKillers:Toggle({
-    Title = "loc:EspKillers",
-    Desc = "loc:EspKillersDesc",
-    Flag = "ESP_Killer_Toggle",
-    Value = false,
-    Callback = function(state)
-        KillerESPConfig.Enabled = state
-        UpdateKillerESP()
-    end
-})
-
-killersFolder.ChildAdded:Connect(function(char)
-    if KillerESPConfig.Enabled then
-        task.wait(3)
-        UpdateKillerESP()
-    end
-end)
-
-killersFolder.ChildRemoved:Connect(function(char)
-    ESP:Huy("Killer_" .. char.Name)
-end)
-
--- Generator
-
-local CurrentMap = nil
-
-local function HandleGeneratorESP(obj, isFake, config)
-    task.spawn(function()
-        local prefix = isFake and "FakeGen_" or "Gen_"
-        local defaultName = isFake and "Fake Generator" or "Generator"
-        local id = prefix .. (obj:GetDebugId() or obj.Name)
-        
-        local progress = obj:WaitForChild("Progress", 3)
-        
-        local function UpdateESP()
-            if not config.Enabled then
-                ESP:Huy(id)
-                return
-            end
-            
-            if progress and progress:IsA("NumberValue") and progress.Value >= 100 then
-                ESP:Huy(id)
-                return
-            end
-            
-            local displayName = defaultName
-            if config.TextFormat.Progress and progress and progress:IsA("NumberValue") then
-                displayName = defaultName .. " [" .. math.floor(progress.Value) .. "%]"
-            end
-            
-            ESP:DangKy(id, obj, {
-                UseHighlight = config.Types.Highlight,
-                UseText = config.Types.Text,
-                UseBox = config.Types.Box,
-                UseTracer = config.Types.Tracer,
-                Color = config.Color,
-                ShowName = config.TextFormat.Name,
-                ShowHP = false,
-                ShowDistance = config.TextFormat.Distance,
-                CustomName = displayName
-            })
-        end
-
-        if progress and progress:IsA("NumberValue") then
-            if not progress:GetAttribute("ESP_Watch") then
-                progress:SetAttribute("ESP_Watch", true)
-                progress:GetPropertyChangedSignal("Value"):Connect(function()
-                    if config.Enabled then
-                        UpdateESP()
-                    end
-                end)
-            end
-        end
-        
-        UpdateESP()
-    end)
-end
-
-local GeneratorESPConfig = {
-    Enabled = false,
-    Types = { Highlight = true, Text = false, Box = false, Tracer = false },
-    TextFormat = { Name = true, Progress = false, Distance = false },
-    Color = Color3.fromRGB(255, 215, 0)
-}
-
-local function UpdateGeneratorESP()
-    if not CurrentMap then return end
-
-    if GeneratorESPConfig.Enabled then
-        for _, child in ipairs(CurrentMap:GetChildren()) do
-            if child.Name == "Generator" then
-                HandleGeneratorESP(child, false, GeneratorESPConfig)
-            end
-        end
-    else
-        for _, child in ipairs(CurrentMap:GetChildren()) do
-            if child.Name == "Generator" then
-                ESP:Huy("Gen_" .. (child:GetDebugId() or child.Name))
-            end
-        end
-    end
-end
-
-MyUIElements.EspGenerator:Dropdown({
-    Title = "loc:ESPMode",
-    Desc = "loc:ESPModeDesc",
-    Flag = "ESP_Generator_Type_Dropdown",
-    Values = {"Highlight", "Text", "Box", "Tracer"},
-    Value = {"Highlight"},
-    Multi = true,
-    AllowNone = true,
-    Callback = function(selectedValues)
-        GeneratorESPConfig.Types = { Highlight = false, Text = false, Box = false, Tracer = false }
-        for k, v in pairs(selectedValues) do
-            local val = type(k) == "string" and k or v
-            if val == "Highlight" then GeneratorESPConfig.Types.Highlight = true 
-            elseif val == "Text" then GeneratorESPConfig.Types.Text = true 
-            elseif val == "Box" then GeneratorESPConfig.Types.Box = true 
-            elseif val == "Tracer" then GeneratorESPConfig.Types.Tracer = true end
-        end
-        if GeneratorESPConfig.Enabled then UpdateGeneratorESP() end
-    end
-})
-
-MyUIElements.EspGenerator:Dropdown({
-    Title = "loc:SetupEspText",
-    Desc = "loc:SetupEspTextDesc",
-    Flag = "ESP_Generator_Text_Format",
-    Values = {"Name", "Progress", "Distance"},
-    Value = {"Name"},
-    Multi = true,
-    AllowNone = true,
-    Callback = function(selectedValues)
-        GeneratorESPConfig.TextFormat = { Name = false, Progress = false, Distance = false }
-        for k, v in pairs(selectedValues) do
-            local val = type(k) == "string" and k or v
-            if val == "Name" then GeneratorESPConfig.TextFormat.Name = true 
-            elseif val == "Progress" then GeneratorESPConfig.TextFormat.Progress = true 
-            elseif val == "Distance" then GeneratorESPConfig.TextFormat.Distance = true end
-        end
-        if GeneratorESPConfig.Enabled then UpdateGeneratorESP() end
-    end
-})
-
-MyUIElements.EspGenerator:Colorpicker({
-    Title = "loc:EspColor",
-    Desc = "loc:EspColorDesc",
-    Flag = "Esp_Generator_Colorpicker",
-    Default = GeneratorESPConfig.Color,
-    Transparency = 0,
-    Locked = false,
-    Callback = function(color) 
-        GeneratorESPConfig.Color = color
-        if GeneratorESPConfig.Enabled then UpdateGeneratorESP() end
-    end
-})
-
-MyUIElements.EspGenerator:Toggle({
-    Title = "loc:EspGenerator",
-    Desc = "loc:EspGeneratorDesc",
-    Flag = "ESP_Generator_Toggle",
-    Value = false,
-    Callback = function(state)
-        GeneratorESPConfig.Enabled = state
-        UpdateGeneratorESP()
-    end
-})
-
-local FakeGenESPConfig = {
-    Enabled = false,
-    Types = { Highlight = true, Text = false, Box = false, Tracer = false },
-    TextFormat = { Name = true, Progress = false, Distance = false },
-    Color = Color3.fromRGB(255, 50, 50)
-}
-
-local function UpdateFakeGenESP()
-    if not CurrentMap then return end
-
-    if FakeGenESPConfig.Enabled then
-        for _, child in ipairs(CurrentMap:GetChildren()) do
-            if child.Name == "FakeGenerator" then
-                HandleGeneratorESP(child, true, FakeGenESPConfig)
-            end
-        end
-    else
-        for _, child in ipairs(CurrentMap:GetChildren()) do
-            if child.Name == "FakeGenerator" then
-                ESP:Huy("FakeGen_" .. (child:GetDebugId() or child.Name))
-            end
-        end
-    end
-end
-
-MyUIElements.EspFakeGenerator:Dropdown({
-    Title = "loc:ESPMode",
-    Desc = "loc:ESPModeDesc",
-    Flag = "ESP_FakeGen_Type_Dropdown",
-    Values = {"Highlight", "Text", "Box", "Tracer"},
-    Value = {"Highlight"},
-    Multi = true,
-    AllowNone = true,
-    Callback = function(selectedValues)
-        FakeGenESPConfig.Types = { Highlight = false, Text = false, Box = false, Tracer = false }
-        for k, v in pairs(selectedValues) do
-            local val = type(k) == "string" and k or v
-            if val == "Highlight" then FakeGenESPConfig.Types.Highlight = true 
-            elseif val == "Text" then FakeGenESPConfig.Types.Text = true 
-            elseif val == "Box" then FakeGenESPConfig.Types.Box = true 
-            elseif val == "Tracer" then FakeGenESPConfig.Types.Tracer = true end
-        end
-        if FakeGenESPConfig.Enabled then UpdateFakeGenESP() end
-    end
-})
-
-MyUIElements.EspFakeGenerator:Dropdown({
-    Title = "loc:SetupEspText",
-    Desc = "loc:SetupEspTextDesc",
-    Flag = "ESP_FakeGen_Text_Format",
-    Values = {"Name", "Progress", "Distance"}, 
-    Value = {"Name"},
-    Multi = true,
-    AllowNone = true,
-    Callback = function(selectedValues)
-        FakeGenESPConfig.TextFormat = { Name = false, Progress = false, Distance = false }
-        for k, v in pairs(selectedValues) do
-            local val = type(k) == "string" and k or v
-            if val == "Name" then FakeGenESPConfig.TextFormat.Name = true 
-            elseif val == "Progress" then FakeGenESPConfig.TextFormat.Progress = true 
-            elseif val == "Distance" then FakeGenESPConfig.TextFormat.Distance = true end
-        end
-        if FakeGenESPConfig.Enabled then UpdateFakeGenESP() end
-    end
-})
-
-MyUIElements.EspFakeGenerator:Colorpicker({
-    Title = "loc:EspColor",
-    Desc = "loc:EspColorDesc",
-    Flag = "Esp_FakeGen_Colorpicker",
-    Default = FakeGenESPConfig.Color,
-    Transparency = 0,
-    Locked = false,
-    Callback = function(color) 
-        FakeGenESPConfig.Color = color
-        if FakeGenESPConfig.Enabled then UpdateFakeGenESP() end
-    end
-})
-
-MyUIElements.EspFakeGenerator:Toggle({
-    Title = "loc:EspFakeGenerator",
-    Desc = "loc:EspFakeGeneratorDesc",
-    Flag = "ESP_FakeGen_Toggle",
-    Value = false,
-    Callback = function(state)
-        FakeGenESPConfig.Enabled = state
-        UpdateFakeGenESP()
-    end
-})
-
-local function SetupMapEvents(mapFolder)
-    mapFolder.ChildAdded:Connect(function(child)
-        if child.Name == "Generator" and GeneratorESPConfig.Enabled then
-            HandleGeneratorESP(child, false, GeneratorESPConfig)
-        elseif child.Name == "FakeGenerator" and FakeGenESPConfig.Enabled then
-            HandleGeneratorESP(child, true, FakeGenESPConfig)
-        end
-    end)
-
-    mapFolder.ChildRemoved:Connect(function(child)
-        if child.Name == "Generator" then
-            ESP:Huy("Gen_" .. (child:GetDebugId() or child.Name))
-        elseif child.Name == "FakeGenerator" then
-            ESP:Huy("FakeGen_" .. (child:GetDebugId() or child.Name))
-        end
-    end)
-end
-
-for _, child in ipairs(IngameFolder:GetChildren()) do
+for _, child in pairs(IngameFolder:GetChildren()) do
     if child.Name == "Map" then
-        CurrentMap = child
-        SetupMapEvents(child)
+        ESPManager:SetCurrentMap(child)
         break
     end
 end
 
-IngameFolder.ChildAdded:Connect(function(child)
+ESPManager.Connections.Global.MapAdded = IngameFolder.ChildAdded:Connect(function(child)
     if child.Name == "Map" then
-        CurrentMap = child
-        SetupMapEvents(child)
-        task.wait(1) 
-        UpdateGeneratorESP()
-        UpdateFakeGenESP()
+        ESPManager:SetCurrentMap(child)
     end
 end)
 
-IngameFolder.ChildRemoved:Connect(function(child)
-    if child.Name == "Map" then
-        CurrentMap = nil
+ESPManager.Connections.Global.MapRemoved = IngameFolder.ChildRemoved:Connect(function(child)
+    if child == ESPManager.State.CurrentMap or child.Name == "Map" then
+        ESPManager:SetCurrentMap(nil)
     end
 end)
 
--- Esp Items
+TeleportLogic = {
+    Height = 100,
+    SelectedSurvivor = nil,
+    SelectedKiller = nil,
+    SelectedGen = nil,
+    SurvivorDropdown = nil,
+    KillerDropdown = nil,
+    GenDropdown = nil,
+    SurvivorHash = "",
+    KillerHash = "",
+    GenHash = "",
+    GenCache = {},
 
-local ItemESPConfig = {
-    Enabled = false,
-    Types = { Highlight = true, Text = true, Box = false, Tracer = false },
-    TextFormat = { Name = true, HP = false, Distance = true },
-    Color = Color3.fromRGB(255, 215, 0)
-}
-
-local function GetItemObjects()
-    return ItemBot.Funcs.GetAvailableItems()
-end
-
-local function UpdateItemESP()
-    if ItemESPConfig.Enabled then
-        for idx, obj in pairs(GetItemObjects()) do
-            ESP:DangKy("ItemESP_" .. (obj:GetDebugId() or obj.Name .. "_" .. idx), obj, {
-                UseHighlight = ItemESPConfig.Types.Highlight,
-                UseText = ItemESPConfig.Types.Text,
-                UseBox = ItemESPConfig.Types.Box,
-                UseTracer = ItemESPConfig.Types.Tracer,
-                Color = ItemESPConfig.Color,
-                ShowName = ItemESPConfig.TextFormat.Name,
-                ShowHP = ItemESPConfig.TextFormat.HP,
-                ShowDistance = ItemESPConfig.TextFormat.Distance,
-                CustomName = obj.Name
-            })
+    DoTeleport = function(self, targetCFrame)
+        self.TempHRP = playerCharacter and playerCharacter:FindFirstChild("HumanoidRootPart")
+        if self.TempHRP and targetCFrame then
+            self.TempHRP.CFrame = targetCFrame
         end
-    else
-        for idx, obj in pairs(GetItemObjects()) do
-            ESP:Huy("ItemESP_" .. (obj:GetDebugId() or obj.Name .. "_" .. idx))
+    end,
+
+    ExecuteUp = function(self)
+        self.TempHRP = playerCharacter and playerCharacter:FindFirstChild("HumanoidRootPart")
+        if self.TempHRP then
+            self:DoTeleport(self.TempHRP.CFrame + Vector3.new(0, self.Height, 0))
         end
-    end
-end
+    end,
 
-MyUIElements.EspItems:Dropdown({
-    Title = "loc:ESPMode",
-    Desc = "loc:ESPModeDesc",
-    Flag = "ESP_Item_Type_Dropdown",
-    Values = {"Highlight", "Text", "Box", "Tracer"},
-    Value = {"Highlight"},
-    Multi = true,
-    AllowNone = true,
-    Callback = function(selectedValues)
-        ItemESPConfig.Types = { Highlight = false, Text = false, Box = false, Tracer = false }
-        for k, v in pairs(selectedValues) do
-            local val = type(k) == "string" and k or v
-            if val == "Highlight" then ItemESPConfig.Types.Highlight = true 
-            elseif val == "Text" then ItemESPConfig.Types.Text = true 
-            elseif val == "Box" then ItemESPConfig.Types.Box = true 
-            elseif val == "Tracer" then ItemESPConfig.Types.Tracer = true end
+    GetNamesFromFolder = function(self, folder)
+        self.TempList = {} 
+        if folder then
+            for _, obj in pairs(folder:GetChildren()) do
+                table.insert(self.TempList, obj.Name)
+            end
         end
-        if ItemESPConfig.Enabled then UpdateItemESP() end
-    end
-})
+        return self.TempList
+    end,
 
-MyUIElements.EspItems:Dropdown({
-    Title = "loc:SetupEspText",
-    Desc = "loc:SetupEspTextDesc",
-    Flag = "ESP_Item_Text_Format",
-    Values = {"Name", "HP", "Distance"},
-    Value = {"Name"},
-    Multi = true,
-    AllowNone = true,
-    Callback = function(selectedValues)
-        ItemESPConfig.TextFormat = { Name = false, HP = false, Distance = false }
-        for k, v in pairs(selectedValues) do
-            local val = type(k) == "string" and k or v
-            if val == "Name" then ItemESPConfig.TextFormat.Name = true 
-            elseif val == "HP" then ItemESPConfig.TextFormat.HP = true 
-            elseif val == "Distance" then ItemESPConfig.TextFormat.Distance = true end
-        end
-        if ItemESPConfig.Enabled then UpdateItemESP() end
-    end
-})
-
-MyUIElements.EspItems:Colorpicker({
-    Title = "loc:EspColor",
-    Desc = "loc:EspColorDesc",
-    Flag = "Esp_Item_Colorpicker",
-    Default = ItemESPConfig.Color,
-    Transparency = 0,
-    Locked = false,
-    Callback = function(color) 
-        ItemESPConfig.Color = color
-        if ItemESPConfig.Enabled then UpdateItemESP() end
-    end
-})
-
-MyUIElements.EspItems:Toggle({
-    Title = "loc:EspItems",
-    Desc = "loc:EspItems",
-    Flag = "ESP_Item_Toggle",
-    Value = false,
-    Callback = function(state)
-        ItemESPConfig.Enabled = state
-        UpdateItemESP()
-    end
-})
-
-task.spawn(function()
-    while task.wait(0.5) do
-        if ItemESPConfig.Enabled then
-            UpdateItemESP()
-            
-            local currentItems = GetItemObjects()
-            for id, data in pairs(ESP.Objects) do
-                if string.sub(id, 1, 8) == "ItemESP_" then
-                    local stillExists = false
-                    for _, obj in pairs(currentItems) do
-                        if id == "ItemESP_" .. (obj:GetDebugId() or obj.Name) then
-                            stillExists = true
-                            break
-                        end
-                    end
-                    if not stillExists then
-                        ESP:Huy(id)
-                    end
+    GetGenerators = function(self)
+        self.GenNames = {}
+        self.GenCache = {}
+        
+        if TargetMapFolder then
+            self.GenCount = 1
+            for _, obj in pairs(TargetMapFolder:GetChildren()) do
+                if obj.Name == "Generator" then
+                    self.GenDisplayName = "Generator " .. tostring(self.GenCount)
+                    table.insert(self.GenNames, self.GenDisplayName)
+                    self.GenCache[self.GenDisplayName] = obj
+                    self.GenCount = self.GenCount + 1
                 end
             end
         end
+        return self.GenNames
+    end,
+
+    TeleportToTarget = function(self, targetName, folder)
+        if targetName and folder then
+            self.TargetObj = folder:FindFirstChild(targetName)
+            self.TargetHRP = self.TargetObj and self.TargetObj:FindFirstChild("HumanoidRootPart")
+            if self.TargetHRP then
+                self:DoTeleport(self.TargetHRP.CFrame)
+            end
+        end
+    end,
+
+    TeleportToGen = function(self)
+        if self.SelectedGen and self.GenCache[self.SelectedGen] then
+            self.TargetGen = self.GenCache[self.SelectedGen]
+            self.GenPart = self.TargetGen.PrimaryPart or self.TargetGen:FindFirstChildWhichIsA("BasePart")
+            if self.GenPart then
+                self:DoTeleport(self.GenPart.CFrame * CFrame.new(0, 0, -6))
+            end
+        end
+    end,
+
+    RefreshDropdownIfNeeded = function(self, dropdownObj, hashProperty, getListFunc)
+        if not dropdownObj then return end
+        
+        self.CurrentNames = getListFunc(self)
+        self.NewHash = table.concat(self.CurrentNames, ",")
+        
+        if self[hashProperty] ~= self.NewHash then
+            self[hashProperty] = self.NewHash
+            pcall(function() dropdownObj:SetValues(self.CurrentNames) end)
+            pcall(function() dropdownObj:Refresh(self.CurrentNames, true) end)
+        end
+    end,
+
+    BindFolderEvents = function(self, folder, dropdownObj, hashProperty, getListFunc)
+        if not folder then return end
+        
+        folder.ChildAdded:Connect(function()
+            task.delay(1, function()
+                self:RefreshDropdownIfNeeded(dropdownObj, hashProperty, getListFunc)
+            end)
+        end)
+        
+        folder.ChildRemoved:Connect(function()
+            self:RefreshDropdownIfNeeded(dropdownObj, hashProperty, getListFunc)
+        end)
+    end,
+
+    InitEvents = function(self)
+        self.GetSurvivorFunc = function(s) return s:GetNamesFromFolder(survivorsFolder) end
+        self.GetKillerFunc = function(s) return s:GetNamesFromFolder(killersFolder) end
+        self.GetGenFunc = function(s) return s:GetGenerators() end
+        self:BindFolderEvents(survivorsFolder, self.SurvivorDropdown, "SurvivorHash", self.GetSurvivorFunc)
+        self:BindFolderEvents(killersFolder, self.KillerDropdown, "KillerHash", self.GetKillerFunc)
+        self:BindFolderEvents(IngameFolder, self.GenDropdown, "GenHash", self.GetGenFunc)
     end
-end)
-
--- Esp Sentry
-
-local SentryESPConfig = {
-    Enabled = false,
-    Types = { Highlight = true, Text = false, Box = false, Tracer = false },
-    TextFormat = { Name = true, HP = false, Distance = false },
-    Color = Color3.fromRGB(255, 170, 0)
 }
 
-local function GetSentryObjects()
-    local list = {}
-    for _, child in pairs(IngameFolder:GetChildren()) do
-        if child.Name == "BuildermanSentry" then
-            table.insert(list, child)
-        end
-    end
-    return list
-end
-
-local function UpdateSentryESP()
-    if SentryESPConfig.Enabled then
-        for idx, obj in pairs(GetSentryObjects()) do
-            ESP:DangKy("Sentry_" .. (obj:GetDebugId() or obj.Name .. "_" .. idx), obj, {
-                UseHighlight = SentryESPConfig.Types.Highlight,
-                UseText = SentryESPConfig.Types.Text,
-                UseBox = SentryESPConfig.Types.Box,
-                UseTracer = SentryESPConfig.Types.Tracer,
-                Color = SentryESPConfig.Color,
-                ShowName = SentryESPConfig.TextFormat.Name,
-                ShowHP = SentryESPConfig.TextFormat.HP,
-                ShowDistance = SentryESPConfig.TextFormat.Distance,
-                CustomName = "Sentry"
-            })
-        end
-    else
-        for idx, obj in pairs(GetSentryObjects()) do
-            ESP:Huy("Sentry_" .. (obj:GetDebugId() or obj.Name .. "_" .. idx))
-        end
-    end
-end
-
-MyUIElements.EspSentry:Dropdown({
-    Title = "loc:ESPMode",
-    Desc = "loc:ESPModeDesc",
-    Flag = "ESP_Sentry_Type_Dropdown",
-    Values = {"Highlight", "Text", "Box", "Tracer"},
-    Value = {"Highlight"},
-    Multi = true,
-    AllowNone = true,
-    Callback = function(selectedValues)
-        SentryESPConfig.Types = { Highlight = false, Text = false, Box = false, Tracer = false }
-        for k, v in pairs(selectedValues) do
-            local val = type(k) == "string" and k or v
-            if val == "Highlight" then SentryESPConfig.Types.Highlight = true 
-            elseif val == "Text" then SentryESPConfig.Types.Text = true 
-            elseif val == "Box" then SentryESPConfig.Types.Box = true 
-            elseif val == "Tracer" then SentryESPConfig.Types.Tracer = true end
-        end
-        if SentryESPConfig.Enabled then UpdateSentryESP() end
+MyUIElements.TeleportUp:Input({
+    Title = "loc:TeleportHeight",
+    Desc = "loc:TeleportHeightDesc",
+    Flag = "TeleportUpHeight",
+    Placeholder = "100",
+    Value = "100",
+    Callback = function(value) 
+        TeleportLogic.Height = tonumber(value) or 100
     end
 })
 
-MyUIElements.EspSentry:Dropdown({
-    Title = "loc:SetupEspText",
-    Desc = "loc:SetupEspTextDesc",
-    Flag = "ESP_Sentry_Text_Format",
-    Values = {"Name", "HP", "Distance"},
-    Value = {"Name"},
-    Multi = true,
-    AllowNone = true,
-    Callback = function(selectedValues)
-        SentryESPConfig.TextFormat = { Name = false, HP = false, Distance = false }
-        for k, v in pairs(selectedValues) do
-            local val = type(k) == "string" and k or v
-            if val == "Name" then SentryESPConfig.TextFormat.Name = true 
-            elseif val == "HP" then SentryESPConfig.TextFormat.HP = true 
-            elseif val == "Distance" then SentryESPConfig.TextFormat.Distance = true end
-        end
-        if SentryESPConfig.Enabled then UpdateSentryESP() end
+MyUIElements.TeleportUp:Button({
+    Title = "loc:TeleportUp",
+    Desc = "loc:TeleportUpDesc",
+    Callback = function()
+        TeleportLogic:ExecuteUp()
     end
 })
 
-MyUIElements.EspSentry:Colorpicker({
-    Title = "loc:EspColor",
-    Desc = "loc:EspColorDesc",
-    Flag = "Esp_Sentry_Colorpicker",
-    Default = SentryESPConfig.Color,
-    Transparency = 0,
-    Locked = false,
-    Callback = function(color) 
-        SentryESPConfig.Color = color
-        if SentryESPConfig.Enabled then UpdateSentryESP() end
+TeleportLogic.GenDropdown = MyUIElements.TeleportToGenerator:Dropdown({
+    Title = "loc:SelectGenerator",
+    Desc = "loc:SelectGeneratorDesc",
+    Flag = "Select_Gen_TP",
+    Values = TeleportLogic:GetGenerators(), 
+    Value = nil,
+    Callback = function(value)
+        TeleportLogic.SelectedGen = value
     end
 })
 
-MyUIElements.EspSentry:Toggle({
-    Title = "loc:EspSentry",
-    Desc = "loc:EspSentryDesc",
-    Flag = "ESP_Sentry_Toggle",
-    Value = false,
-    Callback = function(state)
-        SentryESPConfig.Enabled = state
-        UpdateSentryESP()
+MyUIElements.TeleportToGenerator:Button({
+    Title = "loc:TeleportToGenerator",
+    Desc = "loc:TeleportToGeneratorDesc",
+    Callback = function()
+        TeleportLogic:TeleportToGen()
     end
 })
 
-IngameFolder.ChildAdded:Connect(function(child)
-    if SentryESPConfig.Enabled and child.Name == "BuildermanSentry" then
-        task.wait(0.5)
-        UpdateSentryESP()
-    end
-end)
-
-IngameFolder.ChildRemoved:Connect(function(child)
-    if child.Name == "BuildermanSentry" then
-        ESP:Huy("Sentry_" .. (child:GetDebugId() or child.Name))
-    end
-end)
-
--- Esp Dispenser
-
-local DispenserESPConfig = {
-    Enabled = false,
-    Types = { Highlight = true, Text = false, Box = false, Tracer = false },
-    TextFormat = { Name = true, HP = false, Distance = false },
-    Color = Color3.fromRGB(0, 220, 255)
-}
-
-local function GetDispenserObjects()
-    local list = {}
-    for _, child in pairs(IngameFolder:GetChildren()) do
-        if child.Name == "BuildermanDispenser" then
-            table.insert(list, child)
-        end
-    end
-    return list
-end
-
-local function UpdateDispenserESP()
-    if DispenserESPConfig.Enabled then
-        for idx, obj in pairs(GetDispenserObjects()) do
-            ESP:DangKy("Dispenser_" .. (obj:GetDebugId() or obj.Name .. "_" .. idx), obj, {
-                UseHighlight = DispenserESPConfig.Types.Highlight,
-                UseText = DispenserESPConfig.Types.Text,
-                UseBox = DispenserESPConfig.Types.Box,
-                UseTracer = DispenserESPConfig.Types.Tracer,
-                Color = DispenserESPConfig.Color,
-                ShowName = DispenserESPConfig.TextFormat.Name,
-                ShowHP = DispenserESPConfig.TextFormat.HP,
-                ShowDistance = DispenserESPConfig.TextFormat.Distance,
-                CustomName = "Dispenser"
-            })
-        end
-    else
-        for idx, obj in pairs(GetDispenserObjects()) do
-            ESP:Huy("Dispenser_" .. (obj:GetDebugId() or obj.Name .. "_" .. idx))
-        end
-    end
-end
-
-MyUIElements.EspDispenser:Dropdown({
-    Title = "loc:ESPMode",
-    Desc = "loc:ESPModeDesc",
-    Flag = "ESP_Dispenser_Type_Dropdown",
-    Values = {"Highlight", "Text", "Box", "Tracer"},
-    Value = {"Highlight"},
-    Multi = true,
-    AllowNone = true,
-    Callback = function(selectedValues)
-        DispenserESPConfig.Types = { Highlight = false, Text = false, Box = false, Tracer = false }
-        for k, v in pairs(selectedValues) do
-            local val = type(k) == "string" and k or v
-            if val == "Highlight" then DispenserESPConfig.Types.Highlight = true 
-            elseif val == "Text" then DispenserESPConfig.Types.Text = true 
-            elseif val == "Box" then DispenserESPConfig.Types.Box = true 
-            elseif val == "Tracer" then DispenserESPConfig.Types.Tracer = true end
-        end
-        if DispenserESPConfig.Enabled then UpdateDispenserESP() end
+TeleportLogic.SurvivorDropdown = MyUIElements.TeleportToSurvivors:Dropdown({
+    Title = "loc:SelectSurvivors",
+    Desc = "loc:SelectSurvivorsDesc",
+    Flag = "Select_Survivor_TP",
+    Values = TeleportLogic:GetNamesFromFolder(survivorsFolder), 
+    Value = nil,
+    Callback = function(value)
+        TeleportLogic.SelectedSurvivor = value
     end
 })
 
-MyUIElements.EspDispenser:Dropdown({
-    Title = "loc:SetupEspText",
-    Desc = "loc:SetupEspTextDesc",
-    Flag = "ESP_Dispenser_Text_Format",
-    Values = {"Name", "HP", "Distance"},
-    Value = {"Name"},
-    Multi = true,
-    AllowNone = true,
-    Callback = function(selectedValues)
-        DispenserESPConfig.TextFormat = { Name = false, HP = false, Distance = false }
-        for k, v in pairs(selectedValues) do
-            local val = type(k) == "string" and k or v
-            if val == "Name" then DispenserESPConfig.TextFormat.Name = true 
-            elseif val == "HP" then DispenserESPConfig.TextFormat.HP = true 
-            elseif val == "Distance" then DispenserESPConfig.TextFormat.Distance = true end
-        end
-        if DispenserESPConfig.Enabled then UpdateDispenserESP() end
+MyUIElements.TeleportToSurvivors:Button({
+    Title = "loc:TeleportToSurvivors",
+    Desc = "loc:TeleportToSurvivorsDesc",
+    Callback = function()
+        TeleportLogic:TeleportToTarget(TeleportLogic.SelectedSurvivor, survivorsFolder)
     end
 })
 
-MyUIElements.EspDispenser:Colorpicker({
-    Title = "loc:EspColor",
-    Desc = "loc:EspColorDesc",
-    Flag = "Esp_Dispenser_Colorpicker",
-    Default = DispenserESPConfig.Color,
-    Transparency = 0,
-    Locked = false,
-    Callback = function(color) 
-        DispenserESPConfig.Color = color
-        if DispenserESPConfig.Enabled then UpdateDispenserESP() end
+TeleportLogic.KillerDropdown = MyUIElements.TeleportToKillers:Dropdown({
+    Title = "loc:SelectKiller",
+    Desc = "loc:SelectKillerDesc",
+    Flag = "Select_Killer_TP",
+    Values = TeleportLogic:GetNamesFromFolder(killersFolder), 
+    Value = nil,
+    Callback = function(value)
+        TeleportLogic.SelectedKiller = value
     end
 })
 
-MyUIElements.EspDispenser:Toggle({
-    Title = "loc:EspDispenser",
-    Desc = "loc:EspDispenserDesc",
-    Flag = "ESP_Dispenser_Toggle",
-    Value = false,
-    Callback = function(state)
-        DispenserESPConfig.Enabled = state
-        UpdateDispenserESP()
+MyUIElements.TeleportToKillers:Button({
+    Title = "loc:TeleportToKillers",
+    Desc = "loc:TeleportToKillersDesc",
+    Callback = function()
+        TeleportLogic:TeleportToTarget(TeleportLogic.SelectedKiller, killersFolder)
     end
 })
 
-IngameFolder.ChildAdded:Connect(function(child)
-    if DispenserESPConfig.Enabled and child.Name == "BuildermanDispenser" then
-        task.wait(0.5)
-        UpdateDispenserESP()
-    end
-end)
-
-IngameFolder.ChildRemoved:Connect(function(child)
-    if child.Name == "BuildermanDispenser" then
-        ESP:Huy("Dispenser_" .. (child:GetDebugId() or child.Name))
-    end
-end)
-
--- Esp Tripwire
-
-local TripwireESPConfig = {
-    Enabled = false,
-    Types = { Highlight = true, Text = false, Box = false, Tracer = false },
-    TextFormat = { Name = true, HP = false, Distance = false },
-    Color = Color3.fromRGB(255, 0, 0)
-}
-
-local function GetTripwireObjects()
-    local list = {}
-    for _, child in pairs(IngameFolder:GetChildren()) do
-        if child.Name:match("TaphTripwire$") then
-            table.insert(list, child)
-        end
-    end
-    return list
-end
-
-local function UpdateTripwireESP()
-    if TripwireESPConfig.Enabled then
-        for idx, obj in pairs(GetTripwireObjects()) do
-            local owner = obj.Name:gsub("TaphTripwire$", "")
-            local dispName = owner ~= "" and (owner .. "'s Tripwire") or "Tripwire"
-            
-            ESP:DangKy("Tripwire_" .. (obj:GetDebugId() or obj.Name .. "_" .. idx), obj, {
-                UseHighlight = TripwireESPConfig.Types.Highlight,
-                UseText = TripwireESPConfig.Types.Text,
-                UseBox = TripwireESPConfig.Types.Box,
-                UseTracer = TripwireESPConfig.Types.Tracer,
-                Color = TripwireESPConfig.Color,
-                ShowName = TripwireESPConfig.TextFormat.Name,
-                ShowHP = TripwireESPConfig.TextFormat.HP,
-                ShowDistance = TripwireESPConfig.TextFormat.Distance,
-                CustomName = dispName
-            })
-        end
-    else
-        for idx, obj in pairs(GetTripwireObjects()) do
-            ESP:Huy("Tripwire_" .. (obj:GetDebugId() or obj.Name .. "_" .. idx))
-        end
-    end
-end
-
-MyUIElements.EspTripwire:Dropdown({
-    Title = "loc:ESPMode",
-    Desc = "loc:ESPModeDesc",
-    Flag = "ESP_Tripwire_Type_Dropdown",
-    Values = {"Highlight", "Text", "Box", "Tracer"},
-    Value = {"Highlight"},
-    Multi = true,
-    AllowNone = true,
-    Callback = function(selectedValues)
-        TripwireESPConfig.Types = { Highlight = false, Text = false, Box = false, Tracer = false }
-        for k, v in pairs(selectedValues) do
-            local val = type(k) == "string" and k or v
-            if val == "Highlight" then TripwireESPConfig.Types.Highlight = true 
-            elseif val == "Text" then TripwireESPConfig.Types.Text = true 
-            elseif val == "Box" then TripwireESPConfig.Types.Box = true 
-            elseif val == "Tracer" then TripwireESPConfig.Types.Tracer = true end
-        end
-        if TripwireESPConfig.Enabled then UpdateTripwireESP() end
-    end
-})
-
-MyUIElements.EspTripwire:Dropdown({
-    Title = "loc:SetupEspText",
-    Desc = "loc:SetupEspTextDesc",
-    Flag = "ESP_Tripwire_Text_Format",
-    Values = {"Name", "HP", "Distance"},
-    Value = {"Name"},
-    Multi = true,
-    AllowNone = true,
-    Callback = function(selectedValues)
-        TripwireESPConfig.TextFormat = { Name = false, HP = false, Distance = false }
-        for k, v in pairs(selectedValues) do
-            local val = type(k) == "string" and k or v
-            if val == "Name" then TripwireESPConfig.TextFormat.Name = true 
-            elseif val == "HP" then TripwireESPConfig.TextFormat.HP = true 
-            elseif val == "Distance" then TripwireESPConfig.TextFormat.Distance = true end
-        end
-        if TripwireESPConfig.Enabled then UpdateTripwireESP() end
-    end
-})
-
-MyUIElements.EspTripwire:Colorpicker({
-    Title = "loc:EspColor",
-    Desc = "loc:EspColorDesc",
-    Flag = "Esp_Tripwire_Colorpicker",
-    Default = TripwireESPConfig.Color,
-    Transparency = 0,
-    Locked = false,
-    Callback = function(color) 
-        TripwireESPConfig.Color = color
-        if TripwireESPConfig.Enabled then UpdateTripwireESP() end
-    end
-})
-
-MyUIElements.EspTripwire:Toggle({
-    Title = "loc:EspTripwire",
-    Desc = "loc:EspTripwireDesc",
-    Flag = "ESP_Tripwire_Toggle",
-    Value = false,
-    Callback = function(state)
-        TripwireESPConfig.Enabled = state
-        UpdateTripwireESP()
-    end
-})
-
-IngameFolder.ChildAdded:Connect(function(child)
-    if TripwireESPConfig.Enabled and child.Name:match("TaphTripwire$") then
-        task.wait(0.5)
-        UpdateTripwireESP()
-    end
-end)
-
-IngameFolder.ChildRemoved:Connect(function(child)
-    if child.Name:match("TaphTripwire$") then
-        ESP:Huy("Tripwire_" .. (child:GetDebugId() or child.Name))
-    end
-end)
-
--- Esp Tripmime
-
-local TripmineESPConfig = {
-    Enabled = false,
-    Types = { Highlight = true, Text = false, Box = false, Tracer = false },
-    TextFormat = { Name = true, HP = false, Distance = false },
-    Color = Color3.fromRGB(200, 0, 255)
-}
-
-local function GetTripmineObjects()
-    local list = {}
-    for _, child in pairs(IngameFolder:GetChildren()) do
-        if child.Name == "SubspaceTripmine" then
-            table.insert(list, child)
-        end
-    end
-    return list
-end
-
-local function UpdateTripmineESP()
-    if TripmineESPConfig.Enabled then
-        for idx, obj in pairs(GetTripmineObjects()) do
-            ESP:DangKy("Tripmine_" .. (obj:GetDebugId() or obj.Name .. "_" .. idx), obj, {
-                UseHighlight = TripmineESPConfig.Types.Highlight,
-                UseText = TripmineESPConfig.Types.Text,
-                UseBox = TripmineESPConfig.Types.Box,
-                UseTracer = TripmineESPConfig.Types.Tracer,
-                Color = TripmineESPConfig.Color,
-                ShowName = TripmineESPConfig.TextFormat.Name,
-                ShowHP = TripmineESPConfig.TextFormat.HP,
-                ShowDistance = TripmineESPConfig.TextFormat.Distance,
-                CustomName = "Subspace Tripmine"
-            })
-        end
-    else
-        for idx, obj in pairs(GetTripmineObjects()) do
-            ESP:Huy("Tripmine_" .. (obj:GetDebugId() or obj.Name .. "_" .. idx))
-        end
-    end
-end
-
-MyUIElements.EspTripmine:Dropdown({
-    Title = "loc:ESPMode",
-    Desc = "loc:ESPModeDesc",
-    Flag = "ESP_Tripmine_Type_Dropdown",
-    Values = {"Highlight", "Text", "Box", "Tracer"},
-    Value = {"Highlight"},
-    Multi = true,
-    AllowNone = true,
-    Callback = function(selectedValues)
-        TripmineESPConfig.Types = { Highlight = false, Text = false, Box = false, Tracer = false }
-        for k, v in pairs(selectedValues) do
-            local val = type(k) == "string" and k or v
-            if val == "Highlight" then TripmineESPConfig.Types.Highlight = true 
-            elseif val == "Text" then TripmineESPConfig.Types.Text = true 
-            elseif val == "Box" then TripmineESPConfig.Types.Box = true 
-            elseif val == "Tracer" then TripmineESPConfig.Types.Tracer = true end
-        end
-        if TripmineESPConfig.Enabled then UpdateTripmineESP() end
-    end
-})
-
-MyUIElements.EspTripmine:Dropdown({
-    Title = "loc:SetupEspText",
-    Desc = "loc:SetupEspTextDesc",
-    Flag = "ESP_Tripmine_Text_Format",
-    Values = {"Name", "HP", "Distance"},
-    Value = {"Name"},
-    Multi = true,
-    AllowNone = true,
-    Callback = function(selectedValues)
-        TripmineESPConfig.TextFormat = { Name = false, HP = false, Distance = false }
-        for k, v in pairs(selectedValues) do
-            local val = type(k) == "string" and k or v
-            if val == "Name" then TripmineESPConfig.TextFormat.Name = true 
-            elseif val == "HP" then TripmineESPConfig.TextFormat.HP = true 
-            elseif val == "Distance" then TripmineESPConfig.TextFormat.Distance = true end
-        end
-        if TripmineESPConfig.Enabled then UpdateTripmineESP() end
-    end
-})
-
-MyUIElements.EspTripmine:Colorpicker({
-    Title = "loc:EspColor",
-    Desc = "loc:EspColorDesc",
-    Flag = "Esp_Tripmine_Colorpicker",
-    Default = TripmineESPConfig.Color,
-    Transparency = 0,
-    Locked = false,
-    Callback = function(color) 
-        TripmineESPConfig.Color = color
-        if TripmineESPConfig.Enabled then UpdateTripmineESP() end
-    end
-})
-
-MyUIElements.EspTripmine:Toggle({
-    Title = "loc:EspTripmine",
-    Desc = "loc:EspTripmineDesc",
-    Flag = "ESP_Tripmine_Toggle",
-    Value = false,
-    Callback = function(state)
-        TripmineESPConfig.Enabled = state
-        UpdateTripmineESP()
-    end
-})
-
-IngameFolder.ChildAdded:Connect(function(child)
-    if TripmineESPConfig.Enabled and child.Name == "SubspaceTripmine" then
-        task.wait(0.5)
-        UpdateTripmineESP()
-    end
-end)
-
-IngameFolder.ChildRemoved:Connect(function(child)
-    if child.Name == "SubspaceTripmine" then
-        ESP:Huy("Tripmine_" .. (child:GetDebugId() or child.Name))
-    end
-end)
-
--- Esp Spray
-
-local SprayESPConfig = {
-    Enabled = false,
-    Types = { Highlight = true, Text = false, Box = false, Tracer = false },
-    TextFormat = { Name = true, HP = false, Distance = false },
-    Color = Color3.fromRGB(0, 255, 100)
-}
-
-local function GetSprayObjects()
-    local list = {}
-    for _, child in pairs(IngameFolder:GetChildren()) do
-        if child.Name:match("Spray$") then
-            table.insert(list, child)
-        end
-    end
-    return list
-end
-
-local function UpdateSprayESP()
-    if SprayESPConfig.Enabled then
-        for idx, obj in pairs(GetSprayObjects()) do
-            local owner = obj.Name:gsub("Spray$", "")
-            local dispName = owner ~= "" and (owner .. "'s Spray") or "Spray"
-
-            ESP:DangKy("Spray_" .. (obj:GetDebugId() or obj.Name .. "_" .. idx), obj, {
-                UseHighlight = SprayESPConfig.Types.Highlight,
-                UseText = SprayESPConfig.Types.Text,
-                UseBox = SprayESPConfig.Types.Box,
-                UseTracer = SprayESPConfig.Types.Tracer,
-                Color = SprayESPConfig.Color,
-                ShowName = SprayESPConfig.TextFormat.Name,
-                ShowHP = SprayESPConfig.TextFormat.HP,
-                ShowDistance = SprayESPConfig.TextFormat.Distance,
-                CustomName = dispName
-            })
-        end
-    else
-        for idx, obj in pairs(GetSprayObjects()) do
-            ESP:Huy("Spray_" .. (obj:GetDebugId() or obj.Name .. "_" .. idx))
-        end
-    end
-end
-
-MyUIElements.EspSpray:Dropdown({
-    Title = "loc:ESPMode",
-    Desc = "loc:ESPModeDesc",
-    Flag = "ESP_Spray_Type_Dropdown",
-    Values = {"Highlight", "Text", "Box", "Tracer"},
-    Value = {"Highlight"},
-    Multi = true,
-    AllowNone = true,
-    Callback = function(selectedValues)
-        SprayESPConfig.Types = { Highlight = false, Text = false, Box = false, Tracer = false }
-        for k, v in pairs(selectedValues) do
-            local val = type(k) == "string" and k or v
-            if val == "Highlight" then SprayESPConfig.Types.Highlight = true 
-            elseif val == "Text" then SprayESPConfig.Types.Text = true 
-            elseif val == "Box" then SprayESPConfig.Types.Box = true 
-            elseif val == "Tracer" then SprayESPConfig.Types.Tracer = true end
-        end
-        if SprayESPConfig.Enabled then UpdateSprayESP() end
-    end
-})
-
-MyUIElements.EspSpray:Dropdown({
-    Title = "loc:SetupEspText",
-    Desc = "loc:SetupEspTextDesc",
-    Flag = "ESP_Spray_Text_Format",
-    Values = {"Name", "HP", "Distance"},
-    Value = {"Name"},
-    Multi = true,
-    AllowNone = true,
-    Callback = function(selectedValues)
-        SprayESPConfig.TextFormat = { Name = false, HP = false, Distance = false }
-        for k, v in pairs(selectedValues) do
-            local val = type(k) == "string" and k or v
-            if val == "Name" then SprayESPConfig.TextFormat.Name = true 
-            elseif val == "HP" then SprayESPConfig.TextFormat.HP = true 
-            elseif val == "Distance" then SprayESPConfig.TextFormat.Distance = true end
-        end
-        if SprayESPConfig.Enabled then UpdateSprayESP() end
-    end
-})
-
-MyUIElements.EspSpray:Colorpicker({
-    Title = "loc:EspColor",
-    Desc = "loc:EspColorDesc",
-    Flag = "Esp_Spray_Colorpicker",
-    Default = SprayESPConfig.Color,
-    Transparency = 0,
-    Locked = false,
-    Callback = function(color) 
-        SprayESPConfig.Color = color
-        if SprayESPConfig.Enabled then UpdateSprayESP() end
-    end
-})
-
-MyUIElements.EspSpray:Toggle({
-    Title = "loc:EspSpray",
-    Desc = "loc:EspSprayDesc",
-    Flag = "ESP_Spray_Toggle",
-    Value = false,
-    Callback = function(state)
-        SprayESPConfig.Enabled = state
-        UpdateSprayESP()
-    end
-})
-
-IngameFolder.ChildAdded:Connect(function(child)
-    if SprayESPConfig.Enabled and child.Name:match("Spray$") then
-        task.wait(0.5)
-        UpdateSprayESP()
-    end
-end)
-
-IngameFolder.ChildRemoved:Connect(function(child)
-    if child.Name:match("Spray$") then
-        ESP:Huy("Spray_" .. (child:GetDebugId() or child.Name))
-    end
-end)
+TeleportLogic:InitEvents()
 
 local CamlockBot = {
     Config = {
@@ -4816,7 +4548,6 @@ MyUIElements.Bypass:Button({
     end
 })
 
--- Gom toàn bộ trạng thái vào 1 table để triệt tiêu biến local
 AFKBypass = {
     Enabled = false,
     Initialized = false,
@@ -4826,48 +4557,39 @@ AFKBypass = {
     Method = ""
 }
 
--- Tách logic chặn Remote ra function riêng (DRY & Không local)
 function HookNetwork(self, name, ...)
     if AFKBypass.Enabled and name == "AFKInsanity" then
-        return -- Chặn hoàn toàn tín hiệu báo AFK lên server
+        return
     end
     return AFKBypass.OldHooks.FireServer(self, name, ...)
 end
 
--- Tách logic fake input ra function riêng (DRY & Không local)
 function HookNamecall(self, ...)
     AFKBypass.Method = getnamecallmethod()
-    -- Lừa hàm GetKeysPressed của game là ta luôn đang giữ phím Space
     if AFKBypass.Enabled and not checkcaller() and self == UserInputService and AFKBypass.Method == "GetKeysPressed" then
         return {Enum.KeyCode.Space}
     end
     return AFKBypass.OldHooks.Namecall(self, ...)
 end
 
--- Function khởi tạo Hook, chỉ chạy 1 lần duy nhất
 function InitAFK()
     if AFKBypass.Initialized then return end
     AFKBypass.Initialized = true
     
-    -- Hook vào thẳng Module Network của game (đúng đường dẫn trong source bro gửi)
     AFKBypass.NetworkMod = require(ReplicatedStorage.Modules.Network.Network)
     AFKBypass.OldHooks.FireServer = AFKBypass.NetworkMod.FireServerConnection
     AFKBypass.NetworkMod.FireServerConnection = HookNetwork
     
-    -- Hook namecall để bypass GetKeysPressed
     AFKBypass.OldHooks.Namecall = hookmetamethod(game, "__namecall", HookNamecall)
 end
 
--- Function trị triệt để lỗi AFK do văng cửa sổ (Tab out)
 function ForceWindowFocus()
     if not getconnections then return end
-    -- Bắn event báo game rằng người chơi đang focus màn hình liên tục
     for _, conn in ipairs(getconnections(UserInputService.WindowFocused)) do
         conn:Fire()
     end
 end
 
--- Tích hợp vào UI của bro
 MyUIElements.Bypass:Toggle({
     Title = "loc:AntiAFK",
     Desc = "loc:AntiAFKDesc",
@@ -4879,8 +4601,7 @@ MyUIElements.Bypass:Toggle({
         if state then
             InitAFK()
             ForceWindowFocus()
-            
-            -- Lặp lại việc force focus để chống Tab-out
+
             if not AFKBypass.Loop then
                 AFKBypass.Loop = RunService.Heartbeat:Connect(function()
                     if AFKBypass.Enabled then
@@ -4889,7 +4610,6 @@ MyUIElements.Bypass:Toggle({
                 end)
             end
         else
-            -- Tắt gọn gàng, tránh lặp lại loop (áp dụng đúng Rule 3)
             if AFKBypass.Loop then
                 AFKBypass.Loop:Disconnect()
                 AFKBypass.Loop = nil
@@ -5433,240 +5153,163 @@ MyUIElements.SettingsManager.MySubTabs.UI:Toggle({
     end
 })
 
-local ConfigManager = Window.ConfigManager
-local AUTOLOAD_FILE = "Forsaken.txt"
-local AUTOLOAD_CLONE = "ForsakenOff.txt"
-
-local ConfigState = {
-    Name = "",
-    Selected = nil,
-    CurrentObject = nil,
-    AutoLoad = false,
-    AutoSaveLoop = nil
+ConfigSys = {
+    State = {
+        Name = "",
+        Selected = nil,
+        CurrentObject = nil
+    },
+    Dropdown = nil,
+    Manager = Window.ConfigManager,
+    Tab = MyUIElements.SettingsManager.MySubTabs.Config
 }
 
-local ConfigDropdownElement = nil
-
-local function NotifyConfig(title, content, icon)
+function ConfigSys.Notify(title, content, icon)
     WindUI:Notify({ Title = title, Content = content, Duration = 3, Icon = icon })
 end
 
-local function GetConfigs()
-    return ConfigManager:AllConfigs()
+function ConfigSys.GetConfigs()
+    return ConfigSys.Manager:AllConfigs()
 end
 
-local function RefreshDropdown()
-    if not ConfigDropdownElement then return end
-    
-    local configs = GetConfigs()
-    ConfigDropdownElement:Refresh(configs)
-    
-    local targetValue = ConfigState.Selected
-    if ConfigDropdownElement.Set then
-        ConfigDropdownElement:Set(targetValue)
-    elseif ConfigDropdownElement.SetValue then
-        ConfigDropdownElement:SetValue(targetValue)
+function ConfigSys.RefreshDropdown()
+    if not ConfigSys.Dropdown then return end
+    ConfigSys.Dropdown:Refresh(ConfigSys.GetConfigs())
+
+    local setFunc = ConfigSys.Dropdown.Set or ConfigSys.Dropdown.SetValue
+    if setFunc then
+        setFunc(ConfigSys.Dropdown, ConfigSys.State.Selected)
     end
 end
 
-local function ConfigExists(name)
+function ConfigSys.Exists(name)
     if not name or name == "" then return false end
-    
-    local list = GetConfigs()
-    for i = 1, #list do
-        if list[i] == name then return true end
+    for _, cfgName in ipairs(ConfigSys.GetConfigs()) do
+        if cfgName == name then return true end
     end
     return false
 end
 
-local function SaveAutoLoad(configName, state)
-    if not writefile then return end
-    
-    local dataString = string.format("%s|%s", configName or "", state and "1" or "0")
-    writefile(AUTOLOAD_FILE, dataString)
-
-    if state and isfile and isfile(AUTOLOAD_CLONE) then
-        pcall(delfile, AUTOLOAD_CLONE)
-    end
-end
-
-local function LoadAutoLoad()
-    if (isfile and isfile(AUTOLOAD_CLONE)) or not (readfile and isfile and isfile(AUTOLOAD_FILE)) then
-        return "", false
-    end
-
-    local success, result = pcall(readfile, AUTOLOAD_FILE)
-    if not success then return "", false end
-
-    local name, toggle = tostring(result):match("^(.-)|?(%d?)$")
-    return name or "", toggle == "1"
-end
-
-local function ExecuteConfigAction(name, action)
-    local success, cfg = pcall(function() return ConfigManager:CreateConfig(name) end)
+function ConfigSys.Execute(name, action)
+    local success, cfg = pcall(function() return ConfigSys.Manager:CreateConfig(name) end)
     if not success or not cfg then return false end
 
     local actionSuccess = pcall(function()
-        if action == "Save" then cfg:Save() else cfg:Load() end
+        if action == "Save" then cfg:Save()
+        elseif action == "Load" then cfg:Load()
+        elseif action == "Delete" then cfg:Delete() end
     end)
 
-    if actionSuccess then
-        ConfigState.CurrentObject = cfg
+    if actionSuccess and action ~= "Delete" then
+        ConfigSys.State.CurrentObject = cfg
         Window.CurrentConfig = cfg
     end
     return actionSuccess
 end
 
-local function StopConfigLoops()
-    if ConfigState.AutoSaveLoop then
-        task.cancel(ConfigState.AutoSaveLoop)
-        ConfigState.AutoSaveLoop = nil
+function ConfigSys.HandleAction(actionType, errEmpty, errNotExist, successMsg, icon)
+    local isMake = (actionType == "Make")
+    local targetName = isMake and ConfigSys.State.Name or ConfigSys.State.Selected
+
+    if not targetName or targetName == "" then 
+        return ConfigSys.Notify("loc:Config", errEmpty, "circle-alert") 
     end
-end
 
-local function StartAutoSave()
-    StopConfigLoops()
+    local exists = ConfigSys.Exists(targetName)
+    if isMake and exists then
+        return ConfigSys.Notify("loc:Config", errNotExist, "circle-alert")
+    elseif not isMake and not exists then
+        return ConfigSys.Notify("loc:Config", errNotExist, "circle-alert")
+    end
 
-    ConfigState.AutoSaveLoop = task.spawn(function()
-        task.wait(1)
-        if not ConfigState.AutoLoad then return end
-        
-        local selected = ConfigState.Selected
-        if selected and ConfigExists(selected) then
-            ExecuteConfigAction(selected, "Save")
-            ExecuteConfigAction(selected, "Load")
+    local execType = (isMake or actionType == "Update") and "Save" or actionType
+    if ConfigSys.Execute(targetName, execType) then
+        if isMake then
+            ConfigSys.State.Selected = targetName
+            ConfigSys.RefreshDropdown()
+        elseif actionType == "Delete" then
+            ConfigSys.State.Selected = nil
+            ConfigSys.State.CurrentObject = nil
+            ConfigSys.RefreshDropdown()
         end
-
-        NotifyConfig("loc:Auto_Load", "loc:Config_Content13", "refresh-cw")
-
-        while ConfigState.AutoLoad do
-            task.wait(5)
-            local currentSelected = ConfigState.Selected
-            if currentSelected and ConfigExists(currentSelected) then
-                ExecuteConfigAction(currentSelected, "Save")
-            end
-        end
-    end)
-end
-
-local function OnConfigNameChanged(v)
-    ConfigState.Name = tostring(v or "")
-end
-
-local function OnConfigSelected(v)
-    ConfigState.Selected = v
-end
-
-local function OnMakeConfigPressed()
-    local name = ConfigState.Name
-    if name == "" then return NotifyConfig("loc:Config", "loc:Config_Content", "circle-alert") end
-    if ConfigExists(name) then return NotifyConfig("loc:Config", "loc:Config_Content1", "circle-alert") end
-
-    if not ExecuteConfigAction(name, "Save") then
-        return NotifyConfig("loc:Config", "Failed to create config", "circle-alert")
-    end
-
-    ConfigState.Selected = name
-    RefreshDropdown()
-    NotifyConfig("loc:Config", "loc:Config_Content2", "check")
-end
-
-local function OnUpdateConfigPressed()
-    local selected = ConfigState.Selected
-    if not selected then return NotifyConfig("loc:Config", "loc:Config_Content3", "circle-alert") end
-    if not ConfigExists(selected) then return NotifyConfig("loc:Config", "loc:Config_Content4", "circle-alert") end
-
-    if ExecuteConfigAction(selected, "Save") then
-        NotifyConfig("loc:Config", "loc:Config_Content5", "refresh-cw")
-    end
-end
-
-local function OnLoadConfigPressed()
-    local selected = ConfigState.Selected
-    if not selected then return NotifyConfig("loc:Config", "loc:Config_Content6", "circle-alert") end
-    if not ConfigExists(selected) then return NotifyConfig("loc:Config", "loc:Config_Content7", "circle-alert") end
-
-    if ExecuteConfigAction(selected, "Load") then
-        NotifyConfig("loc:Config", "loc:Config_Content8", "check")
-    end
-end
-
-local function OnDeleteConfigPressed()
-    local selected = ConfigState.Selected
-    if not selected then return NotifyConfig("loc:Config", "loc:Config_Content9", "circle-alert") end
-    if not ConfigExists(selected) then return NotifyConfig("loc:Config", "loc:Config_Content10", "circle-alert") end
-
-    local success, cfg = pcall(function() return ConfigManager:CreateConfig(selected) end)
-    if success and cfg then pcall(function() cfg:Delete() end) end
-
-    ConfigState.Selected = nil
-    ConfigState.CurrentObject = nil
-    RefreshDropdown()
-    NotifyConfig("loc:Config", "loc:Config_Content11", "trash")
-end
-
-local function OnAutoLoadToggled(state)
-    ConfigState.AutoLoad = state
-    StopConfigLoops()
-
-    if not state then
-        if writefile then writefile(AUTOLOAD_CLONE, "") end
-        NotifyConfig("loc:Auto_Load", "loc:Disabled", "x")
-        return
-    end
-
-    local selected = ConfigState.Selected
-    if not selected then
-        ConfigState.AutoLoad = false
-        NotifyConfig("loc:Auto_Load", "loc:Config_Content12", "circle-alert")
-        return
-    end
-
-    SaveAutoLoad(selected, true)
-    NotifyConfig("loc:Auto_Load", "Enabled: " .. selected, "check")
-    StartAutoSave()
-end
-
-MyUIElements.SettingsManager.MySubTabs.Config:Input({
-    Title = "loc:Config_Name", Desc = "loc:Config_Name_Desc", Flag = "Config Name",
-    Placeholder = "Enter new config name", Value = "", Callback = OnConfigNameChanged
-})
-
-ConfigDropdownElement = MyUIElements.SettingsManager.MySubTabs.Config:Dropdown({
-    Title = "loc:Config_List", Desc = "loc:Config_List_Desc", Flag = "Config List",
-    Values = GetConfigs(), Value = nil, Callback = OnConfigSelected
-})
-
-MyUIElements.SettingsManager.MySubTabs.Config:Button({ Title = "loc:Make_Config", Desc = "loc:Make_Config_Desc", Callback = OnMakeConfigPressed })
-MyUIElements.SettingsManager.MySubTabs.Config:Button({ Title = "loc:Update_Config", Desc = "loc:Update_Config_Content", Callback = OnUpdateConfigPressed })
-MyUIElements.SettingsManager.MySubTabs.Config:Button({ Title = "loc:Load_Config", Desc = "loc:Load_Config_Desc", Callback = OnLoadConfigPressed })
-MyUIElements.SettingsManager.MySubTabs.Config:Button({ Title = "loc:Delete_Config", Desc = "loc:Delete_Config_Desc", Callback = OnDeleteConfigPressed })
-
-MyUIElements.SettingsManager.MySubTabs.Config:Toggle({
-    Title = "loc:Auto_Load_Config", Desc = "loc:Auto_Load_Config_Desc", Flag = "Auto Load Config v2",
-    Value = false, Callback = OnAutoLoadToggled
-})
-
-task.delay(1, function()
-    local saved, enabled = LoadAutoLoad()
-    if saved == "" or not ConfigExists(saved) then return end
-
-    ConfigState.Selected = saved
-    ConfigState.AutoLoad = enabled
-
-    ExecuteConfigAction(saved, "Load")
-    RefreshDropdown()
-
-    if enabled then
-        StartAutoSave()
-        NotifyConfig("loc:Auto_Load", "Loaded: " .. saved .. " (enabled)", "check")
+        ConfigSys.Notify("loc:Config", successMsg, icon)
     else
-        NotifyConfig("loc:Auto_Load", "Loaded: " .. saved .. " (disabled)", "circle-alert")
+        if isMake then ConfigSys.Notify("loc:Config", "Failed to create config", "circle-alert") end
     end
-end)
+end
+
+ConfigSys.Tab:Input({
+    Title = "loc:Config_Name", Desc = "loc:Config_Name_Desc", Flag = "Config Name",
+    Placeholder = "Enter new config name", Value = "",
+    Callback = function(v) ConfigSys.State.Name = tostring(v or "") end
+})
+
+ConfigSys.Dropdown = ConfigSys.Tab:Dropdown({
+    Title = "loc:Config_List", Desc = "loc:Config_List_Desc", Flag = "Config List",
+    Values = ConfigSys.GetConfigs(), Value = nil,
+    Callback = function(v) ConfigSys.State.Selected = v end
+})
+
+ConfigSys.Tab:Button({ 
+    Title = "loc:Make_Config", Desc = "loc:Make_Config_Desc", 
+    Callback = function() ConfigSys.HandleAction("Make", "loc:Config_Content", "loc:Config_Content1", "loc:Config_Content2", "check") end 
+})
+
+ConfigSys.Tab:Button({ 
+    Title = "loc:Update_Config", Desc = "loc:Update_Config_Content", 
+    Callback = function() ConfigSys.HandleAction("Update", "loc:Config_Content3", "loc:Config_Content4", "loc:Config_Content5", "refresh-cw") end 
+})
+
+ConfigSys.Tab:Button({ 
+    Title = "loc:Load_Config", Desc = "loc:Load_Config_Desc", 
+    Callback = function() ConfigSys.HandleAction("Load", "loc:Config_Content6", "loc:Config_Content7", "loc:Config_Content8", "check") end 
+})
+
+ConfigSys.Tab:Button({ 
+    Title = "loc:Delete_Config", Desc = "loc:Delete_Config_Desc", 
+    Callback = function() ConfigSys.HandleAction("Delete", "loc:Config_Content9", "loc:Config_Content10", "loc:Config_Content11", "trash") end 
+})
+
+ConfigSys.AutoLoadToggle = Window:Autoload({
+    Parent = ConfigSys.Tab,
+    Title = "loc:Auto_Load_Config",
+    Desc = "loc:Auto_Load_Config_Desc",
+    AutoSaveInterval = 3,
+    Resolve = function()
+        local name = ConfigSys.State.Selected
+
+        if not name or name == "" then
+            ConfigSys.Notify("loc:Config", "loc:AutoLoad_NoSelection", "circle-alert")
+            return nil
+        end
+
+        if not ConfigSys.Exists(name) then
+            ConfigSys.Notify("loc:Config", "loc:AutoLoad_NotExist", "circle-alert")
+            return nil
+        end
+
+        if not ConfigSys.Execute(name, "Load") then
+            ConfigSys.Notify("loc:Config", "loc:AutoLoad_LoadFailed", "circle-alert")
+            return nil
+        end
+
+        return ConfigSys.State.CurrentObject
+    end,
+    OnEnabled = function(cfg, name)
+        ConfigSys.Notify("loc:Config", "loc:AutoLoad_Enabled", "check")
+    end,
+    OnDisabled = function()
+        ConfigSys.Notify("loc:Config", "loc:AutoLoad_Disabled", "info")
+    end,
+    OnError = function(reason)
+        if reason == "no_config" then
+            ConfigSys.Notify("loc:Config", "loc:AutoLoad_NoSelection", "circle-alert")
+        end
+    end,
+})
 
 getgenv().showpingandfps = getgenv().showpingandfps ~= false
 
 if getgenv().showpingandfps then
     loadstring(game:HttpGet("https://raw.githubusercontent.com/SLK-GAMING-MOD/Open-soure/refs/heads/main/fps%2Bping.luau"))()
-end     
+end
