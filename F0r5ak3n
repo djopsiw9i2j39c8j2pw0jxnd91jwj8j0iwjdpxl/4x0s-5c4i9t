@@ -368,6 +368,18 @@ WindUI:Localization({
             SelectGeneratorDesc = "Select a generator to teleport to.",
             TeleportToGenerator = "Teleport To Generator",
             TeleportToGeneratorDesc = "Teleport to the selected generator.",
+            CustomLMS = "Custom LMS",
+            CustomLMSDesc = "Use your custom LMS music.",
+            CustomLMSList = "Custom LMS List",
+            CustomLMSListDesc = "Manage your custom LMS music list.",
+            YouLMSIdOrLink = "LMS ID or Link",
+            YouLMSIdOrLinkDesc = "Enter the LMS ID or link you want to use.",
+            SoundVolume = "Sound Volume",
+            SoundVolumeDesc = "Adjust the volume of the custom LMS music.",
+            TestCustomLMS = "Test Custom LMS",
+            TestCustomLMSDesc = "Play the custom LMS music to test it.",
+            EnableCustomLMS = "Enable Custom LMS",
+            EnableCustomLMSDesc = "Enable your custom LMS music.",
         },
         vi = {
             HubTitle = "Axos Hub",
@@ -621,6 +633,18 @@ Load_Config_Desc = "Nhấn để tải cấu hình đã chọn.",
             SelectGeneratorDesc = "Chọn máy phát điện để dịch chuyển đến.",
             TeleportToGenerator = "Dịch chuyển đến máy phát điện",
             TeleportToGeneratorDesc = "Dịch chuyển đến máy phát điện đã chọn.",
+            CustomLMS = "LMS tùy chỉnh",
+            CustomLMSDesc = "Sử dụng nhạc LMS tùy chỉnh của bạn.",
+            CustomLMSList = "Danh sách LMS tùy chỉnh",
+            CustomLMSListDesc = "Quản lý danh sách nhạc LMS tùy chỉnh của bạn.",
+            YouLMSIdOrLink = "ID hoặc Link LMS",
+            YouLMSIdOrLinkDesc = "Nhập ID hoặc link LMS bạn muốn sử dụng.",
+            SoundVolume = "Âm lượng",
+            SoundVolumeDesc = "Điều chỉnh âm lượng nhạc LMS tùy chỉnh.",
+            TestCustomLMS = "Thử LMS tùy chỉnh",
+            TestCustomLMSDesc = "Phát nhạc LMS tùy chỉnh để kiểm tra.",
+            EnableCustomLMS = "Bật LMS tùy chỉnh",
+            EnableCustomLMSDesc = "Bật nhạc LMS tùy chỉnh của bạn.",
         }
     }
 })
@@ -716,7 +740,7 @@ local OpenButtonConfig = {
 
 Window:EditOpenButton(OpenButtonConfig)
 
-Window:Tag({Title = "v0.0.6", Icon = "cog", Color = Color3.fromHex("#30ff6a")})
+Window:Tag({Title = "v0.0.7", Icon = "cog", Color = Color3.fromHex("#30ff6a")})
 
 local Tabs = {
     About = Window:Section({ Title = "loc:About", Opened = true }),
@@ -762,7 +786,7 @@ local TabHandles = {
     }),
     
     Status = Tabs.Gameplay:Tab({ 
-        Title = "loc:Status", Icon = "toolbox", Desc = "Thông Số", IconThemed = true, 
+        Title = "loc:Status", Icon = "rbxassetid://130626786024244", Desc = "Thông Số", IconThemed = true, 
         Locked = false, ShowTabTitle = true, Border = true, LayoutOrder = 1 
     }),
     
@@ -817,7 +841,7 @@ local ElementConfigs = {
         Config = {
             Title = "loc:Generator",
             Desc = "loc:GeneratorDesc",
-            Icon = "user",
+            Icon = "git-merge",
             Box = true,
             BoxBorder = true,
             Opened = false,
@@ -848,6 +872,21 @@ local ElementConfigs = {
             Title = "loc:AutoMiniGame",
             Desc = "loc:AutoMiniGameDesc",
             Icon = "user",
+            Box = true,
+            BoxBorder = true,
+            Opened = false,
+            Hover = true,
+        }
+    },
+    
+    {
+        ID = "CustomLMS",
+        Type = "Section",
+        Parent = TabHandles.Main,
+        Config = {
+            Title = "loc:CustomLMS",
+            Desc = "loc:CustomLMSDesc",
+            Icon = "audio-lines",
             Box = true,
             BoxBorder = true,
             Opened = false,
@@ -2093,7 +2132,7 @@ local PuzzleBot = {
     Config = {
         AutoSolve = false,
         ShowPath = false,
-        SolveSpeed = 0.01
+        SolveSpeed = 0.07
     },
     State = {
         Watchers = {},
@@ -2243,13 +2282,13 @@ MyUIElements.Generator:Input({
     Title = "loc:SolveSpeed",
     Desc = "loc:SolveSpeedDesc",
     Flag = "SolveSpeed_Input",
-    Placeholder = "0.01",
-    Value = 0.01,
+    Placeholder = "0.07",
+    Value = 0.07,
     Numeric = true,
     Callback = function(val)
         local speed = tonumber(val)
         if speed then
-            PuzzleBot.Config.SolveSpeed = math.clamp(speed, 0.01, 10)
+            PuzzleBot.Config.SolveSpeed = math.clamp(speed, 0.07, 10)
         end
     end
 })
@@ -2601,6 +2640,268 @@ MyUIElements.AutoMiniGame:Toggle({
     Value = false,
     Callback = function(state)
         AutoQTEManager:HandleBloodhook(state)
+    end
+})
+
+CustomLMSLogic = {
+    Enabled = false,
+    CurrentTrack = nil,
+    OriginalSoundId = nil,
+    TestSoundObj = nil,
+    EventsSet = false,
+    Volume = 1,
+    LMSList = {},
+
+    MusicList = {
+        ["Hot topic havoc"] = "134884767490882",
+        ["Coolkidd remix"] = "78534559289195",
+        ["A retro soul"] = "116457974828068",
+        ["Pot"] = "77435705757696",
+        ["Slasher m3"] = "118056082854908",
+        ["Slasher m4"] = "79224828205788",
+        ["Hitbox accurate"] = "126311349373144",
+        ["Azure vs twotime"] = "https://raw.githubusercontent.com/SLK-GAMING-MOD/LMS/main/Two%20Time%20Vs.%20Azure%20LMS%20%20AND%20THE%20SERAPHIM%20WEPT%2C%20AS%20THE%20ANGELS%20FALL%20%20Forsaken%20Animation%20-%20JuanDyAir%20(youtube).mp3",
+        ["c00lkidd m4 new"] = "https://raw.githubusercontent.com/SLK-GAMING-MOD/LMS/main/HERE%20I%20COME%20-%20Milestone%20c00lkidd%20Chase%20Theme%20%20Forsaken%20OST%20-%20Key%20After%20Key%20(youtube).mp3",
+        ["You And I"] = "https://raw.githubusercontent.com/SLK-GAMING-MOD/LMS/main/John%20Doe%20vs.%20Jane%20Doe%20-%20You%20and%20I%20%20Forsaken%20LMS%20-%20Bloxy%20Tortol%20(youtube).mp3",
+        ["You And I (Remix)"] = "https://raw.githubusercontent.com/SLK-GAMING-MOD/LMS/main/You%20and%20I%20Remix%20from%20Forsaken%20Discord!!!%F0%9F%94%A5%F0%9F%94%A5%20%20Forsaken%20-%20Ho%C3%A0ng%20VN%20(youtube).mp3",
+        ["Hacklord vs Shedletsky"] = "https://raw.githubusercontent.com/SLK-GAMING-MOD/LMS/main/THROUGH%20PATCHES%20OF%20VIOLET%20%20Roblox%20Forsaken%20Animation%20-%20(Hacklord%201x%20VS.%20Heartbroken%20Shedletsky%20LMS)%20-%20Pouria%20SFMs%20(youtube).mp3",
+        ["Mafioso LMS"] = "https://raw.githubusercontent.com/SLK-GAMING-MOD/LMS/main/Modern%20Mafioso's%20Intro%20%20Roblox%20Forsaken%20Animation%20-%20Vixynth%20(youtube).mp3",
+        ["Yaai noli LMS"] = "https://raw.githubusercontent.com/SLK-GAMING-MOD/LMS/main/STUPID%20-%20(Idiot%20007n7%20vs%20YAAI%20Noli%20UST%20LMS)%20%20Roblox%20Forsaken%20-%20Goodgaming3233%20(youtube).mp3",
+        ["Plead"] = "https://raw.githubusercontent.com/SLK-GAMING-MOD/LMS/main/%5BPLEAD%5D%20C00lkidd%20vs%20007n7%20%20Forsaken%20%20Roblox%20Animated%20Music%20Video%20-%20Igor%20Animations%20(youtube).mp3",
+        ["Normal LMS"] = "https://raw.githubusercontent.com/SLK-GAMING-MOD/LMS/main/A%20GRAVE%20SOUL%20(NOW%2C%20RUN)%20%20Last%20Man%20Standing%20Theme%20(FORSAKEN)%20-%20Exedious%20(youtube).mp3",
+    },
+
+    GetMusicNames = function(self)
+        self.LMSList = {}
+        for name in pairs(self.MusicList) do
+            table.insert(self.LMSList, name)
+        end
+        return self.LMSList
+    end,
+
+    GetLastSurvivorSound = function(self)
+        local theme = Workspace:FindFirstChild("Themes")
+        if not theme then return nil end
+        local lastSurvivor = theme:FindFirstChild("LastSurvivor")
+        if not lastSurvivor then return nil end
+
+        if lastSurvivor:IsA("Sound") then
+            return lastSurvivor
+        end
+        return lastSurvivor:FindFirstChildWhichIsA("Sound", true)
+    end,
+
+    FormatSoundID = function(self, input)
+        if not input or input == "" then return nil end
+
+        if not string.find(input, "http") then
+            local id = string.match(tostring(input), "%d+")
+            return id and ("rbxassetid://" .. id) or nil
+        end
+
+        local fileName = "CustomLMS_" .. string.gsub(input, "%W", "") .. ".mp3"
+        if isfile and writefile and getcustomasset then
+            if not isfile(fileName) then
+                local req = http_request or (syn and syn.request) or request
+                local fileData = nil
+
+                if req then
+                    local res = req({Url = input, Method = "GET", Headers = {["User-Agent"] = "Mozilla/5.0"}})
+                    if res then fileData = res.Body or res.BodyRaw end
+                end
+
+                if not fileData or #fileData == 0 then
+                    pcall(function() fileData = game:HttpGet(input) end)
+                end
+
+                if fileData and #fileData > 0 then
+                    writefile(fileName, fileData)
+                end
+            end
+            
+            if isfile(fileName) then
+                return getcustomasset(fileName)
+            end
+        end
+        return input
+    end,
+
+    SetVolume = function(self, val)
+        local num = tonumber(val)
+        if num then
+            self.Volume = num
+
+            local soundObj = self:GetLastSurvivorSound()
+            if soundObj and soundObj.SoundId ~= self.OriginalSoundId then
+                soundObj.Volume = self.Volume
+            end
+
+            if self.TestSoundObj then
+                self.TestSoundObj.Volume = self.Volume
+            end
+        end
+    end,
+
+    UpdateState = function(self)
+        local soundObj = self:GetLastSurvivorSound()
+
+        if not soundObj then
+            self.OriginalSoundId = nil
+            return
+        end
+
+        if self.Enabled and self.CurrentTrack and self.CurrentTrack ~= "" then
+            local newAsset = self:FormatSoundID(self.CurrentTrack)
+            if not newAsset then return end
+            
+            if not self.OriginalSoundId and soundObj.SoundId ~= newAsset then
+                self.OriginalSoundId = soundObj.SoundId
+            end
+
+            if soundObj.SoundId ~= newAsset then
+                soundObj.SoundId = newAsset
+                
+                if soundObj.Loaded then
+                    pcall(function() soundObj.Loaded:Wait() end)
+                end
+                
+                soundObj.Volume = self.Volume
+                soundObj.TimePosition = 0
+                soundObj:Play()
+            end
+        else
+            if self.OriginalSoundId and soundObj.SoundId ~= self.OriginalSoundId then
+                soundObj.SoundId = self.OriginalSoundId
+                soundObj.Volume = 1
+                soundObj:Play()
+            end
+        end
+    end,
+
+    HandleTestSound = function(self, isTesting)
+        if isTesting then
+            if not self.CurrentTrack or self.CurrentTrack == "" then return end
+            local testAsset = self:FormatSoundID(self.CurrentTrack)
+            if not testAsset then return end
+
+            if not self.TestSoundObj then
+                self.TestSoundObj = Instance.new("Sound")
+                self.TestSoundObj.Parent = SoundService
+                self.TestSoundObj.Looped = true
+            end
+
+            self.TestSoundObj.SoundId = testAsset
+            self.TestSoundObj.Volume = self.Volume
+            if self.TestSoundObj.Loaded then
+                pcall(function() self.TestSoundObj.Loaded:Wait() end)
+            end
+            self.TestSoundObj:Play()
+        else
+            if self.TestSoundObj then
+                self.TestSoundObj:Stop()
+                self.TestSoundObj:Destroy()
+                self.TestSoundObj = nil
+            end
+        end
+    end,
+
+    CheckDelay = function(self)
+        task.wait(0.2) 
+        self:UpdateState()
+    end,
+
+    HookThemes = function(self, folder)
+        if folder.Name == "Themes" then
+            folder.ChildAdded:Connect(function(child)
+                if child.Name == "LastSurvivor" then self:CheckDelay() end
+            end)
+            
+            folder.ChildRemoved:Connect(function(child)
+                if child.Name == "LastSurvivor" then self:UpdateState() end
+            end)
+            
+            if folder:FindFirstChild("LastSurvivor") then self:CheckDelay() end
+        end
+    end,
+
+    StartMonitor = function(self)
+        if self.EventsSet then return end
+        self.EventsSet = true
+
+        Workspace.ChildAdded:Connect(function(child)
+            self:HookThemes(child)
+        end)
+
+        local existingThemes = Workspace:FindFirstChild("Themes")
+        if existingThemes then
+            self:HookThemes(existingThemes)
+        end
+    end
+}
+
+CustomLMSLogic:StartMonitor()
+
+MyUIElements.CustomLMS:Dropdown({
+    Title = "loc:CustomLMSList",
+    Desc = "loc:CustomLMSListDesc",
+    Flag = "Select_Custom_LMS",
+    Values = CustomLMSLogic:GetMusicNames(),
+    Value = nil,
+    Callback = function(value)
+        CustomLMSLogic.CurrentTrack = CustomLMSLogic.MusicList[value]
+        CustomLMSLogic:UpdateState()
+        
+        if CustomLMSLogic.TestSoundObj then
+            CustomLMSLogic:HandleTestSound(true)
+        end
+    end
+})
+
+MyUIElements.CustomLMS:Input({
+    Title = "loc:YouLMSIdOrLink",
+    Desc = "loc:YouLMSIdOrLinkDesc",
+    Flag = "CustomLMSAudioInput",
+    Placeholder = "Enter ID or Link URL...",
+    Value = "",
+    Callback = function(value)
+        CustomLMSLogic.CurrentTrack = value ~= "" and value or nil
+        CustomLMSLogic:UpdateState()
+        
+        if CustomLMSLogic.TestSoundObj then
+            CustomLMSLogic:HandleTestSound(true)
+        end
+    end
+})
+
+MyUIElements.CustomLMS:Input({
+    Title = "loc:SoundVolume",
+    Desc = "loc:SoundVolumeDesc",
+    Flag = "CustomLMS_VolumeInput",
+    Placeholder = "Enter Volume...",
+    Value = "1",
+    Callback = function(val)
+        CustomLMSLogic:SetVolume(val)
+    end
+})
+
+MyUIElements.CustomLMS:Toggle({
+    Title = "loc:TestCustomLMS",
+    Desc = "loc:TestCustomLMSDesc",
+    Flag = "Test_Custom_LMS_Toggle",
+    Value = false,
+    Callback = function(val)
+        CustomLMSLogic:HandleTestSound(val)
+    end
+})
+
+MyUIElements.CustomLMS:Toggle({
+    Title = "loc:EnableCustomLMS",
+    Desc = "loc:EnableCustomLMSDesc",
+    Flag = "CustomLMS_Toggle",
+    Value = false,
+    Callback = function(val)
+        CustomLMSLogic.Enabled = val
+        CustomLMSLogic:UpdateState()
     end
 })
 
