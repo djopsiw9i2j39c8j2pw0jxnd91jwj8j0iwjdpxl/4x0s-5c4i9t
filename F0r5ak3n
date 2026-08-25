@@ -2689,6 +2689,7 @@ CustomLMSLogic = {
         ["God Second Comming"] = "https://raw.githubusercontent.com/SLK-GAMING-MOD/LMS/main/GOD%E2%80%99S%20SECOND%20COMING%20__%20NOLI%20VS.%20007n7%20LMS%20__%20FORSAKEN%20UST%20__%20By%20%40hxperxhxper%20%5B2DjRuLEiHAM%5D.mp3",
         ["Creation of hatred with lyrcs"] = "https://raw.githubusercontent.com/SLK-GAMING-MOD/LMS/main/Creation%20Of%20Hatred%20With%20Lyrics%20(YET%20AGAIN%2C%20NOT%20MINE)%20%5BVvkeltq72AU%5D.mp3",
         ["Plead (Remix)"] = "https://raw.githubusercontent.com/SLK-GAMING-MOD/LMS/main/BEG%20(PLEAD%20REMIX)%20~%20LMS%20(MILESTONES%203-4%20c00lkid%20vs%20007n7)%20FORSAKEN%20UST%20%5BeCZDjT25GMw%5D.mp3",
+        ["Made just 4 u"] = "https://raw.githubusercontent.com/SLK-GAMING-MOD/LMS/main/FORSAKEN%20OST%20-%20MADE%20JUST%204%20U%20%5B%20Ft.%20Lymphh%20%5D%20(Bluudud%20Vs.%20118o8%20Theme)%20-%20lexxiemow%20(youtube).mp3",
     },
 
     GetMusicNames = function(self)
