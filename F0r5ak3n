@@ -380,6 +380,7 @@ WindUI:Localization({
             TestCustomLMSDesc = "Play the custom LMS music to test it.",
             EnableCustomLMS = "Enable Custom LMS",
             EnableCustomLMSDesc = "Enable your custom LMS music.",
+            StatusDesc = "Display your information and balance.",
         },
         vi = {
             HubTitle = "Axos Hub",
@@ -645,6 +646,7 @@ Load_Config_Desc = "Nhấn để tải cấu hình đã chọn.",
             TestCustomLMSDesc = "Phát nhạc LMS tùy chỉnh để kiểm tra.",
             EnableCustomLMS = "Bật LMS tùy chỉnh",
             EnableCustomLMSDesc = "Bật nhạc LMS tùy chỉnh của bạn.",
+            StatusDesc = "Hiển thị thông tin và số dư của bạn.",
         }
     }
 })
@@ -1150,6 +1152,21 @@ local ElementConfigs = {
     },
 
     {
+        ID = "Status",
+        Type = "Section",
+        Parent = TabHandles.Status,
+        Config = {
+            Title = "loc:Status",
+            Desc = "loc:StatusDesc",
+            Icon = "info",
+            Box = true,
+            BoxBorder = true,
+            Opened = false,
+            Hover = true,
+        }
+    },
+
+    {
         ID = "Camlock",
         Type = "Section",
         Parent = TabHandles.Player,
@@ -1325,7 +1342,6 @@ Window:SelectTab(1)
 TabHandles.Update:Paragraph({
     Title = "loc:Update",
     Desc = "loc:UpdateDesc",
-    Icon = "how",
 })
 
 TabHandles.Info:Divider()
@@ -2669,6 +2685,10 @@ CustomLMSLogic = {
         ["Yaai noli LMS"] = "https://raw.githubusercontent.com/SLK-GAMING-MOD/LMS/main/STUPID%20-%20(Idiot%20007n7%20vs%20YAAI%20Noli%20UST%20LMS)%20%20Roblox%20Forsaken%20-%20Goodgaming3233%20(youtube).mp3",
         ["Plead"] = "https://raw.githubusercontent.com/SLK-GAMING-MOD/LMS/main/%5BPLEAD%5D%20C00lkidd%20vs%20007n7%20%20Forsaken%20%20Roblox%20Animated%20Music%20Video%20-%20Igor%20Animations%20(youtube).mp3",
         ["Normal LMS"] = "https://raw.githubusercontent.com/SLK-GAMING-MOD/LMS/main/A%20GRAVE%20SOUL%20(NOW%2C%20RUN)%20%20Last%20Man%20Standing%20Theme%20(FORSAKEN)%20-%20Exedious%20(youtube).mp3",
+        ["Close to me"] = "https://raw.githubusercontent.com/SLK-GAMING-MOD/LMS/main/%5BANNIHILATION%20John%20Doe%20vs.%20FRIEND%20Elliot%5D%20CLOSE%20TO%20ME%20(Red%20Moonrise%20Mix)%20%5BForsaken%20OST%5D%20%5B_WNJu-yZO14%5D.mp3",
+        ["God Second Comming"] = "https://raw.githubusercontent.com/SLK-GAMING-MOD/LMS/main/GOD%E2%80%99S%20SECOND%20COMING%20__%20NOLI%20VS.%20007n7%20LMS%20__%20FORSAKEN%20UST%20__%20By%20%40hxperxhxper%20%5B2DjRuLEiHAM%5D.mp3",
+        ["Creation of hatred with lyrcs"] = "https://raw.githubusercontent.com/SLK-GAMING-MOD/LMS/main/Creation%20Of%20Hatred%20With%20Lyrics%20(YET%20AGAIN%2C%20NOT%20MINE)%20%5BVvkeltq72AU%5D.mp3",
+        ["Plead (Remix)"] = "https://raw.githubusercontent.com/SLK-GAMING-MOD/LMS/main/BEG%20(PLEAD%20REMIX)%20~%20LMS%20(MILESTONES%203-4%20c00lkid%20vs%20007n7)%20FORSAKEN%20UST%20%5BeCZDjT25GMw%5D.mp3",
     },
 
     GetMusicNames = function(self)
@@ -4214,6 +4234,60 @@ MyUIElements.TeleportToKillers:Button({
 })
 
 TeleportLogic:InitEvents()
+
+StatusLogic = {
+    ParagraphUI = nil,
+    LocalPlayer = Players.LocalPlayer,
+
+    GetStatValue = function(self, statName)
+        local leaderstats = self.LocalPlayer:FindFirstChild("leaderstats")
+        if not leaderstats then return "0" end
+        
+        local stat = leaderstats:FindFirstChild(statName)
+        return stat and stat.Value or "0"
+    end,
+
+    UpdateUI = function(self)
+        if not self.ParagraphUI then return end
+
+        local money = self:GetStatValue("Money")
+        local killerChance = self:GetStatValue("KillerChance")
+        
+        local descText = string.format("Money: $%s\nKiller Chance (Malice): %s%%", tostring(money), tostring(killerChance))
+        
+        if self.ParagraphUI.SetDesc then
+            self.ParagraphUI:SetDesc(descText)
+        elseif self.ParagraphUI.SetText then
+            self.ParagraphUI:SetText("loc:Update", descText)
+        end
+    end,
+
+    StartMonitor = function(self)
+        task.spawn(function()
+            local leaderstats = self.LocalPlayer:WaitForChild("leaderstats", 15)
+            if not leaderstats then return end
+
+            for _, statName in ipairs({"Money", "KillerChance"}) do
+                local statObj = leaderstats:WaitForChild(statName, 5)
+                if statObj then
+                    statObj:GetPropertyChangedSignal("Value"):Connect(function()
+                        self:UpdateUI()
+                    end)
+                end
+            end
+
+            self:UpdateUI()
+        end)
+    end
+}
+
+StatusLogic.ParagraphUI = MyUIElements.Status:Paragraph({
+    Title = "loc:Status",
+    Desc = "Money: Loading...\nKiller Chance: Loading...",
+    Icon = "how",
+})
+
+StatusLogic:StartMonitor()
 
 local CamlockBot = {
     Config = {
