@@ -299,14 +299,6 @@ WindUI:Localization({
             Max_Zoom_Distance_Desc = "Sets the maximum camera zoom distance.",
             Hallucination = "Hallucination",
             HallucinationDesc = "Functions related to hallucinations.",
-            AntiFakeKillers = "Anti Fake Killers",
-            AntiFakeKillersDesc = "Removes fake killer illusions from appearing.",
-            AntiFakePizza = "Anti Fake Pizza",
-            AntiFakePizzaDesc = "Removes fake pizza illusions from appearing.",
-            AntiFakeDispenser = "Anti Fake Dispenser",
-            AntiFakeDispenserDesc = "Removes fake Dispenser illusions from appearing.",
-            AntiFakeProtect = "Anti Fake Protect",
-            AntiFakeProtectDesc = "Removes fake Protect illusions from appearing.",
             AntiSubspaceEffect = "Anti Subspace Effect",
             AntiSubspaceEffectDesc = "Eliminate all annoying effects from subspaces.",
             AntiSlow = "Anti Slow",
@@ -381,6 +373,12 @@ WindUI:Localization({
             EnableCustomLMS = "Enable Custom LMS",
             EnableCustomLMSDesc = "Enable your custom LMS music.",
             StatusDesc = "Display your information and balance.",
+            AntiBloodhunt = "Anti Bloodhunt",
+            AntiBloodhuntDesc = "Remove the annoying effects from the Bloodhunt skill.",
+            CustomName = "Custom Name",
+            CustomNameDesc = "Set a custom name for your character.",
+            EnableCustomName = "Enable Custom Name",
+            EnableCustomNameDesc = "Enable your custom character name.",
         },
         vi = {
             HubTitle = "Axos Hub",
@@ -565,14 +563,6 @@ Load_Config_Desc = "Nhấn để tải cấu hình đã chọn.",
             Max_Zoom_Distance_Desc = "Thiết lập khoảng cách zoom tối đa của camera.",
             Hallucination = "Ảo giác",
             HallucinationDesc = "Các chức năng liên quan đến ảo giác.",
-            AntiFakeKillers = "Chống sát nhân giả",
-            AntiFakeKillersDesc = "Loại bỏ ảo giác Killer giả xuất hiện.",
-            AntiFakePizza = "Chống pizza giả",
-            AntiFakePizzaDesc = "Loại bỏ ảo giác Pizza giả xuất hiện.",
-            AntiFakeDispenser = "Chống Dispenser giả",
-            AntiFakeDispenserDesc = "Loại bỏ ảo giác Dispenser giả xuất hiện.",
-            AntiFakeProtect = "Chống bảo vệ giả",
-            AntiFakeProtectDesc = "Loại bỏ ảo giác Protect giả xuất hiện.",
             AntiSubspaceEffect = "Chống hiệu ứng subspace",
             AntiSubspaceEffectDesc = "Loại bỏ toàn bộ hiệu ứng khó chịu đến từ subspace.",
             AntiSlow = "Chống chậm",
@@ -647,6 +637,12 @@ Load_Config_Desc = "Nhấn để tải cấu hình đã chọn.",
             EnableCustomLMS = "Bật LMS tùy chỉnh",
             EnableCustomLMSDesc = "Bật nhạc LMS tùy chỉnh của bạn.",
             StatusDesc = "Hiển thị thông tin và số dư của bạn.",
+            AntiBloodhunt = "Chống săn đổ máu",
+            AntiBloodhuntDesc = "Loại bỏ các hiệu ứng gây khó chịu từ kỹ năng Săn Máu.",
+            CustomName = "Tên tùy chỉnh",
+            CustomNameDesc = "Đặt tên tùy chỉnh cho nhân vật của bạn.",
+            EnableCustomName = "Bật tên tùy chỉnh",
+            EnableCustomNameDesc = "Bật tên nhân vật tùy chỉnh của bạn.",
         }
     }
 })
@@ -2690,6 +2686,9 @@ CustomLMSLogic = {
         ["Creation of hatred with lyrcs"] = "https://raw.githubusercontent.com/SLK-GAMING-MOD/LMS/main/Creation%20Of%20Hatred%20With%20Lyrics%20(YET%20AGAIN%2C%20NOT%20MINE)%20%5BVvkeltq72AU%5D.mp3",
         ["Plead (Remix)"] = "https://raw.githubusercontent.com/SLK-GAMING-MOD/LMS/main/BEG%20(PLEAD%20REMIX)%20~%20LMS%20(MILESTONES%203-4%20c00lkid%20vs%20007n7)%20FORSAKEN%20UST%20%5BeCZDjT25GMw%5D.mp3",
         ["Made just 4 u"] = "https://raw.githubusercontent.com/SLK-GAMING-MOD/LMS/main/FORSAKEN%20OST%20-%20MADE%20JUST%204%20U%20%5B%20Ft.%20Lymphh%20%5D%20(Bluudud%20Vs.%20118o8%20Theme)%20-%20lexxiemow%20(youtube).mp3",
+        ["Profitable passion"] = "https://raw.githubusercontent.com/SLK-GAMING-MOD/LMS/main/Profitable%20Passion%20%20Last%20Man%20Standing%20(FORSAKEN%20OST)%20-%20Exedious%20(youtube).mp3",
+        ["Prepetuity"] = "https://raw.githubusercontent.com/SLK-GAMING-MOD/LMS/main/Perpetuity%20(Die%20of%20Death%20LMS)%20%20FORSAKEN%20OST%20-%20Lymphh%20(youtube).mp3",
+        ["Cook off confection of hatred"] = "https://raw.githubusercontent.com/SLK-GAMING-MOD/LMS/main/COOK%20OFF%20~%20CONFECTION%20OF%20HATRED%20(1eggs%20vs%20Chef%20Shedletsky%20Last%20Man%20Standing)%20Forsaken%20UST%20-%20Katorrox%20Music%20(youtube).mp3",
     },
 
     GetMusicNames = function(self)
@@ -4238,45 +4237,145 @@ TeleportLogic:InitEvents()
 
 StatusLogic = {
     ParagraphUI = nil,
-    LocalPlayer = Players.LocalPlayer,
+    LocalPlayer = localPlayer,
+    CustomName = "None",
+    CustomNameEnabled = false,
+    Connections = {},
+    OriginalNames = {},
+    WatchedObjects = {},
+
+    TargetPaths = {
+        ["Username"] = {
+            {Depth = 1, ParentName = "PlayerInfo"},
+            {Depth = 2, ParentName = "CurrentSurvivors"}
+        },
+        ["PlayerName"] = {
+            {Depth = 1, ParentName = "BasicInfo"}
+        }
+    },
+
+    FormatName = function(self, value)
+        self.CustomName = (tostring(value) == "" or tostring(value) == "nil") and "None" or tostring(value)
+    end,
 
     GetStatValue = function(self, statName)
-        local leaderstats = self.LocalPlayer:FindFirstChild("leaderstats")
-        if not leaderstats then return "0" end
-        
-        local stat = leaderstats:FindFirstChild(statName)
-        return stat and stat.Value or "0"
+        return (self.LocalPlayer:FindFirstChild("leaderstats") and self.LocalPlayer.leaderstats:FindFirstChild(statName)) 
+            and self.LocalPlayer.leaderstats[statName].Value 
+            or "0"
     end,
 
     UpdateUI = function(self)
         if not self.ParagraphUI then return end
-
-        local money = self:GetStatValue("Money")
-        local killerChance = self:GetStatValue("KillerChance")
-        
-        local descText = string.format("Money: $%s\nKiller Chance (Malice): %s%%", tostring(money), tostring(killerChance))
         
         if self.ParagraphUI.SetDesc then
-            self.ParagraphUI:SetDesc(descText)
+            self.ParagraphUI:SetDesc(string.format("Money: $%s\nKiller Chance (Malice): %s%%", tostring(self:GetStatValue("Money")), tostring(self:GetStatValue("KillerChance"))))
         elseif self.ParagraphUI.SetText then
-            self.ParagraphUI:SetText("loc:Update", descText)
+            self.ParagraphUI:SetText("loc:Update", string.format("Money: $%s\nKiller Chance (Malice): %s%%", tostring(self:GetStatValue("Money")), tostring(self:GetStatValue("KillerChance"))))
+        end
+    end,
+
+    DisconnectCustomName = function(self)
+        for _, connection in ipairs(self.Connections) do
+            connection:Disconnect()
+        end
+        table.clear(self.Connections)
+        table.clear(self.WatchedObjects)
+    end,
+
+    EscapeString = function(self, str)
+        return string.gsub(str, "[%^%$%(%)%%%.%[%]%*%+%-%?]", "%%%1")
+    end,
+
+    ReplaceTargetName = function(self, text)
+        if string.find(text, self:EscapeString(self.LocalPlayer.DisplayName)) then
+            return string.gsub(text, self:EscapeString(self.LocalPlayer.DisplayName), self.CustomName), true
+        elseif string.find(text, self:EscapeString(self.LocalPlayer.Name)) then
+            return string.gsub(text, self:EscapeString(self.LocalPlayer.Name), self.CustomName), true
+        end
+        return text, false
+    end,
+
+    ApplyCustomName = function(self, object)
+        if not self.CustomNameEnabled or not object or not object.Parent then return end
+
+        local newText, isTarget = self:ReplaceTargetName(object.Text)
+
+        if isTarget and object.Text ~= newText then
+            self.OriginalNames[object] = object.Text
+            object.Text = newText
+        end
+    end,
+
+    WatchNameObject = function(self, object)
+        if self.WatchedObjects[object] then return end
+        self.WatchedObjects[object] = true
+
+        self:ApplyCustomName(object)
+        
+        self.Connections[#self.Connections + 1] = object:GetPropertyChangedSignal("Text"):Connect(function()
+            if self.CustomNameEnabled then
+                self:ApplyCustomName(object)
+            end
+        end)
+    end,
+
+    RestoreNames = function(self)
+        for object, originalName in pairs(self.OriginalNames) do
+            if object and object.Parent then
+                object.Text = originalName
+            end
+        end
+        table.clear(self.OriginalNames)
+    end,
+
+    ProcessNameObject = function(self, object)
+        if not self.CustomNameEnabled or not object or not object:IsA("TextLabel") or not self.TargetPaths[object.Name] then return end
+
+        for _, path in ipairs(self.TargetPaths[object.Name]) do
+            if path.Depth == 1 and object.Parent and object.Parent.Name == path.ParentName then
+                self:WatchNameObject(object)
+                break
+            elseif path.Depth == 2 and object.Parent and object.Parent.Parent and object.Parent.Parent.Name == path.ParentName then
+                self:WatchNameObject(object)
+                break
+            end
+        end
+    end,
+
+    ScanExistingUI = function(self)
+        if not self.CustomNameEnabled or not PlayerGui then return end
+        for _, object in ipairs(PlayerGui:GetDescendants()) do
+            self:ProcessNameObject(object)
+        end
+    end,
+
+    UpdateState = function(self, state)
+        self.CustomNameEnabled = state
+        
+        self:DisconnectCustomName()
+        self:RestoreNames()
+
+        if self.CustomNameEnabled then
+            self:FormatName(self.CustomName)
+            self:ScanExistingUI()
+
+            self.Connections[#self.Connections + 1] = PlayerGui.DescendantAdded:Connect(function(object)
+                self:ProcessNameObject(object)
+            end)
         end
     end,
 
     StartMonitor = function(self)
         task.spawn(function()
-            local leaderstats = self.LocalPlayer:WaitForChild("leaderstats", 15)
-            if not leaderstats then return end
+            if not self.LocalPlayer:WaitForChild("leaderstats", 15) then return end
 
             for _, statName in ipairs({"Money", "KillerChance"}) do
-                local statObj = leaderstats:WaitForChild(statName, 5)
-                if statObj then
-                    statObj:GetPropertyChangedSignal("Value"):Connect(function()
+                if self.LocalPlayer.leaderstats:WaitForChild(statName, 5) then
+                    self.LocalPlayer.leaderstats[statName]:GetPropertyChangedSignal("Value"):Connect(function()
                         self:UpdateUI()
                     end)
                 end
             end
-
             self:UpdateUI()
         end)
     end
@@ -4289,6 +4388,30 @@ StatusLogic.ParagraphUI = MyUIElements.Status:Paragraph({
 })
 
 StatusLogic:StartMonitor()
+
+MyUIElements.Status:Input({
+    Title = "loc:CustomName",
+    Desc = "loc:CustomNameDesc",
+    Flag = "Custom_Name_Input",
+    Placeholder = "None",
+    Value = "None",
+    Callback = function(value)
+        StatusLogic:FormatName(value)
+        if StatusLogic.CustomNameEnabled then
+            StatusLogic:UpdateState(true)
+        end
+    end
+})
+
+MyUIElements.Status:Toggle({
+    Title = "loc:EnableCustomName",
+    Desc = "loc:EnableCustomNameDesc",
+    Flag = "Custom_Name_Toggle",
+    Value = false,
+    Callback = function(state)
+        StatusLogic:UpdateState(state)
+    end
+})
 
 local CamlockBot = {
     Config = {
@@ -4994,55 +5117,398 @@ MyUIElements.Bypass:Toggle({
     end
 })
 
-local BypassSystem = {
-    Config = { AntiSubspace = false, AntiBlindness = false },
-    Core = { Lighting = game.Lighting, Player = game.Players.LocalPlayer }
+BypassSystem = {
+    Config = {
+        AntiSubspace = false,
+        AntiBlindness = false,
+        AntiBloodhunt = false
+    },
+
+    Core = {
+        Lighting = Lighting,
+        Player = localPlayer,
+        PlayerGui = PlayerGui
+    },
+
+    BlacklistNames = {
+        "VignetteA",
+        "VignetteB",
+        "GuestRoar",
+        "666Effect",
+        "BloodHunt"
+    },
+
+    Connections = {
+        AntiSubspace = {},
+        AntiBlindness = {},
+        AntiBloodhunt = {}
+    },
+
+    State = {
+        Character = playerCharacter
+    }
 }
 
+function BypassSystem:DisconnectGroup(name)
+    for _, connection in pairs(self.Connections[name]) do
+        if connection then
+            connection:Disconnect()
+        end
+    end
+
+    table.clear(self.Connections[name])
+end
+
+function BypassSystem:AddConnection(name, connection)
+    table.insert(self.Connections[name], connection)
+end
+
 function BypassSystem:SafeDestroy(parent, name)
-    local effect = parent:FindFirstChild(name)
-    if effect then
-        effect.Enabled = false
-        effect:Destroy()
+    if not parent then
+        return false
+    end
+
+    local object = parent:FindFirstChild(name)
+
+    if object then
+        if object:IsA("PostEffect") then
+            object.Enabled = false
+        end
+
+        object:Destroy()
         return true
     end
+
     return false
 end
 
-function BypassSystem:ProcessVFX()
-    local light = self.Core.Lighting
-    
-    if self.Config.AntiSubspace then
-        local removedBlur = self:SafeDestroy(light, "SubspaceVFXBlur")
-        local removedCC = self:SafeDestroy(light, "SubspaceVFXColorCorrection")
+function BypassSystem:RestoreLightingEffects()
+    for _, object in ipairs(self.Core.Lighting:GetChildren()) do
+        local original = object:GetAttribute("originalVal")
 
-        if removedBlur or removedCC then
-            for _, v in ipairs(light:GetChildren()) do
-                local origVal = v:GetAttribute("originalVal")
-                if origVal ~= nil then v.Enabled = origVal end
+        if original ~= nil then
+            if object:IsA("PostEffect") then
+                object.Enabled = original
             end
-        end
 
-        local char = self.Core.Player.Character
-        if char and char:GetAttribute("MuteChaseThemes") then
-            char:SetAttribute("MuteChaseThemes", false)
-        end
-    end
-
-    if self.Config.AntiBlindness then
-        self:SafeDestroy(light, "BlindnessBlur")
-        
-        if light.ExposureCompensation < -2 or light.ExposureCompensation > 2 then
-            light.ExposureCompensation = 0 
+            object:SetAttribute("originalVal", nil)
         end
     end
 end
 
-task.spawn(function()
-    while task.wait(0.25) do
-        if BypassSystem.Config.AntiSubspace or BypassSystem.Config.AntiBlindness then
-            BypassSystem:ProcessVFX()
+function BypassSystem:IsBlacklisted(name)
+    for _, blacklist in ipairs(self.BlacklistNames) do
+        if name:find(blacklist) then
+            return true
         end
+    end
+
+    return false
+end
+
+function BypassSystem:HandleSubspace(object)
+    if not self.Config.AntiSubspace then
+        return
+    end
+
+    if object.Name == "SubspaceVFXBlur" then
+        object.Enabled = false
+        object:Destroy()
+
+        self:RestoreLightingEffects()
+
+    elseif object.Name == "SubspaceVFXColorCorrection" then
+        object.Enabled = false
+        object:Destroy()
+
+        self:RestoreLightingEffects()
+
+    elseif object:IsA("Highlight") then
+        object.Enabled = false
+        object.FillTransparency = 1
+        object.OutlineTransparency = 1
+    end
+end
+
+function BypassSystem:ScanSubspace()
+    if not self.Config.AntiSubspace then
+        return
+    end
+
+    for _, object in ipairs(self.Core.Lighting:GetChildren()) do
+        self:HandleSubspace(object)
+    end
+
+    for _, object in ipairs(Workspace:GetDescendants()) do
+        if object:IsA("Highlight") then
+            self:HandleSubspace(object)
+        end
+    end
+
+    if self.State.Character and self.State.Character:GetAttribute("MuteChaseThemes") then
+        self.State.Character:SetAttribute("MuteChaseThemes", false)
+    end
+end
+
+function BypassSystem:EnableAntiSubspace()
+    self:DisconnectGroup("AntiSubspace")
+
+    self:ScanSubspace()
+
+    self:AddConnection(
+        "AntiSubspace",
+        self.Core.Lighting.ChildAdded:Connect(function(object)
+            self:HandleSubspace(object)
+        end)
+    )
+
+    self:AddConnection(
+        "AntiSubspace",
+        Workspace.DescendantAdded:Connect(function(object)
+            if object:IsA("Highlight") then
+                self:HandleSubspace(object)
+            end
+        end)
+    )
+
+    if self.State.Character then
+        self.State.Character:GetAttributeChangedSignal("MuteChaseThemes"):Connect(function()
+            if self.Config.AntiSubspace
+                and self.State.Character
+                and self.State.Character:GetAttribute("MuteChaseThemes") then
+
+                self.State.Character:SetAttribute("MuteChaseThemes", false)
+            end
+        end)
+    end
+end
+
+function BypassSystem:DisableAntiSubspace()
+    self:DisconnectGroup("AntiSubspace")
+
+    if self.State.Character then
+        self.State.Character:SetAttribute("MuteChaseThemes", false)
+    end
+
+    self:RestoreLightingEffects()
+end
+
+function BypassSystem:HandleBlindness(object)
+    if not self.Config.AntiBlindness then
+        return
+    end
+
+    if object.Name == "BlindnessBlur" then
+        object.Enabled = false
+        object:Destroy()
+    end
+end
+
+function BypassSystem:FixExposure()
+    if not self.Config.AntiBlindness then
+        return
+    end
+
+    if self.Core.Lighting.ExposureCompensation < -2
+        or self.Core.Lighting.ExposureCompensation > 2 then
+
+        self.Core.Lighting.ExposureCompensation = 0
+    end
+end
+
+function BypassSystem:ScanBlindness()
+    if not self.Config.AntiBlindness then
+        return
+    end
+
+    self:HandleBlindness(
+        self.Core.Lighting:FindFirstChild("BlindnessBlur")
+    )
+
+    self:FixExposure()
+end
+
+function BypassSystem:EnableAntiBlindness()
+    self:DisconnectGroup("AntiBlindness")
+
+    self:ScanBlindness()
+
+    self:AddConnection(
+        "AntiBlindness",
+        self.Core.Lighting.ChildAdded:Connect(function(object)
+            self:HandleBlindness(object)
+        end)
+    )
+
+    self:AddConnection(
+        "AntiBlindness",
+        self.Core.Lighting:GetPropertyChangedSignal("ExposureCompensation"):Connect(function()
+            self:FixExposure()
+        end)
+    )
+end
+
+function BypassSystem:DisableAntiBlindness()
+    self:DisconnectGroup("AntiBlindness")
+end
+
+function BypassSystem:HandleBloodhuntLighting(object)
+    if not self.Config.AntiBloodhunt then
+        return
+    end
+
+    if object:IsA("ColorCorrectionEffect") then
+        object.Enabled = false
+        object:Destroy()
+        return
+    end
+
+    if object:IsA("Atmosphere")
+        and object:GetAttribute("Artificial") then
+
+        object:Destroy()
+    end
+end
+
+function BypassSystem:HandleBloodhuntUI(object)
+    if not self.Config.AntiBloodhunt then
+        return
+    end
+
+    if self:IsBlacklisted(object.Name) then
+        object:Destroy()
+    end
+end
+
+function BypassSystem:HandleBloodhuntCharacter(object)
+    if not self.Config.AntiBloodhunt then
+        return
+    end
+
+    if object.Name:find("Spotlight")
+        or object.Name:find("BloodHunt") then
+
+        object:Destroy()
+    end
+end
+
+function BypassSystem:ScanBloodhunt()
+    if not self.Config.AntiBloodhunt then
+        return
+    end
+
+    self.Core.Player:SetAttribute("HuntVFXActive", true)
+
+    for _, object in ipairs(self.Core.Lighting:GetChildren()) do
+        self:HandleBloodhuntLighting(object)
+    end
+
+    if self.Core.PlayerGui then
+        local temporaryUI = self.Core.PlayerGui:FindFirstChild("TemporaryUI")
+
+        if temporaryUI then
+            for _, object in ipairs(temporaryUI:GetChildren()) do
+                self:HandleBloodhuntUI(object)
+            end
+        end
+    end
+
+    if self.State.Character then
+        for _, object in ipairs(self.State.Character:GetDescendants()) do
+            self:HandleBloodhuntCharacter(object)
+        end
+    end
+end
+
+function BypassSystem:EnableBloodhuntCharacter(character)
+    if not character then
+        return
+    end
+
+    self.State.Character = character
+
+    self:AddConnection(
+        "AntiBloodhunt",
+        character.DescendantAdded:Connect(function(object)
+            self:HandleBloodhuntCharacter(object)
+        end)
+    )
+end
+
+function BypassSystem:EnableAntiBloodhunt()
+    self:DisconnectGroup("AntiBloodhunt")
+
+    self:ScanBloodhunt()
+
+    self:AddConnection(
+        "AntiBloodhunt",
+        self.Core.Lighting.ChildAdded:Connect(function(object)
+            self:HandleBloodhuntLighting(object)
+        end)
+    )
+
+    self:AddConnection(
+        "AntiBloodhunt",
+        Workspace:GetAttributeChangedSignal("BloodHuntActive"):Connect(function()
+            if not self.Config.AntiBloodhunt then
+                return
+            end
+
+            self.Core.Player:SetAttribute("HuntVFXActive", true)
+
+            task.defer(function()
+                self:ScanBloodhunt()
+            end)
+        end)
+    )
+
+    if self.Core.PlayerGui then
+        local temporaryUI = self.Core.PlayerGui:FindFirstChild("TemporaryUI")
+
+        if temporaryUI then
+            self:AddConnection(
+                "AntiBloodhunt",
+                temporaryUI.ChildAdded:Connect(function(object)
+                    self:HandleBloodhuntUI(object)
+                end)
+            )
+        else
+            self:AddConnection(
+                "AntiBloodhunt",
+                self.Core.PlayerGui.ChildAdded:Connect(function(object)
+                    if object.Name == "TemporaryUI" then
+                        self:AddConnection(
+                            "AntiBloodhunt",
+                            object.ChildAdded:Connect(function(child)
+                                self:HandleBloodhuntUI(child)
+                            end)
+                        )
+
+                        self:ScanBloodhunt()
+                    end
+                end)
+            )
+        end
+    end
+
+    self:EnableBloodhuntCharacter(self.State.Character)
+end
+
+function BypassSystem:DisableAntiBloodhunt()
+    self:DisconnectGroup("AntiBloodhunt")
+
+    self.Core.Player:SetAttribute("HuntVFXActive", nil)
+end
+
+localPlayer.CharacterAdded:Connect(function(character)
+    BypassSystem.State.Character = character
+
+    if BypassSystem.Config.AntiSubspace then
+        BypassSystem:EnableAntiSubspace()
+    end
+
+    if BypassSystem.Config.AntiBloodhunt then
+        BypassSystem:EnableAntiBloodhunt()
     end
 end)
 
@@ -5051,9 +5517,15 @@ MyUIElements.Bypass:Toggle({
     Desc = "loc:AntiSubspaceEffectDesc",
     Flag = "Anti_Subspace_Toggle",
     Value = false,
+
     Callback = function(state)
         BypassSystem.Config.AntiSubspace = state
-        if state then BypassSystem:ProcessVFX() end
+
+        if state then
+            BypassSystem:EnableAntiSubspace()
+        else
+            BypassSystem:DisableAntiSubspace()
+        end
     end
 })
 
@@ -5062,9 +5534,32 @@ MyUIElements.Bypass:Toggle({
     Desc = "loc:AntiBlindnessDesc",
     Flag = "Anti_Blindness_Toggle",
     Value = false,
+
     Callback = function(state)
         BypassSystem.Config.AntiBlindness = state
-        if state then BypassSystem:ProcessVFX() end
+
+        if state then
+            BypassSystem:EnableAntiBlindness()
+        else
+            BypassSystem:DisableAntiBlindness()
+        end
+    end
+})
+
+MyUIElements.Bypass:Toggle({
+    Title = "loc:AntiBloodhunt",
+    Desc = "loc:AntiBloodhuntDesc",
+    Flag = "Anti_Bloodhunt_Toggle",
+    Value = false,
+
+    Callback = function(state)
+        BypassSystem.Config.AntiBloodhunt = state
+
+        if state then
+            BypassSystem:EnableAntiBloodhunt()
+        else
+            BypassSystem:DisableAntiBloodhunt()
+        end
     end
 })
 
