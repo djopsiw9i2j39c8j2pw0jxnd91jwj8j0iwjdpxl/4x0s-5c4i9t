@@ -395,6 +395,12 @@ WindUI:Localization({
             SilentAimShootDesc = "Automatically aim at the target when shooting.",
             Chance = "Chance",
             ChanceDesc = "Features related to the Chance character.",
+            ChooseTarget = "Choose Target",
+            ChooseTargetDesc = "Select the target you want to aim at.",
+            SilentAimPlasmaBeam = "Silent Aim Plasma Beam",
+            SilentAimPlasmaBeamDesc = "Automatically aim the Plasma Beam at the selected target.",
+            Dusekkar = "Dusekkar",
+            DusekkarDesc = "Features related to the Dusekkar character.",
         },
         vi = {
             HubTitle = "Axos Hub",
@@ -675,6 +681,12 @@ Load_Config_Desc = "Nhấn để tải cấu hình đã chọn.",
             SilentAimShootDesc = "Tự động ngắm vào mục tiêu khi bắn.",
             Chance = "Cơ hội",
             ChanceDesc = "Các chức năng liên quan đến nhân vật cơ hội.",
+            ChooseTarget = "Chọn mục tiêu",
+            ChooseTargetDesc = "Chọn mục tiêu mà bạn muốn ngắm vào.",
+            SilentAimPlasmaBeam = "Ngắm im lặng Tia Plasma",
+            SilentAimPlasmaBeamDesc = "Tự động ngắm Tia Plasma vào mục tiêu đã chọn.",
+            Dusekkar = "Dusekkar",
+            DusekkarDesc = "Các chức năng liên quan đến nhân vật Dusekkar.",
         }
     }
 })
@@ -946,6 +958,21 @@ local ElementConfigs = {
         Config = {
             Title = "loc:Chance",
             Desc = "loc:ChanceDesc",
+            Icon = "bitcoin",
+            Box = true,
+            BoxBorder = true,
+            Opened = false,
+            Hover = true,
+        }
+    },
+
+    {
+        ID = "Dusekkar",
+        Type = "Section",
+        Parent = TabHandles.Survivors,
+        Config = {
+            Title = "loc:Dusekkar",
+            Desc = "loc:DusekkarDesc",
             Icon = "user",
             Box = true,
             BoxBorder = true,
@@ -3411,38 +3438,88 @@ MyUIElements.SetupStamina:Toggle({
 CoreData = {
     Config = {
         CoinFlip = { Enabled = false, Charges = 3, Distance = 75 },
-        AutoAim = { Enabled = false, MaxDistance = 500 }
+        AutoAim = { Enabled = false, MaxDistance = 500 },
+        PlasmaBeam = { Enabled = false, Targets = {"Killers"} }
     },
     State = {
         NearestKillerRoot = nil,
         KillerDist = math.huge,
-        IsFlintlockVisible = false
+        IsFlintlockVisible = false,
+        NearestPlasmaRoot = nil
     },
     Hooks = {
         OldIndex = nil,
-        OldNamecall = nil
+        OldNamecall = nil,
+        OldGetMousePos = nil
     },
     Temp = {},
     Logic = {}
 }
 
-CoreData.Logic.CanAim = function()
+CoreData.Logic.FindNearestTarget = function(allowedFolders)
+    CoreData.Temp.ShortestDist = math.huge
+    CoreData.Temp.Nearest = nil
+
+    for _, folder in ipairs(allowedFolders) do
+        if folder then
+            for _, char in ipairs(folder:GetChildren()) do
+                if char ~= playerCharacter then
+                    CoreData.Temp.TargetRoot = char:FindFirstChild("HumanoidRootPart")
+                    if CoreData.Temp.TargetRoot then
+                        CoreData.Temp.Dist = (CoreData.Temp.TargetRoot.Position - CoreData.Temp.Root.Position).Magnitude
+                        if CoreData.Temp.Dist <= CoreData.Temp.ShortestDist then
+                            CoreData.Temp.ShortestDist = CoreData.Temp.Dist
+                            CoreData.Temp.Nearest = CoreData.Temp.TargetRoot
+                        end
+                    end
+                end
+            end
+        end
+    end
+    return CoreData.Temp.Nearest, CoreData.Temp.ShortestDist
+end
+
+CoreData.Logic.CanFlintlockAim = function()
     return CoreData.Config.AutoAim.Enabled 
        and CoreData.State.IsFlintlockVisible 
        and CoreData.State.NearestKillerRoot 
        and CoreData.State.KillerDist <= CoreData.Config.AutoAim.MaxDistance
 end
 
-CoreData.Logic.GetFlatAimCFrame = function(originPosition)
+CoreData.Logic.GetFlatAimCFrame = function(originPosition, targetPosition)
     return CFrame.lookAt(
         originPosition, 
-        Vector3.new(
-            CoreData.State.NearestKillerRoot.Position.X, 
-            originPosition.Y, -- Giữ nguyên trục Y của người bắn
-            CoreData.State.NearestKillerRoot.Position.Z
-        )
+        Vector3.new(targetPosition.X, originPosition.Y, targetPosition.Z)
     )
 end
+
+CoreData.Logic.ApplyPlasmaHook = function()
+    CoreData.Temp.Path = game:GetService("ReplicatedStorage"):FindFirstChild("Systems")
+        and game:GetService("ReplicatedStorage").Systems:FindFirstChild("Player")
+        and game:GetService("ReplicatedStorage").Systems.Player:FindFirstChild("Miscellaneous")
+        and game:GetService("ReplicatedStorage").Systems.Player.Miscellaneous:FindFirstChild("GetPlayerMousePosition")
+        
+    if not CoreData.Temp.Path then return end
+    
+    CoreData.Temp.Module = require(CoreData.Temp.Path)
+    CoreData.Temp.OriginalGetMousePos = CoreData.Temp.Module.GetMousePos
+    if not CoreData.Temp.OriginalGetMousePos then return end
+    
+    if CoreData.Temp.Module.__silentAimHooked then return end
+    CoreData.Temp.Module.__silentAimHooked = true
+    
+    CoreData.Hooks.OldGetMousePos = CoreData.Temp.OriginalGetMousePos
+    
+    hookfunction(CoreData.Temp.Module.GetMousePos, function(...)
+        if CoreData.Config.PlasmaBeam.Enabled and CoreData.State.NearestPlasmaRoot then
+            return CoreData.State.NearestPlasmaRoot.Position
+        end
+        
+        return CoreData.Hooks.OldGetMousePos(...)
+    end)
+end
+
+task.spawn(CoreData.Logic.ApplyPlasmaHook)
 
 task.spawn(function()
     while task.wait(0.05) do
@@ -3452,27 +3529,24 @@ task.spawn(function()
         
         CoreData.Temp.Flint = playerCharacter:FindFirstChild("Flintlock")
         CoreData.State.IsFlintlockVisible = (CoreData.Temp.Flint and CoreData.Temp.Flint:IsA("BasePart") and CoreData.Temp.Flint.Transparency < 1) or false
+        CoreData.State.NearestKillerRoot, CoreData.State.KillerDist = CoreData.Logic.FindNearestTarget({killersFolder})
 
-        CoreData.State.KillerDist = math.huge
-        CoreData.State.NearestKillerRoot = nil
-
-        for _, killer in ipairs(killersFolder:GetChildren()) do
-            CoreData.Temp.KillerRoot = killer:FindFirstChild("HumanoidRootPart")
-            if CoreData.Temp.KillerRoot then
-                CoreData.Temp.Dist = (CoreData.Temp.KillerRoot.Position - CoreData.Temp.Root.Position).Magnitude
-                if CoreData.Temp.Dist <= CoreData.State.KillerDist then
-                    CoreData.State.KillerDist = CoreData.Temp.Dist
-                    CoreData.State.NearestKillerRoot = CoreData.Temp.KillerRoot
-                end
-            end
+        if CoreData.Config.PlasmaBeam.Enabled then
+            CoreData.Temp.AllowedFolders = {}
+            if table.find(CoreData.Config.PlasmaBeam.Targets, "Killers") then table.insert(CoreData.Temp.AllowedFolders, killersFolder) end
+            if table.find(CoreData.Config.PlasmaBeam.Targets, "Survivors") then table.insert(CoreData.Temp.AllowedFolders, survivorsFolder) end
+            
+            CoreData.State.NearestPlasmaRoot, _ = CoreData.Logic.FindNearestTarget(CoreData.Temp.AllowedFolders)
+        else
+            CoreData.State.NearestPlasmaRoot = nil
         end
     end
 end)
 
 CoreData.Hooks.OldIndex = hookmetamethod(game, "__index", newcclosure(function(self, key)
     if not checkcaller() and key == "CFrame" and self.Name == "HumanoidRootPart" and self.Parent == playerCharacter then
-        if CoreData.Logic.CanAim() then
-            return CoreData.Logic.GetFlatAimCFrame(self.Position)
+        if CoreData.Logic.CanFlintlockAim() then
+            return CoreData.Logic.GetFlatAimCFrame(self.Position, CoreData.State.NearestKillerRoot.Position)
         end
     end
     return CoreData.Hooks.OldIndex(self, key)
@@ -3482,11 +3556,11 @@ CoreData.Hooks.OldNamecall = hookmetamethod(game, "__namecall", newcclosure(func
     local method = getnamecallmethod()
     
     if not checkcaller() and method == "FireServer" and tostring(self):find("ChanceFireShot") then
-        if CoreData.Logic.CanAim() then
+        if CoreData.Logic.CanFlintlockAim() then
             CoreData.Temp.Root = playerCharacter and playerCharacter:FindFirstChild("HumanoidRootPart")
             if CoreData.Temp.Root then
                 local args = {...}
-                args[1] = CoreData.Logic.GetFlatAimCFrame(CoreData.Temp.Root.Position).LookVector
+                args[1] = CoreData.Logic.GetFlatAimCFrame(CoreData.Temp.Root.Position, CoreData.State.NearestKillerRoot.Position).LookVector
                 return CoreData.Hooks.OldNamecall(self, unpack(args))
             end
         end
@@ -3544,6 +3618,29 @@ MyUIElements.Chance:Toggle({
     Value = false,
     Callback = function(state)
         CoreData.Config.AutoAim.Enabled = state
+    end
+})
+
+MyUIElements.Dusekkar:Dropdown({
+    Title = "loc:ChooseTarget", 
+    Desc = "loc:ChooseTargetDesc",
+    Flag = "Plasma_Target_Dropdown",
+    Values = {"Killers", "Survivors"},
+    Value = {"Killers"},
+    Multi = true,
+    AllowNone = false,
+    Callback = function(value)
+        CoreData.Config.PlasmaBeam.Targets = value
+    end
+})
+
+MyUIElements.Dusekkar:Toggle({
+    Title = "loc:SilentAimPlasmaBeam",
+    Desc = "loc:SilentAimPlasmaBeamDesc",
+    Flag = "Auto_Aim_PlasmaBeam",
+    Value = false,
+    Callback = function(state)
+        CoreData.Config.PlasmaBeam.Enabled = state
     end
 })
 
@@ -6120,7 +6217,7 @@ end
 
 function AntiSlowFeature:OnSpeedChanged(val)
     if self.Enabled and val:IsA("NumberValue") and val.Value < 1 then
-        val.Value = 1
+        val.Value = 0.9
         self:HideUI()
     end
 end
