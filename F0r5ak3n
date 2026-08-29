@@ -285,6 +285,10 @@ WindUI:Localization({
             EspTripmineDesc = "Display ESP for Tripmine objects in the map.",
             EspSpray = "ESP Spray",
             EspSprayDesc = "Display ESP for sprays in the map.",
+            EspVine = "ESP Vine",
+            EspVineDesc = "Display ESP for vines in the map.",
+            EspGroundBulb = "ESP Ground Bulb",
+            EspGroundBulbDesc = "Display ESP for ground bulbs in the map.",
             Screen = "Screen",
             ScreenDesc = "Change the things on your screen.",
             Fullbright = "Full Bright",
@@ -561,6 +565,10 @@ Load_Config_Desc = "Nhấn để tải cấu hình đã chọn.",
             EspTripmineDesc = "Hiển thị ESP cho các vật thể Tripmine trong map.",
             EspSpray = "ESP Spray",
             EspSprayDesc = "Hiển thị ESP cho các Spray trong map.",
+            EspVine = "ESP Dây leo",
+            EspVineDesc = "Hiển thị ESP cho các dây leo trong map.",
+            EspGroundBulb = "ESP Củ phát sáng",
+            EspGroundBulbDesc = "Hiển thị ESP cho các củ phát sáng trên mặt đất trong map.",
             Screen = "Màn hình",
             ScreenDesc = "Thay đổi những thứ hiển thị trên màn hình của bạn.",
             Fullbright = "Tăng sáng tất cả",
@@ -1119,6 +1127,36 @@ local ElementConfigs = {
             Title = "loc:EspSpray",
             Desc = "loc:EspSprayDesc",
             Icon = "spray-can",
+            Box = true,
+            BoxBorder = true,
+            Opened = false,
+            Hover = true,
+        }
+    },
+
+    {
+        ID = "EspVine",
+        Type = "Section",
+        Parent = TabHandles.Visual,
+        Config = {
+            Title = "loc:EspVine",
+            Desc = "loc:EspVineDesc",
+            Icon = "leaf",
+            Box = true,
+            BoxBorder = true,
+            Opened = false,
+            Hover = true,
+        }
+    },
+
+    {
+        ID = "EspGroundBulb",
+        Type = "Section",
+        Parent = TabHandles.Visual,
+        Config = {
+            Title = "loc:EspGroundBulb",
+            Desc = "loc:EspGroundBulbDesc",
+            Icon = "lightbulb",
             Box = true,
             BoxBorder = true,
             Opened = false,
@@ -4324,6 +4362,60 @@ ESPManager:AddEntry("Spray", {
     end
 })
 
+ESPManager:AddEntry("Vine", {
+    UI = ESPManager.UI.EspVine,
+    Flags = {
+        Type = "ESP_Vine_Type_Dropdown",
+        Text = "ESP_Vine_Text_Format",
+        Color = "Esp_Vine_Colorpicker",
+        Toggle = "ESP_Vine_Toggle"
+    },
+    Toggle = {
+        Title = "loc:EspVine",
+        Desc = "loc:EspVineDesc"
+    },
+    IdPrefix = "Vine_",
+    DefaultColor = Color3.fromRGB(34, 139, 34),
+    DefaultTypes = {Highlight = true, Text = false, Box = false, Tracer = false},
+    DefaultText = {Name = true, HP = false, Distance = false},
+    TextValues = ESPManager.Constants.TextBasic,
+    SourceFolder = IngameFolder,
+    AddDelay = 0.5,
+    Matcher = function(_, _, object)
+        return object.Name:match("'s Vine$") ~= nil
+    end,
+    GetDisplayName = function()
+        return "Vine"
+    end
+})
+
+ESPManager:AddEntry("GroundBulb", {
+    UI = ESPManager.UI.EspGroundBulb,
+    Flags = {
+        Type = "ESP_GroundBulb_Type_Dropdown",
+        Text = "ESP_GroundBulb_Text_Format",
+        Color = "Esp_GroundBulb_Colorpicker",
+        Toggle = "ESP_GroundBulb_Toggle"
+    },
+    Toggle = {
+        Title = "loc:EspGroundBulb",
+        Desc = "loc:EspGroundBulbDesc"
+    },
+    IdPrefix = "GroundBulb_",
+    DefaultColor = Color3.fromRGB(173, 255, 47),
+    DefaultTypes = {Highlight = true, Text = false, Box = false, Tracer = false},
+    DefaultText = {Name = true, HP = false, Distance = false},
+    TextValues = ESPManager.Constants.TextBasic,
+    SourceFolder = IngameFolder,
+    AddDelay = 0.5,
+    Matcher = function(_, _, object)
+        return object.Name:match("'s GroundBulb$") ~= nil
+    end,
+    GetDisplayName = function()
+        return "GroundBulb"
+    end
+})
+
 ESPManager:AddFolderRoute(survivorsFolder, {
     EntryKey = "Survivor",
     Delay = 3,
@@ -4340,7 +4432,7 @@ ESPManager:AddFolderRoute(killersFolder, {
     end
 })
 
-for _, key in pairs({"Sentry", "Dispenser", "Tripwire", "Tripmine", "Spray"}) do
+for _, key in pairs({"Sentry", "Dispenser", "Tripwire", "Tripmine", "Spray", "Vine", "GroundBulb"}) do
     ESPManager:AddFolderRoute(IngameFolder, {
         EntryKey = key,
         Delay = ESPManager.Entries[key].AddDelay or 0,
