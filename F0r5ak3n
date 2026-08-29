@@ -379,6 +379,18 @@ WindUI:Localization({
             CustomNameDesc = "Set a custom name for your character.",
             EnableCustomName = "Enable Custom Name",
             EnableCustomNameDesc = "Enable your custom character name.",
+            Fake_Ragdoll = "Fake Ragdoll",
+            Fake_Ragdoll_Desc = "Create a fake ragdoll effect on your character.",
+            CoinFlipCharges = "Coin Flip Charges",
+            CoinFlipChargesDesc = "Set the number of Coin Flip charges.",
+            CoinFlipDistance = "CoinFlip Distance",
+            CoinFlipDistanceDesc = "Set the safe distance to use Coin Flip away from nearby killers.",
+            AutoCoinflip = "Auto Coin Flip",
+            AutoCoinflipDesc = "Automatically use Coin Flip.",
+            SilentAimShoot = "Silent Aim Shoot",
+            SilentAimShootDesc = "Automatically aim at the target when shooting.",
+            Chance = "Chance",
+            ChanceDesc = "Features related to the Chance character.",
         },
         vi = {
             HubTitle = "Axos Hub",
@@ -643,6 +655,18 @@ Load_Config_Desc = "Nhấn để tải cấu hình đã chọn.",
             CustomNameDesc = "Đặt tên tùy chỉnh cho nhân vật của bạn.",
             EnableCustomName = "Bật tên tùy chỉnh",
             EnableCustomNameDesc = "Bật tên nhân vật tùy chỉnh của bạn.",
+            Fake_Ragdoll = "Ragdoll giả",
+            Fake_Ragdoll_Desc = "Tạo hiệu ứng ragdoll giả trên nhân vật của bạn.",
+            CoinFlipCharges = "Số lần tung xu",
+            CoinFlipChargesDesc = "Đặt số lần được phép tung xu.",
+            CoinFlipDistance = "Khoảng cách tung xu",
+            CoinFlipDistanceDesc = "Đặt khoảng cách an toàn để tung xu, tránh Killer ở gần.",
+            AutoCoinflip = "Tự động tung xu",
+            AutoCoinflipDesc = "Tự động sử dụng khả năng tung xu.",
+            SilentAimShoot = "Bắn ngắm im lặng",
+            SilentAimShootDesc = "Tự động ngắm vào mục tiêu khi bắn.",
+            Chance = "Cơ hội",
+            ChanceDesc = "Các chức năng liên quan đến nhân vật cơ hội.",
         }
     }
 })
@@ -738,7 +762,7 @@ local OpenButtonConfig = {
 
 Window:EditOpenButton(OpenButtonConfig)
 
-Window:Tag({Title = "v0.0.7", Icon = "cog", Color = Color3.fromHex("#30ff6a")})
+Window:Tag({Title = "v0.0.8", Icon = "cog", Color = Color3.fromHex("#30ff6a")})
 
 local Tabs = {
     About = Window:Section({ Title = "loc:About", Opened = true }),
@@ -899,6 +923,21 @@ local ElementConfigs = {
         Config = {
             Title = "loc:SetupStamina",
             Desc = "loc:SetupStaminaDesc",
+            Icon = "user",
+            Box = true,
+            BoxBorder = true,
+            Opened = false,
+            Hover = true,
+        }
+    },
+
+    {
+        ID = "Chance",
+        Type = "Section",
+        Parent = TabHandles.Survivors,
+        Config = {
+            Title = "loc:Chance",
+            Desc = "loc:ChanceDesc",
             Icon = "user",
             Box = true,
             BoxBorder = true,
@@ -1170,6 +1209,21 @@ local ElementConfigs = {
             Title = "loc:Camlock",
             Desc = "loc:CamlockDesc",
             Icon = "crosshair",
+            Box = true,
+            BoxBorder = true,
+            Opened = false,
+            Hover = true,
+        }
+    },
+
+    {
+        ID = "Ragdoll",
+        Type = "Section",
+        Parent = TabHandles.Player,
+        Config = {
+            Title = "loc:Fake_Ragdoll",
+            Desc = "loc:Fake_Ragdoll_Desc",
+            Icon = "ghost",
             Box = true,
             BoxBorder = true,
             Opened = false,
@@ -1488,6 +1542,141 @@ Core.Spawn("LoadDiscord", function()
 end)
 
 TabHandles.Info:Divider()
+
+AbilityEvent = {
+    GetNumber = function(value)
+        if type(value) == "string" then
+            value = string.gsub(value, "[^%d%.]", "")
+        end
+
+        return tonumber(value) or 0
+    end,
+
+    GetCharge = function(btn)
+        local charge = btn:GetAttribute("Charges")
+
+        if charge == nil then
+            charge = btn:GetAttribute("Charge")
+        end
+
+        if charge ~= nil then
+            return tonumber(charge) or 0
+        end
+
+        local node =
+            btn:FindFirstChild("Charges")
+            or btn:FindFirstChild("Charge")
+            or btn:FindFirstChild("Count")
+            or btn:FindFirstChild("Amount")
+
+        if not node then
+            return 0
+        end
+
+        if node:IsA("TextLabel")
+            or node:IsA("TextBox")
+            or node:IsA("TextButton") then
+            return AbilityEvent.GetNumber(node.Text)
+        end
+
+        return tonumber(node.Value) or 0
+    end,
+
+    IsReverse = function(value)
+        if type(value) == "string" then
+            return string.lower(value) == "true"
+        end
+
+        return value == true
+    end,
+
+    Fire = function(btn)
+        if type(firesignal) == "function" then
+            firesignal(btn.MouseButton1Click)
+            firesignal(btn.MouseButton1Down)
+            firesignal(btn.MouseButton1Up)
+            firesignal(btn.Activated)
+        elseif btn.Activate then
+            btn:Activate()
+        end
+    end,
+
+    CanUse = function(btn, requiredCharges, reverseCheck, chargeBtn)
+        if not btn then
+            return false
+        end
+
+        chargeBtn = chargeBtn or btn
+
+        for _, child in ipairs(btn:GetChildren()) do
+            if child:GetAttribute("IsLockObject") then
+                return false
+            end
+        end
+
+        local cooldown = btn:FindFirstChild("CooldownTime")
+
+        if cooldown and cooldown.Visible then
+            if AbilityEvent.GetNumber(cooldown.Text) > 0 then
+                return false
+            end
+        end
+
+        if requiredCharges then
+            requiredCharges = tonumber(requiredCharges)
+
+            if requiredCharges then
+                local currentCharge = AbilityEvent.GetCharge(chargeBtn)
+
+                if AbilityEvent.IsReverse(reverseCheck) then
+                    if currentCharge >= requiredCharges then
+                        return false
+                    end
+                elseif currentCharge < requiredCharges then
+                    return false
+                end
+            end
+        end
+
+        return true
+    end,
+
+    Use = function(self, abilityName, requiredCharges, reverseCheck, checkAbilityName)
+        if not PlayerGui then
+            return false
+        end
+
+        local mainUI = PlayerGui:FindFirstChild("MainUI")
+        local container = mainUI and mainUI:FindFirstChild("AbilityContainer")
+
+        if not container then
+            return false
+        end
+
+        local targetBtn = container:FindFirstChild(tostring(abilityName))
+
+        if not targetBtn then
+            return false
+        end
+
+        local chargeBtn = targetBtn
+
+        if checkAbilityName then
+            chargeBtn = container:FindFirstChild(tostring(checkAbilityName))
+
+            if not chargeBtn then
+                return false
+            end
+        end
+
+        if self.CanUse(targetBtn, requiredCharges, reverseCheck, chargeBtn) then
+            self.Fire(targetBtn)
+            return true
+        end
+
+        return false
+    end
+}
 
 if getgenv().MyESPFramwork then
     getgenv().MyESPFramwork:RemoveAllEsp()
@@ -2669,8 +2858,6 @@ CustomLMSLogic = {
         ["Coolkidd remix"] = "78534559289195",
         ["A retro soul"] = "116457974828068",
         ["Pot"] = "77435705757696",
-        ["Slasher m3"] = "118056082854908",
-        ["Slasher m4"] = "79224828205788",
         ["Hitbox accurate"] = "126311349373144",
         ["Azure vs twotime"] = "https://raw.githubusercontent.com/SLK-GAMING-MOD/LMS/main/Two%20Time%20Vs.%20Azure%20LMS%20%20AND%20THE%20SERAPHIM%20WEPT%2C%20AS%20THE%20ANGELS%20FALL%20%20Forsaken%20Animation%20-%20JuanDyAir%20(youtube).mp3",
         ["c00lkidd m4 new"] = "https://raw.githubusercontent.com/SLK-GAMING-MOD/LMS/main/HERE%20I%20COME%20-%20Milestone%20c00lkidd%20Chase%20Theme%20%20Forsaken%20OST%20-%20Key%20After%20Key%20(youtube).mp3",
@@ -2688,6 +2875,7 @@ CustomLMSLogic = {
         ["Made just 4 u"] = "https://raw.githubusercontent.com/SLK-GAMING-MOD/LMS/main/FORSAKEN%20OST%20-%20MADE%20JUST%204%20U%20%5B%20Ft.%20Lymphh%20%5D%20(Bluudud%20Vs.%20118o8%20Theme)%20-%20lexxiemow%20(youtube).mp3",
         ["Profitable passion"] = "https://raw.githubusercontent.com/SLK-GAMING-MOD/LMS/main/Profitable%20Passion%20%20Last%20Man%20Standing%20(FORSAKEN%20OST)%20-%20Exedious%20(youtube).mp3",
         ["Prepetuity"] = "https://raw.githubusercontent.com/SLK-GAMING-MOD/LMS/main/Perpetuity%20(Die%20of%20Death%20LMS)%20%20FORSAKEN%20OST%20-%20Lymphh%20(youtube).mp3",
+        ["Burnout"] = "https://raw.githubusercontent.com/SLK-GAMING-MOD/LMS/main/BURNOUT%20-%20FORSAKEN%20OST%20-%20Ohaikou%20(youtube).mp3",
         ["Cook off confection of hatred"] = "https://raw.githubusercontent.com/SLK-GAMING-MOD/LMS/main/COOK%20OFF%20~%20CONFECTION%20OF%20HATRED%20(1eggs%20vs%20Chef%20Shedletsky%20Last%20Man%20Standing)%20Forsaken%20UST%20-%20Katorrox%20Music%20(youtube).mp3",
     },
 
@@ -3179,6 +3367,145 @@ MyUIElements.SetupStamina:Toggle({
         else
             StaminaBot.Funcs.SafeSet("SprintSpeed", "sprintSpeed", StaminaBot.Originals.Speed)
         end
+    end
+})
+
+CoreData = {
+    Config = {
+        CoinFlip = { Enabled = false, Charges = 3, Distance = 75 },
+        AutoAim = { Enabled = false, MaxDistance = 500 }
+    },
+    State = {
+        NearestKillerRoot = nil,
+        KillerDist = math.huge,
+        IsFlintlockVisible = false
+    },
+    Hooks = {
+        OldIndex = nil,
+        OldNamecall = nil
+    },
+    Temp = {},
+    Logic = {}
+}
+
+CoreData.Logic.CanAim = function()
+    return CoreData.Config.AutoAim.Enabled 
+       and CoreData.State.IsFlintlockVisible 
+       and CoreData.State.NearestKillerRoot 
+       and CoreData.State.KillerDist <= CoreData.Config.AutoAim.MaxDistance
+end
+
+CoreData.Logic.GetFlatAimCFrame = function(originPosition)
+    return CFrame.lookAt(
+        originPosition, 
+        Vector3.new(
+            CoreData.State.NearestKillerRoot.Position.X, 
+            originPosition.Y, -- Giữ nguyên trục Y của người bắn
+            CoreData.State.NearestKillerRoot.Position.Z
+        )
+    )
+end
+
+task.spawn(function()
+    while task.wait(0.05) do
+        if not playerCharacter then continue end
+        CoreData.Temp.Root = playerCharacter:FindFirstChild("HumanoidRootPart")
+        if not CoreData.Temp.Root then continue end
+        
+        CoreData.Temp.Flint = playerCharacter:FindFirstChild("Flintlock")
+        CoreData.State.IsFlintlockVisible = (CoreData.Temp.Flint and CoreData.Temp.Flint:IsA("BasePart") and CoreData.Temp.Flint.Transparency < 1) or false
+
+        CoreData.State.KillerDist = math.huge
+        CoreData.State.NearestKillerRoot = nil
+
+        for _, killer in ipairs(killersFolder:GetChildren()) do
+            CoreData.Temp.KillerRoot = killer:FindFirstChild("HumanoidRootPart")
+            if CoreData.Temp.KillerRoot then
+                CoreData.Temp.Dist = (CoreData.Temp.KillerRoot.Position - CoreData.Temp.Root.Position).Magnitude
+                if CoreData.Temp.Dist <= CoreData.State.KillerDist then
+                    CoreData.State.KillerDist = CoreData.Temp.Dist
+                    CoreData.State.NearestKillerRoot = CoreData.Temp.KillerRoot
+                end
+            end
+        end
+    end
+end)
+
+CoreData.Hooks.OldIndex = hookmetamethod(game, "__index", newcclosure(function(self, key)
+    if not checkcaller() and key == "CFrame" and self.Name == "HumanoidRootPart" and self.Parent == playerCharacter then
+        if CoreData.Logic.CanAim() then
+            return CoreData.Logic.GetFlatAimCFrame(self.Position)
+        end
+    end
+    return CoreData.Hooks.OldIndex(self, key)
+end))
+
+CoreData.Hooks.OldNamecall = hookmetamethod(game, "__namecall", newcclosure(function(self, ...)
+    local method = getnamecallmethod()
+    
+    if not checkcaller() and method == "FireServer" and tostring(self):find("ChanceFireShot") then
+        if CoreData.Logic.CanAim() then
+            CoreData.Temp.Root = playerCharacter and playerCharacter:FindFirstChild("HumanoidRootPart")
+            if CoreData.Temp.Root then
+                local args = {...}
+                args[1] = CoreData.Logic.GetFlatAimCFrame(CoreData.Temp.Root.Position).LookVector
+                return CoreData.Hooks.OldNamecall(self, unpack(args))
+            end
+        end
+    end
+    return CoreData.Hooks.OldNamecall(self, ...)
+end))
+
+MyUIElements.Chance:Dropdown({
+    Title = "loc:CoinFlipCharges",
+    Desc = "loc:CoinFlipChargesDesc",
+    Flag = "Select_CoinFlip_Charges",
+    Values = {1, 2, 3},
+    Value = 3,
+    Callback = function(value)
+        CoreData.Config.CoinFlip.Charges = tonumber(value) or 3
+    end
+})
+
+MyUIElements.Chance:Input({
+    Title = "loc:CoinFlipDistance",
+    Desc = "loc:CoinFlipDistanceDesc",
+    Flag = "CoinFlip_Killer_Distance",
+    Placeholder = "75",
+    Value = "75",
+    Callback = function(value)
+        CoreData.Config.CoinFlip.Distance = tonumber(value) or 75
+    end
+})
+
+MyUIElements.Chance:Toggle({
+    Title = "loc:AutoCoinflip",
+    Desc = "loc:AutoCoinflipDesc",
+    Flag = "Auto Coinflip",
+    Value = false,
+    Callback = function(state)
+        CoreData.Config.CoinFlip.Enabled = state
+
+        if state then
+            task.spawn(function()
+                while CoreData.Config.CoinFlip.Enabled do
+                    if CoreData.State.KillerDist > CoreData.Config.CoinFlip.Distance then
+                        AbilityEvent:Use("CoinFlip", CoreData.Config.CoinFlip.Charges, true, "Reroll")
+                    end
+                    task.wait(0.1)
+                end
+            end)
+        end
+    end
+})
+
+MyUIElements.Chance:Toggle({
+    Title = "loc:SilentAimShoot",
+    Desc = "loc:SilentAimShootDesc",
+    Flag = "Auto_Aim_Flintlock",
+    Value = false,
+    Callback = function(state)
+        CoreData.Config.AutoAim.Enabled = state
     end
 })
 
@@ -4746,6 +5073,113 @@ MyUIElements.Camlock:Dropdown({
     Values = {"Head", "Torso", "Left Arm", "Right Arm", "Left Leg", "Right Leg"},
     Value = "Head",
     Callback = function(value) CamlockBot.Config.AimPart = value end
+})
+
+RagdollLogic = {
+    Enabled = false,
+    CreatedConstraints = {},
+    CreatedAttachments = {},
+    DisabledMotors = {},
+    Temp = {},
+
+    ManageInstance = function(self, class, parent, props, listName)
+        self.Temp.Obj = Instance.new(class)
+        for k, v in pairs(props) do
+            self.Temp.Obj[k] = v
+        end
+        self.Temp.Obj.Parent = parent
+        table.insert(self[listName], self.Temp.Obj)
+        return self.Temp.Obj
+    end,
+
+    ClearList = function(self, listName)
+        for _, obj in ipairs(self[listName]) do
+            if obj and obj.Parent then obj:Destroy() end
+        end
+        table.clear(self[listName])
+    end,
+
+    SetState = function(self, stateValue, standValue)
+        if not playerCharacter then return end
+        playerCharacter:SetAttribute("Ragdolling", stateValue)
+        self.Temp.Hum = playerCharacter:FindFirstChildOfClass("Humanoid")
+        if self.Temp.Hum then
+            self.Temp.Hum.PlatformStand = standValue
+        end
+    end,
+
+    Toggle = function(self, state)
+        self.Enabled = state
+        self[self.Enabled and "Enable" or "Disable"](self)
+    end,
+
+    Enable = function(self)
+        self:Disable()
+        
+        self.Temp.Hum = playerCharacter and playerCharacter:FindFirstChildOfClass("Humanoid")
+        if not self.Temp.Hum or self.Temp.Hum.Health <= 0 then return end
+
+        self:SetState(true, true)
+
+        for _, desc in ipairs(playerCharacter:GetDescendants()) do
+            if desc:IsA("Motor6D") and desc.Enabled then
+                desc.Enabled = false
+                table.insert(self.DisabledMotors, desc)
+
+                self.Temp.P0 = desc.Part0
+                self.Temp.P1 = desc.Part1
+                
+                if self.Temp.P0 and self.Temp.P1 then
+                    self.Temp.A0 = self:ManageInstance("Attachment", self.Temp.P0, {CFrame = desc.C0}, "CreatedAttachments")
+                    self.Temp.A1 = self:ManageInstance("Attachment", self.Temp.P1, {CFrame = desc.C1}, "CreatedAttachments")
+                    
+                    self:ManageInstance("BallSocketConstraint", self.Temp.P0, {
+                        Attachment0 = self.Temp.A0,
+                        Attachment1 = self.Temp.A1,
+                        LimitsEnabled = true,
+                        TwistLimitsEnabled = true
+                    }, "CreatedConstraints")
+                end
+            end
+        end
+
+        self.Temp.Conn = self.Temp.Hum.Died:Connect(function()
+            self:Disable()
+        end)
+    end,
+
+    Disable = function(self)
+        if self.Temp.Conn then
+            self.Temp.Conn:Disconnect()
+            self.Temp.Conn = nil
+        end
+
+        self:ClearList("CreatedConstraints")
+        self:ClearList("CreatedAttachments")
+
+        for _, motor in ipairs(self.DisabledMotors) do
+            if motor and motor.Parent then
+                motor.Enabled = true
+            end
+        end
+        table.clear(self.DisabledMotors)
+
+        self:SetState(nil, false)
+
+        if playerCharacter and playerCharacter.PrimaryPart then
+            playerCharacter.PrimaryPart.AssemblyLinearVelocity = Vector3.new(0, 0, 0)
+        end
+    end
+}
+
+MyUIElements.Ragdoll:Toggle({
+    Title = "loc:Fake_Ragdoll",
+    Desc = "loc:Fake_Ragdoll_Desc",
+    Flag = "Enable Ragdoll",
+    Value = false,
+    Callback = function(state) 
+        RagdollLogic:Toggle(state)
+    end
 })
 
 PowerManager = {
