@@ -973,7 +973,7 @@ local ElementConfigs = {
         Config = {
             Title = "loc:Dusekkar",
             Desc = "loc:DusekkarDesc",
-            Icon = "user",
+            Icon = "zap",
             Box = true,
             BoxBorder = true,
             Opened = false,
@@ -3604,7 +3604,7 @@ MyUIElements.Chance:Toggle({
                     if CoreData.State.KillerDist > CoreData.Config.CoinFlip.Distance then
                         AbilityEvent:Use("CoinFlip", CoreData.Config.CoinFlip.Charges, true, "Reroll")
                     end
-                    task.wait(0.1)
+                    task.wait(1.5)
                 end
             end)
         end
@@ -6720,7 +6720,9 @@ function ConfigSys.HandleAction(actionType, errEmpty, errNotExist, successMsg, i
     if ConfigSys.Execute(targetName, execType) then
         if isMake then
             ConfigSys.State.Selected = targetName
-            ConfigSys.RefreshDropdown()
+            task.delay(0.25, function()
+                ConfigSys.RefreshDropdown()
+            end)
         elseif actionType == "Delete" then
             ConfigSys.State.Selected = nil
             ConfigSys.State.CurrentObject = nil
