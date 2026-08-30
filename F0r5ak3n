@@ -782,7 +782,7 @@ local OpenButtonConfig = {
 
 Window:EditOpenButton(OpenButtonConfig)
 
-Window:Tag({Title = "v0.0.8", Icon = "cog", Color = Color3.fromHex("#30ff6a")})
+Window:Tag({Title = "v0.0.9", Icon = "cog", Color = Color3.fromHex("#30ff6a")})
 
 local Tabs = {
     About = Window:Section({ Title = "loc:About", Opened = true }),
@@ -6653,6 +6653,7 @@ ConfigSys = {
         Selected = nil,
         CurrentObject = nil
     },
+    Temp = {},
     Dropdown = nil,
     Manager = Window.ConfigManager,
     Tab = MyUIElements.SettingsManager.MySubTabs.Config
@@ -6670,67 +6671,61 @@ function ConfigSys.RefreshDropdown()
     if not ConfigSys.Dropdown then return end
     ConfigSys.Dropdown:Refresh(ConfigSys.GetConfigs())
 
-    local setFunc = ConfigSys.Dropdown.Set or ConfigSys.Dropdown.SetValue
-    if setFunc then
-        setFunc(ConfigSys.Dropdown, ConfigSys.State.Selected)
+    ConfigSys.Temp.SetFunc = ConfigSys.Dropdown.Set or ConfigSys.Dropdown.SetValue
+    if ConfigSys.Temp.SetFunc then
+        ConfigSys.Temp.SetFunc(ConfigSys.Dropdown, ConfigSys.State.Selected)
     end
 end
 
 function ConfigSys.Exists(name)
-    if not name or name == "" then return false end
-    for _, cfgName in ipairs(ConfigSys.GetConfigs()) do
-        if cfgName == name then return true end
-    end
-    return false
+    return name and name ~= "" and table.find(ConfigSys.GetConfigs(), name) ~= nil
 end
 
 function ConfigSys.Execute(name, action)
-    local success, cfg = pcall(function() return ConfigSys.Manager:CreateConfig(name) end)
-    if not success or not cfg then return false end
+    ConfigSys.Temp.Success, ConfigSys.Temp.Cfg = pcall(function() return ConfigSys.Manager:CreateConfig(name) end)
+    if not ConfigSys.Temp.Success or not ConfigSys.Temp.Cfg then return false end
 
-    local actionSuccess = pcall(function()
-        if action == "Save" then cfg:Save()
-        elseif action == "Load" then cfg:Load()
-        elseif action == "Delete" then cfg:Delete() end
+    ConfigSys.Temp.ActionSuccess = pcall(function()
+        if action == "Save" then ConfigSys.Temp.Cfg:Save()
+        elseif action == "Load" then ConfigSys.Temp.Cfg:Load()
+        elseif action == "Delete" then ConfigSys.Temp.Cfg:Delete() end
     end)
 
-    if actionSuccess and action ~= "Delete" then
-        ConfigSys.State.CurrentObject = cfg
-        Window.CurrentConfig = cfg
+    if ConfigSys.Temp.ActionSuccess and action ~= "Delete" then
+        ConfigSys.State.CurrentObject = ConfigSys.Temp.Cfg
+        Window.CurrentConfig = ConfigSys.Temp.Cfg
     end
-    return actionSuccess
+    return ConfigSys.Temp.ActionSuccess
 end
 
 function ConfigSys.HandleAction(actionType, errEmpty, errNotExist, successMsg, icon)
-    local isMake = (actionType == "Make")
-    local targetName = isMake and ConfigSys.State.Name or ConfigSys.State.Selected
+    ConfigSys.Temp.IsMake = (actionType == "Make")
+    ConfigSys.Temp.TargetName = ConfigSys.Temp.IsMake and ConfigSys.State.Name or ConfigSys.State.Selected
 
-    if not targetName or targetName == "" then 
+    if not ConfigSys.Temp.TargetName or ConfigSys.Temp.TargetName == "" then 
         return ConfigSys.Notify("loc:Config", errEmpty, "circle-alert") 
     end
 
-    local exists = ConfigSys.Exists(targetName)
-    if isMake and exists then
-        return ConfigSys.Notify("loc:Config", errNotExist, "circle-alert")
-    elseif not isMake and not exists then
+    ConfigSys.Temp.IsExist = ConfigSys.Exists(ConfigSys.Temp.TargetName)
+    
+    if (ConfigSys.Temp.IsMake and ConfigSys.Temp.IsExist) or (not ConfigSys.Temp.IsMake and not ConfigSys.Temp.IsExist) then
         return ConfigSys.Notify("loc:Config", errNotExist, "circle-alert")
     end
 
-    local execType = (isMake or actionType == "Update") and "Save" or actionType
-    if ConfigSys.Execute(targetName, execType) then
-        if isMake then
-            ConfigSys.State.Selected = targetName
-            task.delay(0.25, function()
-                ConfigSys.RefreshDropdown()
-            end)
+    ConfigSys.Temp.ExecType = (ConfigSys.Temp.IsMake or actionType == "Update") and "Save" or actionType
+    
+    if ConfigSys.Execute(ConfigSys.Temp.TargetName, ConfigSys.Temp.ExecType) then
+        if ConfigSys.Temp.IsMake then
+            ConfigSys.State.Selected = ConfigSys.Temp.TargetName
+            task.delay(0.25, ConfigSys.RefreshDropdown)
         elseif actionType == "Delete" then
             ConfigSys.State.Selected = nil
             ConfigSys.State.CurrentObject = nil
             ConfigSys.RefreshDropdown()
         end
         ConfigSys.Notify("loc:Config", successMsg, icon)
-    else
-        if isMake then ConfigSys.Notify("loc:Config", "Failed to create config", "circle-alert") end
+    elseif ConfigSys.Temp.IsMake then 
+        ConfigSys.Notify("loc:Config", "Failed to create config", "circle-alert") 
     end
 end
 
@@ -6746,25 +6741,17 @@ ConfigSys.Dropdown = ConfigSys.Tab:Dropdown({
     Callback = function(v) ConfigSys.State.Selected = v end
 })
 
-ConfigSys.Tab:Button({ 
-    Title = "loc:Make_Config", Desc = "loc:Make_Config_Desc", 
-    Callback = function() ConfigSys.HandleAction("Make", "loc:Config_Content", "loc:Config_Content1", "loc:Config_Content2", "check") end 
-})
+function ConfigSys.CreateBtn(actionType, title, desc, e1, e2, e3, icon)
+    ConfigSys.Tab:Button({ 
+        Title = title, Desc = desc, 
+        Callback = function() ConfigSys.HandleAction(actionType, e1, e2, e3, icon) end 
+    })
+end
 
-ConfigSys.Tab:Button({ 
-    Title = "loc:Update_Config", Desc = "loc:Update_Config_Content", 
-    Callback = function() ConfigSys.HandleAction("Update", "loc:Config_Content3", "loc:Config_Content4", "loc:Config_Content5", "refresh-cw") end 
-})
-
-ConfigSys.Tab:Button({ 
-    Title = "loc:Load_Config", Desc = "loc:Load_Config_Desc", 
-    Callback = function() ConfigSys.HandleAction("Load", "loc:Config_Content6", "loc:Config_Content7", "loc:Config_Content8", "check") end 
-})
-
-ConfigSys.Tab:Button({ 
-    Title = "loc:Delete_Config", Desc = "loc:Delete_Config_Desc", 
-    Callback = function() ConfigSys.HandleAction("Delete", "loc:Config_Content9", "loc:Config_Content10", "loc:Config_Content11", "trash") end 
-})
+ConfigSys.CreateBtn("Make", "loc:Make_Config", "loc:Make_Config_Desc", "loc:Config_Content", "loc:Config_Content1", "loc:Config_Content2", "check")
+ConfigSys.CreateBtn("Update", "loc:Update_Config", "loc:Update_Config_Content", "loc:Config_Content3", "loc:Config_Content4", "loc:Config_Content5", "refresh-cw")
+ConfigSys.CreateBtn("Load", "loc:Load_Config", "loc:Load_Config_Desc", "loc:Config_Content6", "loc:Config_Content7", "loc:Config_Content8", "check")
+ConfigSys.CreateBtn("Delete", "loc:Delete_Config", "loc:Delete_Config_Desc", "loc:Config_Content9", "loc:Config_Content10", "loc:Config_Content11", "trash")
 
 ConfigSys.AutoLoadToggle = Window:Autoload({
     Parent = ConfigSys.Tab,
@@ -6772,26 +6759,24 @@ ConfigSys.AutoLoadToggle = Window:Autoload({
     Desc = "loc:Auto_Load_Config_Desc",
     AutoSaveInterval = 3,
     Resolve = function()
-        local name = ConfigSys.State.Selected
-
-        if not name or name == "" then
+        if not ConfigSys.State.Selected or ConfigSys.State.Selected == "" then
             ConfigSys.Notify("loc:Config", "loc:AutoLoad_NoSelection", "circle-alert")
             return nil
         end
 
-        if not ConfigSys.Exists(name) then
+        if not ConfigSys.Exists(ConfigSys.State.Selected) then
             ConfigSys.Notify("loc:Config", "loc:AutoLoad_NotExist", "circle-alert")
             return nil
         end
 
-        if not ConfigSys.Execute(name, "Load") then
+        if not ConfigSys.Execute(ConfigSys.State.Selected, "Load") then
             ConfigSys.Notify("loc:Config", "loc:AutoLoad_LoadFailed", "circle-alert")
             return nil
         end
 
         return ConfigSys.State.CurrentObject
     end,
-    OnEnabled = function(cfg, name)
+    OnEnabled = function()
         ConfigSys.Notify("loc:Config", "loc:AutoLoad_Enabled", "check")
     end,
     OnDisabled = function()
