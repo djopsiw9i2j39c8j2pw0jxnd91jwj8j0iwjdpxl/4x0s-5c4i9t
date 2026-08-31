@@ -6274,7 +6274,7 @@ MyUIElements.Bypass:Toggle({
 
 ScriptData = {
     Vars = {},
-    
+
     Utils = {
         SafeRequire = function(moduleObj)
             if not moduleObj then return nil end
@@ -6288,75 +6288,99 @@ ScriptData = {
 
     Rules = {
         Original = nil,
-        State = true,
-        Conns = {},
-        
         Custom = {
-            { Header = "Exploiting", Size = UDim2.fromScale(0.9, 0.75), Body = "\n• Using or advertising software that gives you unfair advantages is heavily encouraged for a smoother gameplay experience. Feel free to abuse Fast Flags and disable animations!\n\n\t\t\t" },
-            { Header = "Bug Abuse", Size = UDim2.fromScale(0.9, 0.55), Body = "\n• Abusing bugs or unintended glitches to gain unfair advantages is strictly mandatory. Getting flung into a glitch should be used to troll enemies—do NOT reset!\n\n\t\t\t\t" },
-            { Header = "Griefing", Size = UDim2.fromScale(0.9, 0.35), Body = "\t\t\n• Purposely sabotaging teammates and holding the game hostage is highly recommended. The more you annoy your team, the more rewards you get!\n\n\t\t\t\t" },
-            { Header = "Toxicity", Size = UDim2.fromScale(0.9, 0.35), Body = "\t\t\n• All forms of toxicity, flaming, and sending threats via text and voice chat are required to make the game experience extra spicy.\n\n\t\t\t\t" },
-            { Header = "Teaming", Size = UDim2.fromScale(0.9, 0.65), Body = "\t\t\n• Deliberately sparing your friends, saving them for last, and letting them win is required. True friendship comes first—never fight your buddies!\n\n\t\t\t\t" },
-            { Header = "AFK Farming", Size = UDim2.fromScale(0.9, 0.35), Body = "\t\t\n• AFK farming is the ultimate strat! Stand still all match to effortlessly farm maximum EXP and cash without lifting a finger.\n\n\t\t\t\t" }
+            { Header = "Exploiting", NoteSize = UDim2.fromScale(0.9, 0.75), Body = "\n• Using or advertising software that gives you unfair advantages is heavily encouraged for a smoother gameplay experience. Feel free to abuse Fast Flags and disable animations to climb the leaderboards!\n\n\t\t\t" },
+            { Header = "Bug Abuse", NoteSize = UDim2.fromScale(0.9, 0.55), Body = "\n• Abusing bugs or unintended glitches to gain unfair advantages is strictly mandatory. Getting flung into a glitch by Corrupt Energy or Gashing Wound should be used to troll enemies—do NOT reset!\n\n\t\t\t\t" },
+            { Header = "Griefing", NoteSize = UDim2.fromScale(0.9, 0.35), Body = "\t\t\n• Purposely sabotaging teammates and holding the game hostage is highly recommended. The more you annoy your team, the more rewards you get!\n\n\t\t\t\t" },
+            { Header = "Toxicity", NoteSize = UDim2.fromScale(0.9, 0.35), Body = "\t\t\n• All forms of toxicity, flaming, and sending threats via text and voice chat are required to make the game experience extra spicy.\n\n\t\t\t\t" },
+            { Header = "Ban Evasion", NoteSize = UDim2.fromScale(0.9, 0.35), Body = "\t\t\n• Creating alt accounts specifically to bypass punishments is rewarded. Every new alt account grants you special bonus perks!\n\n\t\t\t\t" },
+            { Header = "Teaming", NoteSize = UDim2.fromScale(0.9, 0.65), Body = "\t\t\n• Deliberately sparing your friends, saving them for last, and letting them win is required. True friendship comes first—never fight your buddies!\n\n\t\t\t\t" },
+            { Header = "AFK Farming", NoteSize = UDim2.fromScale(0.9, 0.35), Body = "\t\t\n• AFK farming is the ultimate strat! Stand still all match to effortlessly farm maximum EXP and cash without lifting a finger.\n\n\t\t\t\t" },
+            { Header = "Inappropriate Avatars", NoteSize = UDim2.fromScale(0.9, 0.35), Body = "\t\t\n• Wear the most questionable and inappropriate avatars possible. Outrageous outfits give you a secret +50% dodge chance!\n\n\t\t\t\t" }
         },
 
         GetContainer = function()
-            for _, gui in ipairs(PlayerGui:GetChildren()) do
-                if gui:IsA("ScreenGui") and (gui.Name:match("Sidebar") or gui.Name:match("Rules")) then
-                    ScriptData.Vars.Container = gui:FindFirstChild("RulesContainer", true)
-                    if ScriptData.Vars.Container then return ScriptData.Vars.Container:FindFirstChild("Contents") end
+            ScriptData.Vars.SidebarGui = PlayerGui:FindFirstChild("Sidebar") or PlayerGui:FindFirstChild("RulesScreen") or PlayerGui:FindFirstChild("SidebarScreen")
+            if not ScriptData.Vars.SidebarGui then
+                for _, gui in ipairs(PlayerGui:GetChildren()) do
+                    if gui:IsA("ScreenGui") and gui:FindFirstChild("RulesContainer", true) then
+                        ScriptData.Vars.SidebarGui = gui
+                        break
+                    end
                 end
             end
-            ScriptData.Vars.Handler = ScriptData.Utils.SafeRequire(ReplicatedStorage:FindFirstChild("SidebarHandler", true))
-            return ScriptData.Vars.Handler and ScriptData.Vars.Handler.RegisteredMenus and ScriptData.Vars.Handler.RegisteredMenus.Rules.Menu.RulesContainer.Contents or nil
+
+            if ScriptData.Vars.SidebarGui then
+                ScriptData.Vars.RulesContainer = ScriptData.Vars.SidebarGui:FindFirstChild("RulesContainer", true)
+                if ScriptData.Vars.RulesContainer then
+                    return ScriptData.Vars.RulesContainer:FindFirstChild("Contents")
+                end
+            end
+
+            ScriptData.Vars.Initializer = ScriptData.Utils.SafeRequire(ReplicatedStorage:FindFirstChild("Initializer"))
+            if ScriptData.Vars.Initializer and ScriptData.Vars.Initializer.PlayerSystems and ScriptData.Vars.Initializer.PlayerSystems.SidebarHandler then
+                ScriptData.Vars.SidebarHandler = ScriptData.Vars.Initializer.PlayerSystems.SidebarHandler
+                if ScriptData.Vars.SidebarHandler.RegisteredMenus and ScriptData.Vars.SidebarHandler.RegisteredMenus.Rules then
+                    return ScriptData.Vars.SidebarHandler.RegisteredMenus.Rules.Menu.RulesContainer.Contents
+                end
+            end
+
+            return nil
         end,
 
         UpdateUI = function(targetRules)
             ScriptData.Vars.Contents = ScriptData.Rules.GetContainer()
-            ScriptData.Vars.Presets = ReplicatedStorage:FindFirstChild("UpdatelogPresets", true)
-            if not ScriptData.Vars.Contents or not ScriptData.Vars.Presets then return end
+            if not ScriptData.Vars.Contents or not targetRules then return end
 
+            ScriptData.Vars.TextPresetList = {}
             for _, child in ipairs(ScriptData.Vars.Contents:GetChildren()) do
-                if not child:IsA("UIListLayout") and not child:IsA("UIPadding") then child:Destroy() end
+                if child:FindFirstChild("Main") and child.Main:IsA("TextLabel") then
+                    table.insert(ScriptData.Vars.TextPresetList, child)
+                end
             end
 
-            ScriptData.Vars.Order = 1
-            for _, rule in ipairs(targetRules) do
-                ScriptData.Vars.Header = ScriptData.Vars.Presets.Components.Header:Clone()
-                ScriptData.Vars.Header.Text, ScriptData.Vars.Header.LayoutOrder, ScriptData.Vars.Header.Parent = rule.Header, ScriptData.Vars.Order, ScriptData.Vars.Contents
-
-                ScriptData.Vars.Sep = ScriptData.Vars.Presets.Components.Seperator:Clone()
-                ScriptData.Vars.Sep.LayoutOrder, ScriptData.Vars.Sep.Parent = ScriptData.Vars.Order + 1, ScriptData.Vars.Contents
-
-                ScriptData.Vars.Text = ScriptData.Vars.Presets.Components.TextPreset:Clone()
-                ScriptData.Vars.Text.Main.Text, ScriptData.Vars.Text.AutomaticSize, ScriptData.Vars.Text.Size = rule.Body, Enum.AutomaticSize.None, rule.Size
-                ScriptData.Vars.Text.LayoutOrder, ScriptData.Vars.Text.Parent = ScriptData.Vars.Order + 2, ScriptData.Vars.Contents
-
-                ScriptData.Vars.Order = ScriptData.Vars.Order + 3
-            end
-        end,
-
-        Apply = function()
-            ScriptData.Rules.UpdateUI(ScriptData.Rules.State and ScriptData.Rules.Custom or ScriptData.Rules.Original)
-        end,
-
-        InitWatcher = function()
-            ScriptData.Vars.FoundContents = ScriptData.Rules.GetContainer()
-            if ScriptData.Vars.FoundContents then
-                ScriptData.Rules.Apply()
-                ScriptData.Rules.Conns.Content = ScriptData.Vars.FoundContents.ChildAdded:Connect(function()
-                    if ScriptData.Rules.State then task.wait(); ScriptData.Rules.Apply() end
-                end)
+            if #ScriptData.Vars.TextPresetList > 0 then
+                for index, ruleData in ipairs(targetRules) do
+                    if ScriptData.Vars.TextPresetList[index] then
+                        ScriptData.Vars.TextPresetList[index].Main.Text = ruleData.Body
+                        if ruleData.NoteSize then
+                            ScriptData.Vars.TextPresetList[index].Size = ruleData.NoteSize
+                        end
+                    end
+                end
                 return
             end
 
-            ScriptData.Utils.ClearConn(ScriptData.Rules.Conns, "Gui")
-            ScriptData.Rules.Conns.Gui = PlayerGui.DescendantAdded:Connect(function(descendant)
-                if descendant.Name == "RulesContainer" or descendant.Name == "Contents" then
-                    ScriptData.Rules.InitWatcher()
-                    ScriptData.Utils.ClearConn(ScriptData.Rules.Conns, "Gui")
+            ScriptData.Vars.Assets = ReplicatedStorage:FindFirstChild("Assets")
+            ScriptData.Vars.Presets = ScriptData.Vars.Assets and ScriptData.Vars.Assets:FindFirstChild("UI") and ScriptData.Vars.Assets.UI:FindFirstChild("UpdatelogPresets")
+            if not ScriptData.Vars.Presets then return end
+
+            for _, child in ipairs(ScriptData.Vars.Contents:GetChildren()) do
+                if not child:IsA("UIListLayout") and not child:IsA("UIPadding") then
+                    child:Destroy()
                 end
-            end)
+            end
+
+            ScriptData.Vars.OrderIndex = 1
+            for _, ruleData in ipairs(targetRules) do
+                ScriptData.Vars.HeaderObj = ScriptData.Vars.Presets.Components.Header:Clone()
+                ScriptData.Vars.HeaderObj.Text = ruleData.Header
+                ScriptData.Vars.HeaderObj.LayoutOrder = ScriptData.Vars.OrderIndex
+                ScriptData.Vars.HeaderObj.Parent = ScriptData.Vars.Contents
+
+                ScriptData.Vars.SepObj = ScriptData.Vars.Presets.Components.Seperator:Clone()
+                ScriptData.Vars.SepObj.LayoutOrder = ScriptData.Vars.OrderIndex + 1
+                ScriptData.Vars.SepObj.Parent = ScriptData.Vars.Contents
+
+                ScriptData.Vars.TextObj = ScriptData.Vars.Presets.Components.TextPreset:Clone()
+                ScriptData.Vars.TextObj.Main.Text = ruleData.Body
+                ScriptData.Vars.TextObj.AutomaticSize = Enum.AutomaticSize.None
+                ScriptData.Vars.TextObj.Size = ruleData.NoteSize or UDim2.fromScale(0.9, 0.5)
+                ScriptData.Vars.TextObj.LayoutOrder = ScriptData.Vars.OrderIndex + 2
+                ScriptData.Vars.TextObj.Parent = ScriptData.Vars.Contents
+
+                ScriptData.Vars.OrderIndex = ScriptData.Vars.OrderIndex + 3
+            end
         end
     },
 
@@ -6364,7 +6388,6 @@ ScriptData = {
         State = false,
         HooksInit = false,
         Conns = {},
-        OldNamecall = nil,
 
         InitHooks = function()
             if ScriptData.AntiCheat.HooksInit then return end
@@ -6428,10 +6451,10 @@ ScriptData = {
     }
 }
 
-if not ScriptData.Rules.Original then
-    ScriptData.Rules.Original = ScriptData.Utils.SafeRequire(ReplicatedStorage:FindFirstChild("Rules", true))
+ScriptData.Vars.RulesAsset = ReplicatedStorage:FindFirstChild("Assets") and ReplicatedStorage.Assets:FindFirstChild("Rules")
+if ScriptData.Vars.RulesAsset then
+    ScriptData.Rules.Original = ScriptData.Utils.SafeRequire(ScriptData.Vars.RulesAsset)
 end
-ScriptData.Rules.InitWatcher()
 
 MyUIElements.Bypass:Toggle({
     Title = "loc:ReverseRules",
@@ -6439,14 +6462,7 @@ MyUIElements.Bypass:Toggle({
     Flag = "ReverseRules",
     Value = true,
     Callback = function(state)
-        ScriptData.Rules.State = state
-        ScriptData.Rules.Apply()
-        if state then
-            ScriptData.Rules.InitWatcher()
-        else
-            ScriptData.Utils.ClearConn(ScriptData.Rules.Conns, "Content")
-            ScriptData.Utils.ClearConn(ScriptData.Rules.Conns, "Gui")
-        end
+        ScriptData.Rules.UpdateUI(state and ScriptData.Rules.Custom or ScriptData.Rules.Original)
     end
 })
 
@@ -6454,7 +6470,7 @@ MyUIElements.Bypass:Toggle({
     Title = "loc:BypassAntiCheat",
     Desc = "loc:BypassAntiCheatDesc",
     Flag = "AntiCheatToggleFlag",
-    Value = false,
+    Value = true,
     Callback = function(state)
         ScriptData.AntiCheat.Apply(state)
     end
