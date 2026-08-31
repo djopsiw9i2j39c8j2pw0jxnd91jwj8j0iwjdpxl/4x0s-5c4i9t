@@ -5070,7 +5070,7 @@ function CamlockBot:SetupQuickGui()
     self.UI.Frame, self.UI.Button, self.UI.Stroke = self:CreateUIBtn(sgui, 0.45, nil)
     self.UI.Frame.Visible = self.Config.QuickGuiVisible
 
-    self.UI.SwitchFrame, self.UI.SwitchButton, self.UI.SwitchStroke = self:CreateUIBtn(sgui, 0.55, "ĐỔI MỤC TIÊU")
+    self.UI.SwitchFrame, self.UI.SwitchButton, self.UI.SwitchStroke = self:CreateUIBtn(sgui, 0.55, "Switch Target")
     self.UI.SwitchFrame.Visible = self.Config.SwitchGuiVisible
 
     MakeDraggableAndClickable(self.UI.Frame, self.UI.Button, function() self:Toggle(not self.Config.Enabled) end)
