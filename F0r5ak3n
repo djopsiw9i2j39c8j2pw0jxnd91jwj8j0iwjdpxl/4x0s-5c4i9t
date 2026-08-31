@@ -401,6 +401,10 @@ WindUI:Localization({
             SilentAimPlasmaBeamDesc = "Automatically aim the Plasma Beam at the selected target.",
             Dusekkar = "Dusekkar",
             DusekkarDesc = "Features related to the Dusekkar character.",
+            ReverseRules = "Reverse Rules",
+            ReverseRulesDesc = "Reverse the game's rules.",
+            BypassAntiCheat = "Bypass Anti Cheat",
+            BypassAntiCheatDesc = "Bypass the game's anti-cheat detection.",
         },
         vi = {
             HubTitle = "Axos Hub",
@@ -687,6 +691,10 @@ Load_Config_Desc = "Nhấn để tải cấu hình đã chọn.",
             SilentAimPlasmaBeamDesc = "Tự động ngắm Tia Plasma vào mục tiêu đã chọn.",
             Dusekkar = "Dusekkar",
             DusekkarDesc = "Các chức năng liên quan đến nhân vật Dusekkar.",
+            ReverseRules = "Đảo ngược luật chơi",
+            ReverseRulesDesc = "Đảo ngược các luật của trò chơi.",
+            BypassAntiCheat = "Vượt qua chống gian lận",
+            BypassAntiCheatDesc = "Vượt qua hệ thống phát hiện gian lận của trò chơi.",
         }
     }
 })
@@ -2863,19 +2871,16 @@ function AutoQTEManager:HandleBloodhook(state)
         
         task.spawn(function()
             while AutoQTEManager.Bloodhook.Enabled do
-                -- Dùng đường dẫn tĩnh bro cho để tối ưu tài nguyên, check từng cấp tránh lỗi nil
                 AutoQTEManager.TempUI = Players.LocalPlayer.PlayerGui:FindFirstChild("TemporaryUI")
                 AutoQTEManager.QTE = AutoQTEManager.TempUI and AutoQTEManager.TempUI:FindFirstChild("QTE")
                 AutoQTEManager.ActiveButton = AutoQTEManager.QTE and AutoQTEManager.QTE:FindFirstChild("ActiveButton")
                 
                 if AutoQTEManager.ActiveButton and AutoQTEManager.ActiveButton.Visible then
-                    -- Check xem nút này đã Fire chưa để tránh spam server trong lúc để nút làm màu
                     if AutoQTEManager.Bloodhook.LastButton ~= AutoQTEManager.ActiveButton then
                         AutoQTEManager.NosHookRemote:FireServer(true)
                         AutoQTEManager.Bloodhook.LastButton = AutoQTEManager.ActiveButton
                     end
                 else
-                    -- Reset lại khi không còn nút nào trên màn hình
                     AutoQTEManager.Bloodhook.LastButton = nil
                 end
                 
@@ -6264,6 +6269,194 @@ MyUIElements.Bypass:Toggle({
         else
             AntiSlowFeature:ClearConnections()
         end
+    end
+})
+
+ScriptData = {
+    Vars = {},
+    
+    Utils = {
+        SafeRequire = function(moduleObj)
+            if not moduleObj then return nil end
+            ScriptData.Vars.S, ScriptData.Vars.M = pcall(require, moduleObj)
+            return (ScriptData.Vars.S and type(ScriptData.Vars.M) == "table") and ScriptData.Vars.M or nil
+        end,
+        ClearConn = function(tbl, key)
+            if tbl[key] then tbl[key]:Disconnect(); tbl[key] = nil end
+        end
+    },
+
+    Rules = {
+        Original = nil,
+        State = true,
+        Conns = {},
+        
+        Custom = {
+            { Header = "Exploiting", Size = UDim2.fromScale(0.9, 0.75), Body = "\n• Using or advertising software that gives you unfair advantages is heavily encouraged for a smoother gameplay experience. Feel free to abuse Fast Flags and disable animations!\n\n\t\t\t" },
+            { Header = "Bug Abuse", Size = UDim2.fromScale(0.9, 0.55), Body = "\n• Abusing bugs or unintended glitches to gain unfair advantages is strictly mandatory. Getting flung into a glitch should be used to troll enemies—do NOT reset!\n\n\t\t\t\t" },
+            { Header = "Griefing", Size = UDim2.fromScale(0.9, 0.35), Body = "\t\t\n• Purposely sabotaging teammates and holding the game hostage is highly recommended. The more you annoy your team, the more rewards you get!\n\n\t\t\t\t" },
+            { Header = "Toxicity", Size = UDim2.fromScale(0.9, 0.35), Body = "\t\t\n• All forms of toxicity, flaming, and sending threats via text and voice chat are required to make the game experience extra spicy.\n\n\t\t\t\t" },
+            { Header = "Teaming", Size = UDim2.fromScale(0.9, 0.65), Body = "\t\t\n• Deliberately sparing your friends, saving them for last, and letting them win is required. True friendship comes first—never fight your buddies!\n\n\t\t\t\t" },
+            { Header = "AFK Farming", Size = UDim2.fromScale(0.9, 0.35), Body = "\t\t\n• AFK farming is the ultimate strat! Stand still all match to effortlessly farm maximum EXP and cash without lifting a finger.\n\n\t\t\t\t" }
+        },
+
+        GetContainer = function()
+            for _, gui in ipairs(PlayerGui:GetChildren()) do
+                if gui:IsA("ScreenGui") and (gui.Name:match("Sidebar") or gui.Name:match("Rules")) then
+                    ScriptData.Vars.Container = gui:FindFirstChild("RulesContainer", true)
+                    if ScriptData.Vars.Container then return ScriptData.Vars.Container:FindFirstChild("Contents") end
+                end
+            end
+            ScriptData.Vars.Handler = ScriptData.Utils.SafeRequire(ReplicatedStorage:FindFirstChild("SidebarHandler", true))
+            return ScriptData.Vars.Handler and ScriptData.Vars.Handler.RegisteredMenus and ScriptData.Vars.Handler.RegisteredMenus.Rules.Menu.RulesContainer.Contents or nil
+        end,
+
+        UpdateUI = function(targetRules)
+            ScriptData.Vars.Contents = ScriptData.Rules.GetContainer()
+            ScriptData.Vars.Presets = ReplicatedStorage:FindFirstChild("UpdatelogPresets", true)
+            if not ScriptData.Vars.Contents or not ScriptData.Vars.Presets then return end
+
+            for _, child in ipairs(ScriptData.Vars.Contents:GetChildren()) do
+                if not child:IsA("UIListLayout") and not child:IsA("UIPadding") then child:Destroy() end
+            end
+
+            ScriptData.Vars.Order = 1
+            for _, rule in ipairs(targetRules) do
+                ScriptData.Vars.Header = ScriptData.Vars.Presets.Components.Header:Clone()
+                ScriptData.Vars.Header.Text, ScriptData.Vars.Header.LayoutOrder, ScriptData.Vars.Header.Parent = rule.Header, ScriptData.Vars.Order, ScriptData.Vars.Contents
+
+                ScriptData.Vars.Sep = ScriptData.Vars.Presets.Components.Seperator:Clone()
+                ScriptData.Vars.Sep.LayoutOrder, ScriptData.Vars.Sep.Parent = ScriptData.Vars.Order + 1, ScriptData.Vars.Contents
+
+                ScriptData.Vars.Text = ScriptData.Vars.Presets.Components.TextPreset:Clone()
+                ScriptData.Vars.Text.Main.Text, ScriptData.Vars.Text.AutomaticSize, ScriptData.Vars.Text.Size = rule.Body, Enum.AutomaticSize.None, rule.Size
+                ScriptData.Vars.Text.LayoutOrder, ScriptData.Vars.Text.Parent = ScriptData.Vars.Order + 2, ScriptData.Vars.Contents
+
+                ScriptData.Vars.Order = ScriptData.Vars.Order + 3
+            end
+        end,
+
+        Apply = function()
+            ScriptData.Rules.UpdateUI(ScriptData.Rules.State and ScriptData.Rules.Custom or ScriptData.Rules.Original)
+        end,
+
+        InitWatcher = function()
+            ScriptData.Vars.FoundContents = ScriptData.Rules.GetContainer()
+            if ScriptData.Vars.FoundContents then
+                ScriptData.Rules.Apply()
+                ScriptData.Rules.Conns.Content = ScriptData.Vars.FoundContents.ChildAdded:Connect(function()
+                    if ScriptData.Rules.State then task.wait(); ScriptData.Rules.Apply() end
+                end)
+                return
+            end
+
+            ScriptData.Utils.ClearConn(ScriptData.Rules.Conns, "Gui")
+            ScriptData.Rules.Conns.Gui = PlayerGui.DescendantAdded:Connect(function(descendant)
+                if descendant.Name == "RulesContainer" or descendant.Name == "Contents" then
+                    ScriptData.Rules.InitWatcher()
+                    ScriptData.Utils.ClearConn(ScriptData.Rules.Conns, "Gui")
+                end
+            end)
+        end
+    },
+
+    AntiCheat = {
+        State = false,
+        HooksInit = false,
+        Conns = {},
+        OldNamecall = nil,
+
+        InitHooks = function()
+            if ScriptData.AntiCheat.HooksInit then return end
+            ScriptData.AntiCheat.HooksInit = true
+            
+            ScriptData.AntiCheat.OldNamecall = hookmetamethod(game, "__namecall", function(self, ...)
+                if ScriptData.AntiCheat.State and getnamecallmethod() == "GetAttribute" then
+                    if ((...) == "sv_anticheat_disabled" and self == Workspace) or ((...) == "anticheat_disabled" and self == localPlayer) then
+                        return true
+                    end
+                end
+                return ScriptData.AntiCheat.OldNamecall(self, ...)
+            end)
+
+            task.spawn(function()
+                ScriptData.Vars.StatusesMod = ScriptData.Utils.SafeRequire(ReplicatedStorage:FindFirstChild("Statuses", true))
+                if ScriptData.Vars.StatusesMod and ScriptData.Vars.StatusesMod.ApplyStatus and not ScriptData.Vars.StatusesMod.OrigApply then
+                    ScriptData.Vars.StatusesMod.OrigApply = ScriptData.Vars.StatusesMod.ApplyStatus
+                    ScriptData.Vars.StatusesMod.ApplyStatus = function(self, char, statusName, ...)
+                        if ScriptData.AntiCheat.State and statusName == "Hacked" and char == playerCharacter then return end
+                        return ScriptData.Vars.StatusesMod.OrigApply(self, char, statusName, ...)
+                    end
+                end
+                
+                ScriptData.Vars.HackedMod = ScriptData.Utils.SafeRequire(ReplicatedStorage:FindFirstChild("Hacked", true))
+                if ScriptData.Vars.HackedMod and not ScriptData.Vars.HackedMod.OrigApplied then
+                    ScriptData.Vars.HackedMod.OrigApplied, ScriptData.Vars.HackedMod.OrigHeartbeat = ScriptData.Vars.HackedMod.Applied, ScriptData.Vars.HackedMod.Heartbeat
+                    localPlayer:GetAttributeChangedSignal("AntiStatusToggled"):Connect(function()
+                        ScriptData.Vars.HackedToggled = localPlayer:GetAttribute("AntiStatusToggled")
+                        ScriptData.Vars.HackedMod.Applied = ScriptData.Vars.HackedToggled and function() end or ScriptData.Vars.HackedMod.OrigApplied
+                        ScriptData.Vars.HackedMod.Heartbeat = ScriptData.Vars.HackedToggled and function() end or ScriptData.Vars.HackedMod.OrigHeartbeat
+                    end)
+                end
+            end)
+        end,
+
+        Apply = function(state)
+            ScriptData.AntiCheat.State = state
+            ScriptData.AntiCheat.InitHooks()
+            
+            Workspace:SetAttribute("sv_anticheat_disabled", state)
+            localPlayer:SetAttribute("anticheat_disabled", state)
+            localPlayer:SetAttribute("AntiStatusToggled", state)
+
+            if state then
+                task.spawn(function()
+                    ScriptData.Vars.Network = ScriptData.Utils.SafeRequire(ReplicatedStorage:FindFirstChild("Network", true))
+                    if ScriptData.Vars.Network and ScriptData.Vars.Network.FireServerConnection then
+                        ScriptData.Vars.Network:FireServerConnection("AdminAction", "REMOTE_EVENT", { ["AnticheatDisableFlag"] = true })
+                    end
+                end)
+
+                ScriptData.AntiCheat.Conns.Respawn = localPlayer.CharacterAdded:Connect(function()
+                    localPlayer:SetAttribute("anticheat_disabled", true)
+                    localPlayer:SetAttribute("AntiStatusToggled", true)
+                end)
+            else
+                ScriptData.Utils.ClearConn(ScriptData.AntiCheat.Conns, "Respawn")
+            end
+        end
+    }
+}
+
+if not ScriptData.Rules.Original then
+    ScriptData.Rules.Original = ScriptData.Utils.SafeRequire(ReplicatedStorage:FindFirstChild("Rules", true))
+end
+ScriptData.Rules.InitWatcher()
+
+MyUIElements.Bypass:Toggle({
+    Title = "loc:ReverseRules",
+    Desc = "loc:ReverseRulesDesc",
+    Flag = "ReverseRules",
+    Value = true,
+    Callback = function(state)
+        ScriptData.Rules.State = state
+        ScriptData.Rules.Apply()
+        if state then
+            ScriptData.Rules.InitWatcher()
+        else
+            ScriptData.Utils.ClearConn(ScriptData.Rules.Conns, "Content")
+            ScriptData.Utils.ClearConn(ScriptData.Rules.Conns, "Gui")
+        end
+    end
+})
+
+MyUIElements.Bypass:Toggle({
+    Title = "loc:BypassAntiCheat",
+    Desc = "loc:BypassAntiCheatDesc",
+    Flag = "AntiCheatToggleFlag",
+    Value = false,
+    Callback = function(state)
+        ScriptData.AntiCheat.Apply(state)
     end
 })
 
