@@ -2402,11 +2402,12 @@ MyUIElements.AutoFarm:Input({
 
 -- Generator
 
-local PuzzleBot = {
+PuzzleBot = {
     Config = {
         AutoSolve = false,
         ShowPath = false,
-        SolveSpeed = 0.07
+        SolveSpeed = 0.07,
+        HideGUI = false
     },
     State = {
         Watchers = {},
@@ -2414,17 +2415,17 @@ local PuzzleBot = {
         LastPuzzle = nil,
         IsSolving = false
     },
+    Vars = {},
     Funcs = {}
 }
 
-function PuzzleBot.Funcs.IsNeighbor(node1, node2)
+PuzzleBot.Funcs.IsNeighbor = function(node1, node2)
     return math.abs(node1.row - node2.row) + math.abs(node1.col - node2.col) == 1
 end
 
-function PuzzleBot.Funcs.GetPuzzle()
-    local current = PuzzleBot.State.ActivePuzzle
-    if current and not current.gameEnded and current.gridFrame and current.gridFrame:IsDescendantOf(game) then
-        return current
+PuzzleBot.Funcs.GetPuzzle = function()
+    if PuzzleBot.State.ActivePuzzle and not PuzzleBot.State.ActivePuzzle.gameEnded and PuzzleBot.State.ActivePuzzle.gridFrame and PuzzleBot.State.ActivePuzzle.gridFrame:IsDescendantOf(game) then
+        return PuzzleBot.State.ActivePuzzle
     end
 
     for _, obj in pairs(getgc(true)) do
@@ -2440,105 +2441,113 @@ function PuzzleBot.Funcs.GetPuzzle()
     return nil
 end
 
-function PuzzleBot.Funcs.ClearWatchers()
+PuzzleBot.Funcs.ClearWatchers = function()
     for _, conn in pairs(PuzzleBot.State.Watchers) do
         if conn.Disconnect then conn:Disconnect() end
     end
     table.clear(PuzzleBot.State.Watchers)
 end
 
-function PuzzleBot.Funcs.GetOrderedPath(rawSolPath)
+PuzzleBot.Funcs.UpdateVisibility = function(puzzleTarget)
+    if puzzleTarget and puzzleTarget.containerFrame then
+        puzzleTarget.containerFrame.Visible = not PuzzleBot.Config.HideGUI
+    end
+end
+
+PuzzleBot.Funcs.GetOrderedPath = function(rawSolPath)
     if not rawSolPath or #rawSolPath <= 1 then return rawSolPath end
     
-    local pool = {}
+    PuzzleBot.Vars.Pool = {}
     for _, node in ipairs(rawSolPath) do
-        table.insert(pool, {row = node.row, col = node.col})
+        table.insert(PuzzleBot.Vars.Pool, {row = node.row, col = node.col})
     end
     
-    local startIndex = 1
-    for i, node in ipairs(pool) do
-        local neighbors = 0
-        for j, other in ipairs(pool) do
+    PuzzleBot.Vars.StartIndex = 1
+    for i, node in ipairs(PuzzleBot.Vars.Pool) do
+        PuzzleBot.Vars.Neighbors = 0
+        for j, other in ipairs(PuzzleBot.Vars.Pool) do
             if i ~= j and PuzzleBot.Funcs.IsNeighbor(node, other) then
-                neighbors = neighbors + 1
+                PuzzleBot.Vars.Neighbors = PuzzleBot.Vars.Neighbors + 1
             end
         end
-        if neighbors == 1 then
-            startIndex = i
+        if PuzzleBot.Vars.Neighbors == 1 then
+            PuzzleBot.Vars.StartIndex = i
             break
         end
     end
     
-    local ordered = {}
-    local current = table.remove(pool, startIndex)
-    table.insert(ordered, current)
+    PuzzleBot.Vars.Ordered = {}
+    PuzzleBot.Vars.CurrentNode = table.remove(PuzzleBot.Vars.Pool, PuzzleBot.Vars.StartIndex)
+    table.insert(PuzzleBot.Vars.Ordered, PuzzleBot.Vars.CurrentNode)
     
-    while current and #pool > 0 do
-        local foundIdx = nil
-        for i, node in ipairs(pool) do
-            if PuzzleBot.Funcs.IsNeighbor(current, node) then
-                foundIdx = i
+    while PuzzleBot.Vars.CurrentNode and #PuzzleBot.Vars.Pool > 0 do
+        PuzzleBot.Vars.FoundIdx = nil
+        for i, node in ipairs(PuzzleBot.Vars.Pool) do
+            if PuzzleBot.Funcs.IsNeighbor(PuzzleBot.Vars.CurrentNode, node) then
+                PuzzleBot.Vars.FoundIdx = i
                 break
             end
         end
         
-        current = table.remove(pool, foundIdx or 1)
-        table.insert(ordered, current)
+        PuzzleBot.Vars.CurrentNode = table.remove(PuzzleBot.Vars.Pool, PuzzleBot.Vars.FoundIdx or 1)
+        table.insert(PuzzleBot.Vars.Ordered, PuzzleBot.Vars.CurrentNode)
     end
     
-    return ordered
+    return PuzzleBot.Vars.Ordered
 end
 
-function PuzzleBot.Funcs.ApplyESP(puzzle)
-    local defaultBtnColor = (puzzle.Settings and puzzle.Settings.defaultButtonColor) or Color3.fromRGB(30, 30, 30)
+PuzzleBot.Funcs.ApplyESP = function(puzzle)
+    PuzzleBot.Vars.DefaultBtnColor = (puzzle.Settings and puzzle.Settings.defaultButtonColor) or Color3.fromRGB(30, 30, 30)
 
     for colorIndex, pathCoords in pairs(puzzle.Solution) do
-        local pureColor = (puzzle.colors and puzzle.colors[colorIndex]) or Color3.new(1,1,1)
-        local mixedColor = defaultBtnColor:Lerp(pureColor, 0.3)
+        PuzzleBot.Vars.PureColor = (puzzle.colors and puzzle.colors[colorIndex]) or Color3.new(1,1,1)
+        PuzzleBot.Vars.MixedColor = PuzzleBot.Vars.DefaultBtnColor:Lerp(PuzzleBot.Vars.PureColor, 0.3)
         
         for _, node in ipairs(pathCoords) do
-            local cell = puzzle.gridFrame:FindFirstChild(tostring(node.row) .. "-" .. tostring(node.col))
-            if cell and cell:FindFirstChild("Button") then
-                local btn = cell.Button
-                local function forceColor()
-                    if PuzzleBot.Config.ShowPath and btn.BackgroundColor3 ~= mixedColor then
-                        btn.BackgroundColor3 = mixedColor
-                        btn.BackgroundTransparency = 0 
+            PuzzleBot.Vars.CellName = tostring(node.row) .. "-" .. tostring(node.col)
+            PuzzleBot.Vars.Cell = puzzle.gridFrame:FindFirstChild(PuzzleBot.Vars.CellName)
+            if PuzzleBot.Vars.Cell and PuzzleBot.Vars.Cell:FindFirstChild("Button") then
+                table.insert(PuzzleBot.State.Watchers, PuzzleBot.Vars.Cell.Button:GetPropertyChangedSignal("BackgroundColor3"):Connect(function()
+                    if PuzzleBot.Config.ShowPath and puzzle.gridFrame:FindFirstChild(tostring(node.row) .. "-" .. tostring(node.col)) then
+                        puzzle.gridFrame[tostring(node.row) .. "-" .. tostring(node.col)].Button.BackgroundColor3 = (puzzle.Settings and puzzle.Settings.defaultButtonColor or Color3.fromRGB(30, 30, 30)):Lerp((puzzle.colors and puzzle.colors[colorIndex]) or Color3.new(1,1,1), 0.3)
+                        puzzle.gridFrame[tostring(node.row) .. "-" .. tostring(node.col)].Button.BackgroundTransparency = 0 
                     end
-                end
+                end))
                 
-                forceColor()
-                table.insert(PuzzleBot.State.Watchers, btn:GetPropertyChangedSignal("BackgroundColor3"):Connect(forceColor))
+                if PuzzleBot.Config.ShowPath then
+                    PuzzleBot.Vars.Cell.Button.BackgroundColor3 = PuzzleBot.Vars.MixedColor
+                    PuzzleBot.Vars.Cell.Button.BackgroundTransparency = 0
+                end
             end
         end
     end
 end
 
-function PuzzleBot.Funcs.SolvePuzzle(puzzle)
+PuzzleBot.Funcs.SolvePuzzle = function(puzzle)
     for colorIndex, rawSolPath in pairs(puzzle.Solution) do
         if not PuzzleBot.Config.AutoSolve or puzzle.gameEnded then break end
         
-        local orderedSolPath = PuzzleBot.Funcs.GetOrderedPath(rawSolPath)
-        local currentPath = puzzle.paths[colorIndex]
-        local isPerfect = true
+        PuzzleBot.Vars.OrderedSolPath = PuzzleBot.Funcs.GetOrderedPath(rawSolPath)
+        PuzzleBot.Vars.CurrentPath = puzzle.paths[colorIndex]
+        PuzzleBot.Vars.IsPerfect = true
         
-        if not currentPath or #currentPath ~= #orderedSolPath then
-            isPerfect = false
+        if not PuzzleBot.Vars.CurrentPath or #PuzzleBot.Vars.CurrentPath ~= #PuzzleBot.Vars.OrderedSolPath then
+            PuzzleBot.Vars.IsPerfect = false
         else
-            for j, node in ipairs(orderedSolPath) do
-                if not currentPath[j] or currentPath[j].row ~= node.row or currentPath[j].col ~= node.col then
-                    isPerfect = false
+            for j, node in ipairs(PuzzleBot.Vars.OrderedSolPath) do
+                if not PuzzleBot.Vars.CurrentPath[j] or PuzzleBot.Vars.CurrentPath[j].row ~= node.row or PuzzleBot.Vars.CurrentPath[j].col ~= node.col then
+                    PuzzleBot.Vars.IsPerfect = false
                     break
                 end
             end
         end
 
-        if not isPerfect then
+        if not PuzzleBot.Vars.IsPerfect then
             puzzle.paths[colorIndex] = {}
             if puzzle.updateGui then puzzle:updateGui() end
             task.wait(0.1) 
             
-            for _, node in ipairs(orderedSolPath) do
+            for _, node in ipairs(PuzzleBot.Vars.OrderedSolPath) do
                 if not PuzzleBot.Config.AutoSolve or puzzle.gameEnded then break end
                 table.insert(puzzle.paths[colorIndex], {row = node.row, col = node.col})
                 if puzzle.updateGui then puzzle:updateGui() end
@@ -2560,9 +2569,9 @@ MyUIElements.Generator:Input({
     Value = 0.07,
     Numeric = true,
     Callback = function(val)
-        local speed = tonumber(val)
-        if speed then
-            PuzzleBot.Config.SolveSpeed = math.clamp(speed, 0.07, 10)
+        PuzzleBot.Vars.Speed = tonumber(val)
+        if PuzzleBot.Vars.Speed then
+            PuzzleBot.Config.SolveSpeed = math.clamp(PuzzleBot.Vars.Speed, 0.07, 10)
         end
     end
 })
@@ -2586,34 +2595,51 @@ MyUIElements.Generator:Toggle({
         PuzzleBot.Config.ShowPath = val 
         if not val then 
             PuzzleBot.Funcs.ClearWatchers() 
-            local puzzle = PuzzleBot.State.ActivePuzzle
-            if puzzle and puzzle.updateGui then puzzle:updateGui() end
+            if PuzzleBot.State.ActivePuzzle and PuzzleBot.State.ActivePuzzle.updateGui then 
+                PuzzleBot.State.ActivePuzzle:updateGui() 
+            end
         end
+    end
+})
+
+MyUIElements.Generator:Toggle({
+    Title = "Hide Puzzle GUI", 
+    Desc = "Hides the generator grid so you can see the screen clearly while it solves", 
+    Flag = "HideGUI_Toggle",
+    Value = false, 
+    Callback = function(val)
+        PuzzleBot.Config.HideGUI = val
+        PuzzleBot.Funcs.UpdateVisibility(PuzzleBot.State.ActivePuzzle)
     end
 })
 
 task.spawn(function()
     while task.wait(0.2) do
-        local puzzle = PuzzleBot.Funcs.GetPuzzle()
+        PuzzleBot.Vars.CurrentTarget = PuzzleBot.Funcs.GetPuzzle()
 
-        if puzzle ~= PuzzleBot.State.LastPuzzle then
+        if PuzzleBot.Vars.CurrentTarget ~= PuzzleBot.State.LastPuzzle then
             PuzzleBot.Funcs.ClearWatchers()
-            PuzzleBot.State.LastPuzzle = puzzle
+            PuzzleBot.State.LastPuzzle = PuzzleBot.Vars.CurrentTarget
+            PuzzleBot.Funcs.UpdateVisibility(PuzzleBot.Vars.CurrentTarget)
         end
 
-        if not puzzle then
+        if not PuzzleBot.Vars.CurrentTarget then
             PuzzleBot.State.IsSolving = false
             continue
         end
-
-        if PuzzleBot.Config.ShowPath and #PuzzleBot.State.Watchers == 0 then
-            PuzzleBot.Funcs.ApplyESP(puzzle)
+        
+        if PuzzleBot.Vars.CurrentTarget.containerFrame and PuzzleBot.Vars.CurrentTarget.containerFrame.Visible == PuzzleBot.Config.HideGUI then
+            PuzzleBot.Funcs.UpdateVisibility(PuzzleBot.Vars.CurrentTarget)
         end
 
-        if PuzzleBot.Config.AutoSolve and not PuzzleBot.State.IsSolving and not puzzle.gameEnded then
+        if PuzzleBot.Config.ShowPath and #PuzzleBot.State.Watchers == 0 then
+            PuzzleBot.Funcs.ApplyESP(PuzzleBot.Vars.CurrentTarget)
+        end
+
+        if PuzzleBot.Config.AutoSolve and not PuzzleBot.State.IsSolving and not PuzzleBot.Vars.CurrentTarget.gameEnded then
             PuzzleBot.State.IsSolving = true
             task.spawn(function()
-                PuzzleBot.Funcs.SolvePuzzle(puzzle)
+                PuzzleBot.Funcs.SolvePuzzle(PuzzleBot.Vars.CurrentTarget)
             end)
         end
     end
