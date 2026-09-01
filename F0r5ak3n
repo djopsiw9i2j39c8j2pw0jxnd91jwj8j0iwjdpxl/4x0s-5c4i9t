@@ -3523,7 +3523,7 @@ MyUIElements.SetupStamina:Toggle({
 CoreData = {
     Config = {
         CoinFlip = { Enabled = false, Charges = 3, Distance = 75 },
-        AutoAim = { Enabled = false, MaxDistance = 500 },
+        AutoAim = { Enabled = false, MaxDistance = 500 }, -- Config cho Flintlock (Chance)
         PlasmaBeam = { Enabled = false, Targets = {"Killers"} },
         CorruptNature = { Enabled = false, Targets = {"Survivors"} },
         Nova = { Enabled = false, Targets = {"Survivors"} }
@@ -3540,7 +3540,9 @@ CoreData = {
         OldIndex = nil,
         OldNamecall = nil,
         OldGetMousePos = nil,
-        OldUtilGetMousePos = nil
+        OldUtilGetMousePos = nil,
+        IsPlasmaHooked = false,  -- Đưa cờ check vào đây để tránh lỗi Read-only Table
+        IsCorruptHooked = false
     },
     Temp = {},
     Logic = {}
@@ -3556,7 +3558,7 @@ CoreData.Logic.FindNearestTarget = function(allowedFolders)
                 if char ~= playerCharacter then
                     CoreData.Temp.TargetRoot = char:FindFirstChild("HumanoidRootPart")
                     if CoreData.Temp.TargetRoot then
-                        CoreData.Temp.Dist = (CoreData.Temp.TargetRoot.Position - CoreData.Temp.Root.Position).Magnitude
+                        CoreData.Temp.Dist = (CoreData.Temp.TargetRoot.Position - (CoreData.Temp.Root and CoreData.Temp.Root.Position or Vector3.zero)).Magnitude
                         if CoreData.Temp.Dist <= CoreData.Temp.ShortestDist then
                             CoreData.Temp.ShortestDist = CoreData.Temp.Dist
                             CoreData.Temp.Nearest = CoreData.Temp.TargetRoot
@@ -3607,23 +3609,21 @@ CoreData.Logic.ApplyPlasmaHook = function()
     if not CoreData.Temp.Path then return end
     
     CoreData.Temp.Module = require(CoreData.Temp.Path)
-    CoreData.Temp.OriginalGetMousePos = CoreData.Temp.Module.GetMousePos
-    if not CoreData.Temp.OriginalGetMousePos then return end
+    if type(CoreData.Temp.Module) ~= "table" or not CoreData.Temp.Module.GetMousePos then return end
     
-    if CoreData.Temp.Module.__silentAimHooked then return end
-    CoreData.Temp.Module.__silentAimHooked = true
+    -- Kiểm tra hook bằng biến nội bộ của ta, không chọc vào Module của game
+    if CoreData.Hooks.IsPlasmaHooked then return end
+    CoreData.Hooks.IsPlasmaHooked = true
     
-    CoreData.Hooks.OldGetMousePos = CoreData.Temp.OriginalGetMousePos
+    CoreData.Hooks.OldGetMousePos = CoreData.Temp.Module.GetMousePos
     
     hookfunction(CoreData.Temp.Module.GetMousePos, function(...)
         if CoreData.Config.PlasmaBeam.Enabled and CoreData.State.NearestPlasmaRoot then
             return CoreData.State.NearestPlasmaRoot.Position
         end
-        
         if CoreData.Config.Nova.Enabled and CoreData.State.NearestNovaRoot then
             return CoreData.State.NearestNovaRoot.Position
         end
-        
         return CoreData.Hooks.OldGetMousePos(...)
     end)
 end
@@ -3636,10 +3636,11 @@ CoreData.Logic.ApplyCorruptNatureHook = function()
     if not CoreData.Temp.UtilPath then return end
     
     CoreData.Temp.UtilModule = require(CoreData.Temp.UtilPath)
-    if not CoreData.Temp.UtilModule.GetPlayerMousePosition then return end
+    if type(CoreData.Temp.UtilModule) ~= "table" or not CoreData.Temp.UtilModule.GetPlayerMousePosition then return end
     
-    if CoreData.Temp.UtilModule.__corruptAimHooked then return end
-    CoreData.Temp.UtilModule.__corruptAimHooked = true
+    -- Fix lỗi Read-only: Sử dụng biến trong CoreData thay vì gán vào UtilModule
+    if CoreData.Hooks.IsCorruptHooked then return end
+    CoreData.Hooks.IsCorruptHooked = true
     
     CoreData.Hooks.OldUtilGetMousePos = CoreData.Temp.UtilModule.GetPlayerMousePosition
     
@@ -3647,11 +3648,9 @@ CoreData.Logic.ApplyCorruptNatureHook = function()
         if CoreData.Config.CorruptNature.Enabled and CoreData.State.NearestCorruptRoot then
             return CoreData.State.NearestCorruptRoot.Position
         end
-        
         if CoreData.Config.Nova.Enabled and CoreData.State.NearestNovaRoot then
             return CoreData.State.NearestNovaRoot.Position
         end
-        
         return CoreData.Hooks.OldUtilGetMousePos(...)
     end)
 end
@@ -3700,14 +3699,17 @@ CoreData.Hooks.OldNamecall = hookmetamethod(game, "__namecall", newcclosure(func
     return CoreData.Hooks.OldNamecall(self, ...)
 end))
 
+-- [ KHU VỰC UI ELEMENTS ] --
 MyUIElements.Chance:Dropdown({
     Title = "loc:CoinFlipCharges", Desc = "loc:CoinFlipChargesDesc", Flag = "Select_CoinFlip_Charges", Values = {1, 2, 3}, Value = 3,
     Callback = function(value) CoreData.Config.CoinFlip.Charges = tonumber(value) or 3 end
 })
+
 MyUIElements.Chance:Input({
     Title = "loc:CoinFlipDistance", Desc = "loc:CoinFlipDistanceDesc", Flag = "CoinFlip_Killer_Distance", Placeholder = "75", Value = "75",
     Callback = function(value) CoreData.Config.CoinFlip.Distance = tonumber(value) or 75 end
 })
+
 MyUIElements.Chance:Toggle({
     Title = "loc:AutoCoinflip", Desc = "loc:AutoCoinflipDesc", Flag = "Auto Coinflip", Value = false,
     Callback = function(state)
@@ -3715,7 +3717,9 @@ MyUIElements.Chance:Toggle({
         if state then
             task.spawn(function()
                 while CoreData.Config.CoinFlip.Enabled do
-                    if CoreData.State.KillerDist > CoreData.Config.CoinFlip.Distance then AbilityEvent:Use("CoinFlip", CoreData.Config.CoinFlip.Charges, true, "Reroll") end
+                    if CoreData.State.KillerDist > CoreData.Config.CoinFlip.Distance then 
+                        AbilityEvent:Use("CoinFlip", CoreData.Config.CoinFlip.Charges, true, "Reroll") 
+                    end
                     task.wait(1.5)
                 end
             end)
@@ -3723,10 +3727,17 @@ MyUIElements.Chance:Toggle({
     end
 })
 
+-- ĐÃ KHÔI PHỤC: Toggle Auto Aim của Chance
+MyUIElements.Chance:Toggle({
+    Title = "loc:SilentAimShoot", Desc = "loc:SilentAimShootDesc", Flag = "Auto_Aim_Flintlock", Value = false,
+    Callback = function(state) CoreData.Config.AutoAim.Enabled = state end
+})
+
 MyUIElements.Dusekkar:Dropdown({
     Title = "loc:ChooseTarget", Desc = "loc:ChooseTargetDesc", Flag = "Plasma_Target_Dropdown", Values = {"Killers", "Survivors"}, Value = {"Killers"}, Multi = true, AllowNone = false,
     Callback = function(value) CoreData.Config.PlasmaBeam.Targets = value end
 })
+
 MyUIElements.Dusekkar:Toggle({
     Title = "loc:SilentAimPlasmaBeam", Desc = "loc:SilentAimPlasmaBeamDesc", Flag = "Auto_Aim_PlasmaBeam", Value = false,
     Callback = function(state) CoreData.Config.PlasmaBeam.Enabled = state end
@@ -3736,32 +3747,20 @@ MyUIElements.c00lkidd:Dropdown({
     Title = "loc:ChooseTarget", Desc = "loc:ChooseTargetDesc", Flag = "Corrupt_Target_Dropdown", Values = {"Killers", "Survivors"}, Value = {"Survivors"}, Multi = true, AllowNone = false,
     Callback = function(value) CoreData.Config.CorruptNature.Targets = value end
 })
+
 MyUIElements.c00lkidd:Toggle({
     Title = "loc:SilentAimCorruptNature", Desc = "loc:SilentAimCorruptNatureDesc", Flag = "Auto_Aim_CorruptNature", Value = false,
     Callback = function(state) CoreData.Config.CorruptNature.Enabled = state end
 })
 
 MyUIElements.Noli:Dropdown({
-    Title = "loc:ChooseTarget", 
-    Desc = "loc:ChooseTargetDesc",
-    Flag = "Nova_Target_Dropdown",
-    Values = {"Killers", "Survivors"},
-    Value = {"Survivors"}, 
-    Multi = true,
-    AllowNone = false,
-    Callback = function(value)
-        CoreData.Config.Nova.Targets = value
-    end
+    Title = "loc:ChooseTarget", Desc = "loc:ChooseTargetDesc", Flag = "Nova_Target_Dropdown", Values = {"Killers", "Survivors"}, Value = {"Survivors"}, Multi = true, AllowNone = false,
+    Callback = function(value) CoreData.Config.Nova.Targets = value end
 })
 
 MyUIElements.Noli:Toggle({
-    Title = "loc:SilentAimNova",
-    Desc = "loc:SilentAimNovaDesc",
-    Flag = "Auto_Aim_Nova",
-    Value = false,
-    Callback = function(state)
-        CoreData.Config.Nova.Enabled = state
-    end
+    Title = "loc:SilentAimNova", Desc = "loc:SilentAimNovaDesc", Flag = "Auto_Aim_Nova", Value = false,
+    Callback = function(state) CoreData.Config.Nova.Enabled = state end
 })
 
 local ServerManager = {
