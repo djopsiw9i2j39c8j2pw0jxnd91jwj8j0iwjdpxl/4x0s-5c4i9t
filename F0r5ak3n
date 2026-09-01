@@ -1,4 +1,3 @@
-return function(VerifiedKey)
 Players = game:GetService("Players")
 Workspace = game:GetService("Workspace")
 ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -6806,6 +6805,4 @@ getgenv().showpingandfps = getgenv().showpingandfps ~= false
 
 if getgenv().showpingandfps then
     loadstring(game:HttpGet("https://raw.githubusercontent.com/SLK-GAMING-MOD/Open-soure/refs/heads/main/fps%2Bping.luau"))()
-end
-
 end
