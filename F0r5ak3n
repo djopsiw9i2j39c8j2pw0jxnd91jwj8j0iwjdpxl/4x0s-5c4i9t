@@ -1,3 +1,4 @@
+return function(VerifiedKey)
 Players = game:GetService("Players")
 Workspace = game:GetService("Workspace")
 ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -411,6 +412,12 @@ WindUI:Localization({
             SilentAimNovaDesc = "Automatically aim Nova at the selected target.",
             AntiInfernalCry = "Anti Infernal Cry",
             AntiInfernalCryDesc = "Prevent the effects of Infernal Cry.",
+            HidePuzzleUI = "Hide Puzzle UI",
+            HidePuzzleUIDesc = "Hide the puzzle interface from your screen.",
+            c00lkidd = "c00lkidd",
+            c00lkiddDect = "Features related to the c00lkidd character.",
+            Noli = "Noli"
+            NoliDesc = "Features related to the Noli character.",
         },
         vi = {
             HubTitle = "Axos Hub",
@@ -707,6 +714,12 @@ Load_Config_Desc = "Nhấn để tải cấu hình đã chọn.",
             SilentAimNovaDesc = "Tự động ngắm Nova vào mục tiêu đã chọn.",
             AntiInfernalCry = "Chống Tiếng Gào Địa Ngục",
             AntiInfernalCryDesc = "Ngăn chặn hiệu ứng của Tiếng Gào Địa Ngục.",
+            HidePuzzleUI = "Ẩn giao diện câu đố",
+            HidePuzzleUIDesc = "Ẩn giao diện câu đố khỏi màn hình của bạn.",
+            c00lkidd = "Đứa trẻ ngầu",
+            c00lkiddDesc = "Các chức năng liên quan đến nhân vật đứa trẻ ngầu.",
+            Noli = "Loli",
+            NoliDesc = "Các chức năng liên quan đến nhân vật Noli.",
         }
     }
 })
@@ -2645,8 +2658,8 @@ MyUIElements.Generator:Toggle({
 })
 
 MyUIElements.Generator:Toggle({
-    Title = "Hide Puzzle GUI", 
-    Desc = "Hides the generator grid so you can see the screen clearly while it solves", 
+    Title = "loc:HidePuzzleUI", 
+    Desc = "loc:HidePuzzleUIDesc", 
     Flag = "HideGUI_Toggle",
     Value = false, 
     Callback = function(val)
@@ -6793,4 +6806,6 @@ getgenv().showpingandfps = getgenv().showpingandfps ~= false
 
 if getgenv().showpingandfps then
     loadstring(game:HttpGet("https://raw.githubusercontent.com/SLK-GAMING-MOD/Open-soure/refs/heads/main/fps%2Bping.luau"))()
+end
+
 end
