@@ -415,7 +415,7 @@ WindUI:Localization({
             HidePuzzleUIDesc = "Hide the puzzle interface from your screen.",
             c00lkidd = "c00lkidd",
             c00lkiddDect = "Features related to the c00lkidd character.",
-            Noli = "Noli"
+            Noli = "Noli",
             NoliDesc = "Features related to the Noli character.",
         },
         vi = {
