@@ -405,6 +405,12 @@ WindUI:Localization({
             ReverseRulesDesc = "Reverse the game's rules.",
             BypassAntiCheat = "Bypass Anti Cheat",
             BypassAntiCheatDesc = "Bypass the game's anti-cheat detection.",
+            SilentAimCorruptNature = "Silent Aim Corrupt Nature",
+            SilentAimCorruptNatureDesc = "Automatically aim Corrupt Nature at the selected target.",
+            SilentAimNova = "Silent Aim Nova",
+            SilentAimNovaDesc = "Automatically aim Nova at the selected target.",
+            AntiInfernalCry = "Anti Infernal Cry",
+            AntiInfernalCryDesc = "Prevent the effects of Infernal Cry.",
         },
         vi = {
             HubTitle = "Axos Hub",
@@ -695,6 +701,12 @@ Load_Config_Desc = "Nhấn để tải cấu hình đã chọn.",
             ReverseRulesDesc = "Đảo ngược các luật của trò chơi.",
             BypassAntiCheat = "Vượt qua chống gian lận",
             BypassAntiCheatDesc = "Vượt qua hệ thống phát hiện gian lận của trò chơi.",
+            SilentAimCorruptNature = "Ngắm im lặng Thiên Nhiên Tha Hóa",
+            SilentAimCorruptNatureDesc = "Tự động ngắm Thiên Nhiên Tha Hóa vào mục tiêu đã chọn.",
+            SilentAimNova = "Ngắm im lặng Nova",
+            SilentAimNovaDesc = "Tự động ngắm Nova vào mục tiêu đã chọn.",
+            AntiInfernalCry = "Chống Tiếng Gào Địa Ngục",
+            AntiInfernalCryDesc = "Ngăn chặn hiệu ứng của Tiếng Gào Địa Ngục.",
         }
     }
 })
@@ -790,7 +802,7 @@ local OpenButtonConfig = {
 
 Window:EditOpenButton(OpenButtonConfig)
 
-Window:Tag({Title = "v0.0.9", Icon = "cog", Color = Color3.fromHex("#30ff6a")})
+Window:Tag({Title = "v0.1.0", Icon = "cog", Color = Color3.fromHex("#30ff6a")})
 
 local Tabs = {
     About = Window:Section({ Title = "loc:About", Opened = true }),
@@ -981,6 +993,36 @@ local ElementConfigs = {
         Config = {
             Title = "loc:Dusekkar",
             Desc = "loc:DusekkarDesc",
+            Icon = "zap",
+            Box = true,
+            BoxBorder = true,
+            Opened = false,
+            Hover = true,
+        }
+    },
+
+    {
+        ID = "c00lkidd",
+        Type = "Section",
+        Parent = TabHandles.Killers,
+        Config = {
+            Title = "loc:c00lkidd",
+            Desc = "loc:c00lkiddDesc",
+            Icon = "zap",
+            Box = true,
+            BoxBorder = true,
+            Opened = false,
+            Hover = true,
+        }
+    },
+
+    {
+        ID = "Noli",
+        Type = "Section",
+        Parent = TabHandles.Killers,
+        Config = {
+            Title = "loc:Noli",
+            Desc = "loc:NoliDesc",
             Icon = "zap",
             Box = true,
             BoxBorder = true,
@@ -3470,18 +3512,23 @@ CoreData = {
     Config = {
         CoinFlip = { Enabled = false, Charges = 3, Distance = 75 },
         AutoAim = { Enabled = false, MaxDistance = 500 },
-        PlasmaBeam = { Enabled = false, Targets = {"Killers"} }
+        PlasmaBeam = { Enabled = false, Targets = {"Killers"} },
+        CorruptNature = { Enabled = false, Targets = {"Survivors"} },
+        Nova = { Enabled = false, Targets = {"Survivors"} }
     },
     State = {
         NearestKillerRoot = nil,
         KillerDist = math.huge,
         IsFlintlockVisible = false,
-        NearestPlasmaRoot = nil
+        NearestPlasmaRoot = nil,
+        NearestCorruptRoot = nil,
+        NearestNovaRoot = nil
     },
     Hooks = {
         OldIndex = nil,
         OldNamecall = nil,
-        OldGetMousePos = nil
+        OldGetMousePos = nil,
+        OldUtilGetMousePos = nil
     },
     Temp = {},
     Logic = {}
@@ -3510,6 +3557,21 @@ CoreData.Logic.FindNearestTarget = function(allowedFolders)
     return CoreData.Temp.Nearest, CoreData.Temp.ShortestDist
 end
 
+CoreData.Logic.UpdateAbilityTarget = function(configKey, stateKey)
+    if CoreData.Config[configKey].Enabled then
+        CoreData.Temp.SearchFolders = {}
+        if table.find(CoreData.Config[configKey].Targets, "Killers") then 
+            table.insert(CoreData.Temp.SearchFolders, killersFolder) 
+        end
+        if table.find(CoreData.Config[configKey].Targets, "Survivors") then 
+            table.insert(CoreData.Temp.SearchFolders, survivorsFolder) 
+        end
+        CoreData.State[stateKey], _ = CoreData.Logic.FindNearestTarget(CoreData.Temp.SearchFolders)
+    else
+        CoreData.State[stateKey] = nil
+    end
+end
+
 CoreData.Logic.CanFlintlockAim = function()
     return CoreData.Config.AutoAim.Enabled 
        and CoreData.State.IsFlintlockVisible 
@@ -3525,10 +3587,10 @@ CoreData.Logic.GetFlatAimCFrame = function(originPosition, targetPosition)
 end
 
 CoreData.Logic.ApplyPlasmaHook = function()
-    CoreData.Temp.Path = game:GetService("ReplicatedStorage"):FindFirstChild("Systems")
-        and game:GetService("ReplicatedStorage").Systems:FindFirstChild("Player")
-        and game:GetService("ReplicatedStorage").Systems.Player:FindFirstChild("Miscellaneous")
-        and game:GetService("ReplicatedStorage").Systems.Player.Miscellaneous:FindFirstChild("GetPlayerMousePosition")
+    CoreData.Temp.Path = ReplicatedStorage:FindFirstChild("Systems")
+        and ReplicatedStorage.Systems:FindFirstChild("Player")
+        and ReplicatedStorage.Systems.Player:FindFirstChild("Miscellaneous")
+        and ReplicatedStorage.Systems.Player.Miscellaneous:FindFirstChild("GetPlayerMousePosition")
         
     if not CoreData.Temp.Path then return end
     
@@ -3546,11 +3608,44 @@ CoreData.Logic.ApplyPlasmaHook = function()
             return CoreData.State.NearestPlasmaRoot.Position
         end
         
+        if CoreData.Config.Nova.Enabled and CoreData.State.NearestNovaRoot then
+            return CoreData.State.NearestNovaRoot.Position
+        end
+        
         return CoreData.Hooks.OldGetMousePos(...)
     end)
 end
 
+CoreData.Logic.ApplyCorruptNatureHook = function()
+    CoreData.Temp.UtilPath = ReplicatedStorage:FindFirstChild("Modules")
+        and ReplicatedStorage.Modules:FindFirstChild("Utilities")
+        and ReplicatedStorage.Modules.Utilities:FindFirstChild("Util")
+        
+    if not CoreData.Temp.UtilPath then return end
+    
+    CoreData.Temp.UtilModule = require(CoreData.Temp.UtilPath)
+    if not CoreData.Temp.UtilModule.GetPlayerMousePosition then return end
+    
+    if CoreData.Temp.UtilModule.__corruptAimHooked then return end
+    CoreData.Temp.UtilModule.__corruptAimHooked = true
+    
+    CoreData.Hooks.OldUtilGetMousePos = CoreData.Temp.UtilModule.GetPlayerMousePosition
+    
+    hookfunction(CoreData.Temp.UtilModule.GetPlayerMousePosition, function(...)
+        if CoreData.Config.CorruptNature.Enabled and CoreData.State.NearestCorruptRoot then
+            return CoreData.State.NearestCorruptRoot.Position
+        end
+        
+        if CoreData.Config.Nova.Enabled and CoreData.State.NearestNovaRoot then
+            return CoreData.State.NearestNovaRoot.Position
+        end
+        
+        return CoreData.Hooks.OldUtilGetMousePos(...)
+    end)
+end
+
 task.spawn(CoreData.Logic.ApplyPlasmaHook)
+task.spawn(CoreData.Logic.ApplyCorruptNatureHook)
 
 task.spawn(function()
     while task.wait(0.05) do
@@ -3562,15 +3657,9 @@ task.spawn(function()
         CoreData.State.IsFlintlockVisible = (CoreData.Temp.Flint and CoreData.Temp.Flint:IsA("BasePart") and CoreData.Temp.Flint.Transparency < 1) or false
         CoreData.State.NearestKillerRoot, CoreData.State.KillerDist = CoreData.Logic.FindNearestTarget({killersFolder})
 
-        if CoreData.Config.PlasmaBeam.Enabled then
-            CoreData.Temp.AllowedFolders = {}
-            if table.find(CoreData.Config.PlasmaBeam.Targets, "Killers") then table.insert(CoreData.Temp.AllowedFolders, killersFolder) end
-            if table.find(CoreData.Config.PlasmaBeam.Targets, "Survivors") then table.insert(CoreData.Temp.AllowedFolders, survivorsFolder) end
-            
-            CoreData.State.NearestPlasmaRoot, _ = CoreData.Logic.FindNearestTarget(CoreData.Temp.AllowedFolders)
-        else
-            CoreData.State.NearestPlasmaRoot = nil
-        end
+        CoreData.Logic.UpdateAbilityTarget("PlasmaBeam", "NearestPlasmaRoot")
+        CoreData.Logic.UpdateAbilityTarget("CorruptNature", "NearestCorruptRoot")
+        CoreData.Logic.UpdateAbilityTarget("Nova", "NearestNovaRoot")
     end
 end)
 
@@ -3600,41 +3689,21 @@ CoreData.Hooks.OldNamecall = hookmetamethod(game, "__namecall", newcclosure(func
 end))
 
 MyUIElements.Chance:Dropdown({
-    Title = "loc:CoinFlipCharges",
-    Desc = "loc:CoinFlipChargesDesc",
-    Flag = "Select_CoinFlip_Charges",
-    Values = {1, 2, 3},
-    Value = 3,
-    Callback = function(value)
-        CoreData.Config.CoinFlip.Charges = tonumber(value) or 3
-    end
+    Title = "loc:CoinFlipCharges", Desc = "loc:CoinFlipChargesDesc", Flag = "Select_CoinFlip_Charges", Values = {1, 2, 3}, Value = 3,
+    Callback = function(value) CoreData.Config.CoinFlip.Charges = tonumber(value) or 3 end
 })
-
 MyUIElements.Chance:Input({
-    Title = "loc:CoinFlipDistance",
-    Desc = "loc:CoinFlipDistanceDesc",
-    Flag = "CoinFlip_Killer_Distance",
-    Placeholder = "75",
-    Value = "75",
-    Callback = function(value)
-        CoreData.Config.CoinFlip.Distance = tonumber(value) or 75
-    end
+    Title = "loc:CoinFlipDistance", Desc = "loc:CoinFlipDistanceDesc", Flag = "CoinFlip_Killer_Distance", Placeholder = "75", Value = "75",
+    Callback = function(value) CoreData.Config.CoinFlip.Distance = tonumber(value) or 75 end
 })
-
 MyUIElements.Chance:Toggle({
-    Title = "loc:AutoCoinflip",
-    Desc = "loc:AutoCoinflipDesc",
-    Flag = "Auto Coinflip",
-    Value = false,
+    Title = "loc:AutoCoinflip", Desc = "loc:AutoCoinflipDesc", Flag = "Auto Coinflip", Value = false,
     Callback = function(state)
         CoreData.Config.CoinFlip.Enabled = state
-
         if state then
             task.spawn(function()
                 while CoreData.Config.CoinFlip.Enabled do
-                    if CoreData.State.KillerDist > CoreData.Config.CoinFlip.Distance then
-                        AbilityEvent:Use("CoinFlip", CoreData.Config.CoinFlip.Charges, true, "Reroll")
-                    end
+                    if CoreData.State.KillerDist > CoreData.Config.CoinFlip.Distance then AbilityEvent:Use("CoinFlip", CoreData.Config.CoinFlip.Charges, true, "Reroll") end
                     task.wait(1.5)
                 end
             end)
@@ -3642,36 +3711,44 @@ MyUIElements.Chance:Toggle({
     end
 })
 
-MyUIElements.Chance:Toggle({
-    Title = "loc:SilentAimShoot",
-    Desc = "loc:SilentAimShootDesc",
-    Flag = "Auto_Aim_Flintlock",
-    Value = false,
-    Callback = function(state)
-        CoreData.Config.AutoAim.Enabled = state
-    end
+MyUIElements.Dusekkar:Dropdown({
+    Title = "loc:ChooseTarget", Desc = "loc:ChooseTargetDesc", Flag = "Plasma_Target_Dropdown", Values = {"Killers", "Survivors"}, Value = {"Killers"}, Multi = true, AllowNone = false,
+    Callback = function(value) CoreData.Config.PlasmaBeam.Targets = value end
+})
+MyUIElements.Dusekkar:Toggle({
+    Title = "loc:SilentAimPlasmaBeam", Desc = "loc:SilentAimPlasmaBeamDesc", Flag = "Auto_Aim_PlasmaBeam", Value = false,
+    Callback = function(state) CoreData.Config.PlasmaBeam.Enabled = state end
 })
 
-MyUIElements.Dusekkar:Dropdown({
+MyUIElements.c00lkidd:Dropdown({
+    Title = "loc:ChooseTarget", Desc = "loc:ChooseTargetDesc", Flag = "Corrupt_Target_Dropdown", Values = {"Killers", "Survivors"}, Value = {"Survivors"}, Multi = true, AllowNone = false,
+    Callback = function(value) CoreData.Config.CorruptNature.Targets = value end
+})
+MyUIElements.c00lkidd:Toggle({
+    Title = "loc:SilentAimCorruptNature", Desc = "loc:SilentAimCorruptNatureDesc", Flag = "Auto_Aim_CorruptNature", Value = false,
+    Callback = function(state) CoreData.Config.CorruptNature.Enabled = state end
+})
+
+MyUIElements.Noli:Dropdown({
     Title = "loc:ChooseTarget", 
     Desc = "loc:ChooseTargetDesc",
-    Flag = "Plasma_Target_Dropdown",
+    Flag = "Nova_Target_Dropdown",
     Values = {"Killers", "Survivors"},
-    Value = {"Killers"},
+    Value = {"Survivors"}, 
     Multi = true,
     AllowNone = false,
     Callback = function(value)
-        CoreData.Config.PlasmaBeam.Targets = value
+        CoreData.Config.Nova.Targets = value
     end
 })
 
-MyUIElements.Dusekkar:Toggle({
-    Title = "loc:SilentAimPlasmaBeam",
-    Desc = "loc:SilentAimPlasmaBeamDesc",
-    Flag = "Auto_Aim_PlasmaBeam",
+MyUIElements.Noli:Toggle({
+    Title = "loc:SilentAimNova",
+    Desc = "loc:SilentAimNovaDesc",
+    Flag = "Auto_Aim_Nova",
     Value = false,
     Callback = function(state)
-        CoreData.Config.PlasmaBeam.Enabled = state
+        CoreData.Config.Nova.Enabled = state
     end
 })
 
@@ -5775,7 +5852,8 @@ BypassSystem = {
     Config = {
         AntiSubspace = false,
         AntiBlindness = false,
-        AntiBloodhunt = false
+        AntiBloodhunt = false,
+        AntiInfernalCry = false
     },
 
     Core = {
@@ -5789,13 +5867,9 @@ BypassSystem = {
         "VignetteB",
         "GuestRoar",
         "666Effect",
-        "BloodHunt"
-    },
-
-    Connections = {
-        AntiSubspace = {},
-        AntiBlindness = {},
-        AntiBloodhunt = {}
+        "BloodHunt",
+        "666Shockwave",
+        "InfernalCry"
     },
 
     State = {
@@ -5803,48 +5877,13 @@ BypassSystem = {
     }
 }
 
-function BypassSystem:DisconnectGroup(name)
-    for _, connection in pairs(self.Connections[name]) do
-        if connection then
-            connection:Disconnect()
-        end
-    end
-
-    table.clear(self.Connections[name])
-end
-
-function BypassSystem:AddConnection(name, connection)
-    table.insert(self.Connections[name], connection)
-end
-
-function BypassSystem:SafeDestroy(parent, name)
-    if not parent then
-        return false
-    end
-
-    local object = parent:FindFirstChild(name)
-
-    if object then
-        if object:IsA("PostEffect") then
-            object.Enabled = false
-        end
-
-        object:Destroy()
-        return true
-    end
-
-    return false
-end
-
 function BypassSystem:RestoreLightingEffects()
     for _, object in ipairs(self.Core.Lighting:GetChildren()) do
         local original = object:GetAttribute("originalVal")
-
         if original ~= nil then
             if object:IsA("PostEffect") then
                 object.Enabled = original
             end
-
             object:SetAttribute("originalVal", nil)
         end
     end
@@ -5856,27 +5895,14 @@ function BypassSystem:IsBlacklisted(name)
             return true
         end
     end
-
     return false
 end
 
 function BypassSystem:HandleSubspace(object)
-    if not self.Config.AntiSubspace then
-        return
-    end
-
-    if object.Name == "SubspaceVFXBlur" then
+    if object.Name == "SubspaceVFXBlur" or object.Name == "SubspaceVFXColorCorrection" then
         object.Enabled = false
         object:Destroy()
-
         self:RestoreLightingEffects()
-
-    elseif object.Name == "SubspaceVFXColorCorrection" then
-        object.Enabled = false
-        object:Destroy()
-
-        self:RestoreLightingEffects()
-
     elseif object:IsA("Highlight") then
         object.Enabled = false
         object.FillTransparency = 1
@@ -5884,286 +5910,141 @@ function BypassSystem:HandleSubspace(object)
     end
 end
 
-function BypassSystem:ScanSubspace()
-    if not self.Config.AntiSubspace then
-        return
-    end
-
-    for _, object in ipairs(self.Core.Lighting:GetChildren()) do
-        self:HandleSubspace(object)
-    end
-
-    for _, object in ipairs(Workspace:GetDescendants()) do
-        if object:IsA("Highlight") then
-            self:HandleSubspace(object)
-        end
-    end
-
-    if self.State.Character and self.State.Character:GetAttribute("MuteChaseThemes") then
-        self.State.Character:SetAttribute("MuteChaseThemes", false)
-    end
-end
-
-function BypassSystem:EnableAntiSubspace()
-    self:DisconnectGroup("AntiSubspace")
-
-    self:ScanSubspace()
-
-    self:AddConnection(
-        "AntiSubspace",
-        self.Core.Lighting.ChildAdded:Connect(function(object)
-            self:HandleSubspace(object)
-        end)
-    )
-
-    self:AddConnection(
-        "AntiSubspace",
-        Workspace.DescendantAdded:Connect(function(object)
-            if object:IsA("Highlight") then
-                self:HandleSubspace(object)
-            end
-        end)
-    )
-
-    if self.State.Character then
-        self.State.Character:GetAttributeChangedSignal("MuteChaseThemes"):Connect(function()
-            if self.Config.AntiSubspace
-                and self.State.Character
-                and self.State.Character:GetAttribute("MuteChaseThemes") then
-
-                self.State.Character:SetAttribute("MuteChaseThemes", false)
-            end
-        end)
-    end
-end
-
-function BypassSystem:DisableAntiSubspace()
-    self:DisconnectGroup("AntiSubspace")
-
-    if self.State.Character then
-        self.State.Character:SetAttribute("MuteChaseThemes", false)
-    end
-
-    self:RestoreLightingEffects()
-end
-
 function BypassSystem:HandleBlindness(object)
-    if not self.Config.AntiBlindness then
-        return
-    end
-
     if object.Name == "BlindnessBlur" then
         object.Enabled = false
         object:Destroy()
     end
 end
 
-function BypassSystem:FixExposure()
-    if not self.Config.AntiBlindness then
-        return
-    end
-
-    if self.Core.Lighting.ExposureCompensation < -2
-        or self.Core.Lighting.ExposureCompensation > 2 then
-
-        self.Core.Lighting.ExposureCompensation = 0
-    end
-end
-
-function BypassSystem:ScanBlindness()
-    if not self.Config.AntiBlindness then
-        return
-    end
-
-    self:HandleBlindness(
-        self.Core.Lighting:FindFirstChild("BlindnessBlur")
-    )
-
-    self:FixExposure()
-end
-
-function BypassSystem:EnableAntiBlindness()
-    self:DisconnectGroup("AntiBlindness")
-
-    self:ScanBlindness()
-
-    self:AddConnection(
-        "AntiBlindness",
-        self.Core.Lighting.ChildAdded:Connect(function(object)
-            self:HandleBlindness(object)
-        end)
-    )
-
-    self:AddConnection(
-        "AntiBlindness",
-        self.Core.Lighting:GetPropertyChangedSignal("ExposureCompensation"):Connect(function()
-            self:FixExposure()
-        end)
-    )
-end
-
-function BypassSystem:DisableAntiBlindness()
-    self:DisconnectGroup("AntiBlindness")
-end
-
-function BypassSystem:HandleBloodhuntLighting(object)
-    if not self.Config.AntiBloodhunt then
-        return
-    end
-
+function BypassSystem:HandleBloodhunt(object)
     if object:IsA("ColorCorrectionEffect") then
         object.Enabled = false
         object:Destroy()
-        return
-    end
-
-    if object:IsA("Atmosphere")
-        and object:GetAttribute("Artificial") then
-
+    elseif object:IsA("Atmosphere") and object:GetAttribute("Artificial") then
         object:Destroy()
     end
 end
 
-function BypassSystem:HandleBloodhuntUI(object)
-    if not self.Config.AntiBloodhunt then
-        return
-    end
-
+function BypassSystem:HandleInfernalCry(object)
     if self:IsBlacklisted(object.Name) then
+        if object:IsA("PostEffect") then
+            object.Enabled = false
+        end
         object:Destroy()
     end
 end
 
-function BypassSystem:HandleBloodhuntCharacter(object)
-    if not self.Config.AntiBloodhunt then
-        return
+function BypassSystem:ScanAllActive()
+    if self.Config.AntiSubspace then
+        if self.State.Character and self.State.Character:GetAttribute("MuteChaseThemes") then
+            self.State.Character:SetAttribute("MuteChaseThemes", false)
+        end
+        for _, object in ipairs(Workspace:GetDescendants()) do
+            if object:IsA("Highlight") then self:HandleSubspace(object) end
+        end
     end
 
-    if object.Name:find("Spotlight")
-        or object.Name:find("BloodHunt") then
-
-        object:Destroy()
-    end
-end
-
-function BypassSystem:ScanBloodhunt()
-    if not self.Config.AntiBloodhunt then
-        return
+    if self.Config.AntiBlindness then
+        local blur = self.Core.Lighting:FindFirstChild("BlindnessBlur")
+        if blur then self:HandleBlindness(blur) end
+        if self.Core.Lighting.ExposureCompensation < -2 or self.Core.Lighting.ExposureCompensation > 2 then
+            self.Core.Lighting.ExposureCompensation = 0
+        end
     end
 
-    self.Core.Player:SetAttribute("HuntVFXActive", true)
+    if self.Config.AntiBloodhunt then
+        self.Core.Player:SetAttribute("HuntVFXActive", true)
+        if self.Core.PlayerGui then
+            local tempUI = self.Core.PlayerGui:FindFirstChild("TemporaryUI")
+            if tempUI then
+                for _, object in ipairs(tempUI:GetChildren()) do
+                    if self:IsBlacklisted(object.Name) then object:Destroy() end
+                end
+            end
+        end
+        if self.State.Character then
+            for _, object in ipairs(self.State.Character:GetDescendants()) do
+                if object.Name:find("Spotlight") or object.Name:find("BloodHunt") then
+                    object:Destroy()
+                end
+            end
+        end
+    end
 
     for _, object in ipairs(self.Core.Lighting:GetChildren()) do
-        self:HandleBloodhuntLighting(object)
+        if self.Config.AntiSubspace then self:HandleSubspace(object) end
+        if self.Config.AntiBloodhunt then self:HandleBloodhunt(object) end
+        if self.Config.AntiInfernalCry then self:HandleInfernalCry(object) end
     end
-
-    if self.Core.PlayerGui then
-        local temporaryUI = self.Core.PlayerGui:FindFirstChild("TemporaryUI")
-
-        if temporaryUI then
-            for _, object in ipairs(temporaryUI:GetChildren()) do
-                self:HandleBloodhuntUI(object)
-            end
-        end
-    end
-
-    if self.State.Character then
-        for _, object in ipairs(self.State.Character:GetDescendants()) do
-            self:HandleBloodhuntCharacter(object)
-        end
+    
+    if self.Config.AntiInfernalCry then
+        pcall(function() RunService:UnbindFromRenderStep("InfernalCryTransparency") end)
     end
 end
 
-function BypassSystem:EnableBloodhuntCharacter(character)
-    if not character then
-        return
-    end
+function BypassSystem:InitConnections()
+    self.Core.Lighting.ChildAdded:Connect(function(object)
+        if self.Config.AntiSubspace then self:HandleSubspace(object) end
+        if self.Config.AntiBlindness then self:HandleBlindness(object) end
+        if self.Config.AntiBloodhunt then self:HandleBloodhunt(object) end
+        if self.Config.AntiInfernalCry then self:HandleInfernalCry(object) end
+    end)
+    
+    self.Core.Lighting:GetPropertyChangedSignal("ExposureCompensation"):Connect(function()
+        if self.Config.AntiBlindness and (self.Core.Lighting.ExposureCompensation < -2 or self.Core.Lighting.ExposureCompensation > 2) then
+            self.Core.Lighting.ExposureCompensation = 0
+        end
+    end)
 
-    self.State.Character = character
+    self.Core.PlayerGui.DescendantAdded:Connect(function(object)
+        if self.Config.AntiBloodhunt and object.Parent and object.Parent.Name == "TemporaryUI" then
+            if self:IsBlacklisted(object.Name) then object:Destroy() end
+        end
+    end)
+    
+    self.Core.Player.ChildAdded:Connect(function(object)
+        if self.Config.AntiInfernalCry then self:HandleInfernalCry(object) end
+    end)
 
-    self:AddConnection(
-        "AntiBloodhunt",
-        character.DescendantAdded:Connect(function(object)
-            self:HandleBloodhuntCharacter(object)
-        end)
-    )
-end
-
-function BypassSystem:EnableAntiBloodhunt()
-    self:DisconnectGroup("AntiBloodhunt")
-
-    self:ScanBloodhunt()
-
-    self:AddConnection(
-        "AntiBloodhunt",
-        self.Core.Lighting.ChildAdded:Connect(function(object)
-            self:HandleBloodhuntLighting(object)
-        end)
-    )
-
-    self:AddConnection(
-        "AntiBloodhunt",
-        Workspace:GetAttributeChangedSignal("BloodHuntActive"):Connect(function()
-            if not self.Config.AntiBloodhunt then
-                return
-            end
-
+    Workspace.DescendantAdded:Connect(function(object)
+        if self.Config.AntiSubspace and object:IsA("Highlight") then
+            self:HandleSubspace(object)
+        end
+    end)
+    
+    Workspace:GetAttributeChangedSignal("BloodHuntActive"):Connect(function()
+        if self.Config.AntiBloodhunt then
             self.Core.Player:SetAttribute("HuntVFXActive", true)
-
-            task.defer(function()
-                self:ScanBloodhunt()
-            end)
-        end)
-    )
-
-    if self.Core.PlayerGui then
-        local temporaryUI = self.Core.PlayerGui:FindFirstChild("TemporaryUI")
-
-        if temporaryUI then
-            self:AddConnection(
-                "AntiBloodhunt",
-                temporaryUI.ChildAdded:Connect(function(object)
-                    self:HandleBloodhuntUI(object)
-                end)
-            )
-        else
-            self:AddConnection(
-                "AntiBloodhunt",
-                self.Core.PlayerGui.ChildAdded:Connect(function(object)
-                    if object.Name == "TemporaryUI" then
-                        self:AddConnection(
-                            "AntiBloodhunt",
-                            object.ChildAdded:Connect(function(child)
-                                self:HandleBloodhuntUI(child)
-                            end)
-                        )
-
-                        self:ScanBloodhunt()
-                    end
-                end)
-            )
+            task.defer(function() self:ScanAllActive() end)
         end
-    end
+    end)
 
-    self:EnableBloodhuntCharacter(self.State.Character)
+    RunService.RenderStepped:Connect(function()
+        if self.Config.AntiInfernalCry then
+            pcall(function() RunService:UnbindFromRenderStep("InfernalCryTransparency") end)
+        end
+    end)
 end
 
-function BypassSystem:DisableAntiBloodhunt()
-    self:DisconnectGroup("AntiBloodhunt")
-
-    self.Core.Player:SetAttribute("HuntVFXActive", nil)
-end
+BypassSystem:InitConnections()
 
 localPlayer.CharacterAdded:Connect(function(character)
     BypassSystem.State.Character = character
+    
+    character.DescendantAdded:Connect(function(object)
+        if BypassSystem.Config.AntiBloodhunt and (object.Name:find("Spotlight") or object.Name:find("BloodHunt")) then
+            object:Destroy()
+        end
+    end)
 
-    if BypassSystem.Config.AntiSubspace then
-        BypassSystem:EnableAntiSubspace()
-    end
+    character:GetAttributeChangedSignal("MuteChaseThemes"):Connect(function()
+        if BypassSystem.Config.AntiSubspace and character:GetAttribute("MuteChaseThemes") then
+            character:SetAttribute("MuteChaseThemes", false)
+        end
+    end)
 
-    if BypassSystem.Config.AntiBloodhunt then
-        BypassSystem:EnableAntiBloodhunt()
-    end
+    BypassSystem:ScanAllActive()
 end)
 
 MyUIElements.Bypass:Toggle({
@@ -6171,15 +6052,9 @@ MyUIElements.Bypass:Toggle({
     Desc = "loc:AntiSubspaceEffectDesc",
     Flag = "Anti_Subspace_Toggle",
     Value = false,
-
     Callback = function(state)
         BypassSystem.Config.AntiSubspace = state
-
-        if state then
-            BypassSystem:EnableAntiSubspace()
-        else
-            BypassSystem:DisableAntiSubspace()
-        end
+        if state then BypassSystem:ScanAllActive() else BypassSystem:RestoreLightingEffects() end
     end
 })
 
@@ -6188,15 +6063,9 @@ MyUIElements.Bypass:Toggle({
     Desc = "loc:AntiBlindnessDesc",
     Flag = "Anti_Blindness_Toggle",
     Value = false,
-
     Callback = function(state)
         BypassSystem.Config.AntiBlindness = state
-
-        if state then
-            BypassSystem:EnableAntiBlindness()
-        else
-            BypassSystem:DisableAntiBlindness()
-        end
+        if state then BypassSystem:ScanAllActive() end
     end
 })
 
@@ -6205,15 +6074,24 @@ MyUIElements.Bypass:Toggle({
     Desc = "loc:AntiBloodhuntDesc",
     Flag = "Anti_Bloodhunt_Toggle",
     Value = false,
-
     Callback = function(state)
         BypassSystem.Config.AntiBloodhunt = state
-
-        if state then
-            BypassSystem:EnableAntiBloodhunt()
-        else
-            BypassSystem:DisableAntiBloodhunt()
+        if state then 
+            BypassSystem:ScanAllActive()
+        else 
+            BypassSystem.Core.Player:SetAttribute("HuntVFXActive", nil)
         end
+    end
+})
+
+MyUIElements.Bypass:Toggle({
+    Title = "loc:AntiInfernalCry",
+    Desc = "loc:AntiInfernalCryDesc",
+    Flag = "Anti_InfernalCry_Toggle",
+    Value = false,
+    Callback = function(state)
+        BypassSystem.Config.AntiInfernalCry = state
+        if state then BypassSystem:ScanAllActive() end
     end
 })
 
@@ -6312,104 +6190,6 @@ ScriptData = {
         end
     },
 
-    Rules = {
-        Original = nil,
-        Custom = {
-            { Header = "Exploiting", NoteSize = UDim2.fromScale(0.9, 0.75), Body = "\n• Using or advertising software that gives you unfair advantages is heavily encouraged for a smoother gameplay experience. Feel free to abuse Fast Flags and disable animations to climb the leaderboards!\n\n\t\t\t" },
-            { Header = "Bug Abuse", NoteSize = UDim2.fromScale(0.9, 0.55), Body = "\n• Abusing bugs or unintended glitches to gain unfair advantages is strictly mandatory. Getting flung into a glitch by Corrupt Energy or Gashing Wound should be used to troll enemies—do NOT reset!\n\n\t\t\t\t" },
-            { Header = "Griefing", NoteSize = UDim2.fromScale(0.9, 0.35), Body = "\t\t\n• Purposely sabotaging teammates and holding the game hostage is highly recommended. The more you annoy your team, the more rewards you get!\n\n\t\t\t\t" },
-            { Header = "Toxicity", NoteSize = UDim2.fromScale(0.9, 0.35), Body = "\t\t\n• All forms of toxicity, flaming, and sending threats via text and voice chat are required to make the game experience extra spicy.\n\n\t\t\t\t" },
-            { Header = "Ban Evasion", NoteSize = UDim2.fromScale(0.9, 0.35), Body = "\t\t\n• Creating alt accounts specifically to bypass punishments is rewarded. Every new alt account grants you special bonus perks!\n\n\t\t\t\t" },
-            { Header = "Teaming", NoteSize = UDim2.fromScale(0.9, 0.65), Body = "\t\t\n• Deliberately sparing your friends, saving them for last, and letting them win is required. True friendship comes first—never fight your buddies!\n\n\t\t\t\t" },
-            { Header = "AFK Farming", NoteSize = UDim2.fromScale(0.9, 0.35), Body = "\t\t\n• AFK farming is the ultimate strat! Stand still all match to effortlessly farm maximum EXP and cash without lifting a finger.\n\n\t\t\t\t" },
-            { Header = "Inappropriate Avatars", NoteSize = UDim2.fromScale(0.9, 0.35), Body = "\t\t\n• Wear the most questionable and inappropriate avatars possible. Outrageous outfits give you a secret +50% dodge chance!\n\n\t\t\t\t" }
-        },
-
-        GetContainer = function()
-            ScriptData.Vars.SidebarGui = PlayerGui:FindFirstChild("Sidebar") or PlayerGui:FindFirstChild("RulesScreen") or PlayerGui:FindFirstChild("SidebarScreen")
-            if not ScriptData.Vars.SidebarGui then
-                for _, gui in ipairs(PlayerGui:GetChildren()) do
-                    if gui:IsA("ScreenGui") and gui:FindFirstChild("RulesContainer", true) then
-                        ScriptData.Vars.SidebarGui = gui
-                        break
-                    end
-                end
-            end
-
-            if ScriptData.Vars.SidebarGui then
-                ScriptData.Vars.RulesContainer = ScriptData.Vars.SidebarGui:FindFirstChild("RulesContainer", true)
-                if ScriptData.Vars.RulesContainer then
-                    return ScriptData.Vars.RulesContainer:FindFirstChild("Contents")
-                end
-            end
-
-            ScriptData.Vars.Initializer = ScriptData.Utils.SafeRequire(ReplicatedStorage:FindFirstChild("Initializer"))
-            if ScriptData.Vars.Initializer and ScriptData.Vars.Initializer.PlayerSystems and ScriptData.Vars.Initializer.PlayerSystems.SidebarHandler then
-                ScriptData.Vars.SidebarHandler = ScriptData.Vars.Initializer.PlayerSystems.SidebarHandler
-                if ScriptData.Vars.SidebarHandler.RegisteredMenus and ScriptData.Vars.SidebarHandler.RegisteredMenus.Rules then
-                    return ScriptData.Vars.SidebarHandler.RegisteredMenus.Rules.Menu.RulesContainer.Contents
-                end
-            end
-
-            return nil
-        end,
-
-        UpdateUI = function(targetRules)
-            ScriptData.Vars.Contents = ScriptData.Rules.GetContainer()
-            if not ScriptData.Vars.Contents or not targetRules then return end
-
-            ScriptData.Vars.TextPresetList = {}
-            for _, child in ipairs(ScriptData.Vars.Contents:GetChildren()) do
-                if child:FindFirstChild("Main") and child.Main:IsA("TextLabel") then
-                    table.insert(ScriptData.Vars.TextPresetList, child)
-                end
-            end
-
-            if #ScriptData.Vars.TextPresetList > 0 then
-                for index, ruleData in ipairs(targetRules) do
-                    if ScriptData.Vars.TextPresetList[index] then
-                        ScriptData.Vars.TextPresetList[index].Main.Text = ruleData.Body
-                        if ruleData.NoteSize then
-                            ScriptData.Vars.TextPresetList[index].Size = ruleData.NoteSize
-                        end
-                    end
-                end
-                return
-            end
-
-            ScriptData.Vars.Assets = ReplicatedStorage:FindFirstChild("Assets")
-            ScriptData.Vars.Presets = ScriptData.Vars.Assets and ScriptData.Vars.Assets:FindFirstChild("UI") and ScriptData.Vars.Assets.UI:FindFirstChild("UpdatelogPresets")
-            if not ScriptData.Vars.Presets then return end
-
-            for _, child in ipairs(ScriptData.Vars.Contents:GetChildren()) do
-                if not child:IsA("UIListLayout") and not child:IsA("UIPadding") then
-                    child:Destroy()
-                end
-            end
-
-            ScriptData.Vars.OrderIndex = 1
-            for _, ruleData in ipairs(targetRules) do
-                ScriptData.Vars.HeaderObj = ScriptData.Vars.Presets.Components.Header:Clone()
-                ScriptData.Vars.HeaderObj.Text = ruleData.Header
-                ScriptData.Vars.HeaderObj.LayoutOrder = ScriptData.Vars.OrderIndex
-                ScriptData.Vars.HeaderObj.Parent = ScriptData.Vars.Contents
-
-                ScriptData.Vars.SepObj = ScriptData.Vars.Presets.Components.Seperator:Clone()
-                ScriptData.Vars.SepObj.LayoutOrder = ScriptData.Vars.OrderIndex + 1
-                ScriptData.Vars.SepObj.Parent = ScriptData.Vars.Contents
-
-                ScriptData.Vars.TextObj = ScriptData.Vars.Presets.Components.TextPreset:Clone()
-                ScriptData.Vars.TextObj.Main.Text = ruleData.Body
-                ScriptData.Vars.TextObj.AutomaticSize = Enum.AutomaticSize.None
-                ScriptData.Vars.TextObj.Size = ruleData.NoteSize or UDim2.fromScale(0.9, 0.5)
-                ScriptData.Vars.TextObj.LayoutOrder = ScriptData.Vars.OrderIndex + 2
-                ScriptData.Vars.TextObj.Parent = ScriptData.Vars.Contents
-
-                ScriptData.Vars.OrderIndex = ScriptData.Vars.OrderIndex + 3
-            end
-        end
-    },
-
     AntiCheat = {
         State = false,
         HooksInit = false,
@@ -6476,21 +6256,6 @@ ScriptData = {
         end
     }
 }
-
-ScriptData.Vars.RulesAsset = ReplicatedStorage:FindFirstChild("Assets") and ReplicatedStorage.Assets:FindFirstChild("Rules")
-if ScriptData.Vars.RulesAsset then
-    ScriptData.Rules.Original = ScriptData.Utils.SafeRequire(ScriptData.Vars.RulesAsset)
-end
-
-MyUIElements.Bypass:Toggle({
-    Title = "loc:ReverseRules",
-    Desc = "loc:ReverseRulesDesc",
-    Flag = "ReverseRules",
-    Value = true,
-    Callback = function(state)
-        ScriptData.Rules.UpdateUI(state and ScriptData.Rules.Custom or ScriptData.Rules.Original)
-    end
-})
 
 MyUIElements.Bypass:Toggle({
     Title = "loc:BypassAntiCheat",
