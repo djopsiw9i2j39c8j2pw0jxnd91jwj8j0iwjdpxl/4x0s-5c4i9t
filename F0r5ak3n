@@ -417,6 +417,14 @@ WindUI:Localization({
             c00lkiddDect = "Features related to the c00lkidd character.",
             Noli = "Noli",
             NoliDesc = "Features related to the Noli character.",
+            Nosferatu = "Nosferatu",
+            NosferatuDesc = "Features related to the Nosferatu character.",
+            SilentAimBloodhook = "Silent Aim Bloodhook",
+            SilentAimBloodhookDesc = "Automatically aim Bloodhook at the selected target.",
+            Autosk8Trick = "Auto Sk8 Trick",
+            Autosk8TrickDesc = "Automatically perform Sk8 tricks.",
+            SmoothSk8Controller = "Smooth Sk8 Controller",
+            SmoothSk8ControllerDesc = "Make Sk8 controls smoother and easier to use.",
         },
         vi = {
             HubTitle = "Axos Hub",
@@ -719,6 +727,14 @@ Load_Config_Desc = "Nhấn để tải cấu hình đã chọn.",
             c00lkiddDesc = "Các chức năng liên quan đến nhân vật đứa trẻ ngầu.",
             Noli = "Loli",
             NoliDesc = "Các chức năng liên quan đến nhân vật Noli.",
+            Nosferatu = "Nosferatu",
+            NosferatuDesc = "Các chức năng liên quan đến nhân vật Nosferatu.",
+            SilentAimBloodhook = "Ngắm im lặng Bloodhook",
+            SilentAimBloodhookDesc = "Tự động ngắm Bloodhook vào mục tiêu đã chọn.",
+            Autosk8Trick = "Tự động thực hiện động tác Sk8",
+            Autosk8TrickDesc = "Tự động thực hiện các động tác Sk8.",
+            SmoothSk8Controller = "Bộ điều khiển Sk8 mượt mà",
+            SmoothSk8ControllerDesc = "Giúp điều khiển Sk8 mượt mà và dễ sử dụng hơn.",
         }
     }
 })
@@ -814,7 +830,7 @@ local OpenButtonConfig = {
 
 Window:EditOpenButton(OpenButtonConfig)
 
-Window:Tag({Title = "v0.1.0", Icon = "cog", Color = Color3.fromHex("#30ff6a")})
+Window:Tag({Title = "v0.1.1", Icon = "cog", Color = Color3.fromHex("#30ff6a")})
 
 local Tabs = {
     About = Window:Section({ Title = "loc:About", Opened = true }),
@@ -1014,6 +1030,21 @@ local ElementConfigs = {
     },
 
     {
+        ID = "Veeronica",
+        Type = "Section",
+        Parent = TabHandles.Survivors,
+        Config = {
+            Title = "loc:Veeronica",
+            Desc = "loc:VeeronicaDesc",
+            Icon = "zap",
+            Box = true,
+            BoxBorder = true,
+            Opened = false,
+            Hover = true,
+        }
+    },
+
+    {
         ID = "c00lkidd",
         Type = "Section",
         Parent = TabHandles.Killers,
@@ -1035,6 +1066,21 @@ local ElementConfigs = {
         Config = {
             Title = "loc:Noli",
             Desc = "loc:NoliDesc",
+            Icon = "zap",
+            Box = true,
+            BoxBorder = true,
+            Opened = false,
+            Hover = true,
+        }
+    },
+
+    {
+        ID = "Nosferatu",
+        Type = "Section",
+        Parent = TabHandles.Killers,
+        Config = {
+            Title = "loc:Nosferatu",
+            Desc = "loc:NosferatuDesc",
             Icon = "zap",
             Box = true,
             BoxBorder = true,
@@ -1671,50 +1717,33 @@ end)
 TabHandles.Info:Divider()
 
 AbilityEvent = {
-    GetNumber = function(value)
-        if type(value) == "string" then
-            value = string.gsub(value, "[^%d%.]", "")
-        end
+    State = {
+        AutoSkills = {},
+        Loop = nil,
+        Target = nil,
+        Charge = nil
+    },
 
-        return tonumber(value) or 0
+    GetNumber = function(value)
+        return tonumber(type(value) == "string" and string.gsub(value, "[^%d%.]", "") or value) or 0
     end,
 
     GetCharge = function(btn)
-        local charge = btn:GetAttribute("Charges")
-
-        if charge == nil then
-            charge = btn:GetAttribute("Charge")
+        if btn:GetAttribute("Charges") or btn:GetAttribute("Charge") then
+            return tonumber(btn:GetAttribute("Charges") or btn:GetAttribute("Charge")) or 0
         end
 
-        if charge ~= nil then
-            return tonumber(charge) or 0
+        for _, key in ipairs({"Charges", "Charge", "Count", "Amount"}) do
+            if btn:FindFirstChild(key) then
+                return AbilityEvent.GetNumber(btn[key].Text or btn[key].Value)
+            end
         end
 
-        local node =
-            btn:FindFirstChild("Charges")
-            or btn:FindFirstChild("Charge")
-            or btn:FindFirstChild("Count")
-            or btn:FindFirstChild("Amount")
-
-        if not node then
-            return 0
-        end
-
-        if node:IsA("TextLabel")
-            or node:IsA("TextBox")
-            or node:IsA("TextButton") then
-            return AbilityEvent.GetNumber(node.Text)
-        end
-
-        return tonumber(node.Value) or 0
+        return 0
     end,
 
     IsReverse = function(value)
-        if type(value) == "string" then
-            return string.lower(value) == "true"
-        end
-
-        return value == true
+        return type(value) == "string" and string.lower(value) == "true" or value == true
     end,
 
     Fire = function(btn)
@@ -1729,75 +1758,70 @@ AbilityEvent = {
     end,
 
     CanUse = function(btn, requiredCharges, reverseCheck, chargeBtn)
-        if not btn then
+        if not btn then return false end
+
+        for _, child in ipairs(btn:GetChildren()) do
+            if child:GetAttribute("IsLockObject") then return false end
+        end
+
+        if btn:FindFirstChild("CooldownTime") and btn.CooldownTime.Visible and AbilityEvent.GetNumber(btn.CooldownTime.Text) > 0 then
             return false
         end
 
-        chargeBtn = chargeBtn or btn
-
-        for _, child in ipairs(btn:GetChildren()) do
-            if child:GetAttribute("IsLockObject") then
+        if requiredCharges and tonumber(requiredCharges) then
+            if (AbilityEvent.IsReverse(reverseCheck) and AbilityEvent.GetCharge(chargeBtn or btn) >= tonumber(requiredCharges))
+            or (not AbilityEvent.IsReverse(reverseCheck) and AbilityEvent.GetCharge(chargeBtn or btn) < tonumber(requiredCharges)) then
                 return false
-            end
-        end
-
-        local cooldown = btn:FindFirstChild("CooldownTime")
-
-        if cooldown and cooldown.Visible then
-            if AbilityEvent.GetNumber(cooldown.Text) > 0 then
-                return false
-            end
-        end
-
-        if requiredCharges then
-            requiredCharges = tonumber(requiredCharges)
-
-            if requiredCharges then
-                local currentCharge = AbilityEvent.GetCharge(chargeBtn)
-
-                if AbilityEvent.IsReverse(reverseCheck) then
-                    if currentCharge >= requiredCharges then
-                        return false
-                    end
-                elseif currentCharge < requiredCharges then
-                    return false
-                end
             end
         end
 
         return true
     end,
 
-    Use = function(self, abilityName, requiredCharges, reverseCheck, checkAbilityName)
-        if not PlayerGui then
-            return false
+    GetNodes = function(abilityName, checkAbilityName)
+        if not (PlayerGui and PlayerGui:FindFirstChild("MainUI") and PlayerGui.MainUI:FindFirstChild("AbilityContainer")) then return end
+        if not PlayerGui.MainUI.AbilityContainer:FindFirstChild(tostring(abilityName)) then return end
+        if checkAbilityName and not PlayerGui.MainUI.AbilityContainer:FindFirstChild(tostring(checkAbilityName)) then return end
+
+        return PlayerGui.MainUI.AbilityContainer[tostring(abilityName)],
+               PlayerGui.MainUI.AbilityContainer[tostring(checkAbilityName or abilityName)]
+    end,
+
+    HandleAuto = function(self)
+        for ability, args in pairs(self.State.AutoSkills) do
+            self.State.Target, self.State.Charge = self.GetNodes(ability, args.checkName)
+            if self.State.Target and self.CanUse(self.State.Target, args.reqCharge, args.revCheck, self.State.Charge) then
+                self.Fire(self.State.Target)
+            end
         end
+    end,
 
-        local mainUI = PlayerGui:FindFirstChild("MainUI")
-        local container = mainUI and mainUI:FindFirstChild("AbilityContainer")
-
-        if not container then
-            return false
-        end
-
-        local targetBtn = container:FindFirstChild(tostring(abilityName))
-
-        if not targetBtn then
-            return false
-        end
-
-        local chargeBtn = targetBtn
-
-        if checkAbilityName then
-            chargeBtn = container:FindFirstChild(tostring(checkAbilityName))
-
-            if not chargeBtn then
-                return false
+    Use = function(self, abilityName, requiredCharges, reverseCheck, checkAbilityName, autoUse)
+        if autoUse then
+            self.State.AutoSkills[abilityName] = {
+                reqCharge = requiredCharges,
+                revCheck = reverseCheck,
+                checkName = checkAbilityName
+            }
+            
+            if not self.State.Loop then
+                self.State.Loop = RunService.Heartbeat:Connect(function()
+                    self:HandleAuto()
+                end)
+            end
+        else
+            self.State.AutoSkills[abilityName] = nil
+            
+            if self.State.Loop and next(self.State.AutoSkills) == nil then
+                self.State.Loop:Disconnect()
+                self.State.Loop = nil
             end
         end
 
-        if self.CanUse(targetBtn, requiredCharges, reverseCheck, chargeBtn) then
-            self.Fire(targetBtn)
+        self.State.Target, self.State.Charge = self.GetNodes(abilityName, checkAbilityName)
+        
+        if self.State.Target and self.CanUse(self.State.Target, requiredCharges, reverseCheck, self.State.Charge) then
+            self.Fire(self.State.Target)
             return true
         end
 
@@ -2902,95 +2926,134 @@ MyUIElements.Items:Toggle({
     end
 })
 
-AutoQTEManager = {
-    Construct = { Enabled = false, Hooked = false },
-    Bloodhook = { Enabled = false, LoopActive = false, LastButton = nil },
-    Targets = {"cl_ConstructQTE", "ConstructQTE"},
-    NosHookRemote = ReplicatedStorage:FindFirstChild("Remotes") and ReplicatedStorage.Remotes:FindFirstChild("NosHookQTE") or ReplicatedStorage:FindFirstChild("NosHookQTE", true)
-}
+AutoManager = {
+    State = {
+        AutoQTE = false,
+        AutoBloodhook = false,
+        Hooks = {
+            QTE = false,
+            Network = false,
+            InputLoop = false
+        }
+    },
+    
+    Targets = {
+        QTE = {"cl_ConstructQTE", "ConstructQTE"},
+        Network = {"Network"}
+    },
 
-function AutoQTEManager:TryHookConstruct()
-    if self.Construct.Hooked then return end
-    
-    for i = 1, #self.Targets do
-        self.Module = ReplicatedStorage:FindFirstChild(self.Targets[i], true)
-        if self.Module then break end
-    end
-    
-    if self.Module and self.Module:IsA("ModuleScript") then
-        self.Success, self.Data = pcall(require, self.Module)
+    GetModule = function(self, hookType)
+        for _, name in ipairs(self.Targets[hookType]) do
+            local found = ReplicatedStorage:FindFirstChild(name, true)
+            if found then return found end
+        end
+        return nil
+    end,
+
+    StartBloodhookMash = function(self)
+        if self.State.Hooks.InputLoop then return end
+        self.State.Hooks.InputLoop = true
         
-        if self.Success and type(self.Data) == "table" and self.Data.new then
-            self.Data.OriginalNew = self.Data.new
-            
-            self.Data.new = function(...)
-                AutoQTEManager.TempInstance = AutoQTEManager.Data.OriginalNew(...)
+        task.spawn(function()
+            while self.State.AutoBloodhook do
+                task.wait(0.01)
                 
-                if AutoQTEManager.Construct.Enabled then
+                local tempUI = PlayerGui:FindFirstChild("TemporaryUI")
+                local qteGui = (tempUI and tempUI:FindFirstChildWhichIsA("ScreenGui")) 
+                            or PlayerGui:FindFirstChild("QTE") 
+                            or PlayerGui:FindFirstChild("Bloodhook")
+                
+                if qteGui and (qteGui:IsA("ScreenGui") and qteGui.Enabled or qteGui.Visible) then
+                    for _, btn in ipairs(qteGui:GetDescendants()) do
+                        if btn:IsA("GuiButton") and btn.Visible then
+                            if firesignal then
+                                firesignal(btn.MouseButton1Down)
+                                firesignal(btn.MouseButton1Click)
+                                firesignal(btn.Activated)
+                            end
+                        end
+                    end
+                    
+                    VirtualUser:CaptureController()
+                    VirtualUser:Button1Down(Vector2.new(0, 0))
+                    VirtualUser:Button1Up(Vector2.new(0, 0))
+                end
+            end
+            self.State.Hooks.InputLoop = false
+        end)
+    end,
+
+    InitHook = function(self, hookType)
+        if self.State.Hooks[hookType] then return end
+        
+        local module = self:GetModule(hookType)
+        if not (module and module:IsA("ModuleScript")) then return end
+        
+        local success, data = pcall(require, module)
+        if not (success and type(data) == "table") then return end
+        
+        if hookType == "QTE" and data.new then
+            local originalNew = data.new
+            
+            data.new = function(...)
+                local tempInstance = originalNew(...)
+                
+                if self.State.AutoQTE then
                     task.spawn(function(qte)
                         task.wait(0.1)
                         if type(qte) == "table" and qte.AddProgress then
                             qte:AddProgress(100)
                         end
-                    end, AutoQTEManager.TempInstance)
+                    end, tempInstance)
                 end
                 
-                return AutoQTEManager.TempInstance
+                return tempInstance
             end
+            self.State.Hooks[hookType] = true
             
-            self.Construct.Hooked = true
+        elseif hookType == "Network" and data.FireServerConnection then
+            local originalFire = data.FireServerConnection
+            
+            data.FireServerConnection = function(...)
+                local tempArgs = {...}
+                
+                if self.State.AutoBloodhook then
+                    if type(tempArgs[2]) == "string" and string.find(tempArgs[2], "NosHookQTE") then
+                        tempArgs[4] = true
+                    end
+                end
+                
+                return originalFire(unpack(tempArgs))
+            end
+            self.State.Hooks[hookType] = true
         end
     end
-end
-
-function AutoQTEManager:HandleBloodhook(state)
-    self.Bloodhook.Enabled = state
-    
-    if state and self.NosHookRemote and not self.Bloodhook.LoopActive then
-        self.Bloodhook.LoopActive = true
-        
-        task.spawn(function()
-            while AutoQTEManager.Bloodhook.Enabled do
-                AutoQTEManager.TempUI = Players.LocalPlayer.PlayerGui:FindFirstChild("TemporaryUI")
-                AutoQTEManager.QTE = AutoQTEManager.TempUI and AutoQTEManager.TempUI:FindFirstChild("QTE")
-                AutoQTEManager.ActiveButton = AutoQTEManager.QTE and AutoQTEManager.QTE:FindFirstChild("ActiveButton")
-                
-                if AutoQTEManager.ActiveButton and AutoQTEManager.ActiveButton.Visible then
-                    if AutoQTEManager.Bloodhook.LastButton ~= AutoQTEManager.ActiveButton then
-                        AutoQTEManager.NosHookRemote:FireServer(true)
-                        AutoQTEManager.Bloodhook.LastButton = AutoQTEManager.ActiveButton
-                    end
-                else
-                    AutoQTEManager.Bloodhook.LastButton = nil
-                end
-                
-                task.wait(0.1)
-            end
-            AutoQTEManager.Bloodhook.LoopActive = false
-        end)
-    end
-end
+}
 
 MyUIElements.AutoMiniGame:Toggle({
     Title = "loc:AutoMinigame", 
     Desc = "loc:AutoMinigameDesc", 
-    Flag = "AutoQTE_Construct", 
+    Flag = "AutoQTE", 
     Value = false,
     Callback = function(state)
-        AutoQTEManager.Construct.Enabled = state
-        if state then 
-            AutoQTEManager:TryHookConstruct() 
+        AutoManager.State.AutoQTE = state
+        if AutoManager.State.AutoQTE then
+            AutoManager:InitHook("QTE")
         end
     end
 })
 
 MyUIElements.AutoMiniGame:Toggle({
-    Title = "Auto Bloodhook QTE", 
-    Desc = "Tự động hoàn thành minigame kéo mục tiêu", 
-    Flag = "AutoQTE_Bloodhook", 
+    Title = "Auto Bloodhook Solo", 
+    Desc = "Auto mash nút + Can thiệp Network để luôn thắng kéo co", 
+    Flag = "AutoBloodhook", 
     Value = false,
     Callback = function(state)
-        AutoQTEManager:HandleBloodhook(state)
+        AutoManager.State.AutoBloodhook = state
+        if AutoManager.State.AutoBloodhook then
+            AutoManager:InitHook("Network")
+            AutoManager:StartBloodhookMash()
+        end
     end
 })
 
@@ -3027,6 +3090,8 @@ CustomLMSLogic = {
         ["Prepetuity"] = "https://raw.githubusercontent.com/SLK-GAMING-MOD/LMS/main/Perpetuity%20(Die%20of%20Death%20LMS)%20%20FORSAKEN%20OST%20-%20Lymphh%20(youtube).mp3",
         ["Burnout"] = "https://raw.githubusercontent.com/SLK-GAMING-MOD/LMS/main/BURNOUT%20-%20FORSAKEN%20OST%20-%20Ohaikou%20(youtube).mp3",
         ["Cook off confection of hatred"] = "https://raw.githubusercontent.com/SLK-GAMING-MOD/LMS/main/COOK%20OFF%20~%20CONFECTION%20OF%20HATRED%20(1eggs%20vs%20Chef%20Shedletsky%20Last%20Man%20Standing)%20Forsaken%20UST%20-%20Katorrox%20Music%20(youtube).mp3",
+        ["Slasher vs Guest1337"] = "https://raw.githubusercontent.com/SLK-GAMING-MOD/LMS/main/FORSAKEN%20OST%20-%20Survival%20For%20The%20Fittest%20(Slasher%20VS%20Guest%201337%20LMS)%20-%20vlad%20(youtube).mp3",
+        ["Ready You Were"] = "https://raw.githubusercontent.com/SLK-GAMING-MOD/LMS/main/Ready%20You%20Were%20(Not%20So%20Final%20Version)%20%20Forsaken%20OST%20(unused)%20-%20Fawn%20(youtube).mp3",
     },
 
     GetMusicNames = function(self)
@@ -3522,176 +3587,209 @@ MyUIElements.SetupStamina:Toggle({
 
 CoreData = {
     Config = {
+        MaxAimDistance = 500,
         CoinFlip = { Enabled = false, Charges = 3, Distance = 75 },
-        AutoAim = { Enabled = false, MaxDistance = 500 }, -- Config cho Flintlock (Chance)
+        AutoAim = { Enabled = false }, 
+        Bloodhook = { Enabled = false, Targets = {"Survivors"} }, 
         PlasmaBeam = { Enabled = false, Targets = {"Killers"} },
         CorruptNature = { Enabled = false, Targets = {"Survivors"} },
         Nova = { Enabled = false, Targets = {"Survivors"} }
     },
     State = {
-        NearestKillerRoot = nil,
+        CachedRoot = nil,
+        CachedFlintlock = nil,
         KillerDist = math.huge,
-        IsFlintlockVisible = false,
-        NearestPlasmaRoot = nil,
-        NearestCorruptRoot = nil,
-        NearestNovaRoot = nil
+        SurvDist = math.huge,
+        IsChance = false,
+        IsDusekkar = false,
+        Isc00lkidd = false,
+        IsNoli = false,
+        IsNosferatu = false,
+        LastSafeState = nil,
+        ShortestDist = math.huge,
+        NearestTarget = nil,
+        TempDist = 0,
+        CurrentMod = nil,
+        ReqMod = nil,
+        WantsKillers = false,
+        WantsSurvivors = false,
+        FlintlockReady = false,
+        BloodhookReady = false,
+
+        Targets = {
+            Killers = nil,
+            Survivors = nil,
+            Bloodhook = nil,
+            PlasmaBeam = nil,
+            CorruptNature = nil,
+            Nova = nil
+        }
     },
     Hooks = {
         OldIndex = nil,
         OldNamecall = nil,
         OldGetMousePos = nil,
-        OldUtilGetMousePos = nil,
-        IsPlasmaHooked = false,  -- Đưa cờ check vào đây để tránh lỗi Read-only Table
-        IsCorruptHooked = false
+        IsPlasmaHooked = false
     },
-    Temp = {},
     Logic = {}
 }
 
-CoreData.Logic.FindNearestTarget = function(allowedFolders)
-    CoreData.Temp.ShortestDist = math.huge
-    CoreData.Temp.Nearest = nil
+CoreData.Logic.FindNearestTarget = function(folder)
+    CoreData.State.ShortestDist = math.huge
+    CoreData.State.NearestTarget = nil
+    
+    if not (CoreData.State.CachedRoot and folder) then return nil, math.huge end
 
-    for _, folder in ipairs(allowedFolders) do
-        if folder then
-            for _, char in ipairs(folder:GetChildren()) do
-                if char ~= playerCharacter then
-                    CoreData.Temp.TargetRoot = char:FindFirstChild("HumanoidRootPart")
-                    if CoreData.Temp.TargetRoot then
-                        CoreData.Temp.Dist = (CoreData.Temp.TargetRoot.Position - (CoreData.Temp.Root and CoreData.Temp.Root.Position or Vector3.zero)).Magnitude
-                        if CoreData.Temp.Dist <= CoreData.Temp.ShortestDist then
-                            CoreData.Temp.ShortestDist = CoreData.Temp.Dist
-                            CoreData.Temp.Nearest = CoreData.Temp.TargetRoot
-                        end
+    for _, char in ipairs(folder:GetChildren()) do
+        if char ~= playerCharacter and char:FindFirstChild("HumanoidRootPart") then
+            CoreData.State.TempDist = (char.HumanoidRootPart.Position - CoreData.State.CachedRoot.Position).Magnitude
+            if CoreData.State.TempDist < CoreData.State.ShortestDist then
+                CoreData.State.ShortestDist = CoreData.State.TempDist
+                CoreData.State.NearestTarget = char.HumanoidRootPart
+            end
+        end
+    end
+    return CoreData.State.NearestTarget, CoreData.State.ShortestDist
+end
+
+CoreData.Logic.GetAbilityTarget = function(configKey, identityCheck)
+    if not (identityCheck and CoreData.Config[configKey].Enabled) then return nil end
+    
+    CoreData.State.WantsKillers = table.find(CoreData.Config[configKey].Targets, "Killers")
+    CoreData.State.WantsSurvivors = table.find(CoreData.Config[configKey].Targets, "Survivors")
+
+    if CoreData.State.WantsKillers and not CoreData.State.WantsSurvivors then return CoreData.State.Targets.Killers end
+    if CoreData.State.WantsSurvivors and not CoreData.State.WantsKillers then return CoreData.State.Targets.Survivors end
+    
+    if CoreData.State.WantsKillers and CoreData.State.WantsSurvivors then
+        if CoreData.State.KillerDist < CoreData.State.SurvDist then
+            return CoreData.State.Targets.Killers or CoreData.State.Targets.Survivors
+        else
+            return CoreData.State.Targets.Survivors or CoreData.State.Targets.Killers
+        end
+    end
+    return nil
+end
+
+CoreData.Logic.GetFlatAimCFrame = function(originPosition, targetPosition)
+    return CFrame.lookAt(originPosition, Vector3.new(targetPosition.X, originPosition.Y, targetPosition.Z))
+end
+
+CoreData.Logic.HookMouse = function(modulePath, funcName, hookState, oldHook, targetsMap)
+    CoreData.State.CurrentMod = ReplicatedStorage
+    for _, path in ipairs(modulePath) do
+        CoreData.State.CurrentMod = CoreData.State.CurrentMod and CoreData.State.CurrentMod:FindFirstChild(path)
+    end
+    
+    if not CoreData.State.CurrentMod then return end
+    CoreData.State.ReqMod = require(CoreData.State.CurrentMod)
+    
+    if type(CoreData.State.ReqMod) ~= "table" or not CoreData.State.ReqMod[funcName] or CoreData.Hooks[hookState] then return end
+    
+    CoreData.Hooks[hookState] = true
+    
+    CoreData.Hooks[oldHook] = hookfunction(CoreData.State.ReqMod[funcName], function(self, ...)
+        if CoreData.State.CachedRoot then
+            for _, skillKey in ipairs(targetsMap) do
+                if CoreData.Config[skillKey].Enabled and CoreData.State.Targets[skillKey] then
+                    local dist = (CoreData.State.Targets[skillKey].Position - CoreData.State.CachedRoot.Position).Magnitude
+                    if dist <= CoreData.Config.MaxAimDistance then
+                        return CoreData.State.Targets[skillKey].Position
                     end
                 end
             end
         end
-    end
-    return CoreData.Temp.Nearest, CoreData.Temp.ShortestDist
-end
-
-CoreData.Logic.UpdateAbilityTarget = function(configKey, stateKey)
-    if CoreData.Config[configKey].Enabled then
-        CoreData.Temp.SearchFolders = {}
-        if table.find(CoreData.Config[configKey].Targets, "Killers") then 
-            table.insert(CoreData.Temp.SearchFolders, killersFolder) 
-        end
-        if table.find(CoreData.Config[configKey].Targets, "Survivors") then 
-            table.insert(CoreData.Temp.SearchFolders, survivorsFolder) 
-        end
-        CoreData.State[stateKey], _ = CoreData.Logic.FindNearestTarget(CoreData.Temp.SearchFolders)
-    else
-        CoreData.State[stateKey] = nil
-    end
-end
-
-CoreData.Logic.CanFlintlockAim = function()
-    return CoreData.Config.AutoAim.Enabled 
-       and CoreData.State.IsFlintlockVisible 
-       and CoreData.State.NearestKillerRoot 
-       and CoreData.State.KillerDist <= CoreData.Config.AutoAim.MaxDistance
-end
-
-CoreData.Logic.GetFlatAimCFrame = function(originPosition, targetPosition)
-    return CFrame.lookAt(
-        originPosition, 
-        Vector3.new(targetPosition.X, originPosition.Y, targetPosition.Z)
-    )
-end
-
-CoreData.Logic.ApplyPlasmaHook = function()
-    CoreData.Temp.Path = ReplicatedStorage:FindFirstChild("Systems")
-        and ReplicatedStorage.Systems:FindFirstChild("Player")
-        and ReplicatedStorage.Systems.Player:FindFirstChild("Miscellaneous")
-        and ReplicatedStorage.Systems.Player.Miscellaneous:FindFirstChild("GetPlayerMousePosition")
-        
-    if not CoreData.Temp.Path then return end
-    
-    CoreData.Temp.Module = require(CoreData.Temp.Path)
-    if type(CoreData.Temp.Module) ~= "table" or not CoreData.Temp.Module.GetMousePos then return end
-    
-    -- Kiểm tra hook bằng biến nội bộ của ta, không chọc vào Module của game
-    if CoreData.Hooks.IsPlasmaHooked then return end
-    CoreData.Hooks.IsPlasmaHooked = true
-    
-    CoreData.Hooks.OldGetMousePos = CoreData.Temp.Module.GetMousePos
-    
-    hookfunction(CoreData.Temp.Module.GetMousePos, function(...)
-        if CoreData.Config.PlasmaBeam.Enabled and CoreData.State.NearestPlasmaRoot then
-            return CoreData.State.NearestPlasmaRoot.Position
-        end
-        if CoreData.Config.Nova.Enabled and CoreData.State.NearestNovaRoot then
-            return CoreData.State.NearestNovaRoot.Position
-        end
-        return CoreData.Hooks.OldGetMousePos(...)
+        return CoreData.Hooks[oldHook](self, ...)
     end)
 end
-
-CoreData.Logic.ApplyCorruptNatureHook = function()
-    CoreData.Temp.UtilPath = ReplicatedStorage:FindFirstChild("Modules")
-        and ReplicatedStorage.Modules:FindFirstChild("Utilities")
-        and ReplicatedStorage.Modules.Utilities:FindFirstChild("Util")
-        
-    if not CoreData.Temp.UtilPath then return end
-    
-    CoreData.Temp.UtilModule = require(CoreData.Temp.UtilPath)
-    if type(CoreData.Temp.UtilModule) ~= "table" or not CoreData.Temp.UtilModule.GetPlayerMousePosition then return end
-    
-    -- Fix lỗi Read-only: Sử dụng biến trong CoreData thay vì gán vào UtilModule
-    if CoreData.Hooks.IsCorruptHooked then return end
-    CoreData.Hooks.IsCorruptHooked = true
-    
-    CoreData.Hooks.OldUtilGetMousePos = CoreData.Temp.UtilModule.GetPlayerMousePosition
-    
-    hookfunction(CoreData.Temp.UtilModule.GetPlayerMousePosition, function(...)
-        if CoreData.Config.CorruptNature.Enabled and CoreData.State.NearestCorruptRoot then
-            return CoreData.State.NearestCorruptRoot.Position
-        end
-        if CoreData.Config.Nova.Enabled and CoreData.State.NearestNovaRoot then
-            return CoreData.State.NearestNovaRoot.Position
-        end
-        return CoreData.Hooks.OldUtilGetMousePos(...)
-    end)
-end
-
-task.spawn(CoreData.Logic.ApplyPlasmaHook)
-task.spawn(CoreData.Logic.ApplyCorruptNatureHook)
 
 task.spawn(function()
-    while task.wait(0.05) do
-        if not playerCharacter then continue end
-        CoreData.Temp.Root = playerCharacter:FindFirstChild("HumanoidRootPart")
-        if not CoreData.Temp.Root then continue end
-        
-        CoreData.Temp.Flint = playerCharacter:FindFirstChild("Flintlock")
-        CoreData.State.IsFlintlockVisible = (CoreData.Temp.Flint and CoreData.Temp.Flint:IsA("BasePart") and CoreData.Temp.Flint.Transparency < 1) or false
-        CoreData.State.NearestKillerRoot, CoreData.State.KillerDist = CoreData.Logic.FindNearestTarget({killersFolder})
+    CoreData.Logic.HookMouse(
+        {"Systems", "Player", "Miscellaneous", "GetPlayerMousePosition"}, 
+        "GetMousePos", "IsPlasmaHooked", "OldGetMousePos", 
+        {"PlasmaBeam", "Nova", "CorruptNature"} 
+    )
+end)
 
-        CoreData.Logic.UpdateAbilityTarget("PlasmaBeam", "NearestPlasmaRoot")
-        CoreData.Logic.UpdateAbilityTarget("CorruptNature", "NearestCorruptRoot")
-        CoreData.Logic.UpdateAbilityTarget("Nova", "NearestNovaRoot")
+task.spawn(function()
+    while task.wait(0.01) do
+        if not playerCharacter then continue end
+        
+        CoreData.State.CachedRoot = playerCharacter:FindFirstChild("HumanoidRootPart")
+        CoreData.State.CachedFlintlock = playerCharacter:FindFirstChild("Flintlock")
+
+        CoreData.State.IsChance = (playerCharacter.Name == "Chance" and playerCharacter:IsDescendantOf(survivorsFolder))
+        CoreData.State.IsDusekkar = (playerCharacter.Name == "Dusekkar" and playerCharacter:IsDescendantOf(survivorsFolder))
+        CoreData.State.Isc00lkidd = (playerCharacter.Name == "c00lkidd" and playerCharacter:IsDescendantOf(killersFolder))
+        CoreData.State.IsNoli = (playerCharacter.Name == "Noli" and playerCharacter:IsDescendantOf(killersFolder))
+        CoreData.State.IsNosferatu = ((playerCharacter.Name == "Nosferatu" or playerCharacter.Name == "Nos") and playerCharacter:IsDescendantOf(killersFolder)) 
+
+        CoreData.State.Targets.Killers, CoreData.State.KillerDist = CoreData.Logic.FindNearestTarget(killersFolder)
+        CoreData.State.Targets.Survivors, CoreData.State.SurvDist = CoreData.Logic.FindNearestTarget(survivorsFolder)
+
+        CoreData.State.Targets.PlasmaBeam = CoreData.Logic.GetAbilityTarget("PlasmaBeam", CoreData.State.IsDusekkar)
+        CoreData.State.Targets.CorruptNature = CoreData.Logic.GetAbilityTarget("CorruptNature", CoreData.State.Isc00lkidd)
+        CoreData.State.Targets.Nova = CoreData.Logic.GetAbilityTarget("Nova", CoreData.State.IsNoli)
+        CoreData.State.Targets.Bloodhook = CoreData.Logic.GetAbilityTarget("Bloodhook", CoreData.State.IsNosferatu) 
+
+        CoreData.State.FlintlockReady = (CoreData.Config.AutoAim.Enabled and CoreData.State.IsChance and CoreData.State.CachedFlintlock and CoreData.State.CachedFlintlock:IsA("BasePart") and CoreData.State.CachedFlintlock.Transparency < 1 and CoreData.State.Targets.Killers and CoreData.State.KillerDist <= CoreData.Config.MaxAimDistance) == true
+        CoreData.State.BloodhookReady = (CoreData.Config.Bloodhook.Enabled and CoreData.State.IsNosferatu and CoreData.State.Targets.Bloodhook and CoreData.State.SurvDist <= CoreData.Config.MaxAimDistance) == true
+
+        if CoreData.Config.CoinFlip.Enabled and CoreData.State.IsChance then
+            CoreData.State.IsSafe = (CoreData.State.KillerDist > CoreData.Config.CoinFlip.Distance)
+            
+            if CoreData.State.LastSafeState ~= CoreData.State.IsSafe then
+                CoreData.State.LastSafeState = CoreData.State.IsSafe
+                AbilityEvent:Use("CoinFlip", CoreData.Config.CoinFlip.Charges, true, "Reroll", CoreData.State.IsSafe)
+            end
+        end
     end
 end)
 
 CoreData.Hooks.OldIndex = hookmetamethod(game, "__index", newcclosure(function(self, key)
-    if not checkcaller() and key == "CFrame" and self.Name == "HumanoidRootPart" and self.Parent == playerCharacter then
-        if CoreData.Logic.CanFlintlockAim() then
-            return CoreData.Logic.GetFlatAimCFrame(self.Position, CoreData.State.NearestKillerRoot.Position)
+    if not checkcaller() then
+        if key == "CFrame" and typeof(self) == "Instance" and self == CoreData.State.CachedRoot then
+            local caller = getcallingscript()
+            if caller and caller.Name ~= "PlayerModule" and not string.find(caller.Name, "Camera") and not string.find(caller.Name, "Control") then
+                if CoreData.State.FlintlockReady and CoreData.State.Targets.Killers then
+                    return CoreData.Logic.GetFlatAimCFrame(self.Position, CoreData.State.Targets.Killers.Position)
+                elseif CoreData.State.BloodhookReady and CoreData.State.Targets.Bloodhook then
+                    return CoreData.Logic.GetFlatAimCFrame(self.Position, CoreData.State.Targets.Bloodhook.Position)
+                end
+            end
+        end
+        
+        if (key == "Hit" or key == "Target") and typeof(self) == "Instance" and self:IsA("PlayerMouse") then
+            if CoreData.State.FlintlockReady and CoreData.State.Targets.Killers then
+                return key == "Hit" and CoreData.State.Targets.Killers.HumanoidRootPart.CFrame or CoreData.State.Targets.Killers
+            elseif CoreData.State.BloodhookReady and CoreData.State.Targets.Bloodhook then
+                return key == "Hit" and CoreData.State.Targets.Bloodhook.HumanoidRootPart.CFrame or CoreData.State.Targets.Bloodhook
+            end
         end
     end
     return CoreData.Hooks.OldIndex(self, key)
 end))
 
 CoreData.Hooks.OldNamecall = hookmetamethod(game, "__namecall", newcclosure(function(self, ...)
-    local method = getnamecallmethod()
-    
-    if not checkcaller() and method == "FireServer" and tostring(self):find("ChanceFireShot") then
-        if CoreData.Logic.CanFlintlockAim() then
-            CoreData.Temp.Root = playerCharacter and playerCharacter:FindFirstChild("HumanoidRootPart")
-            if CoreData.Temp.Root then
+    if not checkcaller() and CoreData.State.CachedRoot then
+        local method = getnamecallmethod()
+        
+        if method == "FireServer" then
+            if self.Name == "ChanceFireShot" and CoreData.State.FlintlockReady then
                 local args = {...}
-                args[1] = CoreData.Logic.GetFlatAimCFrame(CoreData.Temp.Root.Position, CoreData.State.NearestKillerRoot.Position).LookVector
+                args[1] = CoreData.Logic.GetFlatAimCFrame(CoreData.State.CachedRoot.Position, CoreData.State.Targets.Killers.Position).LookVector
+                return CoreData.Hooks.OldNamecall(self, unpack(args))
+            
+            elseif (string.find(self.Name, "Hook") or string.find(self.Name, "Nos")) and CoreData.State.BloodhookReady then
+                local args = {...}
+                local aimCFrame = CoreData.Logic.GetFlatAimCFrame(CoreData.State.CachedRoot.Position, CoreData.State.Targets.Bloodhook.Position)
+                
+                if typeof(args[1]) == "Vector3" then
+                    args[1] = aimCFrame.LookVector
+                elseif typeof(args[1]) == "CFrame" then
+                    args[1] = aimCFrame
+                end
+                
                 return CoreData.Hooks.OldNamecall(self, unpack(args))
             end
         end
@@ -3699,7 +3797,6 @@ CoreData.Hooks.OldNamecall = hookmetamethod(game, "__namecall", newcclosure(func
     return CoreData.Hooks.OldNamecall(self, ...)
 end))
 
--- [ KHU VỰC UI ELEMENTS ] --
 MyUIElements.Chance:Dropdown({
     Title = "loc:CoinFlipCharges", Desc = "loc:CoinFlipChargesDesc", Flag = "Select_CoinFlip_Charges", Values = {1, 2, 3}, Value = 3,
     Callback = function(value) CoreData.Config.CoinFlip.Charges = tonumber(value) or 3 end
@@ -3714,20 +3811,13 @@ MyUIElements.Chance:Toggle({
     Title = "loc:AutoCoinflip", Desc = "loc:AutoCoinflipDesc", Flag = "Auto Coinflip", Value = false,
     Callback = function(state)
         CoreData.Config.CoinFlip.Enabled = state
-        if state then
-            task.spawn(function()
-                while CoreData.Config.CoinFlip.Enabled do
-                    if CoreData.State.KillerDist > CoreData.Config.CoinFlip.Distance then 
-                        AbilityEvent:Use("CoinFlip", CoreData.Config.CoinFlip.Charges, true, "Reroll") 
-                    end
-                    task.wait(1.5)
-                end
-            end)
+        if not state then
+            CoreData.State.LastSafeState = nil
+            AbilityEvent:Use("CoinFlip", CoreData.Config.CoinFlip.Charges, true, "Reroll", false)
         end
     end
 })
 
--- ĐÃ KHÔI PHỤC: Toggle Auto Aim của Chance
 MyUIElements.Chance:Toggle({
     Title = "loc:SilentAimShoot", Desc = "loc:SilentAimShootDesc", Flag = "Auto_Aim_Flintlock", Value = false,
     Callback = function(state) CoreData.Config.AutoAim.Enabled = state end
@@ -3761,6 +3851,283 @@ MyUIElements.Noli:Dropdown({
 MyUIElements.Noli:Toggle({
     Title = "loc:SilentAimNova", Desc = "loc:SilentAimNovaDesc", Flag = "Auto_Aim_Nova", Value = false,
     Callback = function(state) CoreData.Config.Nova.Enabled = state end
+})
+
+MyUIElements.Nosferatu:Dropdown({
+    Title = "loc:ChooseTarget", Desc = "loc:ChooseTargetDesc", Flag = "Bloodhook_Target_Dropdown", Values = {"Killers", "Survivors"}, Value = {"Survivors"}, Multi = true, AllowNone = false,
+    Callback = function(value) CoreData.Config.Bloodhook.Targets = value end
+})
+
+MyUIElements.Nosferatu:Toggle({
+    Title = "loc:SilentAimBloodhook", Desc = "loc:SilentAimBloodhookDesc", Flag = "Auto_Aim_Bloodhook", Value = false,
+    Callback = function(state) CoreData.Config.Bloodhook.Enabled = state end
+})
+
+VeeronicaMods = {
+    States = {
+        AutoTrick = false,
+        SmoothSteer = false
+    },
+    Data = {
+        IsSk8Active = false,
+        IsSkating = false,
+        SavedSpeed = 16,
+        Highlights = {},
+        Conns = {},
+        SprintBtn = nil,
+        Folder = nil,
+        Hum = nil,
+        Root = nil,
+        MoveDir = nil,
+        LastLookDir = nil,
+        LastSpeedChange = 0,
+        TurnThreshold = 0.08,
+        SpeedChangeCooldown = 1,
+        BoostSpeed = 26,
+        AnimIDs = {
+            ["117058860640843"] = true,
+            ["123803922491274"] = true,
+            ["79451658483719"] = true
+        }
+    }
+}
+
+function VeeronicaMods.GetCharacterData()
+    if not playerCharacter then return nil, nil end
+
+    VeeronicaMods.Data.Hum = playerCharacter:FindFirstChildOfClass("Humanoid")
+    VeeronicaMods.Data.Root = playerCharacter:FindFirstChild("HumanoidRootPart")
+
+    return VeeronicaMods.Data.Hum, VeeronicaMods.Data.Root
+end
+
+function VeeronicaMods.TriggerSprint()
+    VeeronicaMods.Data.SprintBtn = VeeronicaMods.Data.SprintBtn or (
+        PlayerGui
+        and PlayerGui:FindFirstChild("MainUI")
+        and PlayerGui.MainUI:FindFirstChild("SprintingButton")
+    )
+
+    if not VeeronicaMods.Data.SprintBtn then return end
+
+    if getconnections then
+        for _, conn in pairs(getconnections(VeeronicaMods.Data.SprintBtn.MouseButton1Down)) do
+            pcall(function()
+                conn:Fire()
+                if conn.Function then
+                    conn:Function()
+                end
+            end)
+        end
+    elseif firesignal then
+        firesignal(VeeronicaMods.Data.SprintBtn.MouseButton1Down)
+    end
+end
+
+function VeeronicaMods.AutoTrickStep()
+    if not VeeronicaMods.States.AutoTrick or not playerCharacter then return end
+
+    for h in pairs(VeeronicaMods.Data.Highlights) do
+        if h and h.Adornee and (
+            h.Adornee == playerCharacter
+            or h.Adornee:IsDescendantOf(playerCharacter)
+        ) then
+            VeeronicaMods.TriggerSprint()
+            break
+        end
+    end
+end
+
+function VeeronicaMods.ToggleAutoTrick(state)
+    VeeronicaMods.States.AutoTrick = state
+
+    if VeeronicaMods.Data.Conns.TrickLoop then
+        VeeronicaMods.Data.Conns.TrickLoop:Disconnect()
+    end
+
+    if VeeronicaMods.Data.Conns.BehaviorAdd then
+        VeeronicaMods.Data.Conns.BehaviorAdd:Disconnect()
+    end
+
+    if VeeronicaMods.Data.Conns.BehaviorRem then
+        VeeronicaMods.Data.Conns.BehaviorRem:Disconnect()
+    end
+
+    VeeronicaMods.Data.Highlights = {}
+
+    if state then
+        VeeronicaMods.Data.Folder = ReplicatedStorage:FindFirstChild("Assets")
+        VeeronicaMods.Data.Folder = VeeronicaMods.Data.Folder and VeeronicaMods.Data.Folder:FindFirstChild("Survivors")
+        VeeronicaMods.Data.Folder = VeeronicaMods.Data.Folder and VeeronicaMods.Data.Folder:FindFirstChild("Veeronica")
+        VeeronicaMods.Data.Folder = VeeronicaMods.Data.Folder and VeeronicaMods.Data.Folder:FindFirstChild("Behavior")
+
+        if VeeronicaMods.Data.Folder then
+            for _, v in ipairs(VeeronicaMods.Data.Folder:GetDescendants()) do
+                if v:IsA("Highlight") then
+                    VeeronicaMods.Data.Highlights[v] = true
+                end
+            end
+
+            VeeronicaMods.Data.Conns.BehaviorAdd =
+                VeeronicaMods.Data.Folder.DescendantAdded:Connect(function(c)
+                    if c:IsA("Highlight") then
+                        VeeronicaMods.Data.Highlights[c] = true
+                    end
+                end)
+
+            VeeronicaMods.Data.Conns.BehaviorRem =
+                VeeronicaMods.Data.Folder.DescendantRemoving:Connect(function(c)
+                    if c:IsA("Highlight") then
+                        VeeronicaMods.Data.Highlights[c] = nil
+                    end
+                end)
+        end
+
+        VeeronicaMods.Data.Conns.TrickLoop =
+            RunService.Heartbeat:Connect(VeeronicaMods.AutoTrickStep)
+    end
+end
+
+function VeeronicaMods.SteerStep()
+    if not VeeronicaMods.States.SmoothSteer then return end
+
+    VeeronicaMods.GetCharacterData()
+
+    if not (VeeronicaMods.Data.Hum and VeeronicaMods.Data.Root) then
+        return
+    end
+
+    VeeronicaMods.Data.IsSkating = false
+
+    for _, track in ipairs(VeeronicaMods.Data.Hum:GetPlayingAnimationTracks()) do
+        if track.Animation and VeeronicaMods.Data.AnimIDs[
+            tostring(track.Animation.AnimationId):match("%d+") or ""
+        ] then
+            VeeronicaMods.Data.IsSkating = true
+            break
+        end
+    end
+
+    if not VeeronicaMods.Data.IsSkating then
+        if VeeronicaMods.Data.IsSk8Active then
+            VeeronicaMods.Data.IsSk8Active = false
+            VeeronicaMods.Data.Hum.WalkSpeed =
+                VeeronicaMods.Data.SavedSpeed or 16
+            VeeronicaMods.Data.Hum:Move(Vector3.zero, false)
+        end
+
+        VeeronicaMods.Data.LastLookDir = nil
+        VeeronicaMods.Data.LastSpeedChange = 0
+        return
+    end
+
+    if not VeeronicaMods.Data.IsSk8Active then
+        VeeronicaMods.Data.IsSk8Active = true
+        VeeronicaMods.Data.SavedSpeed =
+            VeeronicaMods.Data.Hum.WalkSpeed
+        VeeronicaMods.Data.LastLookDir = nil
+        VeeronicaMods.Data.LastSpeedChange = 0
+    end
+
+    VeeronicaMods.Data.MoveDir = Vector3.new(
+        Camera.CFrame.LookVector.X,
+        0,
+        Camera.CFrame.LookVector.Z
+    )
+
+    if VeeronicaMods.Data.MoveDir.Magnitude <= 0 then
+        return
+    end
+
+    VeeronicaMods.Data.MoveDir =
+        VeeronicaMods.Data.MoveDir.Unit
+
+    if VeeronicaMods.Data.LastLookDir
+        and 1 - VeeronicaMods.Data.LastLookDir:Dot(VeeronicaMods.Data.MoveDir)
+            >= VeeronicaMods.Data.TurnThreshold
+        and os.clock() - VeeronicaMods.Data.LastSpeedChange
+            >= VeeronicaMods.Data.SpeedChangeCooldown then
+
+        VeeronicaMods.Data.LastSpeedChange = os.clock()
+
+        VeeronicaMods.Data.Hum.WalkSpeed =
+            VeeronicaMods.Data.BoostSpeed
+
+        task.defer(function()
+            if VeeronicaMods.Data.Hum
+                and VeeronicaMods.Data.IsSk8Active
+                and VeeronicaMods.Data.IsSkating then
+
+                VeeronicaMods.Data.Hum.WalkSpeed =
+                    VeeronicaMods.Data.SavedSpeed
+            end
+        end)
+    end
+
+    VeeronicaMods.Data.LastLookDir =
+        VeeronicaMods.Data.MoveDir
+
+    VeeronicaMods.Data.Hum:Move(
+        VeeronicaMods.Data.MoveDir,
+        false
+    )
+
+    VeeronicaMods.Data.Root.CFrame =
+        VeeronicaMods.Data.Root.CFrame:Lerp(
+            CFrame.new(
+                VeeronicaMods.Data.Root.Position,
+                VeeronicaMods.Data.Root.Position
+                    + VeeronicaMods.Data.MoveDir
+            ),
+            0.3
+        )
+end
+
+function VeeronicaMods.ToggleSmoothSteer(state)
+    VeeronicaMods.States.SmoothSteer = state
+
+    if VeeronicaMods.Data.Conns.SteerLoop then
+        VeeronicaMods.Data.Conns.SteerLoop:Disconnect()
+    end
+
+    if state then
+        VeeronicaMods.Data.LastLookDir = nil
+        VeeronicaMods.Data.LastSpeedChange = 0
+
+        VeeronicaMods.Data.Conns.SteerLoop =
+            RunService.RenderStepped:Connect(
+                VeeronicaMods.SteerStep
+            )
+    elseif VeeronicaMods.Data.IsSk8Active then
+        VeeronicaMods.Data.IsSk8Active = false
+        VeeronicaMods.Data.LastLookDir = nil
+        VeeronicaMods.Data.LastSpeedChange = 0
+
+        VeeronicaMods.GetCharacterData()
+
+        if VeeronicaMods.Data.Hum then
+            VeeronicaMods.Data.Hum.WalkSpeed =
+                VeeronicaMods.Data.SavedSpeed or 16
+
+            VeeronicaMods.Data.Hum:Move(Vector3.zero, false)
+        end
+    end
+end
+
+MyUIElements.Veeronica:Toggle({
+    Title = "loc:Autosk8Trick",
+    Desc = "loc:Autosk8TrickDesc",
+    Flag = "Veeronica_AutoTrick",
+    Value = false,
+    Callback = VeeronicaMods.ToggleAutoTrick
+})
+
+MyUIElements.Veeronica:Toggle({
+    Title = "loc:SmoothSk8Controller",
+    Desc = "loc:SmoothSk8ControllerDesc",
+    Flag = "Veeronica_SmoothSteer",
+    Value = false,
+    Callback = VeeronicaMods.ToggleSmoothSteer
 })
 
 local ServerManager = {
@@ -5598,7 +5965,7 @@ end)
 
 -- Screen
 
-local VisualBot = {
+VisualBot = {
     Config = {
         Fullbright = false,
         NoFog = false,
@@ -5626,13 +5993,34 @@ for _, v in ipairs(Lighting:GetChildren()) do
 end
 
 function VisualBot:UpdateCamera()
-    if self.Config.EnableZoom then
-        localPlayer.CameraMinZoomDistance = self.Config.ZoomMin
-        localPlayer.CameraMaxZoomDistance = self.Config.ZoomMax
-    else
-        localPlayer.CameraMinZoomDistance = self.Originals.ZoomMin
-        localPlayer.CameraMaxZoomDistance = self.Originals.ZoomMax
+    local targetMin = self.Config.EnableZoom and self.Config.ZoomMin or self.Originals.ZoomMin
+    local targetMax = self.Config.EnableZoom and self.Config.ZoomMax or self.Originals.ZoomMax
+    
+    if targetMin > targetMax then
+        targetMin = targetMax
     end
+
+    pcall(function()
+        localPlayer.CameraMaxZoomDistance = 100000
+        localPlayer.CameraMinZoomDistance = targetMin
+        localPlayer.CameraMaxZoomDistance = targetMax
+    end)
+end
+
+if not VisualBot.Connections.CharAdded then
+    VisualBot.Connections.CharAdded = localPlayer.CharacterAdded:Connect(function(newChar)
+        task.spawn(function()
+            local hum = newChar:WaitForChild("Humanoid", 3)
+            if hum then
+                local cam = workspace.CurrentCamera
+                if cam then
+                    cam.CameraSubject = hum
+                end
+            end
+            task.wait(0.1)
+            VisualBot:UpdateCamera()
+        end)
+    end)
 end
 
 function VisualBot:RestoreLighting()
