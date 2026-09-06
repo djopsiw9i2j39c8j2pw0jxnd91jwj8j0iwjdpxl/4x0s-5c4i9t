@@ -383,6 +383,18 @@ WindUI:Localization({
             CustomNameDesc = "Set a custom name for your character.",
             EnableCustomName = "Enable Custom Name",
             EnableCustomNameDesc = "Enable your custom character name.",
+            CustomPlayedTime = "Custom Played Time",
+            CustomPlayedTimeDesc = "Set a custom played time.",
+            EnableCustomPlayedTime = "Enable Custom Played Time",
+            EnableCustomPlayedTimeDesc = "Enable your custom played time.",
+            CustomSurvivorWins = "Custom Survivor Wins",
+            CustomSurvivorWinsDesc = "Set a custom number of Survivor wins.",
+            EnableCustomSurvivorWins = "Enable Custom Survivor Wins",
+            EnableCustomSurvivorWinsDesc = "Enable your custom Survivor wins.",
+            CustomKillerWins = "Custom Killer Wins",
+            CustomKillerWinsDesc = "Set a custom number of Killer wins.",
+            EnableCustomKillerWins = "Enable Custom Killer Wins",
+            EnableCustomKillerWinsDesc = "Enable your custom Killer wins.",
             Fake_Ragdoll = "Fake Ragdoll",
             Fake_Ragdoll_Desc = "Create a fake ragdoll effect on your character.",
             CoinFlipCharges = "Coin Flip Charges",
@@ -425,6 +437,28 @@ WindUI:Localization({
             Autosk8TrickDesc = "Automatically perform Sk8 tricks.",
             SmoothSk8Controller = "Smooth Sk8 Controller",
             SmoothSk8ControllerDesc = "Make Sk8 controls smoother and easier to use.",
+            InstantInvisAnim = "Instant Invisible Animation",
+            InstantInvisAnimDesc = "Instantly play the invisible animation.",
+            SkillInvisAnim = "Skill Invisible Animation",
+            SkillInvisAnimDesc = "Play the invisible animation when using the skill.",
+            CloneToKiller = "Clone to Killer",
+            CloneToKillerDesc = "Control the clone to move to the Killer.",
+            Is007n7 = "007n7",
+            Is007n7Desc = "Features related to the 007n7 character.",
+            Veeronica = "Veeronica",
+            VeeronicaDesc = "Features related to the Veeronica character.",
+            WalkspeedOverrideController = "Walkspeed Override Controller",
+            WalkspeedOverrideControllerDesc = "Control the Walkspeed Override ability.",
+            WalkspeedAutoAimTarget = "Walkspeed Auto Aim Target",
+            WalkspeedAutoAimTargetDesc = "Automatically aim Walkspeed Override at the target.",
+            WalkspeedOverridePathfinding = "Walkspeed Override Pathfinding",
+            WalkspeedOverridePathfindingDesc = "Automatically navigate to the target using Walkspeed Override.",
+            VoidrushController = "Voidrush Controller",
+            VoidrushControllerDesc = "Control the Voidrush ability.",
+            VoidrushAutoAimTarget = "Voidrush Auto Aim Target",
+            VoidrushAutoAimTargetDesc = "Automatically aim Voidrush at the target.",
+            VoidrushPathfinding = "Voidrush Pathfinding",
+            VoidrushPathfindingDesc = "Automatically navigate to the target using Voidrush.",
         },
         vi = {
             HubTitle = "Axos Hub",
@@ -693,6 +727,18 @@ Load_Config_Desc = "Nhấn để tải cấu hình đã chọn.",
             CustomNameDesc = "Đặt tên tùy chỉnh cho nhân vật của bạn.",
             EnableCustomName = "Bật tên tùy chỉnh",
             EnableCustomNameDesc = "Bật tên nhân vật tùy chỉnh của bạn.",
+            CustomPlayedTime = "Thời gian chơi tùy chỉnh",
+            CustomPlayedTimeDesc = "Đặt thời gian chơi tùy chỉnh.",
+            EnableCustomPlayedTime = "Bật thời gian chơi tùy chỉnh",
+            EnableCustomPlayedTimeDesc = "Bật thời gian chơi tùy chỉnh của bạn.",
+            CustomSurvivorWins = "Trận thắng Survivor tùy chỉnh",
+            CustomSurvivorWinsDesc = "Đặt lượng trận thắng Survivor tùy chỉnh.",
+            EnableCustomSurvivorWins = "Bật trận thắng Survivor tùy chỉnh",
+            EnableCustomSurvivorWinsDesc = "Bật lượng trận thắng Survivor tùy chỉnh của bạn.",
+            CustomKillerWins = "Trận thắng Killer tùy chỉnh",
+            CustomKillerWinsDesc = "Đặt lượng trận thắng Killer tùy chỉnh.",
+            EnableCustomKillerWins = "Bật trận thắng Killer tùy chỉnh",
+            EnableCustomKillerWinsDesc = "Bật lượng trận thắng Killer tùy chỉnh của bạn.",
             Fake_Ragdoll = "Ragdoll giả",
             Fake_Ragdoll_Desc = "Tạo hiệu ứng ragdoll giả trên nhân vật của bạn.",
             CoinFlipCharges = "Số lần tung xu",
@@ -735,6 +781,28 @@ Load_Config_Desc = "Nhấn để tải cấu hình đã chọn.",
             Autosk8TrickDesc = "Tự động thực hiện các động tác Sk8.",
             SmoothSk8Controller = "Bộ điều khiển Sk8 mượt mà",
             SmoothSk8ControllerDesc = "Giúp điều khiển Sk8 mượt mà và dễ sử dụng hơn.",
+            InstantInvisAnim = "Hoạt ảnh tàng hình tức thì",
+            InstantInvisAnimDesc = "Lập tức phát hoạt ảnh tàng hình.",
+            SkillInvisAnim = "Hoạt ảnh tàng hình kỹ năng",
+            SkillInvisAnimDesc = "Phát hoạt ảnh tàng hình khi sử dụng kỹ năng.",
+            CloneToKiller = "Điều khiển clone đến Killer",
+            CloneToKillerDesc = "Điều khiển clone di chuyển đến Killer.",
+            Is007n7 = "007n7",
+            Is007n7Desc = "Các chức năng liên quan đến nhân vật 007n7.",
+            Veeronica = "Veeronica",
+            VeeronicaDesc = "Các chức năng liên quan đến nhân vật Veeronica.",
+            WalkspeedOverrideController = "Điều khiển Walkspeed Override",
+            WalkspeedOverrideControllerDesc = "Điều khiển kỹ năng Walkspeed Override.",
+            WalkspeedAutoAimTarget = "Tự động ngắm mục tiêu Walkspeed",
+            WalkspeedAutoAimTargetDesc = "Tự động ngắm Walkspeed Override vào mục tiêu.",
+            WalkspeedOverridePathfinding = "Tìm đường Walkspeed Override",
+            WalkspeedOverridePathfindingDesc = "Tự động tìm đường đến mục tiêu bằng Walkspeed Override.",
+            VoidrushController = "Điều khiển Voidrush",
+            VoidrushControllerDesc = "Điều khiển kỹ năng Voidrush.",
+            VoidrushAutoAimTarget = "Tự động ngắm mục tiêu Voidrush",
+            VoidrushAutoAimTargetDesc = "Tự động ngắm Voidrush vào mục tiêu.",
+            VoidrushPathfinding = "Tìm đường Voidrush",
+            VoidrushPathfindingDesc = "Tự động tìm đường đến mục tiêu bằng Voidrush.",
         }
     }
 })
@@ -830,7 +898,7 @@ local OpenButtonConfig = {
 
 Window:EditOpenButton(OpenButtonConfig)
 
-Window:Tag({Title = "v0.1.1", Icon = "cog", Color = Color3.fromHex("#30ff6a")})
+Window:Tag({Title = "v0.1.2", Icon = "cog", Color = Color3.fromHex("#30ff6a")})
 
 local Tabs = {
     About = Window:Section({ Title = "loc:About", Opened = true }),
@@ -1036,7 +1104,22 @@ local ElementConfigs = {
         Config = {
             Title = "loc:Veeronica",
             Desc = "loc:VeeronicaDesc",
-            Icon = "zap",
+            Icon = "spray-can",
+            Box = true,
+            BoxBorder = true,
+            Opened = false,
+            Hover = true,
+        }
+    },
+
+    {
+        ID = "Is007n7",
+        Type = "Section",
+        Parent = TabHandles.Survivors,
+        Config = {
+            Title = "loc:Is007n7",
+            Desc = "loc:Is007n7Desc",
+            Icon = "tablet",
             Box = true,
             BoxBorder = true,
             Opened = false,
@@ -1051,7 +1134,7 @@ local ElementConfigs = {
         Config = {
             Title = "loc:c00lkidd",
             Desc = "loc:c00lkiddDesc",
-            Icon = "zap",
+            Icon = "code-xml",
             Box = true,
             BoxBorder = true,
             Opened = false,
@@ -1066,7 +1149,7 @@ local ElementConfigs = {
         Config = {
             Title = "loc:Noli",
             Desc = "loc:NoliDesc",
-            Icon = "zap",
+            Icon = "scan-eye",
             Box = true,
             BoxBorder = true,
             Opened = false,
@@ -1081,7 +1164,7 @@ local ElementConfigs = {
         Config = {
             Title = "loc:Nosferatu",
             Desc = "loc:NosferatuDesc",
-            Icon = "zap",
+            Icon = "moon",
             Box = true,
             BoxBorder = true,
             Opened = false,
@@ -1096,7 +1179,7 @@ local ElementConfigs = {
         Config = {
             Title = "loc:Server",
             Desc = "loc:ServerDesc",
-            Icon = "user",
+            Icon = "server",
             Box = true,
             BoxBorder = true,
             Opened = false,
@@ -1396,7 +1479,7 @@ local ElementConfigs = {
         Config = {
             Title = "loc:Fake_Ragdoll",
             Desc = "loc:Fake_Ragdoll_Desc",
-            Icon = "ghost",
+            Icon = "accessibility",
             Box = true,
             BoxBorder = true,
             Opened = false,
@@ -3863,6 +3946,320 @@ MyUIElements.Nosferatu:Toggle({
     Callback = function(state) CoreData.Config.Bloodhook.Enabled = state end
 })
 
+SkillController = {
+    WalkspeedEnabled = false,
+    VoidrushEnabled = false,
+    WalkspeedAutoAim = false,
+    VoidrushAutoAim = false,
+    WalkspeedPathfinding = false,
+    VoidrushPathfinding = false,
+    CurrentHRP = nil,
+    TrackedLV = nil,
+    Loop = nil,
+    ActiveMode = nil,
+    SetupHRP = nil,
+    TargetPart = nil,
+    WantsKillers = false,
+    WantsSurvivors = false,
+    WalkspeedBuff = 100,
+    VoidrushBuff = 60,
+    CurrentTargetSpeed = 0,
+    Path = PathfindingService:CreatePath({
+        AgentRadius = 3, 
+        AgentHeight = 5,
+        AgentCanJump = false,
+        WaypointSpacing = 8
+    }),
+    Waypoints = {},
+    WaypointIndex = 1,
+    LastPathTime = 0,
+    NextPos = Vector3.new(),
+    UsePathfinding = false,
+    RayParams = RaycastParams.new(),
+    RayResult = nil,
+    StraightVector = Vector3.new(),
+    CamLook = Vector3.new(),
+    Direction = Vector3.new(),
+    VelocityY = 0,
+    ForwardVector = Vector3.new(),
+    NetworkModule = nil,
+    OldFire = nil,
+    ModulesFolder = nil,
+    NetworkFolder = nil,
+    NetworkScript = nil
+}
+
+task.spawn(function()
+    SkillController.ModulesFolder = game.ReplicatedStorage:WaitForChild("Modules", 15)
+    if SkillController.ModulesFolder then
+        SkillController.NetworkFolder = SkillController.ModulesFolder:WaitForChild("Network", 15)
+        if SkillController.NetworkFolder then
+            SkillController.NetworkScript = SkillController.NetworkFolder:WaitForChild("Network", 15)
+            if SkillController.NetworkScript then
+                SkillController.NetworkModule = require(SkillController.NetworkScript)
+                if SkillController.NetworkModule and not SkillController.OldFire then
+                    SkillController.OldFire = SkillController.NetworkModule.FireServerConnection
+                    SkillController.NetworkModule.FireServerConnection = function(self, remoteName, arg3, arg4, arg5, arg6)
+                        if SkillController.WalkspeedEnabled and type(remoteName) == "string" and string.find(remoteName, "C00lkiddCollision") then
+                            return
+                        end
+                        return SkillController.OldFire(self, remoteName, arg3, arg4, arg5, arg6)
+                    end
+                end
+            end
+        end
+    end
+end)
+
+function SkillController.GetTarget(targetsTable)
+    if not targetsTable then return nil end
+    SkillController.WantsKillers = table.find(targetsTable, "Killers")
+    SkillController.WantsSurvivors = table.find(targetsTable, "Survivors")
+    
+    if SkillController.WantsKillers and not SkillController.WantsSurvivors then 
+        return CoreData.State.Targets.Killers 
+    end
+    if SkillController.WantsSurvivors and not SkillController.WantsKillers then 
+        return CoreData.State.Targets.Survivors 
+    end
+    if SkillController.WantsKillers and SkillController.WantsSurvivors then
+        if CoreData.State.KillerDist < CoreData.State.SurvDist then
+            return CoreData.State.Targets.Killers or CoreData.State.Targets.Survivors
+        else
+            return CoreData.State.Targets.Survivors or CoreData.State.Targets.Killers
+        end
+    end
+    return nil
+end
+
+function SkillController.Clear()
+    if SkillController.TrackedLV and SkillController.TrackedLV.Parent then
+        SkillController.TrackedLV.Enabled = true
+    end
+    
+    if SkillController.Loop then
+        SkillController.Loop:Disconnect()
+        SkillController.Loop = nil
+    end
+    
+    SkillController.CurrentHRP = nil
+    SkillController.TrackedLV = nil
+    SkillController.ActiveMode = nil
+    SkillController.TargetPart = nil
+    SkillController.Waypoints = {}
+    SkillController.LastPathTime = 0
+end
+
+function SkillController.UpdateSteering(Delta)
+    if not SkillController.CurrentHRP or not SkillController.CurrentHRP.Parent or (SkillController.ActiveMode == "Walkspeed" and (not SkillController.TrackedLV or not SkillController.TrackedLV.Parent or SkillController.CurrentHRP.Parent:FindFirstChild("Result"))) then
+        SkillController.Clear()
+        return
+    end
+    
+    if SkillController.ActiveMode == "Walkspeed" and SkillController.TrackedLV.Enabled then
+        SkillController.TrackedLV.Enabled = false
+    end
+    
+    SkillController.TargetPart = nil
+    SkillController.UsePathfinding = false
+    
+    if SkillController.ActiveMode == "Walkspeed" and SkillController.WalkspeedAutoAim then
+        SkillController.TargetPart = SkillController.GetTarget(CoreData.Config.CorruptNature.Targets)
+        SkillController.UsePathfinding = SkillController.WalkspeedPathfinding
+    elseif SkillController.ActiveMode == "Voidrush" and SkillController.VoidrushAutoAim then
+        SkillController.TargetPart = SkillController.GetTarget(CoreData.Config.Nova.Targets)
+        SkillController.UsePathfinding = SkillController.VoidrushPathfinding
+    end
+    
+    if SkillController.TargetPart and SkillController.TargetPart:IsA("BasePart") then
+        if SkillController.UsePathfinding then
+            SkillController.StraightVector = SkillController.TargetPart.Position - SkillController.CurrentHRP.Position
+            SkillController.RayParams.FilterType = Enum.RaycastFilterType.Exclude
+            SkillController.RayParams.FilterDescendantsInstances = {playerCharacter, SkillController.TargetPart.Parent}
+            
+            SkillController.RayResult = Workspace:Raycast(SkillController.CurrentHRP.Position, SkillController.StraightVector, SkillController.RayParams)
+            
+            if not SkillController.RayResult then
+                SkillController.Direction = Vector3.new(
+                    SkillController.TargetPart.Position.X - SkillController.CurrentHRP.Position.X,
+                    0,
+                    SkillController.TargetPart.Position.Z - SkillController.CurrentHRP.Position.Z
+                )
+            else
+                if tick() - SkillController.LastPathTime > 0.2 then
+                    SkillController.LastPathTime = tick()
+                    SkillController.Path:ComputeAsync(SkillController.CurrentHRP.Position, SkillController.TargetPart.Position)
+                    
+                    if SkillController.Path.Status == Enum.PathStatus.Success then
+                        SkillController.Waypoints = SkillController.Path:GetWaypoints()
+                        SkillController.WaypointIndex = 2 
+                    end
+                end
+                
+                if SkillController.Waypoints and SkillController.Waypoints[SkillController.WaypointIndex] then
+                    SkillController.NextPos = SkillController.Waypoints[SkillController.WaypointIndex].Position
+
+                    if Vector3.new(SkillController.NextPos.X - SkillController.CurrentHRP.Position.X, 0, SkillController.NextPos.Z - SkillController.CurrentHRP.Position.Z).Magnitude < 8 then
+                        if SkillController.WaypointIndex < #SkillController.Waypoints then
+                            SkillController.WaypointIndex = SkillController.WaypointIndex + 1
+                            SkillController.NextPos = SkillController.Waypoints[SkillController.WaypointIndex].Position
+                        end
+                    end
+                    
+                    SkillController.Direction = Vector3.new(
+                        SkillController.NextPos.X - SkillController.CurrentHRP.Position.X,
+                        0,
+                        SkillController.NextPos.Z - SkillController.CurrentHRP.Position.Z
+                    )
+                else
+                    SkillController.Direction = Vector3.new(
+                        SkillController.TargetPart.Position.X - SkillController.CurrentHRP.Position.X,
+                        0,
+                        SkillController.TargetPart.Position.Z - SkillController.CurrentHRP.Position.Z
+                    )
+                end
+            end
+        else
+            SkillController.Direction = Vector3.new(
+                SkillController.TargetPart.Position.X - SkillController.CurrentHRP.Position.X,
+                0,
+                SkillController.TargetPart.Position.Z - SkillController.CurrentHRP.Position.Z
+            )
+        end
+    else
+        SkillController.CamLook = Camera.CFrame.LookVector
+        SkillController.Direction = Vector3.new(SkillController.CamLook.X, 0, SkillController.CamLook.Z)
+    end
+    
+    if SkillController.Direction.Magnitude > 0 then
+        SkillController.Direction = SkillController.Direction.Unit
+    else
+        SkillController.Direction = SkillController.CurrentHRP.CFrame.LookVector
+    end
+    
+    if SkillController.ActiveMode == "Walkspeed" then
+        SkillController.CurrentHRP.CFrame = SkillController.CurrentHRP.CFrame:Lerp(CFrame.lookAt(SkillController.CurrentHRP.Position, SkillController.CurrentHRP.Position + SkillController.Direction), Delta * 15)
+        SkillController.CurrentTargetSpeed = SkillController.WalkspeedBuff
+    elseif SkillController.ActiveMode == "Voidrush" then
+        SkillController.CurrentHRP.CFrame = CFrame.lookAt(SkillController.CurrentHRP.Position, SkillController.CurrentHRP.Position + SkillController.Direction)
+        SkillController.CurrentTargetSpeed = SkillController.VoidrushBuff
+    end
+    
+    SkillController.ForwardVector = SkillController.CurrentHRP.CFrame.LookVector
+    SkillController.VelocityY = SkillController.CurrentHRP.AssemblyLinearVelocity.Y
+    
+    SkillController.CurrentHRP.AssemblyLinearVelocity = Vector3.new(
+        SkillController.ForwardVector.X * SkillController.CurrentTargetSpeed,
+        SkillController.VelocityY,
+        SkillController.ForwardVector.Z * SkillController.CurrentTargetSpeed
+    )
+end
+
+function SkillController.SetupCharacter(Character)
+    SkillController.SetupHRP = Character:WaitForChild("HumanoidRootPart", 5)
+    
+    if SkillController.SetupHRP then
+        SkillController.SetupHRP.ChildAdded:Connect(function(Child)
+            if SkillController.WalkspeedEnabled and Child:IsA("LinearVelocity") and Character:GetAttribute("FootstepsMuted") == true then
+                SkillController.Clear()
+                SkillController.CurrentHRP = Character:FindFirstChild("HumanoidRootPart")
+                SkillController.TrackedLV = Child
+                SkillController.ActiveMode = "Walkspeed"
+                SkillController.Loop = RunService.Heartbeat:Connect(SkillController.UpdateSteering)
+            end
+        end)
+    end
+    
+    Character:GetAttributeChangedSignal("VoidRushState"):Connect(function()
+        if not SkillController.VoidrushEnabled then return end
+        
+        if Character:GetAttribute("VoidRushState") == "Dashing" then
+            SkillController.Clear()
+            SkillController.CurrentHRP = Character:FindFirstChild("HumanoidRootPart")
+            if SkillController.CurrentHRP then
+                SkillController.ActiveMode = "Voidrush"
+                SkillController.Loop = RunService.Heartbeat:Connect(SkillController.UpdateSteering)
+            end
+        elseif SkillController.ActiveMode == "Voidrush" then
+            SkillController.Clear()
+        end
+    end)
+end
+
+if playerCharacter then
+    SkillController.SetupCharacter(playerCharacter)
+end
+
+localPlayer.CharacterAdded:Connect(function(Character)
+    SkillController.SetupCharacter(Character)
+end)
+
+MyUIElements.c00lkidd:Toggle({ 
+    Title = "loc:WalkspeedOverrideController",
+    Desc = "loc:WalkspeedOverrideControllerDesc",
+    Flag = "Walkspeed Override Controller",
+    Value = false,
+    Callback = function(Value)
+        SkillController.WalkspeedEnabled = Value
+        if not Value and SkillController.ActiveMode == "Walkspeed" then
+            SkillController.Clear()
+        end
+    end
+})
+
+MyUIElements.c00lkidd:Toggle({ 
+    Title = "loc:WalkspeedAutoAimTarget",
+    Desc = "loc:WalkspeedAutoAimTargetDesc",
+    Flag = "Walkspeed Auto Aim Target",
+    Value = false,
+    Callback = function(Value)
+        SkillController.WalkspeedAutoAim = Value
+    end
+})
+
+MyUIElements.c00lkidd:Toggle({ 
+    Title = "loc:WalkspeedOverridePathfinding",
+    Desc = "loc:WalkspeedOverridePathfindingDesc",
+    Flag = "Walkspeed Pathfinding Target",
+    Value = false,
+    Callback = function(Value)
+        SkillController.WalkspeedPathfinding = Value
+    end
+})
+
+MyUIElements.Noli:Toggle({ 
+    Title = "loc:VoidrushController",
+    Desc = "loc:VoidrushControllerDesc",
+    Flag = "Voidrush Steering Controller",
+    Value = false,
+    Callback = function(Value)
+        SkillController.VoidrushEnabled = Value
+        if not Value and SkillController.ActiveMode == "Voidrush" then
+            SkillController.Clear()
+        end
+    end
+})
+
+MyUIElements.Noli:Toggle({ 
+    Title = "loc:VoidrushAutoAimTarget",
+    Desc = "loc:VoidrushAutoAimTargetDesc",
+    Flag = "Voidrush Auto Aim Target",
+    Value = false,
+    Callback = function(Value)
+        SkillController.VoidrushAutoAim = Value
+    end
+})
+
+MyUIElements.Noli:Toggle({ 
+    Title = "loc:VoidrushPathfinding",
+    Desc = "loc:VoidrushPathfindingDesc",
+    Flag = "Voidrush Pathfinding Target",
+    Value = false,
+    Callback = function(Value)
+        SkillController.VoidrushPathfinding = Value
+    end
+})
+
 VeeronicaMods = {
     States = {
         AutoTrick = false,
@@ -4128,6 +4525,141 @@ MyUIElements.Veeronica:Toggle({
     Flag = "Veeronica_SmoothSteer",
     Value = false,
     Callback = VeeronicaMods.ToggleSmoothSteer
+})
+
+InvisData = {
+    Config = {
+        InstantAnim = false,
+        SkillAnim = false,
+        CloneToKiller = false
+    },
+    State = {
+        AnimId = "rbxassetid://115509603980568",
+        AnimTrack = nil,
+        IsPlaying = false,
+        IsTransparent = false,
+        LastTransparentState = false
+    },
+    Hooks = {
+        OldGetMousePos = nil,
+        IsMouseHooked = false
+    },
+    Logic = {},
+    Cache = {}
+}
+
+InvisData.Logic.Check007Eligibility = function()
+    return (playerCharacter and playerCharacter.Name == "007n7") and true or false
+end
+
+InvisData.Logic.GetAnimator = function()
+    if not playerCharacter then return nil end
+    InvisData.Cache.Hum = playerCharacter:FindFirstChildOfClass("Humanoid")
+    return InvisData.Cache.Hum and InvisData.Cache.Hum:FindFirstChildOfClass("Animator")
+end
+
+InvisData.Logic.StopAnim = function()
+    if InvisData.State.AnimTrack then
+        InvisData.State.AnimTrack:Stop(0.1)
+        InvisData.State.AnimTrack = nil
+    end
+    InvisData.State.IsPlaying = false
+end
+
+InvisData.Logic.PlayAnim = function()
+    if InvisData.State.IsPlaying then return end
+    InvisData.Cache.Animator = InvisData.Logic.GetAnimator()
+    if not InvisData.Cache.Animator then return end
+    
+    InvisData.Cache.Anim = Instance.new("Animation")
+    InvisData.Cache.Anim.AnimationId = InvisData.State.AnimId
+    
+    InvisData.State.AnimTrack = InvisData.Cache.Animator:LoadAnimation(InvisData.Cache.Anim)
+    InvisData.State.AnimTrack.Priority = Enum.AnimationPriority.Action4
+    InvisData.State.AnimTrack:Play(0.1)
+    InvisData.State.AnimTrack:AdjustSpeed(0)
+    InvisData.State.IsPlaying = true
+end
+
+InvisData.Logic.UpdateAnim = function()
+    InvisData.Cache.IsSkillValid = InvisData.Config.SkillAnim and InvisData.State.IsTransparent and InvisData.Logic.Check007Eligibility()
+    InvisData.Cache.ShouldPlay = InvisData.Config.InstantAnim or InvisData.Cache.IsSkillValid
+    
+    if InvisData.Cache.ShouldPlay then
+        InvisData.Logic.PlayAnim()
+    else
+        InvisData.Logic.StopAnim()
+    end
+end
+
+InvisData.Logic.CheckTransparency = function()
+    if not playerCharacter then return false end
+    InvisData.Cache.Head = playerCharacter:FindFirstChild("Head")
+    return (InvisData.Cache.Head and InvisData.Cache.Head.Transparency > 0.3) or false
+end
+
+InvisData.Logic.HookCursorMouse = function()
+    if InvisData.Hooks.IsMouseHooked then return end
+    
+    InvisData.Cache.CurrentMod = ReplicatedStorage
+    InvisData.Cache.ModulePath = {"Systems", "Player", "Miscellaneous", "GetPlayerMousePosition"}
+    
+    for _, path in ipairs(InvisData.Cache.ModulePath) do
+        InvisData.Cache.CurrentMod = InvisData.Cache.CurrentMod and InvisData.Cache.CurrentMod:FindFirstChild(path)
+    end
+    
+    if not InvisData.Cache.CurrentMod then return end
+    InvisData.Cache.ReqMod = require(InvisData.Cache.CurrentMod)
+    
+    if type(InvisData.Cache.ReqMod) ~= "table" or not InvisData.Cache.ReqMod.GetMousePos then return end
+    
+    InvisData.Hooks.IsMouseHooked = true
+    InvisData.Hooks.OldGetMousePos = hookfunction(InvisData.Cache.ReqMod.GetMousePos, function(self, ...)
+        if InvisData.Config.CloneToKiller and InvisData.State.IsTransparent and InvisData.Logic.Check007Eligibility() then
+            if CoreData and CoreData.State and CoreData.State.Targets and CoreData.State.Targets.Killers then
+                return CoreData.State.Targets.Killers.Position
+            end
+        end
+        return InvisData.Hooks.OldGetMousePos(self, ...)
+    end)
+end
+
+task.spawn(function()
+    InvisData.Logic.HookCursorMouse()
+end)
+
+task.spawn(function()
+    while task.wait(0.05) do
+        InvisData.State.IsTransparent = InvisData.Logic.CheckTransparency()
+        
+        if InvisData.State.IsTransparent ~= InvisData.State.LastTransparentState then
+            InvisData.State.LastTransparentState = InvisData.State.IsTransparent
+            InvisData.Logic.UpdateAnim()
+        end
+    end
+end)
+
+MyUIElements.Is007n7:Toggle({
+    Title = "loc:InstantInvisAnim", Desc = "loc:InstantInvisAnimDesc", Flag = "Instant_Invis_Anim", Value = false,
+    Callback = function(state)
+        InvisData.Config.InstantAnim = state
+        InvisData.Logic.UpdateAnim()
+    end
+})
+
+MyUIElements.Is007n7:Toggle({
+    Title = "loc:SkillInvisAnim", Desc = "loc:SkillInvisAnimDesc", Flag = "Skill_Invis_Anim", Value = false,
+    Callback = function(state)
+        InvisData.Config.SkillAnim = state
+        InvisData.Logic.UpdateAnim()
+    end
+})
+
+MyUIElements.Is007n7:Toggle({
+    Title = "loc:CloneToKiller", Desc = "loc:CloneToKillerDesc", Flag = "Clone_To_Killer", Value = false,
+    Callback = function(state)
+        InvisData.Config.CloneToKiller = state
+    end
 })
 
 local ServerManager = {
@@ -5239,153 +5771,268 @@ TeleportLogic:InitEvents()
 
 StatusLogic = {
     ParagraphUI = nil,
-    LocalPlayer = localPlayer,
     CustomName = "None",
     CustomNameEnabled = false,
-    Connections = {},
-    OriginalNames = {},
-    WatchedObjects = {},
-
-    TargetPaths = {
-        ["Username"] = {
-            {Depth = 1, ParentName = "PlayerInfo"},
-            {Depth = 2, ParentName = "CurrentSurvivors"}
-        },
-        ["PlayerName"] = {
-            {Depth = 1, ParentName = "BasicInfo"}
-        }
+    
+    CustomStats = {
+        Time = 0,
+        SurvivorWins = 0,
+        KillerWins = 0
+    },
+    Toggles = {
+        Time = false,
+        SurvivorWins = false,
+        KillerWins = false
     },
 
-    FormatName = function(self, value)
-        self.CustomName = (tostring(value) == "" or tostring(value) == "nil") and "None" or tostring(value)
-    end,
+    Connections = {},
+    CoreConnection = nil,
+    OriginalTexts = {},
+    WatchedObjects = {},
+    
+    Cache = {
+        IsUpdating = false,
+        LastSetTexts = {}
+    },
 
-    GetStatValue = function(self, statName)
-        return (self.LocalPlayer:FindFirstChild("leaderstats") and self.LocalPlayer.leaderstats:FindFirstChild(statName)) 
-            and self.LocalPlayer.leaderstats[statName].Value 
-            or "0"
-    end,
-
-    UpdateUI = function(self)
-        if not self.ParagraphUI then return end
-        
-        if self.ParagraphUI.SetDesc then
-            self.ParagraphUI:SetDesc(string.format("Money: $%s\nKiller Chance (Malice): %s%%", tostring(self:GetStatValue("Money")), tostring(self:GetStatValue("KillerChance"))))
-        elseif self.ParagraphUI.SetText then
-            self.ParagraphUI:SetText("loc:Update", string.format("Money: $%s\nKiller Chance (Malice): %s%%", tostring(self:GetStatValue("Money")), tostring(self:GetStatValue("KillerChance"))))
-        end
-    end,
-
-    DisconnectCustomName = function(self)
-        for _, connection in ipairs(self.Connections) do
-            connection:Disconnect()
-        end
-        table.clear(self.Connections)
-        table.clear(self.WatchedObjects)
-    end,
-
-    EscapeString = function(self, str)
-        return string.gsub(str, "[%^%$%(%)%%%.%[%]%*%+%-%?]", "%%%1")
-    end,
-
-    ReplaceTargetName = function(self, text)
-        if string.find(text, self:EscapeString(self.LocalPlayer.DisplayName)) then
-            return string.gsub(text, self:EscapeString(self.LocalPlayer.DisplayName), self.CustomName), true
-        elseif string.find(text, self:EscapeString(self.LocalPlayer.Name)) then
-            return string.gsub(text, self:EscapeString(self.LocalPlayer.Name), self.CustomName), true
-        end
-        return text, false
-    end,
-
-    ApplyCustomName = function(self, object)
-        if not self.CustomNameEnabled or not object or not object.Parent then return end
-
-        local newText, isTarget = self:ReplaceTargetName(object.Text)
-
-        if isTarget and object.Text ~= newText then
-            self.OriginalNames[object] = object.Text
-            object.Text = newText
-        end
-    end,
-
-    WatchNameObject = function(self, object)
-        if self.WatchedObjects[object] then return end
-        self.WatchedObjects[object] = true
-
-        self:ApplyCustomName(object)
-        
-        self.Connections[#self.Connections + 1] = object:GetPropertyChangedSignal("Text"):Connect(function()
-            if self.CustomNameEnabled then
-                self:ApplyCustomName(object)
-            end
-        end)
-    end,
-
-    RestoreNames = function(self)
-        for object, originalName in pairs(self.OriginalNames) do
-            if object and object.Parent then
-                object.Text = originalName
-            end
-        end
-        table.clear(self.OriginalNames)
-    end,
-
-    ProcessNameObject = function(self, object)
-        if not self.CustomNameEnabled or not object or not object:IsA("TextLabel") or not self.TargetPaths[object.Name] then return end
-
-        for _, path in ipairs(self.TargetPaths[object.Name]) do
-            if path.Depth == 1 and object.Parent and object.Parent.Name == path.ParentName then
-                self:WatchNameObject(object)
-                break
-            elseif path.Depth == 2 and object.Parent and object.Parent.Parent and object.Parent.Parent.Name == path.ParentName then
-                self:WatchNameObject(object)
-                break
-            end
-        end
-    end,
-
-    ScanExistingUI = function(self)
-        if not self.CustomNameEnabled or not PlayerGui then return end
-        for _, object in ipairs(PlayerGui:GetDescendants()) do
-            self:ProcessNameObject(object)
-        end
-    end,
-
-    UpdateState = function(self, state)
-        self.CustomNameEnabled = state
-        
-        self:DisconnectCustomName()
-        self:RestoreNames()
-
-        if self.CustomNameEnabled then
-            self:FormatName(self.CustomName)
-            self:ScanExistingUI()
-
-            self.Connections[#self.Connections + 1] = PlayerGui.DescendantAdded:Connect(function(object)
-                self:ProcessNameObject(object)
-            end)
-        end
-    end,
-
-    StartMonitor = function(self)
-        task.spawn(function()
-            if not self.LocalPlayer:WaitForChild("leaderstats", 15) then return end
-
-            for _, statName in ipairs({"Money", "KillerChance"}) do
-                if self.LocalPlayer.leaderstats:WaitForChild(statName, 5) then
-                    self.LocalPlayer.leaderstats[statName]:GetPropertyChangedSignal("Value"):Connect(function()
-                        self:UpdateUI()
-                    end)
-                end
-            end
-            self:UpdateUI()
-        end)
-    end
+    TargetPaths = {
+        ["Username"] = { {Type = "Name", Depth = 1, ParentName = "PlayerInfo"}, {Type = "Name", Depth = 2, ParentName = "CurrentSurvivors"} },
+        ["PlayerName"] = { {Type = "Name", Depth = 1, ParentName = "BasicInfo"} },
+        ["TimePlayed"] = { {Type = "Stat", StatName = "Time"} },
+        ["Wins"] = { 
+            {Type = "Stat", StatName = "SurvivorWins", ParentName = "SurvivorWins"},
+            {Type = "Stat", StatName = "KillerWins", ParentName = "KillerWins"}
+        }
+    }
 }
+
+StatusLogic.FormatName = function(self, value)
+    self.CustomName = (tostring(value) == "" or tostring(value) == "nil") and "None" or tostring(value)
+end
+
+StatusLogic.FormatClock = function(self, seconds)
+    self.Cache.Days = math.floor(seconds / 86400)
+    self.Cache.Hours = math.floor((seconds % 86400) / 3600)
+    self.Cache.Mins = math.floor((seconds % 3600) / 60)
+    self.Cache.Secs = seconds % 60
+
+    if self.Cache.Days > 0 then
+        return string.format("%d:%02d:%02d:%02d", self.Cache.Days, self.Cache.Hours, self.Cache.Mins, self.Cache.Secs)
+    else
+        return string.format("%02d:%02d:%02d", self.Cache.Hours, self.Cache.Mins, self.Cache.Secs)
+    end
+end
+
+StatusLogic.ParseNumber = function(self, text)
+    return tonumber(string.match(text, "%d+")) or 0
+end
+
+StatusLogic.ParseClockToSeconds = function(self, text)
+    self.Cache.d, self.Cache.h, self.Cache.m, self.Cache.s = string.match(text, "(%d+):(%d+):(%d+):(%d+)")
+    if self.Cache.d then
+        return (tonumber(self.Cache.d) * 86400) + (tonumber(self.Cache.h) * 3600) + (tonumber(self.Cache.m) * 60) + tonumber(self.Cache.s)
+    end
+
+    self.Cache.h, self.Cache.m, self.Cache.s = string.match(text, "(%d+):(%d+):(%d+)")
+    if self.Cache.h then
+        return (tonumber(self.Cache.h) * 3600) + (tonumber(self.Cache.m) * 60) + tonumber(self.Cache.s)
+    end
+
+    self.Cache.m, self.Cache.s = string.match(text, "(%d+):(%d+)")
+    if self.Cache.m then
+        return (tonumber(self.Cache.m) * 60) + tonumber(self.Cache.s)
+    end
+
+    return self:ParseNumber(text)
+end
+
+StatusLogic.GetRealStats = function(self)
+    self.Cache.RealData = { Money = "0", Malice = "0", Time = 0, SWins = 0, KWins = 0 }
+    self.Cache.Leaderstats = localPlayer:FindFirstChild("leaderstats")
+    
+    if self.Cache.Leaderstats then
+        self.Cache.MoneyObj = self.Cache.Leaderstats:FindFirstChild("Money")
+        self.Cache.MaliceObj = self.Cache.Leaderstats:FindFirstChild("KillerChance")
+        self.Cache.RealData.Money = self.Cache.MoneyObj and self.Cache.MoneyObj.Value or "0"
+        self.Cache.RealData.Malice = self.Cache.MaliceObj and self.Cache.MaliceObj.Value or "0"
+    end
+    
+    pcall(function()
+        self.Cache.DataModule = require(ReplicatedStorage.Modules.Data.DataHandler)
+        self.Cache.PData = self.Cache.DataModule:Get(localPlayer)
+        if self.Cache.PData and self.Cache.PData:FindFirstChild("Stats") then
+            self.Cache.RealData.Time = self.Cache.PData.Stats.General.TimePlayed.Value
+            self.Cache.RealData.SWins = self.Cache.PData.Stats.SurvivorStats.SurvivorWins.Value
+            self.Cache.RealData.KWins = self.Cache.PData.Stats.KillerStats.KillerWins.Value
+        end
+    end)
+    return self.Cache.RealData
+end
+
+StatusLogic.UpdateUI = function(self)
+    if not self.ParagraphUI then return end
+    self.Cache.Stats = self:GetRealStats()
+    self.Cache.DescText = string.format(
+        "Money: $%s\nMalice: %s%%\nTime Played: %s\nSurvivor Wins: %s\nKiller Wins: %s", 
+        tostring(self.Cache.Stats.Money), 
+        tostring(self.Cache.Stats.Malice),
+        self:FormatClock(self.Cache.Stats.Time),
+        tostring(self.Cache.Stats.SWins),
+        tostring(self.Cache.Stats.KWins)
+    )
+    
+    if self.ParagraphUI.SetDesc then
+        self.ParagraphUI:SetDesc(self.Cache.DescText)
+    elseif self.ParagraphUI.SetText then
+        self.ParagraphUI:SetText("loc:Update", self.Cache.DescText)
+    end
+end
+
+StatusLogic.ClearConnections = function(self)
+    for _, Connection in ipairs(self.Connections) do
+        Connection:Disconnect()
+    end
+    table.clear(self.Connections)
+    table.clear(self.WatchedObjects)
+end
+
+StatusLogic.EscapeString = function(self, str)
+    return string.gsub(str, "[%^%$%(%)%%%.%[%]%*%+%-%?]", "%%%1")
+end
+
+StatusLogic.ProcessTextReplacement = function(self, object, pathInfo)
+    if self.Cache.IsUpdating then return end
+    self.Cache.IsUpdating = true
+
+    self.Cache.OldText = object.Text
+    self.Cache.NewText = self.Cache.OldText
+    self.Cache.IsTarget = false
+
+    if pathInfo.Type == "Name" and self.CustomNameEnabled then
+        if string.find(self.Cache.OldText, self:EscapeString(localPlayer.DisplayName)) then
+            self.Cache.NewText = string.gsub(self.Cache.OldText, self:EscapeString(localPlayer.DisplayName), self.CustomName)
+            self.Cache.IsTarget = true
+        elseif string.find(self.Cache.OldText, self:EscapeString(localPlayer.Name)) then
+            self.Cache.NewText = string.gsub(self.Cache.OldText, self:EscapeString(localPlayer.Name), self.CustomName)
+            self.Cache.IsTarget = true
+        end
+    elseif pathInfo.Type == "Stat" then
+        self.Cache.BaseText = self.OriginalTexts[object] or self.Cache.OldText
+        
+        if pathInfo.StatName == "Time" and self.Toggles.Time then
+            self.Cache.BaseTime = self:ParseClockToSeconds(self.Cache.BaseText)
+            self.Cache.NewText = "Time Played: " .. self:FormatClock(self.Cache.BaseTime + self.CustomStats.Time)
+            self.Cache.IsTarget = true
+        elseif pathInfo.StatName == "SurvivorWins" and self.Toggles.SurvivorWins then
+            self.Cache.BaseWins = self:ParseNumber(self.Cache.BaseText)
+            self.Cache.NewText = tostring(self.Cache.BaseWins + self.CustomStats.SurvivorWins)
+            self.Cache.IsTarget = true
+        elseif pathInfo.StatName == "KillerWins" and self.Toggles.KillerWins then
+            self.Cache.BaseWins = self:ParseNumber(self.Cache.BaseText)
+            self.Cache.NewText = tostring(self.Cache.BaseWins + self.CustomStats.KillerWins)
+            self.Cache.IsTarget = true
+        end
+    end
+
+    if self.Cache.IsTarget and object.Text ~= self.Cache.NewText then
+        object.Text = self.Cache.NewText
+        self.Cache.LastSetTexts[object] = self.Cache.NewText
+    end
+    
+    self.Cache.IsUpdating = false
+end
+
+StatusLogic.WatchObject = function(self, object, pathInfo)
+    if self.WatchedObjects[object] then return end
+    self.WatchedObjects[object] = true
+
+    if not self.OriginalTexts[object] then
+        self.OriginalTexts[object] = object.Text
+    end
+
+    self:ProcessTextReplacement(object, pathInfo)
+    
+    table.insert(self.Connections, object:GetPropertyChangedSignal("Text"):Connect(function()
+        if self.Cache.IsUpdating then return end
+        
+        if object.Text ~= self.Cache.LastSetTexts[object] then
+            self.OriginalTexts[object] = object.Text
+            self:ProcessTextReplacement(object, pathInfo)
+        end
+    end))
+end
+
+StatusLogic.RestoreTexts = function(self)
+    self.Cache.IsUpdating = true
+    for TargetObject, OriginalText in pairs(self.OriginalTexts) do
+        if TargetObject and TargetObject.Parent then
+            TargetObject.Text = OriginalText
+        end
+    end
+    self.Cache.IsUpdating = false
+    table.clear(self.OriginalTexts)
+    table.clear(self.Cache.LastSetTexts)
+end
+
+StatusLogic.ProcessObject = function(self, object)
+    if not object or not object:IsA("TextLabel") or not self.TargetPaths[object.Name] then return end
+
+    for _, Path in ipairs(self.TargetPaths[object.Name]) do
+        if Path.Type == "Name" and self.CustomNameEnabled then
+            if Path.Depth == 1 and object.Parent and object.Parent.Name == Path.ParentName then
+                self:WatchObject(object, Path)
+                break
+            elseif Path.Depth == 2 and object.Parent and object.Parent.Parent and object.Parent.Parent.Name == Path.ParentName then
+                self:WatchObject(object, Path)
+                break
+            end
+        elseif Path.Type == "Stat" then
+            if (Path.StatName == "Time" and self.Toggles.Time) or 
+               (Path.StatName == "SurvivorWins" and self.Toggles.SurvivorWins and object.Parent and object.Parent.Name == Path.ParentName) or
+               (Path.StatName == "KillerWins" and self.Toggles.KillerWins and object.Parent and object.Parent.Name == Path.ParentName) then
+                self:WatchObject(object, Path)
+                break
+            end
+        end
+    end
+end
+
+StatusLogic.ScanExistingUI = function(self)
+    if not PlayerGui then return end
+    for _, UIObject in ipairs(PlayerGui:GetDescendants()) do
+        self:ProcessObject(UIObject)
+    end
+end
+
+StatusLogic.UpdateState = function(self)
+    self:ClearConnections()
+    self:RestoreTexts()
+
+    self:FormatName(self.CustomName)
+    self:ScanExistingUI()
+
+    if PlayerGui then
+        table.insert(self.Connections, PlayerGui.DescendantAdded:Connect(function(UIObject)
+            self:ProcessObject(UIObject)
+        end))
+    end
+end
+
+StatusLogic.StartMonitor = function(self)
+    task.spawn(function()
+        self.CoreConnection = RunService.Heartbeat:Connect(function()
+            self.Cache.CurrentTick = tick()
+            if not self.Cache.LastUpdate or (self.Cache.CurrentTick - self.Cache.LastUpdate) >= 1 then
+                self.Cache.LastUpdate = self.Cache.CurrentTick
+                self:UpdateUI()
+            end
+        end)
+    end)
+end
 
 StatusLogic.ParagraphUI = MyUIElements.Status:Paragraph({
     Title = "loc:Status",
-    Desc = "Money: Loading...\nKiller Chance: Loading...",
+    Desc = "Loading real stats...",
     Icon = "how",
 })
 
@@ -5400,7 +6047,7 @@ MyUIElements.Status:Input({
     Callback = function(value)
         StatusLogic:FormatName(value)
         if StatusLogic.CustomNameEnabled then
-            StatusLogic:UpdateState(true)
+            StatusLogic:UpdateState()
         end
     end
 })
@@ -5411,7 +6058,83 @@ MyUIElements.Status:Toggle({
     Flag = "Custom_Name_Toggle",
     Value = false,
     Callback = function(state)
-        StatusLogic:UpdateState(state)
+        StatusLogic.CustomNameEnabled = state
+        StatusLogic:UpdateState()
+    end
+})
+
+MyUIElements.Status:Input({
+    Title = "loc:CustomPlayedTime",
+    Desc = "loc:CustomPlayedTimeDesc",
+    Flag = "Custom_Time_Input",
+    Placeholder = "0",
+    Value = "0",
+    Callback = function(value)
+        StatusLogic.CustomStats.Time = tonumber(value) or 0
+        if StatusLogic.Toggles.Time then
+            StatusLogic:UpdateState()
+        end
+    end
+})
+
+MyUIElements.Status:Toggle({
+    Title = "loc:EnableCustomPlayedTime",
+    Desc = "loc:EnableCustomPlayedTimeDesc",
+    Flag = "Custom_Time_Toggle",
+    Value = false,
+    Callback = function(state)
+        StatusLogic.Toggles.Time = state
+        StatusLogic:UpdateState()
+    end
+})
+
+MyUIElements.Status:Input({
+    Title = "loc:CustomSurvivorWins",
+    Desc = "loc:CustomSurvivorWinsDesc",
+    Flag = "Custom_SWins_Input",
+    Placeholder = "0",
+    Value = "0",
+    Callback = function(value)
+        StatusLogic.CustomStats.SurvivorWins = tonumber(value) or 0
+        if StatusLogic.Toggles.SurvivorWins then
+            StatusLogic:UpdateState()
+        end
+    end
+})
+
+MyUIElements.Status:Toggle({
+    Title = "loc:EnableCustomSurvivorWins",
+    Desc = "loc:EnableCustomSurvivorWinsDesc",
+    Flag = "Custom_SWins_Toggle",
+    Value = false,
+    Callback = function(state)
+        StatusLogic.Toggles.SurvivorWins = state
+        StatusLogic:UpdateState()
+    end
+})
+
+MyUIElements.Status:Input({
+    Title = "loc:CustomKillerWins",
+    Desc = "loc:CustomKillerWinsDesc",
+    Flag = "Custom_KWins_Input",
+    Placeholder = "0",
+    Value = "0",
+    Callback = function(value)
+        StatusLogic.CustomStats.KillerWins = tonumber(value) or 0
+        if StatusLogic.Toggles.KillerWins then
+            StatusLogic:UpdateState()
+        end
+    end
+})
+
+MyUIElements.Status:Toggle({
+    Title = "loc:EnableCustomKillerWins",
+    Desc = "loc:EnableCustomKillerWinsDesc",
+    Flag = "Custom_KWins_Toggle",
+    Value = false,
+    Callback = function(state)
+        StatusLogic.Toggles.KillerWins = state
+        StatusLogic:UpdateState()
     end
 })
 
@@ -6572,97 +7295,6 @@ MyUIElements.Bypass:Toggle({
         else
             AntiSlowFeature:ClearConnections()
         end
-    end
-})
-
-ScriptData = {
-    Vars = {},
-
-    Utils = {
-        SafeRequire = function(moduleObj)
-            if not moduleObj then return nil end
-            ScriptData.Vars.S, ScriptData.Vars.M = pcall(require, moduleObj)
-            return (ScriptData.Vars.S and type(ScriptData.Vars.M) == "table") and ScriptData.Vars.M or nil
-        end,
-        ClearConn = function(tbl, key)
-            if tbl[key] then tbl[key]:Disconnect(); tbl[key] = nil end
-        end
-    },
-
-    AntiCheat = {
-        State = false,
-        HooksInit = false,
-        Conns = {},
-
-        InitHooks = function()
-            if ScriptData.AntiCheat.HooksInit then return end
-            ScriptData.AntiCheat.HooksInit = true
-            
-            ScriptData.AntiCheat.OldNamecall = hookmetamethod(game, "__namecall", function(self, ...)
-                if ScriptData.AntiCheat.State and getnamecallmethod() == "GetAttribute" then
-                    if ((...) == "sv_anticheat_disabled" and self == Workspace) or ((...) == "anticheat_disabled" and self == localPlayer) then
-                        return true
-                    end
-                end
-                return ScriptData.AntiCheat.OldNamecall(self, ...)
-            end)
-
-            task.spawn(function()
-                ScriptData.Vars.StatusesMod = ScriptData.Utils.SafeRequire(ReplicatedStorage:FindFirstChild("Statuses", true))
-                if ScriptData.Vars.StatusesMod and ScriptData.Vars.StatusesMod.ApplyStatus and not ScriptData.Vars.StatusesMod.OrigApply then
-                    ScriptData.Vars.StatusesMod.OrigApply = ScriptData.Vars.StatusesMod.ApplyStatus
-                    ScriptData.Vars.StatusesMod.ApplyStatus = function(self, char, statusName, ...)
-                        if ScriptData.AntiCheat.State and statusName == "Hacked" and char == playerCharacter then return end
-                        return ScriptData.Vars.StatusesMod.OrigApply(self, char, statusName, ...)
-                    end
-                end
-                
-                ScriptData.Vars.HackedMod = ScriptData.Utils.SafeRequire(ReplicatedStorage:FindFirstChild("Hacked", true))
-                if ScriptData.Vars.HackedMod and not ScriptData.Vars.HackedMod.OrigApplied then
-                    ScriptData.Vars.HackedMod.OrigApplied, ScriptData.Vars.HackedMod.OrigHeartbeat = ScriptData.Vars.HackedMod.Applied, ScriptData.Vars.HackedMod.Heartbeat
-                    localPlayer:GetAttributeChangedSignal("AntiStatusToggled"):Connect(function()
-                        ScriptData.Vars.HackedToggled = localPlayer:GetAttribute("AntiStatusToggled")
-                        ScriptData.Vars.HackedMod.Applied = ScriptData.Vars.HackedToggled and function() end or ScriptData.Vars.HackedMod.OrigApplied
-                        ScriptData.Vars.HackedMod.Heartbeat = ScriptData.Vars.HackedToggled and function() end or ScriptData.Vars.HackedMod.OrigHeartbeat
-                    end)
-                end
-            end)
-        end,
-
-        Apply = function(state)
-            ScriptData.AntiCheat.State = state
-            ScriptData.AntiCheat.InitHooks()
-            
-            Workspace:SetAttribute("sv_anticheat_disabled", state)
-            localPlayer:SetAttribute("anticheat_disabled", state)
-            localPlayer:SetAttribute("AntiStatusToggled", state)
-
-            if state then
-                task.spawn(function()
-                    ScriptData.Vars.Network = ScriptData.Utils.SafeRequire(ReplicatedStorage:FindFirstChild("Network", true))
-                    if ScriptData.Vars.Network and ScriptData.Vars.Network.FireServerConnection then
-                        ScriptData.Vars.Network:FireServerConnection("AdminAction", "REMOTE_EVENT", { ["AnticheatDisableFlag"] = true })
-                    end
-                end)
-
-                ScriptData.AntiCheat.Conns.Respawn = localPlayer.CharacterAdded:Connect(function()
-                    localPlayer:SetAttribute("anticheat_disabled", true)
-                    localPlayer:SetAttribute("AntiStatusToggled", true)
-                end)
-            else
-                ScriptData.Utils.ClearConn(ScriptData.AntiCheat.Conns, "Respawn")
-            end
-        end
-    }
-}
-
-MyUIElements.Bypass:Toggle({
-    Title = "loc:BypassAntiCheat",
-    Desc = "loc:BypassAntiCheatDesc",
-    Flag = "AntiCheatToggleFlag",
-    Value = true,
-    Callback = function(state)
-        ScriptData.AntiCheat.Apply(state)
     end
 })
 
