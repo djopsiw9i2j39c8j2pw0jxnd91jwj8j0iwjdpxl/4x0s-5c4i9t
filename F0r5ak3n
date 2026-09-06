@@ -459,6 +459,8 @@ WindUI:Localization({
             VoidrushAutoAimTargetDesc = "Automatically aim Voidrush at the target.",
             VoidrushPathfinding = "Voidrush Pathfinding",
             VoidrushPathfindingDesc = "Automatically navigate to the target using Voidrush.",
+            AntiStun = "Anti Stun",
+            AntiStunDesc = "Protects you from being stunned when attacked.",
         },
         vi = {
             HubTitle = "Axos Hub",
@@ -803,6 +805,8 @@ Load_Config_Desc = "Nhấn để tải cấu hình đã chọn.",
             VoidrushAutoAimTargetDesc = "Tự động ngắm Voidrush vào mục tiêu.",
             VoidrushPathfinding = "Tìm đường Voidrush",
             VoidrushPathfindingDesc = "Tự động tìm đường đến mục tiêu bằng Voidrush.",
+            AntiStun = "Chống choáng",
+            AntiStunDesc = "Giúp bạn không bị choáng váng khi bị tấn công.",
         }
     }
 })
@@ -1119,6 +1123,21 @@ local ElementConfigs = {
         Config = {
             Title = "loc:Is007n7",
             Desc = "loc:Is007n7Desc",
+            Icon = "tablet",
+            Box = true,
+            BoxBorder = true,
+            Opened = false,
+            Hover = true,
+        }
+    },
+
+    {
+        ID = "Guest1337",
+        Type = "Section",
+        Parent = TabHandles.Survivors,
+        Config = {
+            Title = "loc:Guest1337",
+            Desc = "loc:Guest1337Desc",
             Icon = "tablet",
             Box = true,
             BoxBorder = true,
@@ -4662,6 +4681,193 @@ MyUIElements.Is007n7:Toggle({
     end
 })
 
+HitboxSystem = {
+    Config = {
+        Size = Vector3.new(10, 7, 18),
+        HalfSize = Vector3.new(5, 3.5, 9),
+        ShiftBack = 2,
+        ColorSafe = Color3.fromRGB(255, 30, 30),     
+        ColorDanger = Color3.fromRGB(30, 255, 30),   
+        Transparency = 0.15                         
+    },
+    State = {
+        IsActive = false,
+        Connection = nil,
+        ActiveHitboxes = {},
+        CurrentChildren = nil,
+        CurrentIndex = 1,
+        CurrentChar = nil,
+        TargetHumanoid = nil,
+        ActivePart = nil,
+        ActiveSubPart = nil,
+        CleanupChar = nil,
+        NextChar = nil,
+        NewPart = nil,
+        NewSubPart = nil,
+        TargetColor = nil,
+        PlayerPos = nil,
+        RelativePos = nil,
+        IsInside = false
+    }
+}
+
+HitboxSystem.Config.Offset = CFrame.new(
+    0, 
+    (HitboxSystem.Config.Size.Y / 2) - 2.5, 
+    -(HitboxSystem.Config.Size.Z / 2) + HitboxSystem.Config.ShiftBack
+)
+
+HitboxSystem.IsLocalPlayerChar = function(char)
+    if not char then return false end
+    return (char == playerCharacter) 
+        or (char == localPlayer.Character) 
+        or (char.Name == localPlayer.Name) 
+        or (Players:GetPlayerFromCharacter(char) == localPlayer)
+end
+
+HitboxSystem.CreateHitbox = function()
+    HitboxSystem.State.NewPart = Instance.new("Part")
+    HitboxSystem.State.NewPart.Name = "KillerHitbox"
+    HitboxSystem.State.NewPart.Material = Enum.Material.ForceField
+    HitboxSystem.State.NewPart.Transparency = HitboxSystem.Config.Transparency 
+    HitboxSystem.State.NewPart.CanCollide = false
+    HitboxSystem.State.NewPart.CanTouch = false
+    HitboxSystem.State.NewPart.CanQuery = false
+    HitboxSystem.State.NewPart.CastShadow = false
+    HitboxSystem.State.NewPart.Anchored = true
+    HitboxSystem.State.NewPart.Shape = Enum.PartType.Block
+    HitboxSystem.State.NewPart.Size = HitboxSystem.Config.Size
+
+    HitboxSystem.State.NewSubPart = Instance.new("Part")
+    HitboxSystem.State.NewSubPart.Name = "SubForcefield"
+    HitboxSystem.State.NewSubPart.Material = Enum.Material.ForceField
+    HitboxSystem.State.NewSubPart.Transparency = HitboxSystem.Config.Transparency
+    HitboxSystem.State.NewSubPart.CanCollide = false
+    HitboxSystem.State.NewSubPart.CanTouch = false
+    HitboxSystem.State.NewSubPart.CanQuery = false
+    HitboxSystem.State.NewSubPart.CastShadow = false
+    HitboxSystem.State.NewSubPart.Anchored = true
+    HitboxSystem.State.NewSubPart.Shape = Enum.PartType.Block
+    HitboxSystem.State.NewSubPart.Size = HitboxSystem.Config.Size * 0.999 
+    HitboxSystem.State.NewSubPart.Parent = HitboxSystem.State.NewPart
+
+    HitboxSystem.State.NewPart.Parent = Workspace
+    return HitboxSystem.State.NewPart
+end
+
+HitboxSystem.RemoveHitbox = function(char)
+    if char and HitboxSystem.State.ActiveHitboxes[char] then
+        HitboxSystem.State.ActiveHitboxes[char]:Destroy()
+        HitboxSystem.State.ActiveHitboxes[char] = nil
+    end
+end
+
+HitboxSystem.OnHeartbeat = function()
+    if playerCharacter and playerCharacter.PrimaryPart then
+        HitboxSystem.State.PlayerPos = playerCharacter.PrimaryPart.Position
+    elseif localPlayer.Character and localPlayer.Character.PrimaryPart then
+        HitboxSystem.State.PlayerPos = localPlayer.Character.PrimaryPart.Position
+    else
+        HitboxSystem.State.PlayerPos = nil
+    end
+
+    HitboxSystem.State.CurrentChildren = killersFolder:GetChildren()
+    HitboxSystem.State.CurrentIndex = 1
+
+    while HitboxSystem.State.CurrentIndex <= #HitboxSystem.State.CurrentChildren do
+        HitboxSystem.State.CurrentChar = HitboxSystem.State.CurrentChildren[HitboxSystem.State.CurrentIndex]
+        
+        if not HitboxSystem.IsLocalPlayerChar(HitboxSystem.State.CurrentChar) and HitboxSystem.State.CurrentChar.PrimaryPart then
+            HitboxSystem.State.TargetHumanoid = HitboxSystem.State.CurrentChar:FindFirstChild("Humanoid")
+            
+            if HitboxSystem.State.TargetHumanoid and HitboxSystem.State.TargetHumanoid.Health > 0 then
+                if not HitboxSystem.State.ActiveHitboxes[HitboxSystem.State.CurrentChar] then
+                    HitboxSystem.State.ActiveHitboxes[HitboxSystem.State.CurrentChar] = HitboxSystem.CreateHitbox()
+                end
+                
+                HitboxSystem.State.ActivePart = HitboxSystem.State.ActiveHitboxes[HitboxSystem.State.CurrentChar]
+                HitboxSystem.State.ActivePart.CFrame = HitboxSystem.State.CurrentChar.PrimaryPart.CFrame * HitboxSystem.Config.Offset
+                
+                HitboxSystem.State.ActiveSubPart = HitboxSystem.State.ActivePart:FindFirstChild("SLK_SubForcefield")
+                if HitboxSystem.State.ActiveSubPart then
+                    HitboxSystem.State.ActiveSubPart.CFrame = HitboxSystem.State.ActivePart.CFrame
+                end
+
+                if HitboxSystem.State.PlayerPos then
+                    HitboxSystem.State.RelativePos = HitboxSystem.State.ActivePart.CFrame:PointToObjectSpace(HitboxSystem.State.PlayerPos)
+                    
+                    HitboxSystem.State.IsInside = 
+                        math.abs(HitboxSystem.State.RelativePos.X) <= HitboxSystem.Config.HalfSize.X and
+                        math.abs(HitboxSystem.State.RelativePos.Y) <= HitboxSystem.Config.HalfSize.Y and
+                        math.abs(HitboxSystem.State.RelativePos.Z) <= HitboxSystem.Config.HalfSize.Z
+                else
+                    HitboxSystem.State.IsInside = false
+                end
+                
+                HitboxSystem.State.TargetColor = HitboxSystem.State.IsInside and HitboxSystem.Config.ColorDanger or HitboxSystem.Config.ColorSafe
+                
+                if HitboxSystem.State.ActivePart.Color ~= HitboxSystem.State.TargetColor then
+                    HitboxSystem.State.ActivePart.Color = HitboxSystem.State.TargetColor
+                    if HitboxSystem.State.ActiveSubPart then
+                        HitboxSystem.State.ActiveSubPart.Color = HitboxSystem.State.TargetColor
+                    end
+                end
+            else
+                HitboxSystem.RemoveHitbox(HitboxSystem.State.CurrentChar)
+            end
+        else
+            HitboxSystem.RemoveHitbox(HitboxSystem.State.CurrentChar)
+        end
+        
+        HitboxSystem.State.CurrentIndex = HitboxSystem.State.CurrentIndex + 1
+    end
+
+    HitboxSystem.State.CleanupChar = next(HitboxSystem.State.ActiveHitboxes)
+    while HitboxSystem.State.CleanupChar do
+        HitboxSystem.State.NextChar = next(HitboxSystem.State.ActiveHitboxes, HitboxSystem.State.CleanupChar)
+
+        if HitboxSystem.IsLocalPlayerChar(HitboxSystem.State.CleanupChar)
+           or not HitboxSystem.State.CleanupChar.Parent 
+           or HitboxSystem.State.CleanupChar.Parent ~= killersFolder 
+           or not HitboxSystem.State.CleanupChar.PrimaryPart then
+            
+            HitboxSystem.RemoveHitbox(HitboxSystem.State.CleanupChar)
+        end
+        
+        HitboxSystem.State.CleanupChar = HitboxSystem.State.NextChar
+    end
+end
+
+HitboxSystem.ToggleFeatures = function(state)
+    HitboxSystem.State.IsActive = state
+
+    if state then
+        HitboxSystem.State.Connection = RunService.Heartbeat:Connect(HitboxSystem.OnHeartbeat)
+    else
+        if HitboxSystem.State.Connection then
+            HitboxSystem.State.Connection:Disconnect()
+            HitboxSystem.State.Connection = nil
+        end
+        
+        HitboxSystem.State.CleanupChar = next(HitboxSystem.State.ActiveHitboxes)
+        while HitboxSystem.State.CleanupChar do
+            HitboxSystem.State.NextChar = next(HitboxSystem.State.ActiveHitboxes, HitboxSystem.State.CleanupChar)
+            HitboxSystem.RemoveHitbox(HitboxSystem.State.CleanupChar)
+            HitboxSystem.State.CleanupChar = HitboxSystem.State.NextChar
+        end
+    end
+end
+
+MyUIElements.Guest1337:Toggle({
+    Title = "loc:ShowAttackHitbox",
+    Desc = "loc:ShowAttackHitboxDesc",
+    Flag = "ShowAttackHitbox",
+    Value = false,
+    Callback = function(state)
+        HitboxSystem.ToggleFeatures(state)
+    end
+})
+
 local ServerManager = {
     ManualJobId = ""
 }
@@ -7217,64 +7423,225 @@ MyUIElements.Bypass:Toggle({
     end
 })
 
-local AntiSlowFeature = {
-    Enabled = false,
-    Connections = {}
+BypassSys = {
+    Flags = {
+        AntiSlow = false,
+        AntiStun = false
+    },
+    State = {
+        Conns = {},
+        MoveConn = nil,
+        AnimBlocked = false,
+        LastStun = false,
+        CtrlBlocked = false,
+        HiddenGuis = {},
+        ActionName = "BlockMovement",
+        SprintMod = nil,
+        Updating = false
+    },
+    Temp = {} 
 }
 
-function AntiSlowFeature:HideUI()
+BypassSys.HideUI = function(statusName)
     pcall(function()
-        local mainUI = PlayerGui:FindFirstChild("MainUI")
-        if not mainUI then return end
-
-        local status = mainUI:FindFirstChild("StatusContainer")
-        if not status then return end
-
-        local slowUI = status:FindFirstChild("Slowness")
-        if slowUI and slowUI.Visible then
-            slowUI.Visible = false
+        if PlayerGui:FindFirstChild("MainUI") and PlayerGui.MainUI:FindFirstChild("StatusContainer") then
+            if statusName then
+                if PlayerGui.MainUI.StatusContainer:FindFirstChild(statusName) then
+                    PlayerGui.MainUI.StatusContainer[statusName].Visible = false
+                end
+            else
+                if PlayerGui.MainUI.StatusContainer:FindFirstChild("Slowness") then
+                    PlayerGui.MainUI.StatusContainer.Slowness.Visible = false
+                end
+                if PlayerGui.MainUI.StatusContainer:FindFirstChild("Stunned") then
+                    PlayerGui.MainUI.StatusContainer.Stunned.Visible = false
+                end
+            end
         end
     end)
 end
 
-function AntiSlowFeature:ClearConnections()
-    for _, conn in ipairs(self.Connections) do
-        if conn.Connected then
-            conn:Disconnect()
+BypassSys.SetTouch = function(visible)
+    if localPlayer:FindFirstChildOfClass("PlayerGui") then
+        for _, gui in ipairs(localPlayer:FindFirstChildOfClass("PlayerGui"):GetDescendants()) do
+            if gui:IsA("GuiObject") and (gui.Name:lower():find("joystick") or gui.Name:lower():find("thumbstick") or gui.Name:lower():find("move")) then
+                if visible then
+                    if BypassSys.State.HiddenGuis[gui] ~= nil then
+                        gui.Visible = BypassSys.State.HiddenGuis[gui]
+                    end
+                else
+                    BypassSys.State.HiddenGuis[gui] = gui.Visible
+                    gui.Visible = false
+                end
+            end
         end
     end
-    table.clear(self.Connections)
 end
 
-function AntiSlowFeature:OnSpeedChanged(val)
-    if self.Enabled and val:IsA("NumberValue") and val.Value < 1 then
-        val.Value = 0.9
-        self:HideUI()
-    end
-end
-
-function AntiSlowFeature:HookSurvivor(survivor)
-    if survivor:GetAttribute("Username") ~= localPlayer.Name then return end
-    
-    local speedFolder = survivor:WaitForChild("SpeedMultipliers", 3)
-    if not speedFolder then return end
-
-    for _, val in ipairs(speedFolder:GetChildren()) do
-        self:OnSpeedChanged(val)
-        table.insert(self.Connections, val:GetPropertyChangedSignal("Value"):Connect(function()
-            self:OnSpeedChanged(val)
-        end))
+BypassSys.FixSprintAnim = function()
+    if not BypassSys.State.SprintMod then
+        for _, v in ipairs(getgc(true)) do
+            if type(v) == "table" and rawget(v, "StaminaFreezeLocks") and rawget(v, "IsSprinting") ~= nil then
+                BypassSys.State.SprintMod = v
+                break
+            end
+        end
     end
 
-    table.insert(self.Connections, speedFolder.ChildAdded:Connect(function(val)
-        task.defer(function()
-            self:OnSpeedChanged(val)
-            table.insert(self.Connections, val:GetPropertyChangedSignal("Value"):Connect(function()
-                self:OnSpeedChanged(val)
-            end))
+    if BypassSys.State.SprintMod then
+        BypassSys.State.SprintMod.IsSprinting = not BypassSys.State.SprintMod.IsSprinting
+        if BypassSys.State.SprintMod.__sprintedEvent then
+            BypassSys.State.SprintMod.__sprintedEvent:Fire(BypassSys.State.SprintMod.IsSprinting)
+        end
+        
+        task.delay(0.05, function()
+            BypassSys.State.SprintMod.IsSprinting = not BypassSys.State.SprintMod.IsSprinting
+            if BypassSys.State.SprintMod.__sprintedEvent then
+                BypassSys.State.SprintMod.__sprintedEvent:Fire(BypassSys.State.SprintMod.IsSprinting)
+            end
         end)
-    end))
+    end
 end
+
+BypassSys.Restore = function()
+    if BypassSys.State.MoveConn then
+        BypassSys.State.MoveConn:Disconnect()
+        BypassSys.State.MoveConn = nil
+    end
+    ContextActionService:UnbindAction(BypassSys.State.ActionName)
+    BypassSys.SetTouch(true)
+    BypassSys.State.CtrlBlocked = false
+    BypassSys.State.AnimBlocked = false
+end
+
+BypassSys.DisableCtrl = function(duration)
+    if BypassSys.State.CtrlBlocked then return end
+    if not (localPlayer.Character and localPlayer.Character:FindFirstChildOfClass("Humanoid")) then return end
+
+    BypassSys.State.CtrlBlocked = true
+    BypassSys.SetTouch(false)
+
+    ContextActionService:BindAction(
+        BypassSys.State.ActionName,
+        function() return Enum.ContextActionResult.Sink end,
+        false,
+        Enum.PlayerActions.CharacterForward,
+        Enum.PlayerActions.CharacterBackward,
+        Enum.PlayerActions.CharacterLeft,
+        Enum.PlayerActions.CharacterRight,
+        Enum.PlayerActions.CharacterJump
+    )
+
+    if BypassSys.State.MoveConn then BypassSys.State.MoveConn:Disconnect() end
+
+    BypassSys.State.MoveConn = RunService.RenderStepped:Connect(function()
+        if localPlayer.Character and localPlayer.Character:FindFirstChildOfClass("Humanoid") and localPlayer.Character:FindFirstChildOfClass("Humanoid").Parent then
+            localPlayer.Character:FindFirstChildOfClass("Humanoid"):Move(Vector3.zero, true)
+            if localPlayer.Character:FindFirstChildOfClass("Humanoid").RootPart then
+                localPlayer.Character:FindFirstChildOfClass("Humanoid").RootPart.AssemblyLinearVelocity = Vector3.zero
+            end
+        end
+    end)
+
+    task.delay(duration or 0.2, function()
+        BypassSys.Restore()
+        if localPlayer.Character and localPlayer.Character:FindFirstChildOfClass("Humanoid") then
+            task.wait()
+            localPlayer.Character:FindFirstChildOfClass("Humanoid"):Move(localPlayer.Character:FindFirstChildOfClass("Humanoid").MoveDirection, true)
+        end
+    end)
+end
+
+BypassSys.BlockAnim = function(duration)
+    if BypassSys.State.AnimBlocked then return end
+    BypassSys.State.AnimBlocked = true
+
+    if localPlayer.Character and localPlayer.Character:FindFirstChildOfClass("Humanoid") then
+        for _, track in ipairs(localPlayer.Character:FindFirstChildOfClass("Humanoid"):GetPlayingAnimationTracks()) do
+            track:Stop(0)
+        end
+        BypassSys.FixSprintAnim()
+    end
+
+    task.delay(duration or 0.1, function()
+        BypassSys.State.AnimBlocked = false
+    end)
+end
+
+BypassSys.OnSpeedChanged = function(val)
+    if not (val and val:IsA("NumberValue")) or BypassSys.State.Updating then return end
+
+    if BypassSys.Flags.AntiSlow and val.Name ~= "Stunned" and val.Value < 1 then
+        BypassSys.State.Updating = true
+        val.Value = 0.9
+        BypassSys.State.Updating = false
+        BypassSys.HideUI("Slowness")
+    end
+
+    if BypassSys.Flags.AntiStun and val.Name == "Stunned" then
+        if val.Value < 1 then
+            BypassSys.State.Updating = true
+            val.Value = 1
+            BypassSys.State.Updating = false
+
+            BypassSys.HideUI("Stunned")
+
+            if not BypassSys.State.LastStun then
+                BypassSys.State.LastStun = true
+                BypassSys.BlockAnim(0.1)
+
+                task.delay(0.2, function()
+                    BypassSys.State.LastStun = false
+                end)
+            end
+        end
+    end
+end
+
+BypassSys.HookChar = function(char)
+    if char:GetAttribute("Username") ~= localPlayer.Name then return end
+    
+    task.spawn(function()
+        BypassSys.Temp.SpeedFolder = char:WaitForChild("SpeedMultipliers", 3)
+        if not BypassSys.Temp.SpeedFolder then return end
+
+        for _, val in ipairs(BypassSys.Temp.SpeedFolder:GetChildren()) do
+            BypassSys.OnSpeedChanged(val)
+            table.insert(BypassSys.State.Conns, val:GetPropertyChangedSignal("Value"):Connect(function()
+                BypassSys.OnSpeedChanged(val)
+            end))
+        end
+
+        table.insert(BypassSys.State.Conns, BypassSys.Temp.SpeedFolder.ChildAdded:Connect(function(val)
+            task.defer(function()
+                BypassSys.OnSpeedChanged(val)
+                table.insert(BypassSys.State.Conns, val:GetPropertyChangedSignal("Value"):Connect(function()
+                    BypassSys.OnSpeedChanged(val)
+                end))
+            end)
+        end))
+    end)
+end
+
+BypassSys.EvaluateAll = function()
+    if BypassSys.Temp.SpeedFolder then
+        for _, val in ipairs(BypassSys.Temp.SpeedFolder:GetChildren()) do
+            BypassSys.OnSpeedChanged(val)
+        end
+    end
+end
+
+BypassSys.InitFolder = function(folder)
+    for _, char in ipairs(folder:GetChildren()) do
+        BypassSys.HookChar(char)
+    end
+    folder.ChildAdded:Connect(function(char)
+        BypassSys.HookChar(char)
+    end)
+end
+
+BypassSys.InitFolder(survivorsFolder)
+BypassSys.InitFolder(killersFolder)
 
 MyUIElements.Bypass:Toggle({
     Title = "loc:AntiSlow",
@@ -7282,18 +7649,23 @@ MyUIElements.Bypass:Toggle({
     Flag = "ToggleAntiSlow",
     Value = false,
     Callback = function(state)
-        AntiSlowFeature.Enabled = state
-        
-        if AntiSlowFeature.Enabled then
-            for _, survivor in ipairs(survivorsFolder:GetChildren()) do
-                AntiSlowFeature:HookSurvivor(survivor)
-            end
-            
-            table.insert(AntiSlowFeature.Connections, survivorsFolder.ChildAdded:Connect(function(survivor)
-                AntiSlowFeature:HookSurvivor(survivor)
-            end))
-        else
-            AntiSlowFeature:ClearConnections()
+        BypassSys.Flags.AntiSlow = state
+        if state then BypassSys.EvaluateAll() end
+    end
+})
+
+MyUIElements.Bypass:Toggle({
+    Title = "loc:AntiStun",
+    Desc = "loc:AntiStunDesc",
+    Flag = "Anti-Stun",
+    Value = false,
+    Callback = function(state)
+        BypassSys.Flags.AntiStun = state
+        if state then 
+            BypassSys.EvaluateAll() 
+        else 
+            BypassSys.Restore() 
+            BypassSys.State.LastStun = false 
         end
     end
 })
