@@ -141,6 +141,7 @@ WindUI:Localization({
             Survivors = "Survivors",
             Killers = "Killers",
             Status = "Status",
+            Troll = "Troll",
             Information = "Information",
             Update = "Update",
             UpdateDesc = "None Update",
@@ -461,6 +462,32 @@ WindUI:Localization({
             VoidrushPathfindingDesc = "Automatically navigate to the target using Voidrush.",
             AntiStun = "Anti Stun",
             AntiStunDesc = "Protects you from being stunned when attacked.",
+            ShowHitbox = "Show Hitbox",
+            ShowHitboxDesc = "Display the hitbox of the target.",
+            AutoPunch = "Auto Punch",
+            AutoPunchDesc = "Automatically punch the target.",
+            AutoBlock = "Auto Block",
+            AutoBlockDesc = "Automatically block incoming attacks.",
+            ChargeController = "Charge Controller",
+            ChargeControllerDesc = "Control the charge of the ability.",
+            AutoAimPizza = "Auto Aim Pizza",
+            AutoAimPizzaDesc = "Automatically aim the pizza at the target.",
+            RadiusAim = "Radius Aim",
+            RadiusAimDesc = "Set the radius used for aiming at targets.",
+             ShowPortalSkill = "Show Portal Skill",
+            ShowPortalSkillDesc = "Show the Portal skill button.",
+            DragSkillGui = "Drag Skill GUI",
+            DragSkillGuiDesc = "Allow the skill GUI to be moved.",
+            SkillButtonSize = "Skill Button Size",
+            SkillButtonSizeDesc = "Adjust the size of the skill button.",
+            PcKeyUseSkill = "PC Key Use Skill",
+            PcKeyUseSkillDesc = "Set the PC key used to activate the skill.",
+            Guest1337 = "Guest1337",
+            Guest1337Desc = "Features related to the Guest1337 character.",
+            Elliot = "Elliot",
+            ElliotDesc = "Features related to the Elliot character.",
+            RickPrime = "Rick Prime",
+            RickPrimeDesc = "Rick Prime's high-tech abilities.",
         },
         vi = {
             HubTitle = "Axos Hub",
@@ -486,6 +513,7 @@ WindUI:Localization({
             Survivors = "Kẻ sống sót",
             Killers = "Sát Nhân",
             Status = "Thông số",
+            Troll = "Trò đùa",
             Information = "Thông tin",
             Update = "Cập nhật",
             UpdateDesc = "Không có update",
@@ -807,6 +835,32 @@ Load_Config_Desc = "Nhấn để tải cấu hình đã chọn.",
             VoidrushPathfindingDesc = "Tự động tìm đường đến mục tiêu bằng Voidrush.",
             AntiStun = "Chống choáng",
             AntiStunDesc = "Giúp bạn không bị choáng váng khi bị tấn công.",
+            ShowHitbox = "Hiển thị Hitbox",
+            ShowHitboxDesc = "Hiển thị hitbox của mục tiêu.",
+            AutoPunch = "Tự động đấm",
+            AutoPunchDesc = "Tự động đấm mục tiêu.",
+            AutoBlock = "Tự động chặn",
+            AutoBlockDesc = "Tự động chặn các đòn tấn công.",
+            ChargeController = "Điều khiển tích lực",
+            ChargeControllerDesc = "Điều khiển quá trình tích lực của kỹ năng.",
+            AutoAimPizza = "Tự động ngắm Pizza",
+            AutoAimPizzaDesc = "Tự động ngắm Pizza vào mục tiêu.",
+            RadiusAim = "Ngắm theo bán kính",
+            RadiusAimDesc = "Đặt bán kính sử dụng để ngắm mục tiêu.",
+            ShowPortalSkill = "Hiển thị kỹ năng Cổng",
+            ShowPortalSkillDesc = "Hiển thị nút kỹ năng Cổng.",
+            DragSkillGui = "Kéo giao diện kỹ năng",
+            DragSkillGuiDesc = "Cho phép di chuyển giao diện kỹ năng.",
+            SkillButtonSize = "Kích thước nút kỹ năng",
+            SkillButtonSizeDesc = "Điều chỉnh kích thước nút kỹ năng.",
+            PcKeyUseSkill = "Phím PC sử dụng kỹ năng",
+            PcKeyUseSkillDesc = "Đặt phím PC dùng để kích hoạt kỹ năng.",
+            Guest1337 = "Guest1337",
+            Guest1337Desc = "Các chức năng liên quan đến nhân vật Guest1337",
+            Elliot = "Elliot",
+            ElliotDesc = "Các chức năng liên quan đến nhân vật Elliot",
+            RickPrime = "Rick Prime",
+            RickPrimeDesc = "Các sức mạnh công nghệ cao của rick prime",
         }
     }
 })
@@ -902,7 +956,7 @@ local OpenButtonConfig = {
 
 Window:EditOpenButton(OpenButtonConfig)
 
-Window:Tag({Title = "v0.1.2", Icon = "cog", Color = Color3.fromHex("#30ff6a")})
+Window:Tag({Title = "v0.1.3", Icon = "cog", Color = Color3.fromHex("#30ff6a")})
 
 local Tabs = {
     About = Window:Section({ Title = "loc:About", Opened = true }),
@@ -964,6 +1018,11 @@ local TabHandles = {
     
     TP = Tabs.Gameplay:Tab({ 
         Title = "loc:Teleport", Icon = "map", Desc = "Dịch Chuyển", IconThemed = true, 
+        Locked = false, ShowTabTitle = true, Border = true, LayoutOrder = 1
+    }),
+    
+    Troll = Tabs.Gameplay:Tab({ 
+        Title = "loc:Troll", Icon = "laugh", Desc = "Trò đùa", IconThemed = true, 
         Locked = false, ShowTabTitle = true, Border = true, LayoutOrder = 1
     }),
     
@@ -1138,7 +1197,22 @@ local ElementConfigs = {
         Config = {
             Title = "loc:Guest1337",
             Desc = "loc:Guest1337Desc",
-            Icon = "tablet",
+            Icon = "sheid",
+            Box = true,
+            BoxBorder = true,
+            Opened = false,
+            Hover = true,
+        }
+    },
+
+    {
+        ID = "Elliot",
+        Type = "Section",
+        Parent = TabHandles.Survivors,
+        Config = {
+            Title = "loc:Elliot",
+            Desc = "loc:ElliotDesc",
+            Icon = "pizza",
             Box = true,
             BoxBorder = true,
             Opened = false,
@@ -1462,6 +1536,21 @@ local ElementConfigs = {
     },
 
     {
+        ID = "RickPrime",
+        Type = "Section",
+        Parent = TabHandles.Troll,
+        Config = {
+            Title = "loc:RickPrime",
+            Desc = "loc:RickPrimeDesc",
+            Icon = "orbit",
+            Box = true,
+            BoxBorder = true,
+            Opened = false,
+            Hover = true,
+        }
+    },
+
+    {
         ID = "Status",
         Type = "Section",
         Parent = TabHandles.Status,
@@ -1580,7 +1669,22 @@ local ElementConfigs = {
             Hover = true,
         }
     },
-    
+
+    {
+        ID = "GamePlay",
+        Type = "Section",
+        Parent = TabHandles.Misc,
+        Config = {
+            Title = "loc:GamePlay",
+            Desc = "loc:GamePlayDesc",
+            Icon = "shield-off",
+            Box = true,
+            BoxBorder = true,
+            Opened = false,
+            Hover = true,
+        }
+    },
+
     {
         ID = "Hallucination",
         Type = "Section",
@@ -1943,7 +2047,7 @@ ESP = {
     ViewSizeConn = nil,
     PendingRemove = {},
     Config = {
-        MaxDistance = 1000,
+        MaxDistance = 500,
         UpdateInterval = 0.12
     },
     Cache = {
@@ -2723,17 +2827,20 @@ PuzzleBot.Funcs.SolvePuzzle = function(puzzle)
         end
 
         if not PuzzleBot.Vars.IsPerfect then
-            puzzle.paths[colorIndex] = {}
-            if puzzle.updateGui then puzzle:updateGui() end
-            task.wait(0.1) 
-            
-            for _, node in ipairs(PuzzleBot.Vars.OrderedSolPath) do
-                if not PuzzleBot.Config.AutoSolve or puzzle.gameEnded then break end
-                table.insert(puzzle.paths[colorIndex], {row = node.row, col = node.col})
+            if PuzzleBot.Config.SolveSpeed <= 0 then
+                puzzle.paths[colorIndex] = PuzzleBot.Vars.OrderedSolPath
                 if puzzle.updateGui then puzzle:updateGui() end
-                task.wait(PuzzleBot.Config.SolveSpeed) 
+            else
+                puzzle.paths[colorIndex] = {}
+                if puzzle.updateGui then puzzle:updateGui() end
+                
+                for _, node in ipairs(PuzzleBot.Vars.OrderedSolPath) do
+                    if not PuzzleBot.Config.AutoSolve or puzzle.gameEnded then break end
+                    table.insert(puzzle.paths[colorIndex], {row = node.row, col = node.col})
+                    if puzzle.updateGui then puzzle:updateGui() end
+                    task.wait(PuzzleBot.Config.SolveSpeed) 
+                end
             end
-            task.wait(0.1) 
         end
     end
     
@@ -2751,7 +2858,7 @@ MyUIElements.Generator:Input({
     Callback = function(val)
         PuzzleBot.Vars.Speed = tonumber(val)
         if PuzzleBot.Vars.Speed then
-            PuzzleBot.Config.SolveSpeed = math.clamp(PuzzleBot.Vars.Speed, 0.07, 10)
+            PuzzleBot.Config.SolveSpeed = math.clamp(PuzzleBot.Vars.Speed, 0, 10)
         end
     end
 })
@@ -3692,7 +3799,6 @@ CoreData = {
         MaxAimDistance = 500,
         CoinFlip = { Enabled = false, Charges = 3, Distance = 75 },
         AutoAim = { Enabled = false }, 
-        Bloodhook = { Enabled = false, Targets = {"Survivors"} }, 
         PlasmaBeam = { Enabled = false, Targets = {"Killers"} },
         CorruptNature = { Enabled = false, Targets = {"Survivors"} },
         Nova = { Enabled = false, Targets = {"Survivors"} }
@@ -3706,7 +3812,6 @@ CoreData = {
         IsDusekkar = false,
         Isc00lkidd = false,
         IsNoli = false,
-        IsNosferatu = false,
         LastSafeState = nil,
         ShortestDist = math.huge,
         NearestTarget = nil,
@@ -3716,12 +3821,10 @@ CoreData = {
         WantsKillers = false,
         WantsSurvivors = false,
         FlintlockReady = false,
-        BloodhookReady = false,
 
         Targets = {
             Killers = nil,
             Survivors = nil,
-            Bloodhook = nil,
             PlasmaBeam = nil,
             CorruptNature = nil,
             Nova = nil
@@ -3824,7 +3927,6 @@ task.spawn(function()
         CoreData.State.IsDusekkar = (playerCharacter.Name == "Dusekkar" and playerCharacter:IsDescendantOf(survivorsFolder))
         CoreData.State.Isc00lkidd = (playerCharacter.Name == "c00lkidd" and playerCharacter:IsDescendantOf(killersFolder))
         CoreData.State.IsNoli = (playerCharacter.Name == "Noli" and playerCharacter:IsDescendantOf(killersFolder))
-        CoreData.State.IsNosferatu = ((playerCharacter.Name == "Nosferatu" or playerCharacter.Name == "Nos") and playerCharacter:IsDescendantOf(killersFolder)) 
 
         CoreData.State.Targets.Killers, CoreData.State.KillerDist = CoreData.Logic.FindNearestTarget(killersFolder)
         CoreData.State.Targets.Survivors, CoreData.State.SurvDist = CoreData.Logic.FindNearestTarget(survivorsFolder)
@@ -3832,10 +3934,8 @@ task.spawn(function()
         CoreData.State.Targets.PlasmaBeam = CoreData.Logic.GetAbilityTarget("PlasmaBeam", CoreData.State.IsDusekkar)
         CoreData.State.Targets.CorruptNature = CoreData.Logic.GetAbilityTarget("CorruptNature", CoreData.State.Isc00lkidd)
         CoreData.State.Targets.Nova = CoreData.Logic.GetAbilityTarget("Nova", CoreData.State.IsNoli)
-        CoreData.State.Targets.Bloodhook = CoreData.Logic.GetAbilityTarget("Bloodhook", CoreData.State.IsNosferatu) 
 
         CoreData.State.FlintlockReady = (CoreData.Config.AutoAim.Enabled and CoreData.State.IsChance and CoreData.State.CachedFlintlock and CoreData.State.CachedFlintlock:IsA("BasePart") and CoreData.State.CachedFlintlock.Transparency < 1 and CoreData.State.Targets.Killers and CoreData.State.KillerDist <= CoreData.Config.MaxAimDistance) == true
-        CoreData.State.BloodhookReady = (CoreData.Config.Bloodhook.Enabled and CoreData.State.IsNosferatu and CoreData.State.Targets.Bloodhook and CoreData.State.SurvDist <= CoreData.Config.MaxAimDistance) == true
 
         if CoreData.Config.CoinFlip.Enabled and CoreData.State.IsChance then
             CoreData.State.IsSafe = (CoreData.State.KillerDist > CoreData.Config.CoinFlip.Distance)
@@ -3855,8 +3955,6 @@ CoreData.Hooks.OldIndex = hookmetamethod(game, "__index", newcclosure(function(s
             if caller and caller.Name ~= "PlayerModule" and not string.find(caller.Name, "Camera") and not string.find(caller.Name, "Control") then
                 if CoreData.State.FlintlockReady and CoreData.State.Targets.Killers then
                     return CoreData.Logic.GetFlatAimCFrame(self.Position, CoreData.State.Targets.Killers.Position)
-                elseif CoreData.State.BloodhookReady and CoreData.State.Targets.Bloodhook then
-                    return CoreData.Logic.GetFlatAimCFrame(self.Position, CoreData.State.Targets.Bloodhook.Position)
                 end
             end
         end
@@ -3864,8 +3962,6 @@ CoreData.Hooks.OldIndex = hookmetamethod(game, "__index", newcclosure(function(s
         if (key == "Hit" or key == "Target") and typeof(self) == "Instance" and self:IsA("PlayerMouse") then
             if CoreData.State.FlintlockReady and CoreData.State.Targets.Killers then
                 return key == "Hit" and CoreData.State.Targets.Killers.HumanoidRootPart.CFrame or CoreData.State.Targets.Killers
-            elseif CoreData.State.BloodhookReady and CoreData.State.Targets.Bloodhook then
-                return key == "Hit" and CoreData.State.Targets.Bloodhook.HumanoidRootPart.CFrame or CoreData.State.Targets.Bloodhook
             end
         end
     end
@@ -3880,18 +3976,6 @@ CoreData.Hooks.OldNamecall = hookmetamethod(game, "__namecall", newcclosure(func
             if self.Name == "ChanceFireShot" and CoreData.State.FlintlockReady then
                 local args = {...}
                 args[1] = CoreData.Logic.GetFlatAimCFrame(CoreData.State.CachedRoot.Position, CoreData.State.Targets.Killers.Position).LookVector
-                return CoreData.Hooks.OldNamecall(self, unpack(args))
-            
-            elseif (string.find(self.Name, "Hook") or string.find(self.Name, "Nos")) and CoreData.State.BloodhookReady then
-                local args = {...}
-                local aimCFrame = CoreData.Logic.GetFlatAimCFrame(CoreData.State.CachedRoot.Position, CoreData.State.Targets.Bloodhook.Position)
-                
-                if typeof(args[1]) == "Vector3" then
-                    args[1] = aimCFrame.LookVector
-                elseif typeof(args[1]) == "CFrame" then
-                    args[1] = aimCFrame
-                end
-                
                 return CoreData.Hooks.OldNamecall(self, unpack(args))
             end
         end
@@ -3955,33 +4039,28 @@ MyUIElements.Noli:Toggle({
     Callback = function(state) CoreData.Config.Nova.Enabled = state end
 })
 
-MyUIElements.Nosferatu:Dropdown({
-    Title = "loc:ChooseTarget", Desc = "loc:ChooseTargetDesc", Flag = "Bloodhook_Target_Dropdown", Values = {"Killers", "Survivors"}, Value = {"Survivors"}, Multi = true, AllowNone = false,
-    Callback = function(value) CoreData.Config.Bloodhook.Targets = value end
-})
-
-MyUIElements.Nosferatu:Toggle({
-    Title = "loc:SilentAimBloodhook", Desc = "loc:SilentAimBloodhookDesc", Flag = "Auto_Aim_Bloodhook", Value = false,
-    Callback = function(state) CoreData.Config.Bloodhook.Enabled = state end
-})
-
 SkillController = {
     WalkspeedEnabled = false,
     VoidrushEnabled = false,
+    ChargeEnabled = false,
     WalkspeedAutoAim = false,
     VoidrushAutoAim = false,
     WalkspeedPathfinding = false,
     VoidrushPathfinding = false,
     CurrentHRP = nil,
+    CurrentHumanoid = nil,
     TrackedLV = nil,
     Loop = nil,
     ActiveMode = nil,
     SetupHRP = nil,
+    SetupHumanoid = nil,
+    SetupMultipliers = nil,
     TargetPart = nil,
     WantsKillers = false,
     WantsSurvivors = false,
     WalkspeedBuff = 100,
     VoidrushBuff = 60,
+    ChargeBuff = 50,
     CurrentTargetSpeed = 0,
     Path = PathfindingService:CreatePath({
         AgentRadius = 3, 
@@ -4009,7 +4088,7 @@ SkillController = {
 }
 
 task.spawn(function()
-    SkillController.ModulesFolder = game.ReplicatedStorage:WaitForChild("Modules", 15)
+    SkillController.ModulesFolder = ReplicatedStorage:WaitForChild("Modules", 15)
     if SkillController.ModulesFolder then
         SkillController.NetworkFolder = SkillController.ModulesFolder:WaitForChild("Network", 15)
         if SkillController.NetworkFolder then
@@ -4019,8 +4098,13 @@ task.spawn(function()
                 if SkillController.NetworkModule and not SkillController.OldFire then
                     SkillController.OldFire = SkillController.NetworkModule.FireServerConnection
                     SkillController.NetworkModule.FireServerConnection = function(self, remoteName, arg3, arg4, arg5, arg6)
-                        if SkillController.WalkspeedEnabled and type(remoteName) == "string" and string.find(remoteName, "C00lkiddCollision") then
-                            return
+                        if type(remoteName) == "string" then
+                            if SkillController.WalkspeedEnabled and string.find(remoteName, "C00lkiddCollision") then
+                                return
+                            end
+                            if SkillController.ChargeEnabled and string.find(remoteName, "Guest1337Collision") then
+                                return
+                            end
                         end
                         return SkillController.OldFire(self, remoteName, arg3, arg4, arg5, arg6)
                     end
@@ -4056,12 +4140,18 @@ function SkillController.Clear()
         SkillController.TrackedLV.Enabled = true
     end
     
+    if SkillController.CurrentHumanoid and SkillController.ActiveMode == "Charge" then
+        SkillController.CurrentHumanoid.AutoRotate = true
+        SkillController.CurrentHumanoid:Move(Vector3.new(0, 0, 0))
+    end
+    
     if SkillController.Loop then
         SkillController.Loop:Disconnect()
         SkillController.Loop = nil
     end
     
     SkillController.CurrentHRP = nil
+    SkillController.CurrentHumanoid = nil
     SkillController.TrackedLV = nil
     SkillController.ActiveMode = nil
     SkillController.TargetPart = nil
@@ -4069,14 +4159,35 @@ function SkillController.Clear()
     SkillController.LastPathTime = 0
 end
 
+function SkillController.CalculateTargetDirection()
+    SkillController.Direction = Vector3.new(
+        SkillController.TargetPart.Position.X - SkillController.CurrentHRP.Position.X,
+        0,
+        SkillController.TargetPart.Position.Z - SkillController.CurrentHRP.Position.Z
+    )
+end
+
 function SkillController.UpdateSteering(Delta)
-    if not SkillController.CurrentHRP or not SkillController.CurrentHRP.Parent or (SkillController.ActiveMode == "Walkspeed" and (not SkillController.TrackedLV or not SkillController.TrackedLV.Parent or SkillController.CurrentHRP.Parent:FindFirstChild("Result"))) then
+    if not SkillController.CurrentHRP or not SkillController.CurrentHRP.Parent or not SkillController.CurrentHumanoid or not SkillController.CurrentHumanoid.Parent then
+        SkillController.Clear()
+        return
+    end
+    
+    if SkillController.ActiveMode == "Walkspeed" and (not SkillController.TrackedLV or not SkillController.TrackedLV.Parent or SkillController.CurrentHRP.Parent:FindFirstChild("Result")) then
         SkillController.Clear()
         return
     end
     
     if SkillController.ActiveMode == "Walkspeed" and SkillController.TrackedLV.Enabled then
         SkillController.TrackedLV.Enabled = false
+    end
+
+    if SkillController.ActiveMode == "Charge" then
+        pcall(function()
+            RunService:UnbindFromRenderStep("GuestCharging")
+        end)
+        SkillController.CurrentHumanoid.AutoRotate = false
+        SkillController.CurrentHumanoid.WalkSpeed = SkillController.ChargeBuff
     end
     
     SkillController.TargetPart = nil
@@ -4090,7 +4201,10 @@ function SkillController.UpdateSteering(Delta)
         SkillController.UsePathfinding = SkillController.VoidrushPathfinding
     end
     
-    if SkillController.TargetPart and SkillController.TargetPart:IsA("BasePart") then
+    if SkillController.ActiveMode == "Charge" or not (SkillController.TargetPart and SkillController.TargetPart:IsA("BasePart")) then
+        SkillController.CamLook = Camera.CFrame.LookVector
+        SkillController.Direction = Vector3.new(SkillController.CamLook.X, 0, SkillController.CamLook.Z)
+    else
         if SkillController.UsePathfinding then
             SkillController.StraightVector = SkillController.TargetPart.Position - SkillController.CurrentHRP.Position
             SkillController.RayParams.FilterType = Enum.RaycastFilterType.Exclude
@@ -4099,11 +4213,7 @@ function SkillController.UpdateSteering(Delta)
             SkillController.RayResult = Workspace:Raycast(SkillController.CurrentHRP.Position, SkillController.StraightVector, SkillController.RayParams)
             
             if not SkillController.RayResult then
-                SkillController.Direction = Vector3.new(
-                    SkillController.TargetPart.Position.X - SkillController.CurrentHRP.Position.X,
-                    0,
-                    SkillController.TargetPart.Position.Z - SkillController.CurrentHRP.Position.Z
-                )
+                SkillController.CalculateTargetDirection()
             else
                 if tick() - SkillController.LastPathTime > 0.2 then
                     SkillController.LastPathTime = tick()
@@ -4131,23 +4241,12 @@ function SkillController.UpdateSteering(Delta)
                         SkillController.NextPos.Z - SkillController.CurrentHRP.Position.Z
                     )
                 else
-                    SkillController.Direction = Vector3.new(
-                        SkillController.TargetPart.Position.X - SkillController.CurrentHRP.Position.X,
-                        0,
-                        SkillController.TargetPart.Position.Z - SkillController.CurrentHRP.Position.Z
-                    )
+                    SkillController.CalculateTargetDirection()
                 end
             end
         else
-            SkillController.Direction = Vector3.new(
-                SkillController.TargetPart.Position.X - SkillController.CurrentHRP.Position.X,
-                0,
-                SkillController.TargetPart.Position.Z - SkillController.CurrentHRP.Position.Z
-            )
+            SkillController.CalculateTargetDirection()
         end
-    else
-        SkillController.CamLook = Camera.CFrame.LookVector
-        SkillController.Direction = Vector3.new(SkillController.CamLook.X, 0, SkillController.CamLook.Z)
     end
     
     if SkillController.Direction.Magnitude > 0 then
@@ -4159,32 +4258,36 @@ function SkillController.UpdateSteering(Delta)
     if SkillController.ActiveMode == "Walkspeed" then
         SkillController.CurrentHRP.CFrame = SkillController.CurrentHRP.CFrame:Lerp(CFrame.lookAt(SkillController.CurrentHRP.Position, SkillController.CurrentHRP.Position + SkillController.Direction), Delta * 15)
         SkillController.CurrentTargetSpeed = SkillController.WalkspeedBuff
+        SkillController.ForwardVector = SkillController.CurrentHRP.CFrame.LookVector
+        SkillController.VelocityY = SkillController.CurrentHRP.AssemblyLinearVelocity.Y
+        SkillController.CurrentHRP.AssemblyLinearVelocity = Vector3.new(SkillController.ForwardVector.X * SkillController.CurrentTargetSpeed, SkillController.VelocityY, SkillController.ForwardVector.Z * SkillController.CurrentTargetSpeed)
+        
     elseif SkillController.ActiveMode == "Voidrush" then
         SkillController.CurrentHRP.CFrame = CFrame.lookAt(SkillController.CurrentHRP.Position, SkillController.CurrentHRP.Position + SkillController.Direction)
         SkillController.CurrentTargetSpeed = SkillController.VoidrushBuff
+        SkillController.ForwardVector = SkillController.CurrentHRP.CFrame.LookVector
+        SkillController.VelocityY = SkillController.CurrentHRP.AssemblyLinearVelocity.Y
+        SkillController.CurrentHRP.AssemblyLinearVelocity = Vector3.new(SkillController.ForwardVector.X * SkillController.CurrentTargetSpeed, SkillController.VelocityY, SkillController.ForwardVector.Z * SkillController.CurrentTargetSpeed)
+        
+    elseif SkillController.ActiveMode == "Charge" then
+        SkillController.CurrentHRP.CFrame = SkillController.CurrentHRP.CFrame:Lerp(CFrame.lookAt(SkillController.CurrentHRP.Position, SkillController.CurrentHRP.Position + SkillController.Direction), Delta * 20)
+        SkillController.CurrentHumanoid:Move(SkillController.Direction)
     end
-    
-    SkillController.ForwardVector = SkillController.CurrentHRP.CFrame.LookVector
-    SkillController.VelocityY = SkillController.CurrentHRP.AssemblyLinearVelocity.Y
-    
-    SkillController.CurrentHRP.AssemblyLinearVelocity = Vector3.new(
-        SkillController.ForwardVector.X * SkillController.CurrentTargetSpeed,
-        SkillController.VelocityY,
-        SkillController.ForwardVector.Z * SkillController.CurrentTargetSpeed
-    )
 end
 
 function SkillController.SetupCharacter(Character)
     SkillController.SetupHRP = Character:WaitForChild("HumanoidRootPart", 5)
+    SkillController.SetupHumanoid = Character:WaitForChild("Humanoid", 5)
     
     if SkillController.SetupHRP then
         SkillController.SetupHRP.ChildAdded:Connect(function(Child)
             if SkillController.WalkspeedEnabled and Child:IsA("LinearVelocity") and Character:GetAttribute("FootstepsMuted") == true then
                 SkillController.Clear()
                 SkillController.CurrentHRP = Character:FindFirstChild("HumanoidRootPart")
+                SkillController.CurrentHumanoid = Character:FindFirstChild("Humanoid")
                 SkillController.TrackedLV = Child
                 SkillController.ActiveMode = "Walkspeed"
-                SkillController.Loop = RunService.Heartbeat:Connect(SkillController.UpdateSteering)
+                SkillController.Loop = RunService.RenderStepped:Connect(SkillController.UpdateSteering)
             end
         end)
     end
@@ -4195,15 +4298,42 @@ function SkillController.SetupCharacter(Character)
         if Character:GetAttribute("VoidRushState") == "Dashing" then
             SkillController.Clear()
             SkillController.CurrentHRP = Character:FindFirstChild("HumanoidRootPart")
-            if SkillController.CurrentHRP then
+            SkillController.CurrentHumanoid = Character:FindFirstChild("Humanoid")
+            if SkillController.CurrentHRP and SkillController.CurrentHumanoid then
                 SkillController.ActiveMode = "Voidrush"
-                SkillController.Loop = RunService.Heartbeat:Connect(SkillController.UpdateSteering)
+                SkillController.Loop = RunService.RenderStepped:Connect(SkillController.UpdateSteering)
             end
         elseif SkillController.ActiveMode == "Voidrush" then
             SkillController.Clear()
         end
     end)
 end
+
+RunService.RenderStepped:Connect(function()
+    if not SkillController.ChargeEnabled or not playerCharacter then
+        if SkillController.ActiveMode == "Charge" then
+            SkillController.Clear()
+        end
+        return
+    end
+
+    SkillController.SetupMultipliers = playerCharacter:FindFirstChild("SpeedMultipliers")
+    if SkillController.SetupMultipliers and SkillController.SetupMultipliers:FindFirstChild("Guest1337Charge") then
+        if SkillController.ActiveMode ~= "Charge" then
+            SkillController.Clear()
+            SkillController.CurrentHRP = playerCharacter:FindFirstChild("HumanoidRootPart")
+            SkillController.CurrentHumanoid = playerCharacter:FindFirstChild("Humanoid")
+            if SkillController.CurrentHRP and SkillController.CurrentHumanoid then
+                SkillController.ActiveMode = "Charge"
+                SkillController.Loop = RunService.RenderStepped:Connect(SkillController.UpdateSteering)
+            end
+        end
+    else
+        if SkillController.ActiveMode == "Charge" then
+            SkillController.Clear()
+        end
+    end
+end)
 
 if playerCharacter then
     SkillController.SetupCharacter(playerCharacter)
@@ -4276,6 +4406,19 @@ MyUIElements.Noli:Toggle({
     Value = false,
     Callback = function(Value)
         SkillController.VoidrushPathfinding = Value
+    end
+})
+
+MyUIElements.Guest1337:Toggle({ 
+    Title = "loc:ChargeController",
+    Desc = "loc:ChargeControllerDesc",
+    Flag = "Charge Steering",
+    Value = false,
+    Callback = function(Value)
+        SkillController.ChargeEnabled = Value
+        if not Value and SkillController.ActiveMode == "Charge" then
+            SkillController.Clear()
+        end
     end
 })
 
@@ -4681,191 +4824,989 @@ MyUIElements.Is007n7:Toggle({
     end
 })
 
-HitboxSystem = {
-    Config = {
-        Size = Vector3.new(10, 7, 18),
-        HalfSize = Vector3.new(5, 3.5, 9),
-        ShiftBack = 2,
-        ColorSafe = Color3.fromRGB(255, 30, 30),     
-        ColorDanger = Color3.fromRGB(30, 255, 30),   
-        Transparency = 0.15                         
-    },
-    State = {
-        IsActive = false,
-        Connection = nil,
-        ActiveHitboxes = {},
-        CurrentChildren = nil,
-        CurrentIndex = 1,
-        CurrentChar = nil,
-        TargetHumanoid = nil,
-        ActivePart = nil,
-        ActiveSubPart = nil,
-        CleanupChar = nil,
-        NextChar = nil,
-        NewPart = nil,
-        NewSubPart = nil,
-        TargetColor = nil,
-        PlayerPos = nil,
-        RelativePos = nil,
-        IsInside = false
-    }
+App = {
+	Config = {
+		Hitbox = {
+			Keys          = { "Slash", "Swing", "Golemslash" },
+			Default       = { Size = Vector3.new(12, 8, 16), Offset = CFrame.new(0, 0, -3) },
+			Skills        = { ["slasher:slash"] = { Size = Vector3.new(12, 8, 16), Offset = CFrame.new(0, 0, -3) }, ["sixer:slash"] = { Size = Vector3.new(12, 8, 18), Offset = CFrame.new(0, 0, -3) } },
+			NameAliases   = { slasher = { "jason" } },
+			Duration      = 0.25,
+			Color         = Color3.fromRGB(255, 60, 60),
+			Transparency  = 0.8,
+			BlockCooldown = 0.75,
+			BasePath      = { "Assets", "Killers" },
+			SkinBasePath  = { "Assets", "Skins", "Killers" }
+		},
+		Counter = {
+			AimMaxDuration= 1.0, 
+			Keys          = { "BlockSuccess", "Punch", "ParryPunch" },
+			NameAliases   = {},
+			BasePath      = { "Assets", "Survivors" },
+			SkinBasePath  = { "Assets", "Skins", "Survivors" }
+		},
+		AntiBait = {
+			MaxBounces  = 4,
+			CloseDist   = 3.5,
+			ViewDot     = 0.5,
+			SpinSpeed   = 360,
+			SpinTime    = 0.2,
+			RetreatDist = 2,
+			RetreatDot  = -0.3,
+			ApproachDot = 0.3,
+			RecheckGap  = 0.5,
+			Checks      = { "WallCheck", "AngleCheck", "RetreatCheck", "BackwardsApproachCheck" }
+		}
+	},
+	State = {
+		Flags            = { ShowHitbox = false, AutoBlock = false, AutoCounter = false },
+		ActiveAntiBait   = { WallCheck = true, AngleCheck = true, RetreatCheck = true, BackwardsApproachCheck = true },
+		ActiveTargets    = { Killers = true },
+		
+		SkillCache       = {}, 
+		KillerStates     = {},
+		LastTrigger      = {},
+		BaitTimestamps   = {}, 
+		RetreatData      = {},
+		AngleData        = {},
+		LastBlock        = 0,
+		GlobalModuleCache= {}, 
+		
+		ActiveHitboxes   = {},
+		ActiveTweens     = {},
+		CounterTarget = nil,
+		CounterModel = nil,
+		CounterHum = nil,
+		AimTargetRoot = nil,
+		IsAimlocking     = false,
+		LockedTarget     = nil,
+		ActiveAction     = nil, 
+		LockEndTime      = 0,   
+		WasShiftLockForced = false,
+		ShiftLockForced = false,
+		ShiftLockModule  = nil,
+		
+		GCAttempts       = 0,
+		
+		LocalState       = { Conns = {} },
+		LocalSkillCache  = {},
+		LocalLastTrigger = 0,
+		
+		FlatVec          = Vector3.new(1, 0, 1) 
+	},
+	Inst = {
+		ProbeParams    = OverlapParams.new(),
+		AntiBaitParams = RaycastParams.new()
+	}
 }
 
-HitboxSystem.Config.Offset = CFrame.new(
-    0, 
-    (HitboxSystem.Config.Size.Y / 2) - 2.5, 
-    -(HitboxSystem.Config.Size.Z / 2) + HitboxSystem.Config.ShiftBack
-)
-
-HitboxSystem.IsLocalPlayerChar = function(char)
-    if not char then return false end
-    return (char == playerCharacter) 
-        or (char == localPlayer.Character) 
-        or (char.Name == localPlayer.Name) 
-        or (Players:GetPlayerFromCharacter(char) == localPlayer)
+App.GetRoot = function(char)
+	return char and (char.PrimaryPart or char:FindFirstChild("HumanoidRootPart"))
 end
 
-HitboxSystem.CreateHitbox = function()
-    HitboxSystem.State.NewPart = Instance.new("Part")
-    HitboxSystem.State.NewPart.Name = "KillerHitbox"
-    HitboxSystem.State.NewPart.Material = Enum.Material.ForceField
-    HitboxSystem.State.NewPart.Transparency = HitboxSystem.Config.Transparency 
-    HitboxSystem.State.NewPart.CanCollide = false
-    HitboxSystem.State.NewPart.CanTouch = false
-    HitboxSystem.State.NewPart.CanQuery = false
-    HitboxSystem.State.NewPart.CastShadow = false
-    HitboxSystem.State.NewPart.Anchored = true
-    HitboxSystem.State.NewPart.Shape = Enum.PartType.Block
-    HitboxSystem.State.NewPart.Size = HitboxSystem.Config.Size
-
-    HitboxSystem.State.NewSubPart = Instance.new("Part")
-    HitboxSystem.State.NewSubPart.Name = "SubForcefield"
-    HitboxSystem.State.NewSubPart.Material = Enum.Material.ForceField
-    HitboxSystem.State.NewSubPart.Transparency = HitboxSystem.Config.Transparency
-    HitboxSystem.State.NewSubPart.CanCollide = false
-    HitboxSystem.State.NewSubPart.CanTouch = false
-    HitboxSystem.State.NewSubPart.CanQuery = false
-    HitboxSystem.State.NewSubPart.CastShadow = false
-    HitboxSystem.State.NewSubPart.Anchored = true
-    HitboxSystem.State.NewSubPart.Shape = Enum.PartType.Block
-    HitboxSystem.State.NewSubPart.Size = HitboxSystem.Config.Size * 0.999 
-    HitboxSystem.State.NewSubPart.Parent = HitboxSystem.State.NewPart
-
-    HitboxSystem.State.NewPart.Parent = Workspace
-    return HitboxSystem.State.NewPart
+App.MakePart = function(props)
+	App.State.TempPart = Instance.new("Part")
+	for k, v in pairs(props) do App.State.TempPart[k] = v end
+	return App.State.TempPart
 end
 
-HitboxSystem.RemoveHitbox = function(char)
-    if char and HitboxSystem.State.ActiveHitboxes[char] then
-        HitboxSystem.State.ActiveHitboxes[char]:Destroy()
-        HitboxSystem.State.ActiveHitboxes[char] = nil
-    end
+App.ClearConnections = function(connsTbl)
+	for _, conn in ipairs(connsTbl) do conn:Disconnect() end
+	table.clear(connsTbl)
 end
 
-HitboxSystem.OnHeartbeat = function()
-    if playerCharacter and playerCharacter.PrimaryPart then
-        HitboxSystem.State.PlayerPos = playerCharacter.PrimaryPart.Position
-    elseif localPlayer.Character and localPlayer.Character.PrimaryPart then
-        HitboxSystem.State.PlayerPos = localPlayer.Character.PrimaryPart.Position
-    else
-        HitboxSystem.State.PlayerPos = nil
-    end
-
-    HitboxSystem.State.CurrentChildren = killersFolder:GetChildren()
-    HitboxSystem.State.CurrentIndex = 1
-
-    while HitboxSystem.State.CurrentIndex <= #HitboxSystem.State.CurrentChildren do
-        HitboxSystem.State.CurrentChar = HitboxSystem.State.CurrentChildren[HitboxSystem.State.CurrentIndex]
-        
-        if not HitboxSystem.IsLocalPlayerChar(HitboxSystem.State.CurrentChar) and HitboxSystem.State.CurrentChar.PrimaryPart then
-            HitboxSystem.State.TargetHumanoid = HitboxSystem.State.CurrentChar:FindFirstChild("Humanoid")
-            
-            if HitboxSystem.State.TargetHumanoid and HitboxSystem.State.TargetHumanoid.Health > 0 then
-                if not HitboxSystem.State.ActiveHitboxes[HitboxSystem.State.CurrentChar] then
-                    HitboxSystem.State.ActiveHitboxes[HitboxSystem.State.CurrentChar] = HitboxSystem.CreateHitbox()
-                end
-                
-                HitboxSystem.State.ActivePart = HitboxSystem.State.ActiveHitboxes[HitboxSystem.State.CurrentChar]
-                HitboxSystem.State.ActivePart.CFrame = HitboxSystem.State.CurrentChar.PrimaryPart.CFrame * HitboxSystem.Config.Offset
-                
-                HitboxSystem.State.ActiveSubPart = HitboxSystem.State.ActivePart:FindFirstChild("SLK_SubForcefield")
-                if HitboxSystem.State.ActiveSubPart then
-                    HitboxSystem.State.ActiveSubPart.CFrame = HitboxSystem.State.ActivePart.CFrame
-                end
-
-                if HitboxSystem.State.PlayerPos then
-                    HitboxSystem.State.RelativePos = HitboxSystem.State.ActivePart.CFrame:PointToObjectSpace(HitboxSystem.State.PlayerPos)
-                    
-                    HitboxSystem.State.IsInside = 
-                        math.abs(HitboxSystem.State.RelativePos.X) <= HitboxSystem.Config.HalfSize.X and
-                        math.abs(HitboxSystem.State.RelativePos.Y) <= HitboxSystem.Config.HalfSize.Y and
-                        math.abs(HitboxSystem.State.RelativePos.Z) <= HitboxSystem.Config.HalfSize.Z
-                else
-                    HitboxSystem.State.IsInside = false
-                end
-                
-                HitboxSystem.State.TargetColor = HitboxSystem.State.IsInside and HitboxSystem.Config.ColorDanger or HitboxSystem.Config.ColorSafe
-                
-                if HitboxSystem.State.ActivePart.Color ~= HitboxSystem.State.TargetColor then
-                    HitboxSystem.State.ActivePart.Color = HitboxSystem.State.TargetColor
-                    if HitboxSystem.State.ActiveSubPart then
-                        HitboxSystem.State.ActiveSubPart.Color = HitboxSystem.State.TargetColor
-                    end
-                end
-            else
-                HitboxSystem.RemoveHitbox(HitboxSystem.State.CurrentChar)
-            end
-        else
-            HitboxSystem.RemoveHitbox(HitboxSystem.State.CurrentChar)
-        end
-        
-        HitboxSystem.State.CurrentIndex = HitboxSystem.State.CurrentIndex + 1
-    end
-
-    HitboxSystem.State.CleanupChar = next(HitboxSystem.State.ActiveHitboxes)
-    while HitboxSystem.State.CleanupChar do
-        HitboxSystem.State.NextChar = next(HitboxSystem.State.ActiveHitboxes, HitboxSystem.State.CleanupChar)
-
-        if HitboxSystem.IsLocalPlayerChar(HitboxSystem.State.CleanupChar)
-           or not HitboxSystem.State.CleanupChar.Parent 
-           or HitboxSystem.State.CleanupChar.Parent ~= killersFolder 
-           or not HitboxSystem.State.CleanupChar.PrimaryPart then
-            
-            HitboxSystem.RemoveHitbox(HitboxSystem.State.CleanupChar)
-        end
-        
-        HitboxSystem.State.CleanupChar = HitboxSystem.State.NextChar
-    end
+App.UpdateDictFromList = function(dict, list)
+	table.clear(dict)
+	for _, v in ipairs(list) do dict[v] = true end
 end
 
-HitboxSystem.ToggleFeatures = function(state)
-    HitboxSystem.State.IsActive = state
+App.Inst.Probe = App.MakePart({Anchored = true, CanCollide = false, CanQuery = false, CanTouch = false})
+App.Inst.ProbeParams.FilterType = Enum.RaycastFilterType.Include
 
-    if state then
-        HitboxSystem.State.Connection = RunService.Heartbeat:Connect(HitboxSystem.OnHeartbeat)
-    else
-        if HitboxSystem.State.Connection then
-            HitboxSystem.State.Connection:Disconnect()
-            HitboxSystem.State.Connection = nil
-        end
-        
-        HitboxSystem.State.CleanupChar = next(HitboxSystem.State.ActiveHitboxes)
-        while HitboxSystem.State.CleanupChar do
-            HitboxSystem.State.NextChar = next(HitboxSystem.State.ActiveHitboxes, HitboxSystem.State.CleanupChar)
-            HitboxSystem.RemoveHitbox(HitboxSystem.State.CleanupChar)
-            HitboxSystem.State.CleanupChar = HitboxSystem.State.NextChar
-        end
-    end
+App.Inst.AntiBaitParams.FilterType       = Enum.RaycastFilterType.Exclude
+App.Inst.AntiBaitParams.RespectCanCollide = true
+
+task.spawn(function()
+	while not App.State.ShiftLockModule and App.State.GCAttempts < 15 do
+		App.State.GCAttempts += 1
+		for _, v in pairs(getgc(true)) do
+			if type(v) == "table" and rawget(v, "ToggleShiftLock") and type(rawget(v, "ToggleShiftLock")) == "function" then
+				App.State.ShiftLockModule = v
+				break
+			end
+		end
+		if not App.State.ShiftLockModule then task.wait(1) end
+	end
+end)
+
+App.NormalizeId = function(id) return tostring(id):match("%d+") end
+
+App.NamesFor = function(charName, aliasesTbl)
+	App.State.TempNames = { charName }
+	App.State.TempLowered = charName:lower()
+	for canonical, aliases in pairs(aliasesTbl) do
+		if App.State.TempLowered == canonical then
+			for _, alias in ipairs(aliases) do table.insert(App.State.TempNames, alias) end
+		else
+			for _, alias in ipairs(aliases) do
+				if App.State.TempLowered == alias:lower() then table.insert(App.State.TempNames, canonical); break end
+			end
+		end
+	end
+	return App.State.TempNames
 end
+
+App.FindChildCI = function(parent, name)
+	if not parent then return nil end
+	App.State.TempLoweredChild = name:lower()
+	for _, child in ipairs(parent:GetChildren()) do
+		if child.Name:lower() == App.State.TempLoweredChild then return child end
+	end
+	return nil
+end
+
+App.MatchKey = function(name, keyList)
+	if type(name) ~= "string" then return nil end
+	App.State.TempLoweredKey = name:lower()
+	for _, key in ipairs(keyList) do
+		if App.State.TempLoweredKey == key:lower() then return App.State.TempLoweredKey end
+	end
+	return nil
+end
+
+App.CollectIds = function(value, key, out)
+	if type(value) == "string" or type(value) == "number" then
+		out[App.NormalizeId(value)] = key
+	elseif type(value) == "table" then
+		for _, v in ipairs(value) do App.CollectIds(v, key, out) end
+	end
+end
+
+App.WalkTable = function(tbl, out, depth, keyList)
+	if depth > 4 then return end
+	for k, v in pairs(tbl) do
+		App.State.TempMatched = App.MatchKey(k, keyList)
+		if App.State.TempMatched then App.CollectIds(v, App.State.TempMatched, out) end
+		if type(v) == "table" then App.WalkTable(v, out, depth + 1, keyList) end
+	end
+end
+
+App.GetPath = function(parts)
+	App.State.TempCurPath = ReplicatedStorage
+	for _, name in ipairs(parts) do
+		App.State.TempCurPath = App.State.TempCurPath:FindFirstChild(name)
+		if not App.State.TempCurPath then return nil end
+	end
+	return App.State.TempCurPath
+end
+
+App.ResolveFolders = function(charName, skin, basePathArr, skinPathArr, aliasesTbl)
+	App.State.TempFolderResult, App.State.TempSeenFolders = {}, {}
+	App.State.TempSkinRoot, App.State.TempBaseRoot = App.GetPath(skinPathArr), App.GetPath(basePathArr)
+	
+	for _, name in ipairs(App.NamesFor(charName, aliasesTbl)) do
+		App.State.TempTargets = {}
+		if App.State.TempSkinRoot and skin and skin ~= "" then
+			App.State.TempK = App.FindChildCI(App.State.TempSkinRoot, name)
+			table.insert(App.State.TempTargets, App.State.TempK and App.FindChildCI(App.State.TempK, skin))
+		end
+		if App.State.TempBaseRoot then table.insert(App.State.TempTargets, App.FindChildCI(App.State.TempBaseRoot, name)) end
+		for _, folder in ipairs(App.State.TempTargets) do
+			if folder and not App.State.TempSeenFolders[folder] then 
+				App.State.TempSeenFolders[folder] = true
+				table.insert(App.State.TempFolderResult, folder) 
+			end
+		end
+	end
+	return App.State.TempFolderResult
+end
+
+App.ScanSkills = function(charObj, basePathArr, skinPathArr, aliasesTbl, keyList, out, forceCharName)
+	App.State.TempSkin = charObj:GetAttribute("SkinName") or ""
+	for _, folder in ipairs(App.ResolveFolders(forceCharName or charObj.Name, App.State.TempSkin, basePathArr, skinPathArr, aliasesTbl)) do
+		App.State.TempModule = App.FindChildCI(folder, "config")
+		if App.State.TempModule then
+			if not App.State.GlobalModuleCache[App.State.TempModule] then
+				App.State.GlobalModuleCache[App.State.TempModule] = {}
+				App.State.TempOk, App.State.TempData = pcall(require, App.State.TempModule)
+				if App.State.TempOk and type(App.State.TempData) == "table" then 
+					App.WalkTable(App.State.TempData, App.State.GlobalModuleCache[App.State.TempModule], 0, keyList) 
+				end
+			end
+			for id, key in pairs(App.State.GlobalModuleCache[App.State.TempModule]) do out[id] = key end
+		end
+	end
+end
+
+App.ResolveKiller = function(killer)
+	App.State.SkillCache[killer] = App.State.SkillCache[killer] or {}
+	App.ScanSkills(killer, App.Config.Hitbox.BasePath, App.Config.Hitbox.SkinBasePath, App.Config.Hitbox.NameAliases, App.Config.Hitbox.Keys, App.State.SkillCache[killer])
+end
+
+App.ResolveLocal = function()
+	App.State.LocalSkillCache = {}
+	App.ScanSkills(playerCharacter, App.Config.Counter.BasePath, App.Config.Counter.SkinBasePath, App.Config.Counter.NameAliases, App.Config.Counter.Keys, App.State.LocalSkillCache, (playerCharacter and playerCharacter:GetAttribute("CharacterName")) or "Guest1337")
+end
+
+App.GetSizeConfig = function(killerName, key)
+	for _, name in ipairs(App.NamesFor(killerName, App.Config.Hitbox.NameAliases)) do
+		App.State.TempSizeCfg = App.Config.Hitbox.Skills[name:lower() .. ":" .. key]
+		if App.State.TempSizeCfg then return App.State.TempSizeCfg end
+	end
+	return App.Config.Hitbox.Default
+end
+
+App.GetPositionData = function(pRoot, kRoot)
+	App.State.PosDelta = (pRoot.Position - kRoot.Position) * App.State.FlatVec
+	App.State.PosDist = App.State.PosDelta.Magnitude
+	App.State.KVel = kRoot.AssemblyLinearVelocity * App.State.FlatVec
+	App.State.KLookVec = (kRoot.CFrame.LookVector * App.State.FlatVec).Unit
+end
+
+App.AntiBait = {}
+
+App.AntiBait.BuildExclude = function(killer)
+	App.State.TempExclude = { playerCharacter, killer }
+	for _, folder in ipairs({ killersFolder, survivorsFolder }) do
+		for _, model in ipairs(folder:GetChildren()) do
+			if model ~= killer then table.insert(App.State.TempExclude, model) end
+		end
+	end
+	return App.State.TempExclude
+end
+
+App.AntiBait.WallCheck = function(killer, pRoot, kRoot)
+	App.State.RayOrigin, App.State.RayDelta = pRoot.Position, kRoot.Position - pRoot.Position
+	if App.State.RayDelta.Magnitude < 0.01 then return true end
+
+	App.Inst.AntiBaitParams.FilterDescendantsInstances = App.AntiBait.BuildExclude(killer)
+
+	for _ = 1, App.Config.AntiBait.MaxBounces do
+		App.State.RayHit = Workspace:Raycast(App.State.RayOrigin, App.State.RayDelta, App.Inst.AntiBaitParams)
+		if not App.State.RayHit then return true end
+		if App.State.RayHit.Instance.CanCollide then return false end
+		App.State.RayOrigin = App.State.RayHit.Position + App.State.RayDelta.Unit * 0.1
+		App.State.RayDelta  = kRoot.Position - App.State.RayOrigin
+	end
+	return true
+end
+
+App.AntiBait.AngleCheck = function(killer, pRoot, kRoot)
+	App.GetPositionData(pRoot, kRoot)
+	if App.State.PosDist < 0.01 then return true end
+	
+	App.State.TempAngleData = App.State.AngleData[killer]
+	if App.State.TempAngleData and App.State.TempAngleData.Spinning then return true end
+	
+	return App.State.KLookVec:Dot(App.State.PosDelta.Unit) > App.Config.AntiBait.ViewDot
+end
+
+App.AntiBait.RetreatCheck = function(killer, pRoot, kRoot)
+	App.GetPositionData(pRoot, kRoot)
+	if App.State.KVel.Magnitude < 1.5 or App.State.PosDist < 0.01 then return true end
+	
+	App.State.TempRetreat = App.State.RetreatData[killer]
+	if not App.State.TempRetreat then
+		App.State.TempRetreat = { Dist = 0, LastPos = kRoot.Position, LastClock = os.clock() }
+		App.State.RetreatData[killer] = App.State.TempRetreat
+	end
+	
+	if os.clock() - App.State.TempRetreat.LastClock > App.Config.AntiBait.RecheckGap then
+		App.State.TempRetreat.Dist = 0
+	end
+	App.State.TempRetreat.LastClock = os.clock()
+	
+	App.State.MoveDelta = (kRoot.Position - App.State.TempRetreat.LastPos) * App.State.FlatVec
+	App.State.TempRetreat.LastPos = kRoot.Position
+	
+	App.State.MoveDot = App.State.KVel.Unit:Dot(App.State.PosDelta.Unit)
+	
+	if App.State.MoveDot <= App.Config.AntiBait.RetreatDot then
+		App.State.TempRetreat.Dist += App.State.MoveDelta.Magnitude
+	elseif App.State.MoveDot >= App.Config.AntiBait.ApproachDot then
+		App.State.TempRetreat.Dist = 0
+	end
+	
+	return App.State.TempRetreat.Dist < App.Config.AntiBait.RetreatDist
+end
+
+App.AntiBait.BackwardsApproachCheck = function(killer, pRoot, kRoot)
+	App.GetPositionData(pRoot, kRoot)
+	
+	if App.State.KVel.Magnitude < 1.5 or App.State.PosDist < 0.01 then 
+		App.State.BaitTimestamps[killer] = nil 
+		return true 
+	end
+	
+	App.State.FacingPlayer = App.State.KLookVec:Dot(App.State.PosDelta.Unit)
+	App.State.MovingToPlayer = App.State.KVel.Unit:Dot(App.State.PosDelta.Unit)
+	App.State.IsMoonwalking = App.State.KVel.Unit:Dot(App.State.KLookVec)
+
+	if App.State.FacingPlayer < -0.2 and App.State.MovingToPlayer > 0.3 and App.State.IsMoonwalking < -0.5 then
+		App.State.BaitTimestamps[killer] = App.State.BaitTimestamps[killer] or os.clock()
+		if os.clock() - App.State.BaitTimestamps[killer] >= 0.5 then
+			return false 
+		end
+	else
+		App.State.BaitTimestamps[killer] = nil 
+	end
+	
+	return true
+end
+
+App.AntiBait.Run = function(killer)
+	App.State.PRoot, App.State.KRoot = App.GetRoot(playerCharacter), App.GetRoot(killer)
+	if not (App.State.PRoot and App.State.KRoot) then return false end
+
+	if (App.State.PRoot.Position - App.State.KRoot.Position).Magnitude <= App.Config.AntiBait.CloseDist then
+		return true
+	end
+
+	for checkName, isActive in pairs(App.State.ActiveAntiBait) do
+		if isActive and App.AntiBait[checkName] and not App.AntiBait[checkName](killer, App.State.PRoot, App.State.KRoot) then 
+			return false 
+		end
+	end
+	return true
+end
+
+App.UpdateSpinTracking = function(dt)
+	if not (App.State.Flags.AutoBlock and App.State.ActiveAntiBait.AngleCheck) then
+		if next(App.State.AngleData) then table.clear(App.State.AngleData) end
+		return
+	end
+	for killer in pairs(App.State.KillerStates) do
+		App.State.TrackRoot = App.GetRoot(killer)
+		if App.State.TrackRoot then
+			App.State.TrackLookFlat = App.State.TrackRoot.CFrame.LookVector * App.State.FlatVec
+			if App.State.TrackLookFlat.Magnitude >= 0.001 then
+				App.State.TrackLook = App.State.TrackLookFlat.Unit
+				App.State.TrackData = App.State.AngleData[killer]
+				if not App.State.TrackData then
+					App.State.AngleData[killer] = { LastLook = App.State.TrackLook, SpinTime = 0, Spinning = false }
+				else
+					App.State.TurnDot = math.clamp(App.State.TrackData.LastLook:Dot(App.State.TrackLook), -1, 1)
+					App.State.TurnSpeed = math.deg(math.acos(App.State.TurnDot)) / math.max(dt, 1e-4)
+					if App.State.TurnSpeed >= App.Config.AntiBait.SpinSpeed then
+						App.State.TrackData.SpinTime += dt
+						if App.State.TrackData.SpinTime >= App.Config.AntiBait.SpinTime then
+							App.State.TrackData.Spinning = true
+						end
+					else
+						App.State.TrackData.SpinTime, App.State.TrackData.Spinning = 0, false
+					end
+					App.State.TrackData.LastLook = App.State.TrackLook
+				end
+			end
+		end
+	end
+end
+
+App.PlayerInVirtualHitbox = function(killer, key)
+	App.State.HitKRoot, App.State.HitPRoot = App.GetRoot(killer), App.GetRoot(playerCharacter)
+	if not (App.State.HitKRoot and App.State.HitPRoot) then return false end
+	App.State.HitCfg = App.GetSizeConfig(killer.Name, key)
+	
+	App.Inst.Probe.Size, App.Inst.Probe.CFrame = App.State.HitCfg.Size, App.State.HitKRoot.CFrame * App.State.HitCfg.Offset
+	App.Inst.ProbeParams.FilterDescendantsInstances = { playerCharacter }
+	return #Workspace:GetPartsInPart(App.Inst.Probe, App.Inst.ProbeParams) > 0
+end
+
+App.UnequipCurrentItem = function(char)
+	if not char then return end
+	App.State.TempHumForUnequip = char:FindFirstChildOfClass("Humanoid")
+	if App.State.TempHumForUnequip then
+		App.State.TempHumForUnequip:UnequipTools()
+	end
+end
+
+App.TryBlock = function()
+	if os.clock() - App.State.LastBlock < App.Config.Hitbox.BlockCooldown then return end
+	App.State.LastBlock = os.clock()
+	
+	App.UnequipCurrentItem(playerCharacter)
+	
+	if typeof(AbilityEvent) ~= "nil" then AbilityEvent:Use("Block") end
+end
+
+App.ShowHitbox = function(killer, key)
+	App.State.VisualRoot = App.GetRoot(killer)
+	if not App.State.VisualRoot then return end
+	App.State.VisualCfg = App.GetSizeConfig(killer.Name, key)
+	
+	App.State.HitboxId = HttpService:GenerateGUID(false)
+	
+	App.State.ActiveHitboxes[App.State.HitboxId] = App.MakePart({
+		Name = "FakeHitbox_" .. key, Size = App.State.VisualCfg.Size,
+		Anchored = false, Massless = true, CanCollide = false, CanQuery = false, CanTouch = false, CastShadow = false,
+		Material = Enum.Material.Neon, Color = App.Config.Hitbox.Color, Transparency = App.Config.Hitbox.Transparency,
+		Parent = Workspace
+	})
+
+	App.State.VisualWeld = Instance.new("Weld")
+	App.State.VisualWeld.Part0 = App.State.VisualRoot
+	App.State.VisualWeld.Part1 = App.State.ActiveHitboxes[App.State.HitboxId]
+	App.State.VisualWeld.C0 = App.State.VisualCfg.Offset
+	App.State.VisualWeld.Parent = App.State.ActiveHitboxes[App.State.HitboxId]
+
+	Debris:AddItem(App.State.ActiveHitboxes[App.State.HitboxId], App.Config.Hitbox.Duration + 1)
+	App.State.ActiveTweens[App.State.HitboxId] = TweenService:Create(App.State.ActiveHitboxes[App.State.HitboxId], TweenInfo.new(0.15), { Transparency = 1 })
+	
+	task.delay(App.Config.Hitbox.Duration, function(hId)
+		if App.State.ActiveHitboxes[hId] and App.State.ActiveHitboxes[hId].Parent then 
+			App.State.ActiveTweens[hId]:Play()
+			App.State.ActiveTweens[hId].Completed:Once(function() 
+				if App.State.ActiveHitboxes[hId] then
+					App.State.ActiveHitboxes[hId]:Destroy() 
+					App.State.ActiveHitboxes[hId] = nil
+					App.State.ActiveTweens[hId] = nil
+				end
+			end) 
+		end
+	end, App.State.HitboxId)
+end
+
+App.OnKillerTrigger = function(killer, matched)
+	if not (App.State.Flags.ShowHitbox or App.State.Flags.AutoBlock) then return end
+	if App.State.LastTrigger[killer] and os.clock() - App.State.LastTrigger[killer] < 0.1 then return end
+	App.State.LastTrigger[killer] = os.clock()
+
+	if App.State.Flags.ShowHitbox then App.ShowHitbox(killer, matched) end
+	
+	if App.State.Flags.AutoBlock then
+		App.State.TrigPRoot, App.State.TrigKRoot = App.GetRoot(playerCharacter), App.GetRoot(killer)
+		if not (App.State.TrigPRoot and App.State.TrigKRoot) then return end
+		
+		App.State.CurrDist = (App.State.TrigPRoot.Position - App.State.TrigKRoot.Position).Magnitude
+		App.State.IsHit = (App.State.CurrDist <= App.Config.AntiBait.CloseDist) or App.PlayerInVirtualHitbox(killer, matched)
+		
+		if App.State.IsHit and App.AntiBait.Run(killer) then 
+			App.TryBlock() 
+		end
+	end
+end
+
+App.OnLocalTrigger = function(char, matched, actionObj)
+	if not App.State.Flags.AutoCounter then return end
+	if os.clock() - App.State.LocalLastTrigger < 0.1 then return end
+	App.State.LocalLastTrigger = os.clock()
+	App.TriggerCounter(actionObj)
+end
+
+App.CheckTriggerEvent = function(char, id, cache, actionObj, isLocal)
+	if not (id and cache[id]) then return end
+	if isLocal then App.OnLocalTrigger(char, cache[id], actionObj)
+	else App.OnKillerTrigger(char, cache[id]) end
+end
+
+App.HookSound = function(char, sound, state, isLocal)
+	if not sound:IsA("Sound") then return end
+
+	table.insert(state.Conns, sound.Played:Connect(function()
+		App.State.HookCache = isLocal and App.State.LocalSkillCache or App.State.SkillCache[char]
+		if not App.State.HookCache then return end
+		App.CheckTriggerEvent(char, App.NormalizeId(sound.SoundId), App.State.HookCache, sound, isLocal)
+	end))
+
+	if sound.IsPlaying then 
+		App.State.HookCache = isLocal and App.State.LocalSkillCache or App.State.SkillCache[char]
+		if App.State.HookCache then
+			App.CheckTriggerEvent(char, App.NormalizeId(sound.SoundId), App.State.HookCache, sound, isLocal)
+		end
+	end
+end
+
+App.InitCharState = function(char, isLocal)
+	App.State.NewCharState = { Conns = {} }
+	App.State.CharResolveFunc = isLocal and App.ResolveLocal or function() 
+		App.State.SkillCache[char] = nil; App.ResolveKiller(char) 
+	end
+
+	if isLocal then App.ResolveLocal() else App.ResolveKiller(char) end
+
+	table.insert(App.State.NewCharState.Conns, char:GetAttributeChangedSignal("SkinName"):Connect(App.State.CharResolveFunc))
+	
+	App.State.Hum = char:WaitForChild("Humanoid", 5)
+	App.State.Animator = App.State.Hum and App.State.Hum:WaitForChild("Animator", 5)
+	if App.State.Animator then
+		table.insert(App.State.NewCharState.Conns, App.State.Animator.AnimationPlayed:Connect(function(track)
+			App.State.AnimCache = isLocal and App.State.LocalSkillCache or App.State.SkillCache[char]
+			if not App.State.AnimCache then return end
+			App.CheckTriggerEvent(char, App.NormalizeId(track.Animation and track.Animation.AnimationId), App.State.AnimCache, track, isLocal)
+		end))
+	end
+
+	for _, d in ipairs(char:GetDescendants()) do App.HookSound(char, d, App.State.NewCharState, isLocal) end
+	table.insert(App.State.NewCharState.Conns, char.DescendantAdded:Connect(function(d) App.HookSound(char, d, App.State.NewCharState, isLocal) end))
+	
+	return App.State.NewCharState
+end
+
+App.WatchKiller = function(killer)
+	if not killer:IsA("Model") or App.State.KillerStates[killer] then return end
+	App.State.KillerStates[killer] = App.InitCharState(killer, false)
+	
+	table.insert(App.State.KillerStates[killer].Conns, killer.AncestryChanged:Connect(function(_, parent)
+		if not parent then
+			App.ClearConnections(App.State.KillerStates[killer].Conns)
+			App.State.KillerStates[killer], App.State.SkillCache[killer], App.State.LastTrigger[killer], App.State.BaitTimestamps[killer], App.State.RetreatData[killer], App.State.AngleData[killer] = nil, nil, nil, nil, nil, nil
+		end
+	end))
+end
+
+App.SetupLocalPlayer = function(char)
+	if not char then return end
+	if App.State.LocalState.Conns then App.ClearConnections(App.State.LocalState.Conns) end
+	App.State.LocalState = App.InitCharState(char, true)
+end
+
+task.spawn(function()
+	App.State.WsSounds = Workspace:WaitForChild("Sounds", 10)
+	if not App.State.WsSounds then return end
+	
+	App.State.WsSounds.ChildAdded:Connect(function(sound)
+		if not sound:IsA("Sound") and not sound:IsA("Part") then return end
+		App.State.ActualSound = sound:IsA("Sound") and sound or sound:FindFirstChildOfClass("Sound")
+		
+		if App.State.ActualSound then
+			App.State.ActualSound.Played:Connect(function()
+				App.State.SoundIdNorm = App.NormalizeId(App.State.ActualSound.SoundId)
+				if not App.State.SoundIdNorm then return end
+				
+				for killer, cache in pairs(App.State.SkillCache) do
+					if cache[App.State.SoundIdNorm] then App.OnKillerTrigger(killer, cache[App.State.SoundIdNorm]) end
+				end
+				if App.State.LocalSkillCache[App.State.SoundIdNorm] then 
+					App.OnLocalTrigger(playerCharacter, App.State.LocalSkillCache[App.State.SoundIdNorm], App.State.ActualSound) 
+				end
+			end)
+		end
+	end)
+end)
+
+App.ScanFolderForTarget = function(folder)
+	for _, charModel in ipairs(folder:GetChildren()) do
+		if charModel ~= playerCharacter then
+			App.State.TargetRoot = App.GetRoot(charModel)
+			App.State.TargetHum = charModel:FindFirstChildOfClass("Humanoid")
+			if App.State.TargetRoot and App.State.TargetHum and App.State.TargetHum.Health > 0 then
+				App.State.TargetDist = (App.State.TargetRoot.Position - App.State.PRootNearest.Position).Magnitude
+				if App.State.TargetDist < App.State.MinDist then 
+					App.State.MinDist = App.State.TargetDist
+					App.State.NearestTarget = App.State.TargetRoot 
+				end
+			end
+		end
+	end
+end
+
+App.GetNearestTarget = function()
+	App.State.PRootNearest = App.GetRoot(playerCharacter)
+	if not App.State.PRootNearest then return nil end
+	
+	App.State.NearestTarget, App.State.MinDist = nil, math.huge
+	
+	if App.State.ActiveTargets.Killers then App.ScanFolderForTarget(killersFolder) end
+	if App.State.ActiveTargets.Survivors then App.ScanFolderForTarget(survivorsFolder) end
+	
+	return App.State.NearestTarget
+end
+
+App.TriggerCounter = function(actionObj)
+	if App.State.IsAimlocking or not App.State.Flags.AutoCounter then return end
+
+	App.State.CounterTarget = App.GetNearestTarget()
+	if not App.State.CounterTarget then return end
+
+	App.State.CounterModel = App.State.CounterTarget.Parent
+	App.State.CounterHum = App.State.CounterModel and App.State.CounterModel:FindFirstChildOfClass("Humanoid")
+
+	if not App.State.CounterHum or App.State.CounterHum.Health <= 0 then
+		App.State.CounterTarget = nil
+		App.State.CounterModel = nil
+		App.State.CounterHum = nil
+		return
+	end
+
+	App.State.IsAimlocking = true
+	App.State.LockedTarget = App.State.CounterTarget
+	App.State.ActiveAction = actionObj
+	App.State.LockEndTime = os.clock() + App.Config.Counter.AimMaxDuration
+
+	App.UnequipCurrentItem(playerCharacter)
+
+	if typeof(AbilityEvent) ~= "nil" then
+		AbilityEvent:Use("Punch")
+	end
+end
+
+App.CheckActionPlaying = function()
+	return os.clock() < App.State.LockEndTime
+end
+
+App.SetShiftLock = function(forceState)
+	App.State.SL = App.State.ShiftLockModule
+	if not App.State.SL or type(App.State.SL.IsEnabled) ~= "function" then return end
+
+	if forceState then
+		if App.State.ShiftLockForced then return end
+		if not App.State.SL:IsEnabled() then
+			App.State.WasShiftLockForced = true
+			App.State.SL:ToggleShiftLock(true)
+		end
+		App.State.ShiftLockForced = true
+	elseif App.State.ShiftLockForced then
+		if App.State.WasShiftLockForced and App.State.SL:IsEnabled() then
+			App.State.SL:ToggleShiftLock(false)
+		end
+		App.State.ShiftLockForced = false
+		App.State.WasShiftLockForced = false
+	end
+end
+
+App.UpdateCameraAimBypass = function()
+	if not App.State.IsAimlocking then return end
+
+	if os.clock() >= App.State.LockEndTime then
+		App.SetShiftLock(false)
+
+		App.State.IsAimlocking = false
+		App.State.LockedTarget = nil
+		App.State.ActiveAction = nil
+		App.State.CounterTarget = nil
+		App.State.CounterModel = nil
+		App.State.CounterHum = nil
+		return
+	end
+
+	App.State.AimTargetRoot = App.State.LockedTarget
+	App.State.TargetHum = App.State.CounterHum
+
+	if not App.State.AimTargetRoot
+		or not App.State.AimTargetRoot.Parent
+		or not App.State.TargetHum
+		or App.State.TargetHum.Health <= 0 then
+
+		App.SetShiftLock(false)
+
+		App.State.IsAimlocking = false
+		App.State.LockedTarget = nil
+		App.State.ActiveAction = nil
+		App.State.CounterTarget = nil
+		App.State.CounterModel = nil
+		App.State.CounterHum = nil
+		return
+	end
+
+	App.SetShiftLock(true)
+
+	App.State.MyCamRoot = App.GetRoot(playerCharacter)
+	if not App.State.MyCamRoot then return end
+
+	App.State.CharPos = App.State.MyCamRoot.Position + Vector3.new(0, 1.5, 0)
+	App.State.LookDir = App.State.AimTargetRoot.Position - App.State.CharPos
+
+	if App.State.LookDir.Magnitude < 0.001 then return end
+
+	App.State.LookDir = App.State.LookDir.Unit
+	App.State.CamDist = math.clamp(
+		(Camera.CFrame.Position - App.State.CharPos).Magnitude,
+		2,
+		15
+	)
+
+	Camera.CFrame = CFrame.new(
+		App.State.CharPos - App.State.LookDir * App.State.CamDist,
+		App.State.AimTargetRoot.Position
+	)
+end
+
+localPlayer.CharacterAdded:Connect(function(character)
+	playerCharacter = character
+	App.SetupLocalPlayer(character)
+end)
+if playerCharacter then App.SetupLocalPlayer(playerCharacter) end
+
+for _, k in ipairs(killersFolder:GetChildren()) do task.spawn(App.WatchKiller, k) end
+killersFolder.ChildAdded:Connect(function(k) task.spawn(App.WatchKiller, k) end)
+
+RunService:BindToRenderStep("AutoCounterCam", 201, App.UpdateCameraAimBypass)
+RunService.Heartbeat:Connect(App.UpdateSpinTracking)
+
+MyUIElements.Guest1337:Dropdown({
+	Title = "loc:AntiBaitMode",
+	Desc = "loc:AntiBaitModeDesc",
+	Flag = "AntiBaitMode",
+	Values = App.Config.AntiBait.Checks,
+	Value = App.Config.AntiBait.Checks, 
+	Multi = true,
+	AllowNone = true, 
+	Callback = function(value)
+		App.UpdateDictFromList(App.State.ActiveAntiBait, value)
+	end,
+})
+
+MyUIElements.Guest1337:Dropdown({
+	Title = "loc:ChooseTarget",
+	Desc = "loc:ChooseTargetDesc",
+	Flag = "ChooseTarget",
+	Values = {"Killers", "Survivors"},
+	Value = {"Killers"}, 
+	Multi = true,
+	AllowNone = false, 
+	Callback = function(value)
+		App.UpdateDictFromList(App.State.ActiveTargets, value)
+	end,
+})
 
 MyUIElements.Guest1337:Toggle({
-    Title = "loc:ShowAttackHitbox",
-    Desc = "loc:ShowAttackHitboxDesc",
-    Flag = "ShowAttackHitbox",
-    Value = false,
-    Callback = function(state)
-        HitboxSystem.ToggleFeatures(state)
-    end
+	Title = "loc:ShowHitbox",
+	Desc = "loc:ShowHitboxDesc",
+	Flag = "ShowHitbox",
+	Value = false,
+	Callback = function(state) App.State.Flags.ShowHitbox = state end,
+})
+
+MyUIElements.Guest1337:Toggle({
+	Title = "loc:AutoBlock",
+	Desc = "loc:AutoBlockDesc",
+	Flag = "AutoBlock",
+	Value = false,
+	Callback = function(state) App.State.Flags.AutoBlock = state end,
+})
+
+MyUIElements.Guest1337:Toggle({
+	Title = "loc:AutoPunch",
+	Desc = "loc:AutoPunchDesc",
+	Flag = "AutoPunch",
+	Value = false,
+	Callback = function(state) App.State.Flags.AutoCounter = state end,
+})
+
+AppAimPizza = {
+	Config = {
+		BasePath     = { "Assets", "Survivors" },
+		TargetFolder = { Killers = killersFolder, Survivors = survivorsFolder },
+		SkillKeys    = { "throwpizza" },
+		RightOffset  = 2,
+		AimRadius    = 50
+	},
+	State = {
+		Flags           = { AutoAim = false },
+		TargetModes     = { Survivors = true },
+		SkillCache      = {},
+		IsAiming        = false,
+		AimTargetRoot   = nil,
+		AimTrack        = nil,
+		AimConn         = nil,
+		PlayerConns     = {},
+		BestTargetsList = {}
+	}
+}
+
+AppAimPizza.NormalizeId = function(id) 
+	return tostring(id):match("%d+") 
+end
+
+AppAimPizza.UpdateDict = function(dict, list)
+	table.clear(dict)
+	for _, v in ipairs(list) do dict[v] = true end
+end
+
+AppAimPizza.WalkTable = function(tbl, out, depth, keyList)
+	if depth > 4 then return end
+	for k, v in pairs(tbl) do
+		AppAimPizza.State.TempMatched = nil
+		for _, key in ipairs(keyList) do
+			if type(k) == "string" and k:lower() == key:lower() then
+				AppAimPizza.State.TempMatched = key:lower()
+				break
+			end
+		end
+		if AppAimPizza.State.TempMatched then
+			if type(v) == "string" or type(v) == "number" then
+				out[AppAimPizza.NormalizeId(v)] = AppAimPizza.State.TempMatched
+			elseif type(v) == "table" then
+				AppAimPizza.WalkTable(v, out, depth + 1, {AppAimPizza.State.TempMatched})
+			end
+		end
+		if type(v) == "table" then 
+			AppAimPizza.WalkTable(v, out, depth + 1, keyList) 
+		end
+	end
+end
+
+AppAimPizza.LoadElliotConfig = function()
+	AppAimPizza.State.CurPath = ReplicatedStorage
+	for _, name in ipairs(AppAimPizza.Config.BasePath) do
+		AppAimPizza.State.CurPath = AppAimPizza.State.CurPath:FindFirstChild(name)
+		if not AppAimPizza.State.CurPath then return end
+	end
+	
+	AppAimPizza.State.ElliotFolder = AppAimPizza.State.CurPath:FindFirstChild("Elliot") or AppAimPizza.State.CurPath:FindFirstChild("elliot")
+	if not AppAimPizza.State.ElliotFolder then return end
+
+	AppAimPizza.State.ConfigMod = AppAimPizza.State.ElliotFolder:FindFirstChild("config") or AppAimPizza.State.ElliotFolder:FindFirstChild("Config")
+	if AppAimPizza.State.ConfigMod then
+		AppAimPizza.State.Ok, AppAimPizza.State.Data = pcall(require, AppAimPizza.State.ConfigMod)
+		if AppAimPizza.State.Ok and type(AppAimPizza.State.Data) == "table" then
+			AppAimPizza.WalkTable(AppAimPizza.State.Data, AppAimPizza.State.SkillCache, 0, AppAimPizza.Config.SkillKeys)
+		end
+	end
+end
+
+AppAimPizza.GetLowestHPTarget = function()
+	table.clear(AppAimPizza.State.BestTargetsList)
+	AppAimPizza.State.LowestHPPct = math.huge
+	AppAimPizza.State.MyRoot = playerCharacter and playerCharacter:FindFirstChild("HumanoidRootPart")
+	
+	if not AppAimPizza.State.MyRoot then return nil end
+	
+	for mode, active in pairs(AppAimPizza.State.TargetModes) do
+		if active and AppAimPizza.Config.TargetFolder[mode] then
+			for _, model in ipairs(AppAimPizza.Config.TargetFolder[mode]:GetChildren()) do
+				if model ~= playerCharacter then
+					AppAimPizza.State.ScanHum = model:FindFirstChildOfClass("Humanoid")
+					AppAimPizza.State.ScanRoot = model:FindFirstChild("HumanoidRootPart")
+					
+					if AppAimPizza.State.ScanHum and AppAimPizza.State.ScanRoot and AppAimPizza.State.ScanHum.Health > 0 and AppAimPizza.State.ScanHum.MaxHealth > 0 then
+						AppAimPizza.State.Dist = (AppAimPizza.State.ScanRoot.Position - AppAimPizza.State.MyRoot.Position).Magnitude
+						if AppAimPizza.State.Dist <= AppAimPizza.Config.AimRadius then
+							AppAimPizza.State.Pct = AppAimPizza.State.ScanHum.Health / AppAimPizza.State.ScanHum.MaxHealth
+							
+							if AppAimPizza.State.Pct < AppAimPizza.State.LowestHPPct then
+								AppAimPizza.State.LowestHPPct = AppAimPizza.State.Pct
+								table.clear(AppAimPizza.State.BestTargetsList)
+								table.insert(AppAimPizza.State.BestTargetsList, AppAimPizza.State.ScanRoot)
+							elseif AppAimPizza.State.Pct == AppAimPizza.State.LowestHPPct then
+								table.insert(AppAimPizza.State.BestTargetsList, AppAimPizza.State.ScanRoot)
+							end
+						end
+					end
+				end
+			end
+		end
+	end
+	
+	if #AppAimPizza.State.BestTargetsList > 0 then
+		return AppAimPizza.State.BestTargetsList[math.random(1, #AppAimPizza.State.BestTargetsList)]
+	end
+	return nil
+end
+
+AppAimPizza.StopAim = function()
+	AppAimPizza.State.IsAiming = false
+	if AppAimPizza.State.AimConn then 
+		AppAimPizza.State.AimConn:Disconnect()
+		AppAimPizza.State.AimConn = nil 
+	end
+	AppAimPizza.State.MyHum = playerCharacter and playerCharacter:FindFirstChildOfClass("Humanoid")
+	if AppAimPizza.State.MyHum then 
+		AppAimPizza.State.MyHum.AutoRotate = true 
+	end
+end
+
+AppAimPizza.AimLoop = function()
+	if not AppAimPizza.State.IsAiming or not AppAimPizza.State.AimTargetRoot or not playerCharacter then return AppAimPizza.StopAim() end
+	if AppAimPizza.State.AimTrack and not AppAimPizza.State.AimTrack.IsPlaying then return AppAimPizza.StopAim() end
+
+	AppAimPizza.State.MyRoot = playerCharacter:FindFirstChild("HumanoidRootPart")
+	AppAimPizza.State.TargetHum = AppAimPizza.State.AimTargetRoot.Parent:FindFirstChildOfClass("Humanoid")
+
+	if not AppAimPizza.State.MyRoot or not AppAimPizza.State.TargetHum or AppAimPizza.State.TargetHum.Health <= 0 then
+		return AppAimPizza.StopAim()
+	end
+
+	AppAimPizza.State.MyPos = AppAimPizza.State.MyRoot.Position
+	AppAimPizza.State.TargetPos = AppAimPizza.State.AimTargetRoot.Position
+
+	AppAimPizza.State.DirFlat = Vector3.new(AppAimPizza.State.TargetPos.X - AppAimPizza.State.MyPos.X, 0, AppAimPizza.State.TargetPos.Z - AppAimPizza.State.MyPos.Z).Unit
+	AppAimPizza.State.RightVec = AppAimPizza.State.DirFlat:Cross(Vector3.new(0, 1, 0))
+	AppAimPizza.State.AimPoint = AppAimPizza.State.TargetPos + (AppAimPizza.State.RightVec * AppAimPizza.Config.RightOffset)
+
+	AppAimPizza.State.MyRoot.CFrame = CFrame.new(AppAimPizza.State.MyPos, Vector3.new(AppAimPizza.State.AimPoint.X, AppAimPizza.State.MyPos.Y, AppAimPizza.State.AimPoint.Z))
+end
+
+AppAimPizza.OnAnimPlayed = function(track)
+	if not AppAimPizza.State.Flags.AutoAim then return end
+	if not track.Animation or not track.Animation.AnimationId then return end
+	if AppAimPizza.State.IsAiming then return end
+
+	AppAimPizza.State.AnimId = AppAimPizza.NormalizeId(track.Animation.AnimationId)
+	
+	if AppAimPizza.State.SkillCache[AppAimPizza.State.AnimId] then
+		AppAimPizza.State.AimTargetRoot = AppAimPizza.GetLowestHPTarget()
+		
+		if AppAimPizza.State.AimTargetRoot then
+			AppAimPizza.State.IsAiming = true
+			AppAimPizza.State.AimTrack = track
+			
+			AppAimPizza.State.MyHum = playerCharacter and playerCharacter:FindFirstChildOfClass("Humanoid")
+			if AppAimPizza.State.MyHum then 
+				AppAimPizza.State.MyHum.AutoRotate = false 
+			end
+
+			if AppAimPizza.State.AimConn then AppAimPizza.State.AimConn:Disconnect() end
+			AppAimPizza.State.AimConn = RunService.RenderStepped:Connect(AppAimPizza.AimLoop)
+
+			track.Stopped:Once(AppAimPizza.StopAim)
+		end
+	end
+end
+
+AppAimPizza.HookPlayer = function(char)
+	if not char then return end
+	for _, conn in ipairs(AppAimPizza.State.PlayerConns) do conn:Disconnect() end
+	table.clear(AppAimPizza.State.PlayerConns)
+	
+	AppAimPizza.State.Hum = char:WaitForChild("Humanoid", 5)
+	AppAimPizza.State.Animator = AppAimPizza.State.Hum and AppAimPizza.State.Hum:WaitForChild("Animator", 5)
+	
+	if AppAimPizza.State.Animator then
+		table.insert(AppAimPizza.State.PlayerConns, AppAimPizza.State.Animator.AnimationPlayed:Connect(AppAimPizza.OnAnimPlayed))
+	end
+end
+
+AppAimPizza.LoadElliotConfig()
+AppAimPizza.HookPlayer(playerCharacter)
+localPlayer.CharacterAdded:Connect(AppAimPizza.HookPlayer)
+
+MyUIElements.Elliot:Dropdown({
+	Title = "loc:ChooseTarget",
+	Desc = "loc:ChooseTargetDesc",
+	Flag = "PizzaTargetMode",
+	Values = {"Killers", "Survivors"},
+	Value = {"Survivors"}, 
+	Multi = true,
+	AllowNone = false, 
+	Callback = function(value)
+		AppAimPizza.UpdateDict(AppAimPizza.State.TargetModes, value)
+	end,
+})
+
+MyUIElements.Elliot:Input({
+	Title = "loc:RadiusAim",
+	Desc = "loc:RadiusAimDesc",
+	Flag = "PizzaAimRadius_Input",
+	Placeholder = "Enter Text",
+	Value = "50",
+	Callback = function(value)
+		AppAimPizza.State.ParsedRadius = tonumber(value)
+		if AppAimPizza.State.ParsedRadius then
+			AppAimPizza.Config.AimRadius = AppAimPizza.State.ParsedRadius
+		end
+	end
+})
+
+MyUIElements.Elliot:Toggle({
+	Title = "loc:AutoAimPizza",
+	Desc = "loc:AutoAimPizzaDesc",
+	Flag = "AutoAimPizzaFlag",
+	Value = false,
+	Callback = function(state) 
+		AppAimPizza.State.Flags.AutoAim = state 
+		if not state then AppAimPizza.StopAim() end
+	end,
 })
 
 local ServerManager = {
@@ -5974,6 +6915,749 @@ MyUIElements.TeleportToKillers:Button({
 })
 
 TeleportLogic:InitEvents()
+
+PortalConfig = {
+    PortalImage = "rbxassetid://75133594843421",
+    OpenSoundUrl = "https://raw.githubusercontent.com/SLK-GAMING-MOD/Open-soure/main/OpenPortal.mp3",
+    OpenSoundName = "OpenPortal_Sound.mp3",
+    EnterSoundUrl = "https://raw.githubusercontent.com/SLK-GAMING-MOD/Open-soure/main/EnterPortal.mp3",
+    EnterSoundName = "EnterPortal_Sound.mp3",
+    EndSoundUrl = "https://raw.githubusercontent.com/SLK-GAMING-MOD/Open-soure/main/EndPortal.mp3",
+    EndSoundName = "EndPortal_Sound.mp3",
+    TriggerKey = Enum.KeyCode.U,
+    FreecamDuration = 15,
+    ButtonIcon = "rbxassetid://89910721511648",
+    ButtonSize = 60,
+    PortalLifetime = 10,
+    CamSpeed = 50,
+    CamSensitivity = 0.3,
+    ScanRadius = 1000,
+    ScanTop = 1000,
+    ScanBottom = -1000,
+    GridStep = 50,
+    MaxPassThrough = 12,
+    RootHeight = 3.2,
+    MinFloorNormalY = 0.85,
+    SuspiciousMaxSize = 500,
+    SuspiciousMinSize = 0.5,
+    CheckSize = Vector3.new(4.5, 6.5, 4.5),
+    HeadCheckOffset = Vector3.new(0, 1.5, 0),
+    HeadCheckDir = Vector3.new(0, 5, 0),
+    SideCheckOffset = Vector3.new(0, -0.5, 0),
+    SideDirections = {
+        Vector3.new(2.5, 0, 0),
+        Vector3.new(-2.5, 0, 0),
+        Vector3.new(0, 0, 2.5),
+        Vector3.new(0, 0, -2.5),
+    },
+    FloorOffsets = {
+        Vector3.new(2, 0, 2),
+        Vector3.new(-2, 0, 2),
+        Vector3.new(2, 0, -2),
+        Vector3.new(-2, 0, -2),
+    },
+}
+
+AppState = {
+    Plr = localPlayer,
+    IsSpawning = false,
+    InFreecam = false,
+    ButtonVisible = true,
+    ButtonDraggable = false,
+    IsDragging = false,
+    PortalConnection = nil,
+    MoveConnection = nil,
+    RotateConnection = nil,
+    FreecamEndTick = 0,
+    PortalDespawnTick = 0,
+    ExitCooldown = 0,
+    OpenSoundId = nil,
+    EndSoundId = nil,
+    EnterSoundId = nil,
+    CurrentPortal = nil,
+    PortalLight = nil,
+    PortalDecals = {},
+    PortalSpin = nil,
+    PortalAngle = 0,
+    OriginalCharacterCFrame = nil,
+    CamPart = nil,
+    CamYaw = 0,
+    CamPitch = 0,
+    ControlModule = nil,
+    ScreenEffects = {},
+    Drag = {Input = nil, Start = nil, StartPos = nil, Delta = nil},
+    RayParams = nil,
+    SafePos = nil,
+    Humanoid = nil,
+    OldWalkSpeed = nil,
+    OldJumpPower = nil,
+    OldJumpHeight = nil,
+    OldAutoRotate = nil,
+    OldUseJumpPower = nil,
+    SafeSurface = nil,
+    SafeSurfaceNormal = nil,
+}
+
+pcall(function()
+    AppState.ControlModule = require(localPlayer.PlayerScripts:WaitForChild("PlayerModule", 10):WaitForChild("ControlModule", 10))
+end)
+
+function DownloadAndGetAsset(url, filename)
+    AppState.TempAsset = nil
+    pcall(function()
+        if not isfile(filename) then
+            writefile(filename, game:HttpGet(url))
+        end
+        AppState.TempAsset = getcustomasset(filename)
+    end)
+    return AppState.TempAsset
+end
+
+AppState.OpenSoundId = DownloadAndGetAsset(PortalConfig.OpenSoundUrl, PortalConfig.OpenSoundName)
+AppState.EndSoundId = DownloadAndGetAsset(PortalConfig.EndSoundUrl, PortalConfig.EndSoundName)
+AppState.EnterSoundId = DownloadAndGetAsset(PortalConfig.EnterSoundUrl, PortalConfig.EnterSoundName)
+
+function CreateTween(instance, duration, style, direction, properties)
+    AppState.LastTween = nil
+    pcall(function()
+        AppState.LastTween = TweenService:Create(instance, TweenInfo.new(duration, style, direction), properties)
+        AppState.LastTween:Play()
+    end)
+    return AppState.LastTween
+end
+
+function PlaySound(assetId, parentPart)
+    if not assetId or not parentPart then return end
+    AppState.SoundInstance = Instance.new("Sound")
+    AppState.SoundInstance.SoundId = assetId
+    AppState.SoundInstance.Volume = 1
+    AppState.SoundInstance.RollOffMaxDistance = 150
+    AppState.SoundInstance.Parent = parentPart
+    AppState.SoundInstance:Play()
+    Debris:AddItem(AppState.SoundInstance, 5)
+end
+
+function DisconnectConn(key)
+    if AppState[key] then
+        AppState[key]:Disconnect()
+        AppState[key] = nil
+    end
+end
+
+function GetHRP()
+    AppState.Character = localPlayer.Character
+    return AppState.Character and AppState.Character:FindFirstChild("HumanoidRootPart")
+end
+
+function ZeroVelocity(hrp)
+    hrp.AssemblyLinearVelocity = Vector3.zero
+    hrp.AssemblyAngularVelocity = Vector3.zero
+end
+
+function IsPressInput(input)
+    return input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch
+end
+
+function IsMoveInput(input)
+    return input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch
+end
+
+function GetFlatLook(hrp)
+    AppState.FlatLook = Vector3.new(hrp.CFrame.LookVector.X, 0, hrp.CFrame.LookVector.Z)
+    if AppState.FlatLook.Magnitude < 0.01 then
+        AppState.FlatLook = Vector3.new(0, 0, -1)
+    end
+    return AppState.FlatLook.Unit
+end
+
+function GetPortalCFrame(hrp, distance, side)
+    AppState.FlatLook = GetFlatLook(hrp)
+    AppState.PortalPos = hrp.Position + AppState.FlatLook * (distance * side) + Vector3.new(0, 1.2, 0)
+    return CFrame.fromMatrix(AppState.PortalPos, -AppState.FlatLook * side, Vector3.new(0, 1, 0))
+end
+
+function UpdateCamRotation(deltaX, deltaY)
+    AppState.CamYaw = AppState.CamYaw - math.rad(deltaX * PortalConfig.CamSensitivity)
+    AppState.CamPitch = math.clamp(AppState.CamPitch - math.rad(deltaY * PortalConfig.CamSensitivity), math.rad(-80), math.rad(80))
+end
+function NewColumnParams(instances)
+    AppState.ColumnParams = RaycastParams.new()
+    AppState.ColumnParams.FilterType = Enum.RaycastFilterType.Exclude
+    AppState.ColumnParams.FilterDescendantsInstances = instances
+    AppState.ColumnParams.IgnoreWater = true
+    return AppState.ColumnParams
+end
+
+function IsSuspiciousPart(part)
+    if not part or not part:IsA("BasePart") then return true end
+    AppState.PartSize = part.Size
+    return AppState.PartSize.X > PortalConfig.SuspiciousMaxSize
+        or AppState.PartSize.Y > PortalConfig.SuspiciousMaxSize
+        or AppState.PartSize.Z > PortalConfig.SuspiciousMaxSize
+        or AppState.PartSize.X < PortalConfig.SuspiciousMinSize
+        or AppState.PartSize.Z < PortalConfig.SuspiciousMinSize
+end
+
+function CheckCandidate(result, centerPos)
+    if not result then return nil end
+    AppState.HitPart = result.Instance
+    if not AppState.HitPart or not AppState.HitPart:IsA("BasePart") then return nil end
+    if result.Normal.Y < PortalConfig.MinFloorNormalY then return nil end
+    if IsSuspiciousPart(AppState.HitPart) then return nil end
+
+    AppState.CandidatePos = result.Position + Vector3.new(0, PortalConfig.RootHeight, 0)
+
+    AppState.TouchingParts = Workspace:GetPartBoundsInBox(CFrame.new(AppState.CandidatePos), PortalConfig.CheckSize, AppState.OverlapParams)
+    for _, part in ipairs(AppState.TouchingParts) do
+        if part ~= AppState.HitPart and part:IsA("BasePart") and part.CanCollide then
+            return nil
+        end
+    end
+
+    if Workspace:Raycast(AppState.CandidatePos + PortalConfig.HeadCheckOffset, PortalConfig.HeadCheckDir, AppState.RayParams) then
+        return nil
+    end
+
+    AppState.SideOrigin = AppState.CandidatePos + PortalConfig.SideCheckOffset
+    for _, dir in ipairs(PortalConfig.SideDirections) do
+        if Workspace:Raycast(AppState.SideOrigin, dir, AppState.RayParams) then
+            return nil
+        end
+    end
+
+    for _, offset in ipairs(PortalConfig.FloorOffsets) do
+        AppState.FloorCheck = Workspace:Raycast(result.Position + offset + Vector3.new(0, 2, 0), Vector3.new(0, -5, 0), AppState.RayParams)
+        if not AppState.FloorCheck or AppState.FloorCheck.Normal.Y < PortalConfig.MinFloorNormalY then
+            return nil
+        end
+    end
+
+    return {
+        CFrame = CFrame.new(AppState.CandidatePos),
+        Position = AppState.CandidatePos,
+        Surface = AppState.HitPart,
+        Normal = result.Normal,
+        Distance = (Vector3.new(AppState.CandidatePos.X, 0, AppState.CandidatePos.Z) - Vector3.new(centerPos.X, 0, centerPos.Z)).Magnitude,
+    }
+end
+
+function FindSurfaceAtColumn(x, z, centerPos)
+    AppState.ColumnOrigin = Vector3.new(x, PortalConfig.ScanTop, z)
+    AppState.IgnoredParts = {AppState.ScanCharacter}
+
+    for attempt = 1, PortalConfig.MaxPassThrough do
+        AppState.ColumnResult = Workspace:Raycast(
+            AppState.ColumnOrigin,
+            Vector3.new(0, PortalConfig.ScanBottom - AppState.ColumnOrigin.Y, 0),
+            NewColumnParams(AppState.IgnoredParts)
+        )
+        if not AppState.ColumnResult then return nil end
+
+        AppState.ColumnCandidate = CheckCandidate(AppState.ColumnResult, centerPos)
+        if AppState.ColumnCandidate then return AppState.ColumnCandidate end
+
+        AppState.ColumnHit = AppState.ColumnResult.Instance
+        if AppState.ColumnHit and AppState.ColumnHit:IsA("BasePart") then
+            table.insert(AppState.IgnoredParts, AppState.ColumnHit)
+            AppState.ColumnOrigin = Vector3.new(x, AppState.ColumnResult.Position.Y - 0.05, z)
+        else
+            return nil
+        end
+    end
+    return nil
+end
+
+function GetHighestSafePos(centerPos)
+    AppState.ScanCharacter = localPlayer.Character
+    if not AppState.ScanCharacter then return nil end
+
+    AppState.RayParams = RaycastParams.new()
+    AppState.RayParams.FilterType = Enum.RaycastFilterType.Exclude
+    AppState.RayParams.FilterDescendantsInstances = {AppState.ScanCharacter}
+    AppState.RayParams.IgnoreWater = true
+
+    AppState.OverlapParams = OverlapParams.new()
+    AppState.OverlapParams.FilterType = Enum.RaycastFilterType.Exclude
+    AppState.OverlapParams.FilterDescendantsInstances = {AppState.ScanCharacter}
+
+    AppState.Candidates = {}
+
+    for x = -PortalConfig.ScanRadius, PortalConfig.ScanRadius, PortalConfig.GridStep do
+        for z = -PortalConfig.ScanRadius, PortalConfig.ScanRadius, PortalConfig.GridStep do
+            if math.sqrt(x * x + z * z) <= PortalConfig.ScanRadius then
+                AppState.Candidate = FindSurfaceAtColumn(centerPos.X + x, centerPos.Z + z, centerPos)
+                if AppState.Candidate then
+                    table.insert(AppState.Candidates, AppState.Candidate)
+                end
+            end
+        end
+    end
+
+    if #AppState.Candidates == 0 then
+        AppState.SafeSurface = nil
+        AppState.SafeSurfaceNormal = nil
+        AppState.SafePos = nil
+        return nil
+    end
+
+    table.sort(AppState.Candidates, function(a, b) return a.Distance < b.Distance end)
+
+    AppState.SafeSurface = AppState.Candidates[1].Surface
+    AppState.SafeSurfaceNormal = AppState.Candidates[1].Normal
+    AppState.SafePos = AppState.Candidates[1].Position
+    return AppState.Candidates[1].CFrame
+end
+function ManageScreenEffect(enable)
+    if enable then
+        AppState.ScreenEffects.ColorCorrection = Instance.new("ColorCorrectionEffect")
+        AppState.ScreenEffects.ColorCorrection.TintColor = Color3.fromRGB(50, 255, 50)
+        AppState.ScreenEffects.ColorCorrection.Brightness = 0.1
+        AppState.ScreenEffects.ColorCorrection.Contrast = 0.35
+        AppState.ScreenEffects.ColorCorrection.Saturation = 0.7
+        AppState.ScreenEffects.ColorCorrection.Parent = Lighting
+
+        AppState.ScreenEffects.Gui = Instance.new("ScreenGui")
+        AppState.ScreenEffects.Gui.IgnoreGuiInset = true
+        AppState.ScreenEffects.Gui.ResetOnSpawn = false
+        AppState.ScreenEffects.Gui.Parent = CoreGui
+
+        AppState.ScreenEffects.Overlay = Instance.new("Frame")
+        AppState.ScreenEffects.Overlay.Size = UDim2.new(1, 0, 1, 0)
+        AppState.ScreenEffects.Overlay.BackgroundColor3 = Color3.fromRGB(0, 255, 50)
+        AppState.ScreenEffects.Overlay.BackgroundTransparency = 0.6
+        AppState.ScreenEffects.Overlay.BorderSizePixel = 0
+        AppState.ScreenEffects.Overlay.Parent = AppState.ScreenEffects.Gui
+
+        AppState.ScreenEffects.TimerText = Instance.new("TextLabel")
+        AppState.ScreenEffects.TimerText.Size = UDim2.new(1, 0, 0, 50)
+        AppState.ScreenEffects.TimerText.Position = UDim2.new(0, 0, 0, 80)
+        AppState.ScreenEffects.TimerText.BackgroundTransparency = 1
+        AppState.ScreenEffects.TimerText.Font = Enum.Font.GothamBold
+        AppState.ScreenEffects.TimerText.TextSize = 30
+        AppState.ScreenEffects.TimerText.TextColor3 = Color3.fromRGB(200, 255, 200)
+        AppState.ScreenEffects.TimerText.Text = ""
+        AppState.ScreenEffects.TimerText.Parent = AppState.ScreenEffects.Gui
+
+        AppState.ScreenEffects.Stroke = Instance.new("UIStroke")
+        AppState.ScreenEffects.Stroke.Thickness = 2
+        AppState.ScreenEffects.Stroke.Color = Color3.fromRGB(0, 150, 0)
+        AppState.ScreenEffects.Stroke.Parent = AppState.ScreenEffects.TimerText
+
+        task.spawn(function()
+            while AppState.InFreecam and AppState.ScreenEffects.TimerText do
+                AppState.TimeLeft = math.ceil(AppState.FreecamEndTick - os.clock())
+                if AppState.TimeLeft > 0 then
+                    AppState.ScreenEffects.TimerText.Text = string.format("00:%02d", AppState.TimeLeft)
+                    if AppState.TimeLeft <= 3 then
+                        AppState.ScreenEffects.TimerText.TextColor3 = Color3.fromRGB(255, 50, 50)
+                        AppState.ScreenEffects.Stroke.Color = Color3.fromRGB(150, 0, 0)
+                        AppState.ScreenEffects.TimerText.TextSize = 30
+                        CreateTween(AppState.ScreenEffects.TimerText, 0.25, Enum.EasingStyle.Sine, Enum.EasingDirection.Out, {TextSize = 50})
+                        task.delay(0.25, function()
+                            if AppState.ScreenEffects.TimerText then
+                                CreateTween(AppState.ScreenEffects.TimerText, 0.25, Enum.EasingStyle.Sine, Enum.EasingDirection.In, {TextSize = 30})
+                            end
+                        end)
+                    else
+                        AppState.ScreenEffects.TimerText.TextColor3 = Color3.fromRGB(200, 255, 200)
+                        AppState.ScreenEffects.Stroke.Color = Color3.fromRGB(0, 150, 0)
+                        AppState.ScreenEffects.TimerText.TextSize = 30
+                    end
+                else
+                    AppState.ScreenEffects.TimerText.Text = ""
+                end
+                task.wait(1)
+            end
+        end)
+    else
+        for _, effect in pairs(AppState.ScreenEffects) do
+            if effect.Parent then effect:Destroy() end
+        end
+        table.clear(AppState.ScreenEffects)
+    end
+end
+
+function FreezeCharacter(humanoid, hrp)
+    AppState.OldWalkSpeed = humanoid.WalkSpeed
+    AppState.OldJumpPower = humanoid.JumpPower
+    AppState.OldJumpHeight = humanoid.JumpHeight
+    AppState.OldAutoRotate = humanoid.AutoRotate
+    AppState.OldUseJumpPower = humanoid.UseJumpPower
+
+    humanoid.WalkSpeed = 0
+    humanoid.AutoRotate = false
+    if humanoid.UseJumpPower then
+        humanoid.JumpPower = 0
+    else
+        humanoid.JumpHeight = 0
+    end
+    humanoid.Jump = false
+    humanoid:Move(Vector3.zero, false)
+    ZeroVelocity(hrp)
+end
+
+function UnfreezeCharacter(humanoid, hrp)
+    humanoid.WalkSpeed = AppState.OldWalkSpeed or 16
+    humanoid.AutoRotate = AppState.OldAutoRotate ~= false
+    if AppState.OldUseJumpPower then
+        humanoid.UseJumpPower = true
+        humanoid.JumpPower = AppState.OldJumpPower or 50
+    else
+        humanoid.UseJumpPower = false
+        humanoid.JumpHeight = AppState.OldJumpHeight or 7.2
+    end
+    humanoid.Jump = false
+    humanoid:Move(Vector3.zero, false)
+    ZeroVelocity(hrp)
+end
+
+function StartFreecam()
+    if AppState.InFreecam then return false end
+
+    AppState.Hrp = GetHRP()
+    if not AppState.Hrp then return false end
+
+    AppState.OriginalCharacterCFrame = AppState.Hrp.CFrame
+    AppState.SafeCFrame = GetHighestSafePos(AppState.OriginalCharacterCFrame.Position)
+    if not AppState.SafeCFrame then
+        AppState.FreecamEndTick = 0
+        return false
+    end
+
+    AppState.InFreecam = true
+    AppState.FreecamEndTick = os.clock() + PortalConfig.FreecamDuration
+    AppState.PendingTeleportCFrame = AppState.SafeCFrame
+
+    AppState.Humanoid = localPlayer.Character and localPlayer.Character:FindFirstChildOfClass("Humanoid")
+    if AppState.Humanoid then
+        FreezeCharacter(AppState.Humanoid, AppState.Hrp)
+    end
+
+    AppState.CamPart = Instance.new("Part")
+    AppState.CamPart.Transparency = 1
+    AppState.CamPart.Anchored = true
+    AppState.CamPart.CanCollide = false
+    AppState.CamPart.Size = Vector3.new(1, 1, 1)
+    AppState.CamPart.CFrame = CFrame.new(AppState.Hrp.Position)
+    AppState.CamPart.Parent = Workspace
+
+    task.delay(0.15, function()
+        if not AppState.InFreecam then return end
+        AppState.Hrp = GetHRP()
+        if AppState.Hrp and AppState.PendingTeleportCFrame then
+            AppState.Hrp.CFrame = AppState.PendingTeleportCFrame
+            ZeroVelocity(AppState.Hrp)
+            AppState.PendingTeleportCFrame = nil
+        end
+    end)
+
+    AppState.CamPitch, AppState.CamYaw = Camera.CFrame:ToEulerAnglesYXZ()
+    Camera.CameraType = Enum.CameraType.Scriptable
+    Camera.CFrame = AppState.CamPart.CFrame * CFrame.Angles(0, AppState.CamYaw, 0) * CFrame.Angles(AppState.CamPitch, 0, 0)
+
+    if not UserInputService.TouchEnabled then
+        UserInputService.MouseBehavior = Enum.MouseBehavior.LockCurrentPosition
+    end
+
+    ManageScreenEffect(true)
+    PlaySound(AppState.EnterSoundId, AppState.CamPart)
+
+    AppState.RotateConnection = UserInputService.InputChanged:Connect(function(input, gpe)
+        if not AppState.InFreecam then return end
+        if input.UserInputType == Enum.UserInputType.MouseMovement then
+            UpdateCamRotation(input.Delta.X, input.Delta.Y)
+        elseif input.UserInputType == Enum.UserInputType.Touch and not gpe then
+            UpdateCamRotation(input.Delta.X, input.Delta.Y)
+        end
+    end)
+
+    AppState.MoveConnection = RunService.RenderStepped:Connect(function(dt)
+        if os.clock() >= AppState.FreecamEndTick then
+            EndFreecam()
+            return
+        end
+        AppState.CamPart.CFrame = CFrame.new(AppState.CamPart.Position) * CFrame.Angles(0, AppState.CamYaw, 0) * CFrame.Angles(AppState.CamPitch, 0, 0)
+        if AppState.Humanoid and AppState.Hrp then
+            AppState.Humanoid:Move(Vector3.zero, false)
+            AppState.Humanoid.Jump = false
+        end
+
+        AppState.MoveVector = AppState.ControlModule and AppState.ControlModule:GetMoveVector() or Vector3.new()
+        if AppState.MoveVector.Magnitude > 0.01 then
+            AppState.MoveDir = (AppState.CamPart.CFrame.LookVector * -AppState.MoveVector.Z) + (AppState.CamPart.CFrame.RightVector * AppState.MoveVector.X)
+            if AppState.MoveDir.Magnitude > 0 then
+                AppState.CamPart.CFrame = AppState.CamPart.CFrame + (AppState.MoveDir.Unit * PortalConfig.CamSpeed * dt)
+            end
+        end
+        Camera.CFrame = AppState.CamPart.CFrame
+    end)
+    return true
+end
+
+function EndFreecam()
+    if not AppState.InFreecam then return end
+    AppState.InFreecam = false
+
+    DisconnectConn("MoveConnection")
+    DisconnectConn("RotateConnection")
+    UserInputService.MouseBehavior = Enum.MouseBehavior.Default
+
+    ManageScreenEffect(false)
+
+    AppState.Hrp = GetHRP()
+    if AppState.Hrp and AppState.CamPart then
+        AppState.SafePos = AppState.CamPart.Position
+        AppState.Hrp.CFrame = CFrame.new(AppState.SafePos) * (AppState.OriginalCharacterCFrame - AppState.OriginalCharacterCFrame.Position)
+
+        if AppState.Humanoid then
+            UnfreezeCharacter(AppState.Humanoid, AppState.Hrp)
+        end
+
+        AppState.ExitCooldown = os.clock() + 1.5
+        BuildPortal(GetPortalCFrame(AppState.Hrp, 5, -1))
+    end
+
+    if AppState.CamPart then AppState.CamPart:Destroy() AppState.CamPart = nil end
+    Camera.CameraType = Enum.CameraType.Custom
+    if localPlayer.Character then
+        Camera.CameraSubject = localPlayer.Character:FindFirstChild("Humanoid")
+    end
+end
+function TweenDecals(duration, style, direction, transparency)
+    for _, decal in pairs(AppState.PortalDecals) do
+        CreateTween(decal, duration, style, direction, {Transparency = transparency})
+    end
+end
+
+function ClosePortal()
+    if not AppState.CurrentPortal or not AppState.CurrentPortal.Parent then return end
+    AppState.ClosingPortal = AppState.CurrentPortal
+    AppState.CurrentPortal = nil
+
+    PlaySound(AppState.EndSoundId, AppState.ClosingPortal)
+
+    DisconnectConn("PortalSpin")
+    if AppState.PortalLight then CreateTween(AppState.PortalLight, 0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.In, {Range = 0, Brightness = 0}) end
+
+    TweenDecals(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.In, 1)
+    CreateTween(AppState.ClosingPortal, 0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.In, {Size = Vector3.new(0.3, 0.1, 0.1)})
+    Debris:AddItem(AppState.ClosingPortal, 0.55)
+end
+
+function BuildPortal(portalCFrame)
+    DisconnectConn("PortalSpin")
+    DisconnectConn("PortalConnection")
+    if AppState.CurrentPortal then AppState.CurrentPortal:Destroy() AppState.CurrentPortal = nil end
+
+    AppState.CurrentPortal = Instance.new("Part")
+    AppState.CurrentPortal.Name = "portalrickprime"
+    AppState.CurrentPortal.Anchored = true
+    AppState.CurrentPortal.CanCollide = false
+    AppState.CurrentPortal.Material = Enum.Material.Neon
+    AppState.CurrentPortal.Color = Color3.fromRGB(255, 221, 51)
+    AppState.CurrentPortal.Shape = Enum.PartType.Cylinder
+    AppState.CurrentPortal.Size = Vector3.new(0.3, 0.1, 0.1)
+    AppState.CurrentPortal.CFrame = portalCFrame
+    AppState.CurrentPortal.Transparency = 1
+    AppState.CurrentPortal.Parent = Workspace
+
+    PlaySound(AppState.OpenSoundId, AppState.CurrentPortal)
+    table.clear(AppState.PortalDecals)
+
+    for _, face in pairs({Enum.NormalId.Left, Enum.NormalId.Right}) do
+        AppState.PortalDecals[face.Name] = Instance.new("Decal")
+        AppState.PortalDecals[face.Name].Texture = PortalConfig.PortalImage
+        AppState.PortalDecals[face.Name].Face = face
+        AppState.PortalDecals[face.Name].Transparency = 1
+        AppState.PortalDecals[face.Name].Parent = AppState.CurrentPortal
+    end
+
+    AppState.PortalLight = Instance.new("PointLight")
+    AppState.PortalLight.Color = Color3.fromRGB(80, 255, 120)
+    AppState.PortalLight.Range = 0
+    AppState.PortalLight.Brightness = 0
+    AppState.PortalLight.Parent = AppState.CurrentPortal
+    AppState.PortalAngle = 0
+
+    AppState.PortalSpin = RunService.Heartbeat:Connect(function(dt)
+        if AppState.CurrentPortal and AppState.CurrentPortal.Parent then
+            AppState.PortalAngle = AppState.PortalAngle - (80 * dt)
+            AppState.CurrentPortal.CFrame = portalCFrame * CFrame.Angles(math.rad(AppState.PortalAngle), 0, 0)
+        end
+    end)
+
+    CreateTween(AppState.PortalLight, 0.9, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, {Range = 10, Brightness = 1.2})
+    TweenDecals(0.9, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0)
+
+    task.spawn(function()
+        AppState.StepTween = CreateTween(AppState.CurrentPortal, 0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, {Size = Vector3.new(0.3, 10, 0.2)})
+        if AppState.StepTween then AppState.StepTween.Completed:Wait() end
+        if AppState.CurrentPortal then CreateTween(AppState.CurrentPortal, 0.9, Enum.EasingStyle.Back, Enum.EasingDirection.Out, {Size = Vector3.new(0.3, 10, 8)}) end
+    end)
+
+    AppState.PortalDespawnTick = os.clock() + PortalConfig.PortalLifetime
+    AppState.PortalConnection = RunService.Heartbeat:Connect(function()
+        if not AppState.CurrentPortal or not AppState.CurrentPortal.Parent then return end
+        if os.clock() >= AppState.PortalDespawnTick then
+            DisconnectConn("PortalConnection")
+            ClosePortal()
+            return
+        end
+        AppState.Hrp = GetHRP()
+        if AppState.Hrp
+            and not AppState.InFreecam
+            and os.clock() > AppState.ExitCooldown
+            and (AppState.Hrp.Position - AppState.CurrentPortal.Position).Magnitude < 4 then
+
+            if StartFreecam() then
+                DisconnectConn("PortalConnection")
+                ClosePortal()
+            end
+        end
+    end)
+end
+
+function HandlePortalAction()
+    if AppState.InFreecam then
+        EndFreecam()
+        return
+    end
+    AppState.Hrp = GetHRP()
+    if not AppState.Hrp or AppState.IsSpawning then return end
+
+    AppState.IsSpawning = true
+    BuildPortal(GetPortalCFrame(AppState.Hrp, 6, 1))
+    task.wait(1)
+    AppState.IsSpawning = false
+end
+
+function SaveButtonPos()
+    pcall(function()
+        writefile("PortalBtnConfig.json", HttpService:JSONEncode({
+            S1 = ActionButton.Position.X.Scale, O1 = ActionButton.Position.X.Offset,
+            S2 = ActionButton.Position.Y.Scale, O2 = ActionButton.Position.Y.Offset
+        }))
+    end)
+end
+
+function LoadButtonPos()
+    pcall(function()
+        if isfile("PortalBtnConfig.json") then
+            AppState.BtnData = HttpService:JSONDecode(readfile("PortalBtnConfig.json"))
+            ActionButton.Position = UDim2.new(AppState.BtnData.S1, AppState.BtnData.O1, AppState.BtnData.S2, AppState.BtnData.O2)
+        end
+    end)
+end
+
+UserInputService.InputBegan:Connect(function(input, gpe)
+    if gpe then return end
+    if input.KeyCode == PortalConfig.TriggerKey then
+        HandlePortalAction()
+    end
+end)
+
+ActionScreenGui = Instance.new("ScreenGui")
+ActionScreenGui.Name = "PortalActionUI"
+ActionScreenGui.ResetOnSpawn = false
+ActionScreenGui.Parent = CoreGui
+
+ActionButton = Instance.new("ImageButton")
+ActionButton.Name = "ActionButton"
+ActionButton.Size = UDim2.new(0, PortalConfig.ButtonSize, 0, PortalConfig.ButtonSize)
+ActionButton.Position = UDim2.new(0.5, -PortalConfig.ButtonSize / 2, 0.7, 0)
+ActionButton.BackgroundTransparency = 1
+ActionButton.Image = PortalConfig.ButtonIcon
+ActionButton.Parent = ActionScreenGui
+
+LoadButtonPos()
+
+ActionButton.InputBegan:Connect(function(input)
+    if IsPressInput(input) then
+        AppState.Drag.Start = input.Position
+        AppState.Drag.StartPos = ActionButton.Position
+        AppState.IsDragging = false
+    end
+end)
+
+ActionButton.InputChanged:Connect(function(input)
+    if IsMoveInput(input) then
+        AppState.Drag.Input = input
+        if AppState.ButtonDraggable and AppState.Drag.Start then
+            AppState.Drag.Delta = input.Position - AppState.Drag.Start
+            if AppState.Drag.Delta.Magnitude > 5 then
+                AppState.IsDragging = true
+                ActionButton.Position = UDim2.new(
+                    AppState.Drag.StartPos.X.Scale, AppState.Drag.StartPos.X.Offset + AppState.Drag.Delta.X,
+                    AppState.Drag.StartPos.Y.Scale, AppState.Drag.StartPos.Y.Offset + AppState.Drag.Delta.Y
+                )
+            end
+        end
+    end
+end)
+
+ActionButton.InputEnded:Connect(function(input)
+    if IsPressInput(input) then
+        if AppState.IsDragging then
+            SaveButtonPos()
+        else
+            HandlePortalAction()
+        end
+        AppState.Drag.Start = nil
+        AppState.IsDragging = false
+    end
+end)
+
+MyUIElements.RickPrime:Toggle({
+    Title = "loc:ShowPortalSkill",
+    Desc = "loc:ShowPortalSkillDesc",
+    Flag = "Portal_Button_Visible",
+    Value = false,
+    Callback = function(state)
+        AppState.ButtonVisible = state
+        ActionScreenGui.Enabled = state
+    end
+})
+
+MyUIElements.RickPrime:Toggle({
+    Title = "loc:DragSkillGui",
+    Desc = "loc:DragSkillGuiDesc",
+    Flag = "Portal_Button_Drag",
+    Value = false,
+    Callback = function(state)
+        AppState.ButtonDraggable = state
+    end
+})
+
+MyUIElements.RickPrime:Input({
+    Title = "loc:SkillButtonSize",
+    Desc = "loc:SkillButtonSizeDesc",
+    Flag = "Portal_Button_Size",
+    Placeholder = "60",
+    Value = 60,
+    Numeric = true,
+    Callback = function(val)
+        AppState.NewSize = tonumber(val)
+        if AppState.NewSize and AppState.NewSize > 20 then
+            PortalConfig.ButtonSize = AppState.NewSize
+            CreateTween(ActionButton, 0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, {Size = UDim2.new(0, AppState.NewSize, 0, AppState.NewSize)})
+        end
+    end
+})
+
+MyUIElements.RickPrime:Input({
+    Title = "loc:PcKeyUseSkill",
+    Desc = "loc:PcKeyUseSkillDesc",
+    Flag = "Portal_Keybind",
+    Placeholder = "U",
+    Value = "U",
+    Numeric = false,
+    Callback = function(val)
+        AppState.NewKey = string.upper(tostring(val))
+        if Enum.KeyCode[AppState.NewKey] then
+            PortalConfig.TriggerKey = Enum.KeyCode[AppState.NewKey]
+        end
+    end
+})
 
 StatusLogic = {
     ParagraphUI = nil,
@@ -7643,7 +9327,7 @@ end
 BypassSys.InitFolder(survivorsFolder)
 BypassSys.InitFolder(killersFolder)
 
-MyUIElements.Bypass:Toggle({
+MyUIElements.GamePlay:Toggle({
     Title = "loc:AntiSlow",
     Desc = "loc:AntiSlowDesc",
     Flag = "ToggleAntiSlow",
@@ -7654,7 +9338,7 @@ MyUIElements.Bypass:Toggle({
     end
 })
 
-MyUIElements.Bypass:Toggle({
+MyUIElements.GamePlay:Toggle({
     Title = "loc:AntiStun",
     Desc = "loc:AntiStunDesc",
     Flag = "Anti-Stun",
