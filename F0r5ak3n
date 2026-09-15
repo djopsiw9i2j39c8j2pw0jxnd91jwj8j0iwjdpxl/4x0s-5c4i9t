@@ -127,7 +127,7 @@ WindUI:Localization({
             TransparencyEnabled = "Transparency enabled",
             About = "About",
             Features = "Features",
-            Gameplay = "Gameplay",
+            GamePlay = "GamePlay",
             System = "System",
             Misc = "Misc",
             Items = "Items",
@@ -488,6 +488,13 @@ WindUI:Localization({
             ElliotDesc = "Features related to the Elliot character.",
             RickPrime = "Rick Prime",
             RickPrimeDesc = "Rick Prime's high-tech abilities.",
+            GamePlayDesc = "All gameplay-related features.",
+            AutoAimBloodHook = "Auto Aim Bloodhook",
+            AutoAimBloodHookDesc = "Automatically aim Bloodhook at the target.",
+            AutoAimEntanglement = "Auto Aim Entanglement",
+            AutoAimEntanglementDesc = "Automatically aim Entanglement at the target.",
+            AutoAimMassInfection = "Auto Aim Mass Infection",
+            AutoAimMassInfectionDesc = "Automatically aim Mass Infection at the target.",
         },
         vi = {
             HubTitle = "Axos Hub",
@@ -499,7 +506,7 @@ WindUI:Localization({
             TransparencyEnabled = "Đã bật độ trong suốt",
             About = "Giới thiệu",
             Features = "Tính năng",
-            Gameplay = "Lối chơi",
+            GamePlay = "Lối chơi",
             System = "Hệ thống",
             Misc = "Khác",
             Items = "Vật phẩm",
@@ -861,6 +868,13 @@ Load_Config_Desc = "Nhấn để tải cấu hình đã chọn.",
             ElliotDesc = "Các chức năng liên quan đến nhân vật Elliot",
             RickPrime = "Rick Prime",
             RickPrimeDesc = "Các sức mạnh công nghệ cao của rick prime",
+            GamePlayDesc = "Tất cả chức năng liên quan đến gameplay.",
+            AutoAimBloodHook = "Tự động ngắm Bloodhook",
+            AutoAimBloodHookDesc = "Tự động ngắm Bloodhook vào mục tiêu.",
+            AutoAimEntanglement = "Tự động ngắm Entanglement",
+            AutoAimEntanglementDesc = "Tự động ngắm Entanglement vào mục tiêu.",
+            AutoAimMassInfection = "Tự động ngắm Mass Infection",
+            AutoAimMassInfectionDesc = "Tự động ngắm Mass Infection vào mục tiêu.",
         }
     }
 })
@@ -961,7 +975,7 @@ Window:Tag({Title = "v0.1.3", Icon = "cog", Color = Color3.fromHex("#30ff6a")})
 local Tabs = {
     About = Window:Section({ Title = "loc:About", Opened = true }),
     Features = Window:Section({ Title = "loc:Features", Opened = true }),
-    Gameplay = Window:Section({ Title = "loc:Gameplay", Opened = true }),
+    GamePlay = Window:Section({ Title = "loc:GamePlay", Opened = true }),
     System = Window:Section({ Title = "loc:System", Opened = true }),
 }
 
@@ -1001,27 +1015,27 @@ local TabHandles = {
         Locked = false, ShowTabTitle = true, Border = true, LayoutOrder = 1 
     }),
     
-    Status = Tabs.Gameplay:Tab({ 
+    Status = Tabs.GamePlay:Tab({ 
         Title = "loc:Status", Icon = "rbxassetid://130626786024244", Desc = "Thông Số", IconThemed = true, 
         Locked = false, ShowTabTitle = true, Border = true, LayoutOrder = 1 
     }),
     
-    Player = Tabs.Gameplay:Tab({ 
+    Player = Tabs.GamePlay:Tab({ 
         Title = "loc:Player", Icon = "user", Desc = "Người Chơi", IconThemed = true, 
         Locked = false, ShowTabTitle = true, Border = true, LayoutOrder = 1
     }),
     
-    Visual = Tabs.Gameplay:Tab({ 
+    Visual = Tabs.GamePlay:Tab({ 
         Title = "loc:Visual", Icon = "eye", Desc = "Thị Giác", IconThemed = true, 
         Locked = false, ShowTabTitle = true, Border = true, LayoutOrder = 1
     }),
     
-    TP = Tabs.Gameplay:Tab({ 
+    TP = Tabs.GamePlay:Tab({ 
         Title = "loc:Teleport", Icon = "map", Desc = "Dịch Chuyển", IconThemed = true, 
         Locked = false, ShowTabTitle = true, Border = true, LayoutOrder = 1
     }),
     
-    Troll = Tabs.Gameplay:Tab({ 
+    Troll = Tabs.GamePlay:Tab({ 
         Title = "loc:Troll", Icon = "laugh", Desc = "Trò đùa", IconThemed = true, 
         Locked = false, ShowTabTitle = true, Border = true, LayoutOrder = 1
     }),
@@ -1197,7 +1211,7 @@ local ElementConfigs = {
         Config = {
             Title = "loc:Guest1337",
             Desc = "loc:Guest1337Desc",
-            Icon = "sheid",
+            Icon = "shield",
             Box = true,
             BoxBorder = true,
             Opened = false,
@@ -1258,6 +1272,21 @@ local ElementConfigs = {
             Title = "loc:Nosferatu",
             Desc = "loc:NosferatuDesc",
             Icon = "moon",
+            Box = true,
+            BoxBorder = true,
+            Opened = false,
+            Hover = true,
+        }
+    },
+
+    {
+        ID = "1x1x1x1",
+        Type = "Section",
+        Parent = TabHandles.Killers,
+        Config = {
+            Title = "loc:1x1x1x1",
+            Desc = "loc:1x1x1x1Desc",
+            Icon = "swords",
             Box = true,
             BoxBorder = true,
             Opened = false,
@@ -4827,7 +4856,7 @@ MyUIElements.Is007n7:Toggle({
 App = {
 	Config = {
 		Hitbox = {
-			Keys          = { "Slash", "Swing", "Golemslash" },
+			Keys          = { "Slash", "Swing", "Golemslash", "Bite"},
 			Default       = { Size = Vector3.new(12, 8, 16), Offset = CFrame.new(0, 0, -3) },
 			Skills        = { ["slasher:slash"] = { Size = Vector3.new(12, 8, 16), Offset = CFrame.new(0, 0, -3) }, ["sixer:slash"] = { Size = Vector3.new(12, 8, 18), Offset = CFrame.new(0, 0, -3) } },
 			NameAliases   = { slasher = { "jason" } },
@@ -5583,103 +5612,166 @@ MyUIElements.Guest1337:Toggle({
 	Callback = function(state) App.State.Flags.AutoCounter = state end,
 })
 
-AppAimPizza = {
+MainAimLogicSS1 = {
 	Config = {
-		BasePath     = { "Assets", "Survivors" },
 		TargetFolder = { Killers = killersFolder, Survivors = survivorsFolder },
-		SkillKeys    = { "throwpizza" },
-		RightOffset  = 2,
-		AimRadius    = 50
+		Characters = {
+			Elliot = {
+				BasePath = { "Assets", "Survivors" },
+				FolderName = "Elliot",
+				SkillKeys = { "throwpizza" },
+				RightOffset = 2,
+				AimRadius = 50,
+				MaxYDiff = 3,
+				SortBy = "HP" 
+			},
+			Nosferatu = {
+				BasePath = { "Assets", "Killers" },
+				FolderName = "Nosferatu",
+				SkillKeys = { "uppercut", "Uppercut" }, 
+				RightOffset = 0,
+				AimRadius = 500,
+				MaxYDiff = 3,
+				SortBy = "Distance" 
+			},
+			["1x1x1x1_MassInfection"] = {
+				BasePath = { "Assets", "Killers" },
+				FolderName = "1x1x1x1",
+				SkillKeys = { "massinfection" }, 
+				RightOffset = 0,
+				AimRadius = 500,
+				MaxYDiff = 3,
+				SortBy = "Distance"
+			},
+			["1x1x1x1_Entanglement"] = {
+				BasePath = { "Assets", "Killers" },
+				FolderName = "1x1x1x1",
+				SkillKeys = { "entanglement", "Entanglement" }, 
+				RightOffset = 0,
+				AimRadius = 500,
+				MaxYDiff = 3,
+				SortBy = "Distance"
+			}
+		}
 	},
 	State = {
-		Flags           = { AutoAim = false },
-		TargetModes     = { Survivors = true },
-		SkillCache      = {},
+		Flags           = { 
+			Elliot = false, 
+			Nosferatu = false, 
+			["1x1x1x1_MassInfection"] = false,
+			["1x1x1x1_Entanglement"] = false 
+		},
+		TargetModes     = { 
+			Elliot = { Survivors = true }, 
+			Nosferatu = { Survivors = true }, 
+			["1x1x1x1_MassInfection"] = { Survivors = true },
+			["1x1x1x1_Entanglement"] = { Survivors = true }
+		},
+		SkillCache      = {}, 
 		IsAiming        = false,
 		AimTargetRoot   = nil,
 		AimTrack        = nil,
 		AimConn         = nil,
+		CurrentOffset   = 0,
+		ActiveCharName  = nil,
 		PlayerConns     = {},
 		BestTargetsList = {}
 	}
 }
 
-AppAimPizza.NormalizeId = function(id) 
+MainAimLogicSS1.NormalizeId = function(id) 
 	return tostring(id):match("%d+") 
 end
 
-AppAimPizza.UpdateDict = function(dict, list)
+MainAimLogicSS1.UpdateDict = function(dict, list)
 	table.clear(dict)
 	for _, v in ipairs(list) do dict[v] = true end
 end
 
-AppAimPizza.WalkTable = function(tbl, out, depth, keyList)
+MainAimLogicSS1.WalkTable = function(tbl, depth, charData, charName)
 	if depth > 4 then return end
 	for k, v in pairs(tbl) do
-		AppAimPizza.State.TempMatched = nil
-		for _, key in ipairs(keyList) do
+		MainAimLogicSS1.State.TempMatched = nil
+		for _, key in ipairs(charData.SkillKeys) do
 			if type(k) == "string" and k:lower() == key:lower() then
-				AppAimPizza.State.TempMatched = key:lower()
+				MainAimLogicSS1.State.TempMatched = key:lower()
 				break
 			end
 		end
-		if AppAimPizza.State.TempMatched then
+		if MainAimLogicSS1.State.TempMatched then
 			if type(v) == "string" or type(v) == "number" then
-				out[AppAimPizza.NormalizeId(v)] = AppAimPizza.State.TempMatched
+				MainAimLogicSS1.State.SkillCache[MainAimLogicSS1.NormalizeId(v)] = {
+					CharName = charName,
+					Offset = charData.RightOffset
+				}
 			elseif type(v) == "table" then
-				AppAimPizza.WalkTable(v, out, depth + 1, {AppAimPizza.State.TempMatched})
+				MainAimLogicSS1.WalkTable(v, depth + 1, charData, charName)
 			end
 		end
 		if type(v) == "table" then 
-			AppAimPizza.WalkTable(v, out, depth + 1, keyList) 
+			MainAimLogicSS1.WalkTable(v, depth + 1, charData, charName) 
 		end
 	end
 end
 
-AppAimPizza.LoadElliotConfig = function()
-	AppAimPizza.State.CurPath = ReplicatedStorage
-	for _, name in ipairs(AppAimPizza.Config.BasePath) do
-		AppAimPizza.State.CurPath = AppAimPizza.State.CurPath:FindFirstChild(name)
-		if not AppAimPizza.State.CurPath then return end
-	end
-	
-	AppAimPizza.State.ElliotFolder = AppAimPizza.State.CurPath:FindFirstChild("Elliot") or AppAimPizza.State.CurPath:FindFirstChild("elliot")
-	if not AppAimPizza.State.ElliotFolder then return end
-
-	AppAimPizza.State.ConfigMod = AppAimPizza.State.ElliotFolder:FindFirstChild("config") or AppAimPizza.State.ElliotFolder:FindFirstChild("Config")
-	if AppAimPizza.State.ConfigMod then
-		AppAimPizza.State.Ok, AppAimPizza.State.Data = pcall(require, AppAimPizza.State.ConfigMod)
-		if AppAimPizza.State.Ok and type(AppAimPizza.State.Data) == "table" then
-			AppAimPizza.WalkTable(AppAimPizza.State.Data, AppAimPizza.State.SkillCache, 0, AppAimPizza.Config.SkillKeys)
+MainAimLogicSS1.LoadConfigs = function()
+	for charName, charData in pairs(MainAimLogicSS1.Config.Characters) do
+		MainAimLogicSS1.State.CurPath = ReplicatedStorage
+		for _, name in ipairs(charData.BasePath) do
+			MainAimLogicSS1.State.CurPath = MainAimLogicSS1.State.CurPath:FindFirstChild(name)
+			if not MainAimLogicSS1.State.CurPath then break end
+		end
+		
+		if MainAimLogicSS1.State.CurPath then
+			MainAimLogicSS1.State.CharFolder = MainAimLogicSS1.State.CurPath:FindFirstChild(charData.FolderName) or MainAimLogicSS1.State.CurPath:FindFirstChild(charData.FolderName:lower())
+			if MainAimLogicSS1.State.CharFolder then
+				MainAimLogicSS1.State.ConfigMod = MainAimLogicSS1.State.CharFolder:FindFirstChild("config") or MainAimLogicSS1.State.CharFolder:FindFirstChild("Config")
+				if MainAimLogicSS1.State.ConfigMod then
+					MainAimLogicSS1.State.Ok, MainAimLogicSS1.State.Data = pcall(require, MainAimLogicSS1.State.ConfigMod)
+					if MainAimLogicSS1.State.Ok and type(MainAimLogicSS1.State.Data) == "table" then
+						MainAimLogicSS1.WalkTable(MainAimLogicSS1.State.Data, 0, charData, charName)
+					end
+				end
+			end
 		end
 	end
 end
 
-AppAimPizza.GetLowestHPTarget = function()
-	table.clear(AppAimPizza.State.BestTargetsList)
-	AppAimPizza.State.LowestHPPct = math.huge
-	AppAimPizza.State.MyRoot = playerCharacter and playerCharacter:FindFirstChild("HumanoidRootPart")
+MainAimLogicSS1.GetBestTarget = function(charName)
+	if not charName then return nil end
+	table.clear(MainAimLogicSS1.State.BestTargetsList)
+	MainAimLogicSS1.State.BestValue = math.huge
+	MainAimLogicSS1.State.MyRoot = playerCharacter and playerCharacter:FindFirstChild("HumanoidRootPart")
+	MainAimLogicSS1.State.CurrentRadius = MainAimLogicSS1.Config.Characters[charName].AimRadius
+	MainAimLogicSS1.State.CurrentMaxY = MainAimLogicSS1.Config.Characters[charName].MaxYDiff or 3
+	MainAimLogicSS1.State.CurrentSortBy = MainAimLogicSS1.Config.Characters[charName].SortBy
 	
-	if not AppAimPizza.State.MyRoot then return nil end
+	if not MainAimLogicSS1.State.MyRoot then return nil end
 	
-	for mode, active in pairs(AppAimPizza.State.TargetModes) do
-		if active and AppAimPizza.Config.TargetFolder[mode] then
-			for _, model in ipairs(AppAimPizza.Config.TargetFolder[mode]:GetChildren()) do
+	for mode, active in pairs(MainAimLogicSS1.State.TargetModes[charName]) do
+		if active and MainAimLogicSS1.Config.TargetFolder[mode] then
+			for _, model in ipairs(MainAimLogicSS1.Config.TargetFolder[mode]:GetChildren()) do
 				if model ~= playerCharacter then
-					AppAimPizza.State.ScanHum = model:FindFirstChildOfClass("Humanoid")
-					AppAimPizza.State.ScanRoot = model:FindFirstChild("HumanoidRootPart")
+					MainAimLogicSS1.State.ScanHum = model:FindFirstChildOfClass("Humanoid")
+					MainAimLogicSS1.State.ScanRoot = model:FindFirstChild("HumanoidRootPart")
 					
-					if AppAimPizza.State.ScanHum and AppAimPizza.State.ScanRoot and AppAimPizza.State.ScanHum.Health > 0 and AppAimPizza.State.ScanHum.MaxHealth > 0 then
-						AppAimPizza.State.Dist = (AppAimPizza.State.ScanRoot.Position - AppAimPizza.State.MyRoot.Position).Magnitude
-						if AppAimPizza.State.Dist <= AppAimPizza.Config.AimRadius then
-							AppAimPizza.State.Pct = AppAimPizza.State.ScanHum.Health / AppAimPizza.State.ScanHum.MaxHealth
+					if MainAimLogicSS1.State.ScanHum and MainAimLogicSS1.State.ScanRoot and MainAimLogicSS1.State.ScanHum.Health > 0 and MainAimLogicSS1.State.ScanHum.MaxHealth > 0 then
+						MainAimLogicSS1.State.Dist = (MainAimLogicSS1.State.ScanRoot.Position - MainAimLogicSS1.State.MyRoot.Position).Magnitude
+						MainAimLogicSS1.State.YDiff = math.abs(MainAimLogicSS1.State.ScanRoot.Position.Y - MainAimLogicSS1.State.MyRoot.Position.Y)
+						
+						if MainAimLogicSS1.State.Dist <= MainAimLogicSS1.State.CurrentRadius and MainAimLogicSS1.State.YDiff <= MainAimLogicSS1.State.CurrentMaxY then
+							if MainAimLogicSS1.State.CurrentSortBy == "HP" then
+								MainAimLogicSS1.State.Metric = MainAimLogicSS1.State.ScanHum.Health / MainAimLogicSS1.State.ScanHum.MaxHealth
+							else
+								MainAimLogicSS1.State.Metric = MainAimLogicSS1.State.Dist
+							end
 							
-							if AppAimPizza.State.Pct < AppAimPizza.State.LowestHPPct then
-								AppAimPizza.State.LowestHPPct = AppAimPizza.State.Pct
-								table.clear(AppAimPizza.State.BestTargetsList)
-								table.insert(AppAimPizza.State.BestTargetsList, AppAimPizza.State.ScanRoot)
-							elseif AppAimPizza.State.Pct == AppAimPizza.State.LowestHPPct then
-								table.insert(AppAimPizza.State.BestTargetsList, AppAimPizza.State.ScanRoot)
+							if MainAimLogicSS1.State.Metric < MainAimLogicSS1.State.BestValue then
+								MainAimLogicSS1.State.BestValue = MainAimLogicSS1.State.Metric
+								table.clear(MainAimLogicSS1.State.BestTargetsList)
+								table.insert(MainAimLogicSS1.State.BestTargetsList, MainAimLogicSS1.State.ScanRoot)
+							elseif MainAimLogicSS1.State.Metric == MainAimLogicSS1.State.BestValue then
+								table.insert(MainAimLogicSS1.State.BestTargetsList, MainAimLogicSS1.State.ScanRoot)
 							end
 						end
 					end
@@ -5688,112 +5780,152 @@ AppAimPizza.GetLowestHPTarget = function()
 		end
 	end
 	
-	if #AppAimPizza.State.BestTargetsList > 0 then
-		return AppAimPizza.State.BestTargetsList[math.random(1, #AppAimPizza.State.BestTargetsList)]
+	if #MainAimLogicSS1.State.BestTargetsList > 0 then
+		return MainAimLogicSS1.State.BestTargetsList[math.random(1, #MainAimLogicSS1.State.BestTargetsList)]
 	end
 	return nil
 end
 
-AppAimPizza.StopAim = function()
-	AppAimPizza.State.IsAiming = false
-	if AppAimPizza.State.AimConn then 
-		AppAimPizza.State.AimConn:Disconnect()
-		AppAimPizza.State.AimConn = nil 
+MainAimLogicSS1.StopAim = function()
+	MainAimLogicSS1.State.IsAiming = false
+	if MainAimLogicSS1.State.AimConn then 
+		MainAimLogicSS1.State.AimConn:Disconnect()
+		MainAimLogicSS1.State.AimConn = nil 
 	end
-	AppAimPizza.State.MyHum = playerCharacter and playerCharacter:FindFirstChildOfClass("Humanoid")
-	if AppAimPizza.State.MyHum then 
-		AppAimPizza.State.MyHum.AutoRotate = true 
-	end
-end
-
-AppAimPizza.AimLoop = function()
-	if not AppAimPizza.State.IsAiming or not AppAimPizza.State.AimTargetRoot or not playerCharacter then return AppAimPizza.StopAim() end
-	if AppAimPizza.State.AimTrack and not AppAimPizza.State.AimTrack.IsPlaying then return AppAimPizza.StopAim() end
-
-	AppAimPizza.State.MyRoot = playerCharacter:FindFirstChild("HumanoidRootPart")
-	AppAimPizza.State.TargetHum = AppAimPizza.State.AimTargetRoot.Parent:FindFirstChildOfClass("Humanoid")
-
-	if not AppAimPizza.State.MyRoot or not AppAimPizza.State.TargetHum or AppAimPizza.State.TargetHum.Health <= 0 then
-		return AppAimPizza.StopAim()
-	end
-
-	AppAimPizza.State.MyPos = AppAimPizza.State.MyRoot.Position
-	AppAimPizza.State.TargetPos = AppAimPizza.State.AimTargetRoot.Position
-
-	AppAimPizza.State.DirFlat = Vector3.new(AppAimPizza.State.TargetPos.X - AppAimPizza.State.MyPos.X, 0, AppAimPizza.State.TargetPos.Z - AppAimPizza.State.MyPos.Z).Unit
-	AppAimPizza.State.RightVec = AppAimPizza.State.DirFlat:Cross(Vector3.new(0, 1, 0))
-	AppAimPizza.State.AimPoint = AppAimPizza.State.TargetPos + (AppAimPizza.State.RightVec * AppAimPizza.Config.RightOffset)
-
-	AppAimPizza.State.MyRoot.CFrame = CFrame.new(AppAimPizza.State.MyPos, Vector3.new(AppAimPizza.State.AimPoint.X, AppAimPizza.State.MyPos.Y, AppAimPizza.State.AimPoint.Z))
-end
-
-AppAimPizza.OnAnimPlayed = function(track)
-	if not AppAimPizza.State.Flags.AutoAim then return end
-	if not track.Animation or not track.Animation.AnimationId then return end
-	if AppAimPizza.State.IsAiming then return end
-
-	AppAimPizza.State.AnimId = AppAimPizza.NormalizeId(track.Animation.AnimationId)
 	
-	if AppAimPizza.State.SkillCache[AppAimPizza.State.AnimId] then
-		AppAimPizza.State.AimTargetRoot = AppAimPizza.GetLowestHPTarget()
+	MainAimLogicSS1.State.MyHum = playerCharacter and playerCharacter:FindFirstChildOfClass("Humanoid")
+	if MainAimLogicSS1.State.MyHum then 
+		MainAimLogicSS1.State.MyHum.AutoRotate = true 
+	end
+	
+	MainAimLogicSS1.State.AimTrack = nil
+	MainAimLogicSS1.State.AimTargetRoot = nil
+end
+
+MainAimLogicSS1.AimLoop = function()
+	if not MainAimLogicSS1.State.IsAiming or not playerCharacter then return MainAimLogicSS1.StopAim() end
+	
+	if MainAimLogicSS1.State.AimTrack then
+		MainAimLogicSS1.State.TrackEnded = not MainAimLogicSS1.State.AimTrack.IsPlaying or MainAimLogicSS1.State.AimTrack.WeightTarget <= 0.01 or (MainAimLogicSS1.State.AimTrack.Length > 0 and MainAimLogicSS1.State.AimTrack.TimePosition >= MainAimLogicSS1.State.AimTrack.Length - 0.05)
+		if MainAimLogicSS1.State.TrackEnded then return MainAimLogicSS1.StopAim() end
+	else
+		return MainAimLogicSS1.StopAim()
+	end
+
+	MainAimLogicSS1.State.MyRoot = playerCharacter:FindFirstChild("HumanoidRootPart")
+	if not MainAimLogicSS1.State.MyRoot then return MainAimLogicSS1.StopAim() end
+
+	MainAimLogicSS1.State.TargetValid = false
+	if MainAimLogicSS1.State.AimTargetRoot and MainAimLogicSS1.State.AimTargetRoot.Parent then
+		MainAimLogicSS1.State.TargetHum = MainAimLogicSS1.State.AimTargetRoot.Parent:FindFirstChildOfClass("Humanoid")
+		if MainAimLogicSS1.State.TargetHum and MainAimLogicSS1.State.TargetHum.Health > 0 then
+			MainAimLogicSS1.State.CurrentMaxY = MainAimLogicSS1.Config.Characters[MainAimLogicSS1.State.ActiveCharName] and MainAimLogicSS1.Config.Characters[MainAimLogicSS1.State.ActiveCharName].MaxYDiff or 3
+			MainAimLogicSS1.State.YDiff = math.abs(MainAimLogicSS1.State.AimTargetRoot.Position.Y - MainAimLogicSS1.State.MyRoot.Position.Y)
+			if MainAimLogicSS1.State.YDiff <= MainAimLogicSS1.State.CurrentMaxY then
+				MainAimLogicSS1.State.TargetValid = true
+			end
+		end
+	end
+
+	if not MainAimLogicSS1.State.TargetValid then
+		MainAimLogicSS1.State.AimTargetRoot = MainAimLogicSS1.GetBestTarget(MainAimLogicSS1.State.ActiveCharName)
+		if not MainAimLogicSS1.State.AimTargetRoot then
+			return MainAimLogicSS1.StopAim() 
+		end
+	end
+
+	MainAimLogicSS1.State.MyPos = MainAimLogicSS1.State.MyRoot.Position
+	MainAimLogicSS1.State.TargetPos = MainAimLogicSS1.State.AimTargetRoot.Position
+
+	MainAimLogicSS1.State.Dir = Vector3.new(MainAimLogicSS1.State.TargetPos.X - MainAimLogicSS1.State.MyPos.X, 0, MainAimLogicSS1.State.TargetPos.Z - MainAimLogicSS1.State.MyPos.Z)
+	
+	if MainAimLogicSS1.State.Dir.Magnitude > 0.05 then
+		MainAimLogicSS1.State.DirFlat = MainAimLogicSS1.State.Dir.Unit
 		
-		if AppAimPizza.State.AimTargetRoot then
-			AppAimPizza.State.IsAiming = true
-			AppAimPizza.State.AimTrack = track
+		if MainAimLogicSS1.State.CurrentOffset ~= 0 then
+			MainAimLogicSS1.State.RightVec = MainAimLogicSS1.State.DirFlat:Cross(Vector3.new(0, 1, 0))
+			MainAimLogicSS1.State.AimPoint = MainAimLogicSS1.State.TargetPos + (MainAimLogicSS1.State.RightVec * MainAimLogicSS1.State.CurrentOffset)
+		else
+			MainAimLogicSS1.State.AimPoint = MainAimLogicSS1.State.TargetPos
+		end
+
+		MainAimLogicSS1.State.MyRoot.CFrame = CFrame.lookAt(MainAimLogicSS1.State.MyPos, Vector3.new(MainAimLogicSS1.State.AimPoint.X, MainAimLogicSS1.State.MyPos.Y, MainAimLogicSS1.State.AimPoint.Z))
+	end
+end
+
+MainAimLogicSS1.OnAnimPlayed = function(track)
+	if not track.Animation or not track.Animation.AnimationId then return end
+	if MainAimLogicSS1.State.IsAiming then return end
+
+	MainAimLogicSS1.State.AnimId = MainAimLogicSS1.NormalizeId(track.Animation.AnimationId)
+	MainAimLogicSS1.State.SkillInfo = MainAimLogicSS1.State.SkillCache[MainAimLogicSS1.State.AnimId]
+	
+	if MainAimLogicSS1.State.SkillInfo then
+		if not MainAimLogicSS1.State.Flags[MainAimLogicSS1.State.SkillInfo.CharName] then return end
+
+		MainAimLogicSS1.State.AimTargetRoot = MainAimLogicSS1.GetBestTarget(MainAimLogicSS1.State.SkillInfo.CharName)
+		
+		if MainAimLogicSS1.State.AimTargetRoot then
+			MainAimLogicSS1.State.IsAiming = true
+			MainAimLogicSS1.State.AimTrack = track
+			MainAimLogicSS1.State.CurrentOffset = MainAimLogicSS1.State.SkillInfo.Offset
+			MainAimLogicSS1.State.ActiveCharName = MainAimLogicSS1.State.SkillInfo.CharName 
 			
-			AppAimPizza.State.MyHum = playerCharacter and playerCharacter:FindFirstChildOfClass("Humanoid")
-			if AppAimPizza.State.MyHum then 
-				AppAimPizza.State.MyHum.AutoRotate = false 
+			MainAimLogicSS1.State.MyHum = playerCharacter and playerCharacter:FindFirstChildOfClass("Humanoid")
+			if MainAimLogicSS1.State.MyHum then 
+				MainAimLogicSS1.State.MyHum.AutoRotate = false 
 			end
 
-			if AppAimPizza.State.AimConn then AppAimPizza.State.AimConn:Disconnect() end
-			AppAimPizza.State.AimConn = RunService.RenderStepped:Connect(AppAimPizza.AimLoop)
+			if MainAimLogicSS1.State.AimConn then MainAimLogicSS1.State.AimConn:Disconnect() end
+			MainAimLogicSS1.State.AimConn = RunService.RenderStepped:Connect(MainAimLogicSS1.AimLoop)
 
-			track.Stopped:Once(AppAimPizza.StopAim)
+			track.Stopped:Once(MainAimLogicSS1.StopAim)
 		end
 	end
 end
 
-AppAimPizza.HookPlayer = function(char)
+MainAimLogicSS1.HookPlayer = function(char)
 	if not char then return end
-	for _, conn in ipairs(AppAimPizza.State.PlayerConns) do conn:Disconnect() end
-	table.clear(AppAimPizza.State.PlayerConns)
+	MainAimLogicSS1.StopAim() 
 	
-	AppAimPizza.State.Hum = char:WaitForChild("Humanoid", 5)
-	AppAimPizza.State.Animator = AppAimPizza.State.Hum and AppAimPizza.State.Hum:WaitForChild("Animator", 5)
+	for _, conn in ipairs(MainAimLogicSS1.State.PlayerConns) do conn:Disconnect() end
+	table.clear(MainAimLogicSS1.State.PlayerConns)
 	
-	if AppAimPizza.State.Animator then
-		table.insert(AppAimPizza.State.PlayerConns, AppAimPizza.State.Animator.AnimationPlayed:Connect(AppAimPizza.OnAnimPlayed))
+	MainAimLogicSS1.State.Hum = char:WaitForChild("Humanoid", 5)
+	MainAimLogicSS1.State.Animator = MainAimLogicSS1.State.Hum and MainAimLogicSS1.State.Hum:WaitForChild("Animator", 5)
+	
+	if MainAimLogicSS1.State.Animator then
+		table.insert(MainAimLogicSS1.State.PlayerConns, MainAimLogicSS1.State.Animator.AnimationPlayed:Connect(MainAimLogicSS1.OnAnimPlayed))
 	end
 end
 
-AppAimPizza.LoadElliotConfig()
-AppAimPizza.HookPlayer(playerCharacter)
-localPlayer.CharacterAdded:Connect(AppAimPizza.HookPlayer)
+MainAimLogicSS1.LoadConfigs()
+MainAimLogicSS1.HookPlayer(playerCharacter)
+localPlayer.CharacterAdded:Connect(MainAimLogicSS1.HookPlayer)
 
 MyUIElements.Elliot:Dropdown({
 	Title = "loc:ChooseTarget",
 	Desc = "loc:ChooseTargetDesc",
-	Flag = "PizzaTargetMode",
+	Flag = "ElliotTargetMode",
 	Values = {"Killers", "Survivors"},
 	Value = {"Survivors"}, 
 	Multi = true,
 	AllowNone = false, 
 	Callback = function(value)
-		AppAimPizza.UpdateDict(AppAimPizza.State.TargetModes, value)
+		MainAimLogicSS1.UpdateDict(MainAimLogicSS1.State.TargetModes.Elliot, value)
 	end,
 })
 
 MyUIElements.Elliot:Input({
 	Title = "loc:RadiusAim",
 	Desc = "loc:RadiusAimDesc",
-	Flag = "PizzaAimRadius_Input",
-	Placeholder = "Enter Text",
+	Flag = "ElliotAimRadius_Input",
+	Placeholder = "50",
 	Value = "50",
 	Callback = function(value)
-		AppAimPizza.State.ParsedRadius = tonumber(value)
-		if AppAimPizza.State.ParsedRadius then
-			AppAimPizza.Config.AimRadius = AppAimPizza.State.ParsedRadius
+		MainAimLogicSS1.State.ParsedRadius = tonumber(value)
+		if MainAimLogicSS1.State.ParsedRadius then
+			MainAimLogicSS1.Config.Characters.Elliot.AimRadius = MainAimLogicSS1.State.ParsedRadius
 		end
 	end
 })
@@ -5801,11 +5933,71 @@ MyUIElements.Elliot:Input({
 MyUIElements.Elliot:Toggle({
 	Title = "loc:AutoAimPizza",
 	Desc = "loc:AutoAimPizzaDesc",
-	Flag = "AutoAimPizzaFlag",
+	Flag = "AutoAimElliotFlag",
 	Value = false,
 	Callback = function(state) 
-		AppAimPizza.State.Flags.AutoAim = state 
-		if not state then AppAimPizza.StopAim() end
+		MainAimLogicSS1.State.Flags.Elliot = state 
+		if not state then MainAimLogicSS1.StopAim() end
+	end,
+})
+
+MyUIElements.Nosferatu:Dropdown({
+	Title = "loc:ChooseTarget",
+	Desc = "loc:ChooseTargetDesc",
+	Flag = "NosferatuTargetMode",
+	Values = {"Killers", "Survivors"},
+	Value = {"Survivors"}, 
+	Multi = true,
+	AllowNone = false, 
+	Callback = function(value)
+		MainAimLogicSS1.UpdateDict(MainAimLogicSS1.State.TargetModes.Nosferatu, value)
+	end,
+})
+
+MyUIElements.Nosferatu:Toggle({
+	Title = "loc:AutoAimBloodHook",
+	Desc = "loc:AutoAimBloodHookDesc",
+	Flag = "AutoAimNosferatuFlag",
+	Value = false,
+	Callback = function(state) 
+		MainAimLogicSS1.State.Flags.Nosferatu = state 
+		if not state then MainAimLogicSS1.StopAim() end
+	end,
+})
+
+MyUIElements["1x1x1x1"]:Dropdown({
+	Title = "loc:ChooseTarget",
+	Desc = "loc:ChooseTargetDesc",
+	Flag = "1x1x1x1TargetMode",
+	Values = {"Killers", "Survivors"},
+	Value = {"Survivors"}, 
+	Multi = true,
+	AllowNone = false, 
+	Callback = function(value)
+		MainAimLogicSS1.UpdateDict(MainAimLogicSS1.State.TargetModes["1x1x1x1_MassInfection"], value)
+		MainAimLogicSS1.UpdateDict(MainAimLogicSS1.State.TargetModes["1x1x1x1_Entanglement"], value)
+	end,
+})
+
+MyUIElements["1x1x1x1"]:Toggle({
+	Title = "loc:AutoAimMassInfection",
+	Desc = "loc:AutoAimMassInfectionDesc",
+	Flag = "AutoAimMassInfectionFlag",
+	Value = false,
+	Callback = function(state) 
+		MainAimLogicSS1.State.Flags["1x1x1x1_MassInfection"] = state 
+		if not state then MainAimLogicSS1.StopAim() end
+	end,
+})
+
+MyUIElements["1x1x1x1"]:Toggle({
+	Title = "loc:AutoAimEntanglement",
+	Desc = "loc:AutoAimEntanglementDesc",
+	Flag = "AutoAimEntanglementFlag",
+	Value = false,
+	Callback = function(state) 
+		MainAimLogicSS1.State.Flags["1x1x1x1_Entanglement"] = state 
+		if not state then MainAimLogicSS1.StopAim() end
 	end,
 })
 
@@ -9839,42 +10031,6 @@ ConfigSys.CreateBtn("Make", "loc:Make_Config", "loc:Make_Config_Desc", "loc:Conf
 ConfigSys.CreateBtn("Update", "loc:Update_Config", "loc:Update_Config_Content", "loc:Config_Content3", "loc:Config_Content4", "loc:Config_Content5", "refresh-cw")
 ConfigSys.CreateBtn("Load", "loc:Load_Config", "loc:Load_Config_Desc", "loc:Config_Content6", "loc:Config_Content7", "loc:Config_Content8", "check")
 ConfigSys.CreateBtn("Delete", "loc:Delete_Config", "loc:Delete_Config_Desc", "loc:Config_Content9", "loc:Config_Content10", "loc:Config_Content11", "trash")
-
-ConfigSys.AutoLoadToggle = Window:Autoload({
-    Parent = ConfigSys.Tab,
-    Title = "loc:Auto_Load_Config",
-    Desc = "loc:Auto_Load_Config_Desc",
-    AutoSaveInterval = 3,
-    Resolve = function()
-        if not ConfigSys.State.Selected or ConfigSys.State.Selected == "" then
-            ConfigSys.Notify("loc:Config", "loc:AutoLoad_NoSelection", "circle-alert")
-            return nil
-        end
-
-        if not ConfigSys.Exists(ConfigSys.State.Selected) then
-            ConfigSys.Notify("loc:Config", "loc:AutoLoad_NotExist", "circle-alert")
-            return nil
-        end
-
-        if not ConfigSys.Execute(ConfigSys.State.Selected, "Load") then
-            ConfigSys.Notify("loc:Config", "loc:AutoLoad_LoadFailed", "circle-alert")
-            return nil
-        end
-
-        return ConfigSys.State.CurrentObject
-    end,
-    OnEnabled = function()
-        ConfigSys.Notify("loc:Config", "loc:AutoLoad_Enabled", "check")
-    end,
-    OnDisabled = function()
-        ConfigSys.Notify("loc:Config", "loc:AutoLoad_Disabled", "info")
-    end,
-    OnError = function(reason)
-        if reason == "no_config" then
-            ConfigSys.Notify("loc:Config", "loc:AutoLoad_NoSelection", "circle-alert")
-        end
-    end,
-})
 
 getgenv().showpingandfps = getgenv().showpingandfps ~= false
 
