@@ -19,6 +19,7 @@ LocalizationService = game:GetService("LocalizationService")
 Debris = game:GetService("Debris")
 ServerScriptService = game:GetService("ServerScriptService")
 CollectionService = game:GetService("CollectionService")
+InsertService = game:GetService("InsertService")
 
 MapFolder = Workspace:FindFirstChild("Map")
 IngameFolder = MapFolder and MapFolder:FindFirstChild("Ingame")
@@ -290,6 +291,10 @@ WindUI:Localization({
             EspVineDesc = "Display ESP for vines in the map.",
             EspGroundBulb = "ESP Ground Bulb",
             EspGroundBulbDesc = "Display ESP for ground bulbs in the map.",
+            EspDocument = "ESP Document",
+            EspDocumentDesc = "Display ESP for documents in the map.",
+            EspRing = "ESP Ring",
+            EspRingDesc = "Display ESP for rings in the map.",
             Screen = "Screen",
             ScreenDesc = "Change the things on your screen.",
             Fullbright = "Full Bright",
@@ -408,6 +413,8 @@ WindUI:Localization({
             SilentAimShootDesc = "Automatically aim at the target when shooting.",
             Chance = "Chance",
             ChanceDesc = "Features related to the Chance character.",
+            AntiBaitMode = "Anti Bait Mode",
+            AntiBaitModeDesc = "Prevent Auto Block from being baited into blocking at the wrong time.",
             ChooseTarget = "Choose Target",
             ChooseTargetDesc = "Select the target you want to aim at.",
             SilentAimPlasmaBeam = "Silent Aim Plasma Beam",
@@ -432,8 +439,6 @@ WindUI:Localization({
             NoliDesc = "Features related to the Noli character.",
             Nosferatu = "Nosferatu",
             NosferatuDesc = "Features related to the Nosferatu character.",
-            SilentAimBloodhook = "Silent Aim Bloodhook",
-            SilentAimBloodhookDesc = "Automatically aim Bloodhook at the selected target.",
             Autosk8Trick = "Auto Sk8 Trick",
             Autosk8TrickDesc = "Automatically perform Sk8 tricks.",
             SmoothSk8Controller = "Smooth Sk8 Controller",
@@ -474,7 +479,7 @@ WindUI:Localization({
             AutoAimPizzaDesc = "Automatically aim the pizza at the target.",
             RadiusAim = "Radius Aim",
             RadiusAimDesc = "Set the radius used for aiming at targets.",
-             ShowPortalSkill = "Show Portal Skill",
+            ShowPortalSkill = "Show Portal Skill",
             ShowPortalSkillDesc = "Show the Portal skill button.",
             DragSkillGui = "Drag Skill GUI",
             DragSkillGuiDesc = "Allow the skill GUI to be moved.",
@@ -486,6 +491,8 @@ WindUI:Localization({
             Guest1337Desc = "Features related to the Guest1337 character.",
             Elliot = "Elliot",
             ElliotDesc = "Features related to the Elliot character.",
+            ["1x1x1x1"] = "1x1x1x1",
+            ["1x1x1x1Desc"] = "Features related to the 1x1x1x1 character.",
             RickPrime = "Rick Prime",
             RickPrimeDesc = "Rick Prime's high-tech abilities.",
             GamePlayDesc = "All gameplay-related features.",
@@ -495,6 +502,36 @@ WindUI:Localization({
             AutoAimEntanglementDesc = "Automatically aim Entanglement at the target.",
             AutoAimMassInfection = "Auto Aim Mass Infection",
             AutoAimMassInfectionDesc = "Automatically aim Mass Infection at the target.",
+            ModSkin = "Mod Skin",
+            ModSkinDesc = "Customize and manage mod skins.",
+            SkinJason = "Jason Skin",
+            SkinJasonDesc = "Change the default Killer Slasher skin to Jason.",
+            LungeStabController = "Lunge Stab Controller",
+            LungeStabControllerDesc = "Enable movement control for Lunge Stab.",
+            LungeStabAutoAim = "Lunge Stab Auto Aim",
+            LungeStabAutoAimDesc = "Automatically aim and steer toward the nearest Killer.",
+            LungeStabTeleport = "Lunge Stab Teleport",
+            LungeStabTeleportDesc = "Teleport behind the Killer when entering the back cone.",
+            AimRadiusShow = "Show Aim Radius",
+            AimRadiusShowDesc = "Show the radius used to detect nearby Killers.",
+            BackConeShow = "Show Back Cone",
+            BackConeShowDesc = "Show the back cone used to detect the area behind the Killer.",
+            RadiusAim = "Aim Radius",
+            RadiusAimDesc = "Set the maximum distance for detecting nearby Killers.",
+            BackConeRadius = "Back Cone Radius",
+            BackConeRadiusDesc = "Set the detection radius behind the Killer.",
+            BackAngle = "Back Cone Angle",
+            BackAngleDesc = "Set the angle of the detection cone behind the Killer.",
+            TwoTime = "TwoTime",
+            TwoTimeDesc = "Features related to the TwoTime character.",
+            Hitbox = "Hitbox",
+            HitboxDesc = "Change the hitbox range of your skills.",
+            SelectMode = "Select Mode",
+            SelectModeDesc = "Select the hitbox mode you want to use.",
+            HitboxReach = "Hitbox Reach",
+            HitboxReachDesc = "Change the reach of your skill hitbox.",
+            HitboxDistance = "Hitbox Distance",
+            HitboxDistanceDesc = "Change the distance of your skill hitbox.",
         },
         vi = {
             HubTitle = "Axos Hub",
@@ -648,8 +685,8 @@ Load_Config_Desc = "Nhấn để tải cấu hình đã chọn.",
             EspColorDesc = "Điều chỉnh màu sắc cho ESP của bạn.",
             ESPSurvivors = "ESP Survivor",
             ESPSurvivorsDesc = "Hiển thị ESP cho những Survivor còn sống.",
-            EspItem = "ESP Vật phẩm",
-            EspItemDesc = "Hiển thị ESP cho các vật phẩm trong map.",
+            EspItems = "ESP Vật phẩm",
+            EspItemsDesc = "Hiển thị ESP cho các vật phẩm trong map.",
             EspFakeGenerator = "ESP Máy phát điện giả",
             EspFakeGeneratorDesc = "Hiển thị ESP cho các máy phát điện giả trong map.",
             EspGenerator = "ESP Máy phát điện",
@@ -670,6 +707,10 @@ Load_Config_Desc = "Nhấn để tải cấu hình đã chọn.",
             EspVineDesc = "Hiển thị ESP cho các dây leo trong map.",
             EspGroundBulb = "ESP Củ phát sáng",
             EspGroundBulbDesc = "Hiển thị ESP cho các củ phát sáng trên mặt đất trong map.",
+            EspDocument = "ESP Tài liệu",
+            EspDocumentDesc = "Hiển thị ESP cho các tài liệu trong map.",
+            EspRing = "ESP Nhẫn",
+            EspRingDesc = "Hiển thị ESP cho các chiếc nhẫn trong map.",
             Screen = "Màn hình",
             ScreenDesc = "Thay đổi những thứ hiển thị trên màn hình của bạn.",
             Fullbright = "Tăng sáng tất cả",
@@ -788,6 +829,8 @@ Load_Config_Desc = "Nhấn để tải cấu hình đã chọn.",
             SilentAimShootDesc = "Tự động ngắm vào mục tiêu khi bắn.",
             Chance = "Cơ hội",
             ChanceDesc = "Các chức năng liên quan đến nhân vật cơ hội.",
+            AntiBaitMode = "Chế độ chống bait",
+            AntiBaitModeDesc = "Ngăn Auto Block bị bait khiến chặn sai thời điểm.",
             ChooseTarget = "Chọn mục tiêu",
             ChooseTargetDesc = "Chọn mục tiêu mà bạn muốn ngắm vào.",
             SilentAimPlasmaBeam = "Ngắm im lặng Tia Plasma",
@@ -812,8 +855,6 @@ Load_Config_Desc = "Nhấn để tải cấu hình đã chọn.",
             NoliDesc = "Các chức năng liên quan đến nhân vật Noli.",
             Nosferatu = "Nosferatu",
             NosferatuDesc = "Các chức năng liên quan đến nhân vật Nosferatu.",
-            SilentAimBloodhook = "Ngắm im lặng Bloodhook",
-            SilentAimBloodhookDesc = "Tự động ngắm Bloodhook vào mục tiêu đã chọn.",
             Autosk8Trick = "Tự động thực hiện động tác Sk8",
             Autosk8TrickDesc = "Tự động thực hiện các động tác Sk8.",
             SmoothSk8Controller = "Bộ điều khiển Sk8 mượt mà",
@@ -866,6 +907,8 @@ Load_Config_Desc = "Nhấn để tải cấu hình đã chọn.",
             Guest1337Desc = "Các chức năng liên quan đến nhân vật Guest1337",
             Elliot = "Elliot",
             ElliotDesc = "Các chức năng liên quan đến nhân vật Elliot",
+            ["1x1x1x1"] = "1x1x1x1",
+            ["1x1x1x1Desc"] = "Các chức năng liên quan đến nhân vật 1x1x1x1",
             RickPrime = "Rick Prime",
             RickPrimeDesc = "Các sức mạnh công nghệ cao của rick prime",
             GamePlayDesc = "Tất cả chức năng liên quan đến gameplay.",
@@ -875,6 +918,36 @@ Load_Config_Desc = "Nhấn để tải cấu hình đã chọn.",
             AutoAimEntanglementDesc = "Tự động ngắm Entanglement vào mục tiêu.",
             AutoAimMassInfection = "Tự động ngắm Mass Infection",
             AutoAimMassInfectionDesc = "Tự động ngắm Mass Infection vào mục tiêu.",
+            ModSkin = "Mod Skin",
+            ModSkinDesc = "Tùy chỉnh và quản lý các mod skin.",
+            SkinJason = "Skin Jason",
+            SkinJasonDesc = "Thay skin Slasher mặc định của Killer thành Jason.",
+            LungeStabController = "Điều khiển Lunge Stab",
+            LungeStabControllerDesc = "Bật điều khiển di chuyển cho Lunge Stab.",
+            LungeStabAutoAim = "Tự động ngắm Lunge Stab",
+            LungeStabAutoAimDesc = "Tự động ngắm và điều hướng đến Killer gần nhất.",
+            LungeStabTeleport = "Dịch chuyển Lunge Stab",
+            LungeStabTeleportDesc = "Dịch chuyển ra phía sau Killer khi vào vùng hình nón phía sau.",
+            AimRadiusShow = "Hiển thị bán kính ngắm",
+            AimRadiusShowDesc = "Hiển thị bán kính dùng để phát hiện Killer gần đó.",
+            BackConeShow = "Hiển thị vùng hình nón phía sau",
+            BackConeShowDesc = "Hiển thị vùng hình nón dùng để xác định khu vực phía sau Killer.",
+            RadiusAim = "Bán kính ngắm",
+            RadiusAimDesc = "Đặt khoảng cách tối đa để phát hiện Killer gần đó.",
+            BackConeRadius = "Bán kính vùng phía sau",
+            BackConeRadiusDesc = "Đặt bán kính phát hiện phía sau Killer.",
+            BackAngle = "Góc vùng phía sau",
+            BackAngleDesc = "Đặt góc của vùng hình nón phía sau Killer.",
+            TwoTime = "Hai lần",
+            TwoTimeDesc = "Các chức năng liên quan đến nhân vật TwoTime",
+            Hitbox = "Hộp đòn đánh",
+            HitboxDesc = "Biến đổi phạm vi hitbox của kỹ năng.",
+            SelectMode = "Chọn chế độ",
+            SelectModeDesc = "Chọn chế độ hitbox bạn muốn sử dụng.",
+            HitboxReach = "Tầm với Hitbox",
+            HitboxReachDesc = "Biến đổi tầm với của hitbox kỹ năng.",
+            HitboxDistance = "Khoảng cách Hitbox",
+            HitboxDistanceDesc = "Biến đổi khoảng cách của hitbox kỹ năng.",
         }
     }
 })
@@ -970,7 +1043,7 @@ local OpenButtonConfig = {
 
 Window:EditOpenButton(OpenButtonConfig)
 
-Window:Tag({Title = "v0.1.3", Icon = "cog", Color = Color3.fromHex("#30ff6a")})
+Window:Tag({Title = "v0.1.5", Icon = "cog", Color = Color3.fromHex("#30ff6a")})
 
 local Tabs = {
     About = Window:Section({ Title = "loc:About", Opened = true }),
@@ -1227,6 +1300,21 @@ local ElementConfigs = {
             Title = "loc:Elliot",
             Desc = "loc:ElliotDesc",
             Icon = "pizza",
+            Box = true,
+            BoxBorder = true,
+            Opened = false,
+            Hover = true,
+        }
+    },
+
+    {
+        ID = "TwoTime",
+        Type = "Section",
+        Parent = TabHandles.Survivors,
+        Config = {
+            Title = "loc:TwoTime",
+            Desc = "loc:TwoTimeDesc",
+            Icon = "sword",
             Box = true,
             BoxBorder = true,
             Opened = false,
@@ -1505,6 +1593,36 @@ local ElementConfigs = {
     },
 
     {
+        ID = "EspDocument",
+        Type = "Section",
+        Parent = TabHandles.Visual,
+        Config = {
+            Title = "loc:EspDocument",
+            Desc = "loc:EspDocumentDesc",
+            Icon = "file",
+            Box = true,
+            BoxBorder = true,
+            Opened = false,
+            Hover = true,
+        }
+    },
+
+    {
+        ID = "EspRing",
+        Type = "Section",
+        Parent = TabHandles.Visual,
+        Config = {
+            Title = "loc:EspRing",
+            Desc = "loc:EspRingDesc",
+            Icon = "circle-dot",
+            Box = true,
+            BoxBorder = true,
+            Opened = false,
+            Hover = true,
+        }
+    },
+
+    {
         ID = "TeleportUp",
         Type = "Section",
         Parent = TabHandles.TP,
@@ -1572,6 +1690,36 @@ local ElementConfigs = {
             Title = "loc:RickPrime",
             Desc = "loc:RickPrimeDesc",
             Icon = "orbit",
+            Box = true,
+            BoxBorder = true,
+            Opened = false,
+            Hover = true,
+        }
+    },
+
+    {
+        ID = "Hitbox",
+        Type = "Section",
+        Parent = TabHandles.Troll,
+        Config = {
+            Title = "loc:Hitbox",
+            Desc = "loc:HitboxDesc",
+            Icon = "scale-3d",
+            Box = true,
+            BoxBorder = true,
+            Opened = false,
+            Hover = true,
+        }
+    },
+
+    {
+        ID = "ModSkin",
+        Type = "Section",
+        Parent = TabHandles.Troll,
+        Config = {
+            Title = "loc:ModSkin",
+            Desc = "loc:ModSkinDesc",
+            Icon = "palette",
             Box = true,
             BoxBorder = true,
             Opened = false,
@@ -1706,7 +1854,7 @@ local ElementConfigs = {
         Config = {
             Title = "loc:GamePlay",
             Desc = "loc:GamePlayDesc",
-            Icon = "shield-off",
+            Icon = "gamepad-2",
             Box = true,
             BoxBorder = true,
             Opened = false,
@@ -4087,7 +4235,7 @@ SkillController = {
     TargetPart = nil,
     WantsKillers = false,
     WantsSurvivors = false,
-    WalkspeedBuff = 100,
+    WalkspeedBuff = 95,
     VoidrushBuff = 60,
     ChargeBuff = 50,
     CurrentTargetSpeed = 0,
@@ -4856,7 +5004,7 @@ MyUIElements.Is007n7:Toggle({
 App = {
 	Config = {
 		Hitbox = {
-			Keys          = { "Slash", "Swing", "Golemslash", "Bite"},
+			Keys          = { "Slash", "Attack", "Golemslash", "Bite", "DemonicPursuitStart"},
 			Default       = { Size = Vector3.new(12, 8, 16), Offset = CFrame.new(0, 0, -3) },
 			Skills        = { ["slasher:slash"] = { Size = Vector3.new(12, 8, 16), Offset = CFrame.new(0, 0, -3) }, ["sixer:slash"] = { Size = Vector3.new(12, 8, 18), Offset = CFrame.new(0, 0, -3) } },
 			NameAliases   = { slasher = { "jason" } },
@@ -5714,23 +5862,45 @@ MainAimLogicSS1.WalkTable = function(tbl, depth, charData, charName)
 	end
 end
 
+MainAimLogicSS1.ScanDirectory = function(folder, charData, charName, depth)
+	if not folder or (depth and depth > 3) then return end
+	MainAimLogicSS1.State.CurrentDepth = depth or 1
+	
+	for _, child in ipairs(folder:GetChildren()) do
+		if child:IsA("ModuleScript") then
+			MainAimLogicSS1.State.Ok, MainAimLogicSS1.State.Data = pcall(require, child)
+			if MainAimLogicSS1.State.Ok and type(MainAimLogicSS1.State.Data) == "table" then
+				MainAimLogicSS1.WalkTable(MainAimLogicSS1.State.Data, 0, charData, charName)
+			end
+		elseif child:IsA("Folder") or child:IsA("Model") then
+			MainAimLogicSS1.ScanDirectory(child, charData, charName, MainAimLogicSS1.State.CurrentDepth + 1)
+		end
+	end
+end
+
 MainAimLogicSS1.LoadConfigs = function()
+	MainAimLogicSS1.State.AssetsFolder = ReplicatedStorage:FindFirstChild("Assets")
+	if not MainAimLogicSS1.State.AssetsFolder then return end
+
+	MainAimLogicSS1.State.SkinsFolder = MainAimLogicSS1.State.AssetsFolder:FindFirstChild("Skins")
+
 	for charName, charData in pairs(MainAimLogicSS1.Config.Characters) do
-		MainAimLogicSS1.State.CurPath = ReplicatedStorage
-		for _, name in ipairs(charData.BasePath) do
-			MainAimLogicSS1.State.CurPath = MainAimLogicSS1.State.CurPath:FindFirstChild(name)
-			if not MainAimLogicSS1.State.CurPath then break end
+		MainAimLogicSS1.State.RoleName = charData.BasePath[#charData.BasePath]
+		
+		MainAimLogicSS1.State.RoleFolder = MainAimLogicSS1.State.AssetsFolder:FindFirstChild(MainAimLogicSS1.State.RoleName)
+		if MainAimLogicSS1.State.RoleFolder then
+			MainAimLogicSS1.State.CharFolder = MainAimLogicSS1.State.RoleFolder:FindFirstChild(charData.FolderName) or MainAimLogicSS1.State.RoleFolder:FindFirstChild(charData.FolderName:lower())
+			if MainAimLogicSS1.State.CharFolder then
+				MainAimLogicSS1.ScanDirectory(MainAimLogicSS1.State.CharFolder, charData, charName, 1)
+			end
 		end
 		
-		if MainAimLogicSS1.State.CurPath then
-			MainAimLogicSS1.State.CharFolder = MainAimLogicSS1.State.CurPath:FindFirstChild(charData.FolderName) or MainAimLogicSS1.State.CurPath:FindFirstChild(charData.FolderName:lower())
-			if MainAimLogicSS1.State.CharFolder then
-				MainAimLogicSS1.State.ConfigMod = MainAimLogicSS1.State.CharFolder:FindFirstChild("config") or MainAimLogicSS1.State.CharFolder:FindFirstChild("Config")
-				if MainAimLogicSS1.State.ConfigMod then
-					MainAimLogicSS1.State.Ok, MainAimLogicSS1.State.Data = pcall(require, MainAimLogicSS1.State.ConfigMod)
-					if MainAimLogicSS1.State.Ok and type(MainAimLogicSS1.State.Data) == "table" then
-						MainAimLogicSS1.WalkTable(MainAimLogicSS1.State.Data, 0, charData, charName)
-					end
+		if MainAimLogicSS1.State.SkinsFolder then
+			MainAimLogicSS1.State.SkinRoleFolder = MainAimLogicSS1.State.SkinsFolder:FindFirstChild(MainAimLogicSS1.State.RoleName)
+			if MainAimLogicSS1.State.SkinRoleFolder then
+				MainAimLogicSS1.State.SkinCharFolder = MainAimLogicSS1.State.SkinRoleFolder:FindFirstChild(charData.FolderName) or MainAimLogicSS1.State.SkinRoleFolder:FindFirstChild(charData.FolderName:lower())
+				if MainAimLogicSS1.State.SkinCharFolder then
+					MainAimLogicSS1.ScanDirectory(MainAimLogicSS1.State.SkinCharFolder, charData, charName, 1)
 				end
 			end
 		end
@@ -5998,6 +6168,663 @@ MyUIElements["1x1x1x1"]:Toggle({
 	Callback = function(state) 
 		MainAimLogicSS1.State.Flags["1x1x1x1_Entanglement"] = state 
 		if not state then MainAimLogicSS1.StopAim() end
+	end,
+})
+
+TwoTime = {
+	Config = {
+		AimRadius = 10,
+		BackConeRadius = 10,
+		BackAngle = 60,
+		StabOffset = 3,
+		SafeRadius = 5.31415,
+		TangentWeight = 2,
+		LineThick = 0.15,
+		RingThick = 0.25,
+		VizColor = Color3.fromRGB(80, 255, 120),
+		LineColor = Color3.fromRGB(255, 220, 0),
+		VizTransparency = 0.5,
+		TeleportCooldown = 1.5,
+		CharName = "TwoTime",
+		Skills = {
+			stab = { Speed = 40, Cutoff = 0.5, Aim = true },
+			lungestart = { Speed = 60, Cutoff = 0.6, Aim = true },
+		},
+		BadMovers = {
+			"BodyVelocity", "BodyPosition", "BodyForce", "BodyThrust",
+			"LinearVelocity", "VectorForce", "AlignPosition"
+		}
+	},
+	State = {
+		Flags = { TwoTimeDash = false, AutoAim = false, ShowAimRadius = false, ShowBackCone = false, Teleport = false },
+		Active = false,
+		Target = nil,
+		DidTeleport = false,
+		NextTeleport = 0,
+		Visuals = {},
+		VizFolder = nil,
+		IsBoosting = false,
+		PlayerConns = {},
+		SkillCache = {},
+		CurrentSpeed = 0,
+		CurrentCutoff = 1,
+		CurrentAim = false,
+		CurrentTrack = nil,
+		AimHum = nil,
+		PrevAutoRotate = nil,
+		AimRotLocked = false
+	}
+}
+
+TwoTime.Flatten = function(v)
+	return Vector3.new(v.X, 0, v.Z)
+end
+
+TwoTime.FlatAngle = function(a, b)
+	TwoTime.State.FA1 = TwoTime.Flatten(a)
+	TwoTime.State.FA2 = TwoTime.Flatten(b)
+	if TwoTime.State.FA1.Magnitude < 0.001 or TwoTime.State.FA2.Magnitude < 0.001 then
+		return 999
+	end
+	return math.deg(math.acos(math.clamp(TwoTime.State.FA1.Unit:Dot(TwoTime.State.FA2.Unit), -1, 1)))
+end
+
+TwoTime.RotY = function(v, rad)
+	TwoTime.State.RotCos = math.cos(rad)
+	TwoTime.State.RotSin = math.sin(rad)
+	return Vector3.new(v.X * TwoTime.State.RotCos + v.Z * TwoTime.State.RotSin, 0, -v.X * TwoTime.State.RotSin + v.Z * TwoTime.State.RotCos)
+end
+
+TwoTime.GetTargetRoot = function()
+	TwoTime.State.MyPos = TwoTime.State.Root and TwoTime.State.Root.Position
+	if not TwoTime.State.MyPos then return nil end
+
+	TwoTime.State.BestRoot = nil
+	TwoTime.State.BestDist = TwoTime.Config.AimRadius
+	TwoTime.State.Target = nil
+
+	for _, killer in ipairs(killersFolder:GetChildren()) do
+		TwoTime.State.KR = killer:FindFirstChild("HumanoidRootPart")
+		TwoTime.State.KH = killer:FindFirstChild("Humanoid")
+		if TwoTime.State.KR and TwoTime.State.KH and TwoTime.State.KH.Health > 0 then
+			TwoTime.State.KDist = (TwoTime.State.KR.Position - TwoTime.State.MyPos).Magnitude
+			if TwoTime.State.KDist <= TwoTime.State.BestDist then
+				TwoTime.State.BestDist = TwoTime.State.KDist
+				TwoTime.State.BestRoot = TwoTime.State.KR
+				TwoTime.State.Target = killer
+			end
+		end
+	end
+
+	return TwoTime.State.BestRoot
+end
+
+TwoTime.ComputeZone = function()
+	TwoTime.State.PPos = TwoTime.State.Root.Position
+	TwoTime.State.TargetRoot = TwoTime.GetTargetRoot()
+	TwoTime.State.InZone = false
+
+	if TwoTime.State.TargetRoot then
+		TwoTime.State.KPos = TwoTime.State.TargetRoot.Position
+		TwoTime.State.KLook = TwoTime.Flatten(TwoTime.State.TargetRoot.CFrame.LookVector)
+		TwoTime.State.BehindDir = TwoTime.State.KLook.Magnitude > 0.001 and -TwoTime.State.KLook.Unit or Vector3.new(0, 0, 1)
+
+		TwoTime.State.ToPlayer = TwoTime.Flatten(TwoTime.State.PPos - TwoTime.State.KPos)
+		TwoTime.State.Dist = TwoTime.State.ToPlayer.Magnitude
+		if TwoTime.State.Dist > 0.001 then
+			TwoTime.State.ToPlayer = TwoTime.State.ToPlayer.Unit
+		else
+			TwoTime.State.ToPlayer = TwoTime.State.BehindDir
+		end
+
+		TwoTime.State.InZone = TwoTime.FlatAngle(TwoTime.State.ToPlayer, TwoTime.State.BehindDir) <= TwoTime.Config.BackAngle * 0.5
+			and TwoTime.State.Dist <= TwoTime.Config.BackConeRadius
+	end
+end
+
+TwoTime.TeleportStep = function()
+	if not TwoTime.State.IsBoosting then return end
+	if not (TwoTime.State.Root and TwoTime.State.Root.Parent) then return end
+
+	if not TwoTime.State.Flags.Teleport then
+		TwoTime.State.DidTeleport = false
+		return
+	end
+
+	TwoTime.ComputeZone()
+
+	if TwoTime.State.InZone then
+		if not TwoTime.State.DidTeleport and os.clock() >= TwoTime.State.NextTeleport then
+			TwoTime.State.DidTeleport = true
+			TwoTime.State.NextTeleport = os.clock() + TwoTime.Config.TeleportCooldown
+			if TwoTime.State.Dist > TwoTime.Config.StabOffset + 1 then
+				TwoTime.State.StabPoint = Vector3.new(
+					TwoTime.State.KPos.X + TwoTime.State.BehindDir.X * TwoTime.Config.StabOffset,
+					TwoTime.State.PPos.Y,
+					TwoTime.State.KPos.Z + TwoTime.State.BehindDir.Z * TwoTime.Config.StabOffset
+				)
+				TwoTime.State.Root.CFrame = CFrame.lookAt(TwoTime.State.StabPoint, Vector3.new(TwoTime.State.KPos.X, TwoTime.State.PPos.Y, TwoTime.State.KPos.Z))
+				TwoTime.State.Root.AssemblyLinearVelocity = Vector3.zero
+			end
+		end
+	else
+		TwoTime.State.DidTeleport = false
+	end
+end
+
+TwoTime.AimStep = function()
+	if not TwoTime.State.Active then return end
+	if not (TwoTime.State.Root and TwoTime.State.Root.Parent) then return end
+
+	TwoTime.ComputeZone()
+
+	if TwoTime.State.TargetRoot then
+		if TwoTime.State.InZone then
+			TwoTime.State.Root.CFrame = CFrame.lookAt(TwoTime.State.Root.Position, Vector3.new(TwoTime.State.KPos.X, TwoTime.State.Root.Position.Y, TwoTime.State.KPos.Z))
+		else
+			TwoTime.State.Tangent = Vector3.new(TwoTime.State.ToPlayer.Z, 0, -TwoTime.State.ToPlayer.X)
+			if TwoTime.State.Tangent:Dot(TwoTime.State.BehindDir) < 0 then
+				TwoTime.State.Tangent = -TwoTime.State.Tangent
+			end
+
+			if TwoTime.State.Dist < TwoTime.Config.SafeRadius then
+				TwoTime.State.Radial = TwoTime.State.ToPlayer
+				TwoTime.State.ApproachW = 1.5
+			else
+				TwoTime.State.Radial = -TwoTime.State.ToPlayer
+				TwoTime.State.ApproachW = math.clamp(TwoTime.State.Dist / 10, 0.4, 1.2)
+			end
+
+			TwoTime.State.MoveDir = TwoTime.State.Tangent * TwoTime.Config.TangentWeight + TwoTime.State.Radial * TwoTime.State.ApproachW
+			if TwoTime.State.MoveDir.Magnitude > 0.001 then
+				TwoTime.State.MoveDir = TwoTime.State.MoveDir.Unit
+			else
+				TwoTime.State.MoveDir = TwoTime.State.Tangent
+			end
+
+			TwoTime.State.Root.CFrame = CFrame.lookAt(TwoTime.State.PPos, TwoTime.State.PPos + TwoTime.State.MoveDir)
+		end
+	else
+		TwoTime.State.CamDir = TwoTime.Flatten(Camera.CFrame.LookVector)
+		if TwoTime.State.CamDir.Magnitude > 0.001 then
+			TwoTime.State.Root.CFrame = CFrame.lookAt(TwoTime.State.PPos, TwoTime.State.PPos + TwoTime.State.CamDir.Unit)
+		end
+	end
+end
+
+TwoTime.LockAimRotation = function()
+	TwoTime.State.AimHum = TwoTime.State.Char and TwoTime.State.Char:FindFirstChild("Humanoid")
+	if TwoTime.State.AimHum and not TwoTime.State.AimRotLocked then
+		TwoTime.State.PrevAutoRotate = TwoTime.State.AimHum.AutoRotate
+		TwoTime.State.AimHum.AutoRotate = false
+		TwoTime.State.AimRotLocked = true
+	end
+end
+
+TwoTime.UnlockAimRotation = function()
+	if not TwoTime.State.AimRotLocked then return end
+
+	if TwoTime.State.AimHum and TwoTime.State.AimHum.Parent then
+		TwoTime.State.AimHum.AutoRotate = TwoTime.State.PrevAutoRotate ~= false
+	end
+
+	if TwoTime.State.Root and TwoTime.State.Root.Parent then
+		TwoTime.State.CamDir = TwoTime.Flatten(Camera.CFrame.LookVector)
+		if TwoTime.State.CamDir.Magnitude > 0.001 then
+			TwoTime.State.Root.CFrame = CFrame.lookAt(TwoTime.State.Root.Position, TwoTime.State.Root.Position + TwoTime.State.CamDir.Unit)
+		end
+	end
+
+	TwoTime.State.AimHum = nil
+	TwoTime.State.PrevAutoRotate = nil
+	TwoTime.State.AimRotLocked = false
+end
+
+TwoTime.OnBoostStart = function()
+	TwoTime.State.DidTeleport = false
+	TwoTime.State.Target = nil
+	TwoTime.State.Active = TwoTime.State.Flags.AutoAim and TwoTime.State.CurrentAim == true
+
+	if TwoTime.State.Flags.Teleport then
+		RunService:BindToRenderStep("TwoTime_Teleport", 2998, TwoTime.TeleportStep)
+	end
+
+	if TwoTime.State.Active then
+		TwoTime.LockAimRotation()
+		RunService:BindToRenderStep("TwoTime_AimSteer", 2999, TwoTime.AimStep)
+	end
+end
+
+TwoTime.OnBoostEnd = function()
+	pcall(function()
+		RunService:UnbindFromRenderStep("TwoTime_Teleport")
+	end)
+
+	if TwoTime.State.Active then
+		pcall(function()
+			RunService:UnbindFromRenderStep("TwoTime_AimSteer")
+		end)
+	end
+
+	TwoTime.UnlockAimRotation()
+
+	TwoTime.State.Active = false
+	TwoTime.State.Target = nil
+	TwoTime.State.DidTeleport = false
+end
+
+TwoTime.GetVizFolder = function()
+	if not (TwoTime.State.VizFolder and TwoTime.State.VizFolder.Parent) then
+		TwoTime.State.VizFolder = Instance.new("Folder")
+		TwoTime.State.VizFolder.Name = "TwoTimeAimViz"
+		TwoTime.State.VizFolder.Parent = CoreGui
+	end
+	return TwoTime.State.VizFolder
+end
+
+TwoTime.NewAdornment = function(className, adornee, color)
+	TwoTime.State.NewAdorn = Instance.new(className)
+	TwoTime.State.NewAdorn.Adornee = adornee
+	TwoTime.State.NewAdorn.Color3 = color
+	TwoTime.State.NewAdorn.Transparency = TwoTime.Config.VizTransparency
+	TwoTime.State.NewAdorn.AlwaysOnTop = true
+	TwoTime.State.NewAdorn.Parent = TwoTime.GetVizFolder()
+	return TwoTime.State.NewAdorn
+end
+
+TwoTime.LayoutVisuals = function(viz)
+	if not (viz.Root and viz.Root.Parent and viz.Hum) then return end
+
+	TwoTime.State.GroundY = -(viz.Hum.HipHeight + viz.Root.Size.Y * 0.5) + 0.15
+	TwoTime.State.GPos = viz.Root.Position + Vector3.new(0, TwoTime.State.GroundY, 0)
+	TwoTime.State.KLook = TwoTime.Flatten(viz.Root.CFrame.LookVector)
+	TwoTime.State.BehindDir = TwoTime.State.KLook.Magnitude > 0.001 and -TwoTime.State.KLook.Unit or Vector3.new(0, 0, 1)
+
+	viz.Circle.CFrame = CFrame.new(0, TwoTime.State.GroundY, 0) * CFrame.Angles(math.pi * 0.5, 0, 0)
+	viz.Circle.Radius = TwoTime.Config.AimRadius
+	viz.Circle.InnerRadius = math.max(TwoTime.Config.AimRadius - TwoTime.Config.RingThick, 0)
+	viz.Circle.Height = 0.15
+
+	TwoTime.State.HalfRad = math.rad(TwoTime.Config.BackAngle * 0.5)
+	TwoTime.State.P1 = TwoTime.State.GPos + TwoTime.RotY(TwoTime.State.BehindDir, TwoTime.State.HalfRad) * TwoTime.Config.BackConeRadius
+	TwoTime.State.P2 = TwoTime.State.GPos + TwoTime.RotY(TwoTime.State.BehindDir, -TwoTime.State.HalfRad) * TwoTime.Config.BackConeRadius
+	TwoTime.State.Segments = {
+		{ TwoTime.State.GPos, TwoTime.State.P1 },
+		{ TwoTime.State.GPos, TwoTime.State.P2 },
+		{ TwoTime.State.P1, TwoTime.State.P2 },
+	}
+
+	for i, seg in ipairs(TwoTime.State.Segments) do
+		TwoTime.State.LineVec = seg[2] - seg[1]
+		TwoTime.State.LineLen = TwoTime.State.LineVec.Magnitude
+		if TwoTime.State.LineLen < 0.01 then
+			viz.Lines[i].Size = Vector3.zero
+		else
+			viz.Lines[i].Size = Vector3.new(TwoTime.Config.LineThick, TwoTime.Config.LineThick, TwoTime.State.LineLen)
+			viz.Lines[i].CFrame = viz.Root.CFrame:ToObjectSpace(CFrame.lookAt((seg[1] + seg[2]) * 0.5, seg[2]))
+		end
+	end
+end
+
+TwoTime.ApplyVisibility = function(viz)
+	viz.Circle.Visible = TwoTime.State.Flags.ShowAimRadius
+	for _, line in ipairs(viz.Lines) do
+		line.Visible = TwoTime.State.Flags.ShowBackCone
+	end
+end
+
+TwoTime.RefreshVisualVisibility = function()
+	for _, viz in pairs(TwoTime.State.Visuals) do
+		TwoTime.ApplyVisibility(viz)
+	end
+end
+
+TwoTime.RemoveVisuals = function(killer)
+	TwoTime.State.OldViz = TwoTime.State.Visuals[killer]
+	if not TwoTime.State.OldViz then return end
+
+	TwoTime.State.OldViz.Circle:Destroy()
+	for _, line in ipairs(TwoTime.State.OldViz.Lines) do
+		line:Destroy()
+	end
+	for _, conn in ipairs(TwoTime.State.OldViz.Conns) do
+		conn:Disconnect()
+	end
+	TwoTime.State.Visuals[killer] = nil
+end
+
+TwoTime.BuildVisuals = function(killer)
+	TwoTime.RemoveVisuals(killer)
+
+	TwoTime.State.KR = killer:FindFirstChild("HumanoidRootPart")
+	TwoTime.State.KH = killer:FindFirstChild("Humanoid")
+	if not (TwoTime.State.KR and TwoTime.State.KH) or TwoTime.State.KH.Health <= 0 then return end
+
+	TwoTime.State.NewViz = {
+		Root = TwoTime.State.KR,
+		Hum = TwoTime.State.KH,
+		Circle = TwoTime.NewAdornment("CylinderHandleAdornment", TwoTime.State.KR, TwoTime.Config.VizColor),
+		Lines = {
+			TwoTime.NewAdornment("BoxHandleAdornment", TwoTime.State.KR, TwoTime.Config.LineColor),
+			TwoTime.NewAdornment("BoxHandleAdornment", TwoTime.State.KR, TwoTime.Config.LineColor),
+			TwoTime.NewAdornment("BoxHandleAdornment", TwoTime.State.KR, TwoTime.Config.LineColor),
+		},
+		Conns = {},
+	}
+	TwoTime.State.Visuals[killer] = TwoTime.State.NewViz
+
+	TwoTime.LayoutVisuals(TwoTime.State.NewViz)
+	TwoTime.ApplyVisibility(TwoTime.State.NewViz)
+
+	table.insert(TwoTime.State.NewViz.Conns, TwoTime.State.KH.Died:Connect(function()
+		TwoTime.RemoveVisuals(killer)
+	end))
+	table.insert(TwoTime.State.NewViz.Conns, killer.AncestryChanged:Connect(function(_, parent)
+		if not parent then
+			TwoTime.RemoveVisuals(killer)
+		end
+	end))
+end
+
+TwoTime.TryAttach = function(killer)
+	task.defer(function()
+		if killer:WaitForChild("HumanoidRootPart", 5) and killer:WaitForChild("Humanoid", 5) then
+			TwoTime.BuildVisuals(killer)
+		end
+	end)
+end
+
+TwoTime.RebuildVisuals = function()
+	for killer, viz in pairs(TwoTime.State.Visuals) do
+		if killer.Parent and viz.Root and viz.Root.Parent then
+			TwoTime.LayoutVisuals(viz)
+		else
+			TwoTime.RemoveVisuals(killer)
+		end
+	end
+end
+
+TwoTime.IsExactMatch = function(str)
+	if type(str) ~= "string" then return false end
+	TwoTime.State.LowerStr = str:lower()
+
+	TwoTime.State.MatchedData = TwoTime.Config.Skills[TwoTime.State.LowerStr]
+	if TwoTime.State.MatchedData then
+		TwoTime.State.MatchedSpeed = TwoTime.State.MatchedData.Speed
+		TwoTime.State.MatchedCutoff = TwoTime.State.MatchedData.Cutoff
+		TwoTime.State.MatchedAim = TwoTime.State.MatchedData.Aim == true
+		return true
+	end
+
+	return false
+end
+
+TwoTime.WalkTable = function(tbl, depth)
+	if depth > 4 then return end
+	for k, v in pairs(tbl) do
+		if TwoTime.IsExactMatch(k) and (type(v) == "string" or type(v) == "number") then
+			TwoTime.State.SkillCache[tostring(v):match("%d+")] = {
+				Speed = TwoTime.State.MatchedSpeed,
+				Cutoff = TwoTime.State.MatchedCutoff,
+				Aim = TwoTime.State.MatchedAim
+			}
+		end
+
+		if type(v) == "table" then
+			TwoTime.WalkTable(v, depth + 1)
+		end
+	end
+end
+
+TwoTime.ScanFolder = function(folder, depth)
+	if not folder or depth > 3 then return end
+	for _, child in ipairs(folder:GetChildren()) do
+		if child:IsA("ModuleScript") then
+			TwoTime.State.Ok, TwoTime.State.Data = pcall(require, child)
+			if TwoTime.State.Ok and type(TwoTime.State.Data) == "table" then
+				TwoTime.WalkTable(TwoTime.State.Data, 0)
+			end
+		elseif child:IsA("Folder") or child:IsA("Model") then
+			TwoTime.ScanFolder(child, depth + 1)
+		end
+	end
+end
+
+TwoTime.LoadConfigs = function()
+	TwoTime.State.AssetsFolder = ReplicatedStorage:FindFirstChild("Assets")
+	if not TwoTime.State.AssetsFolder then return end
+
+	TwoTime.State.SurvFolder = TwoTime.State.AssetsFolder:FindFirstChild("Survivors")
+	if TwoTime.State.SurvFolder then
+		TwoTime.ScanFolder(TwoTime.State.SurvFolder:FindFirstChild("TwoTime"), 1)
+	end
+
+	TwoTime.State.SkinFolder = TwoTime.State.AssetsFolder:FindFirstChild("Skins")
+	if TwoTime.State.SkinFolder then
+		TwoTime.State.SkinSurvFolder = TwoTime.State.SkinFolder:FindFirstChild("Survivors")
+		if TwoTime.State.SkinSurvFolder then
+			TwoTime.ScanFolder(TwoTime.State.SkinSurvFolder:FindFirstChild("TwoTime"), 1)
+		end
+	end
+end
+
+TwoTime.StopBoost = function()
+	TwoTime.State.IsBoosting = false
+	TwoTime.State.CurrentTrack = nil
+
+	TwoTime.OnBoostEnd()
+
+	pcall(function()
+		RunService:UnbindFromRenderStep("TwoTime_PhysicsOverride")
+	end)
+
+	if TwoTime.State.Root and TwoTime.State.Root.Parent then
+		TwoTime.State.Root.AssemblyLinearVelocity = Vector3.zero
+		TwoTime.State.Root.AssemblyAngularVelocity = Vector3.zero
+	end
+end
+
+TwoTime.DashStep = function()
+	if not TwoTime.State.CurrentTrack then return TwoTime.StopBoost() end
+
+	TwoTime.State.TrackEnded = (not TwoTime.State.CurrentTrack.IsPlaying)
+		or (TwoTime.State.CurrentTrack.Length > 0 and TwoTime.State.CurrentTrack.TimePosition >= TwoTime.State.CurrentTrack.Length * TwoTime.State.CurrentCutoff)
+
+	if TwoTime.State.TrackEnded or not TwoTime.State.IsBoosting or not TwoTime.State.Root.Parent then
+		return TwoTime.StopBoost()
+	end
+
+	for _, child in ipairs(TwoTime.State.Root:GetChildren()) do
+		for _, className in ipairs(TwoTime.Config.BadMovers) do
+			if child:IsA(className) then
+				child:Destroy()
+				break
+			end
+		end
+	end
+
+	if TwoTime.State.Active then
+		TwoTime.State.FlatDir = TwoTime.Flatten(TwoTime.State.Root.CFrame.LookVector)
+	else
+		TwoTime.State.FlatDir = TwoTime.Flatten(TwoTime.State.Cam.CFrame.LookVector)
+	end
+
+	if TwoTime.State.FlatDir.Magnitude > 0.001 then
+		TwoTime.State.FlatDir = TwoTime.State.FlatDir.Unit
+	else
+		TwoTime.State.FlatDir = TwoTime.State.Root.CFrame.LookVector
+	end
+
+	TwoTime.State.Root.AssemblyLinearVelocity = TwoTime.State.FlatDir * TwoTime.State.CurrentSpeed
+	TwoTime.State.Root.AssemblyAngularVelocity = Vector3.zero
+end
+
+TwoTime.StartBoost = function(track)
+	if not TwoTime.State.Flags.TwoTimeDash or TwoTime.State.IsBoosting then return end
+
+	TwoTime.State.Char = localPlayer.Character
+	if not TwoTime.State.Char then return end
+
+	TwoTime.State.Root = TwoTime.State.Char:FindFirstChild("HumanoidRootPart")
+	if not TwoTime.State.Root then return end
+
+	TwoTime.StopBoost()
+	TwoTime.State.IsBoosting = true
+	TwoTime.State.Cam = Camera
+	TwoTime.State.CurrentTrack = track
+
+	TwoTime.OnBoostStart()
+
+	RunService:BindToRenderStep("TwoTime_PhysicsOverride", 3000, TwoTime.DashStep)
+
+	track.Stopped:Once(TwoTime.StopBoost)
+end
+
+TwoTime.OnAnimPlayed = function(track)
+	if not track or not track.Animation then return end
+
+	TwoTime.State.AnimName = track.Animation.Name or ""
+	TwoTime.State.AnimId = tostring(track.Animation.AnimationId):match("%d+") or ""
+
+	TwoTime.State.IsMatched = TwoTime.IsExactMatch(TwoTime.State.AnimName)
+
+	if not TwoTime.State.IsMatched and TwoTime.State.SkillCache[TwoTime.State.AnimId] then
+		TwoTime.State.IsMatched = true
+		TwoTime.State.MatchedSpeed = TwoTime.State.SkillCache[TwoTime.State.AnimId].Speed
+		TwoTime.State.MatchedCutoff = TwoTime.State.SkillCache[TwoTime.State.AnimId].Cutoff
+		TwoTime.State.MatchedAim = TwoTime.State.SkillCache[TwoTime.State.AnimId].Aim == true
+	end
+
+	if TwoTime.State.IsMatched then
+		TwoTime.State.CurrentSpeed = TwoTime.State.MatchedSpeed
+		TwoTime.State.CurrentCutoff = TwoTime.State.MatchedCutoff
+		TwoTime.State.CurrentAim = TwoTime.State.MatchedAim
+		TwoTime.StartBoost(track)
+	end
+end
+
+TwoTime.HookPlayer = function(char)
+	if not char then return end
+	TwoTime.StopBoost()
+
+	for _, conn in ipairs(TwoTime.State.PlayerConns) do conn:Disconnect() end
+	table.clear(TwoTime.State.PlayerConns)
+
+	TwoTime.State.Hum = char:WaitForChild("Humanoid", 5)
+	TwoTime.State.Animator = TwoTime.State.Hum and TwoTime.State.Hum:WaitForChild("Animator", 5)
+
+	if TwoTime.State.Animator then
+		table.insert(TwoTime.State.PlayerConns, TwoTime.State.Animator.AnimationPlayed:Connect(TwoTime.OnAnimPlayed))
+	end
+end
+
+TwoTime.LoadConfigs()
+
+killersFolder.ChildAdded:Connect(TwoTime.TryAttach)
+for _, killer in ipairs(killersFolder:GetChildren()) do
+	TwoTime.TryAttach(killer)
+end
+
+if playerCharacter then TwoTime.HookPlayer(playerCharacter) end
+localPlayer.CharacterAdded:Connect(TwoTime.HookPlayer)
+
+MyUIElements.TwoTime:Toggle({
+	Title = "loc:LungeStabController",
+	Desc = "loc:LungeStabControllerDesc",
+	Flag = "TwoTimeDashFlag",
+	Value = false,
+	Callback = function(state)
+		TwoTime.State.Flags.TwoTimeDash = state
+		if not state then TwoTime.StopBoost() end
+	end,
+})
+
+MyUIElements.TwoTime:Toggle({
+	Title = "loc:LungeStabAutoAim",
+	Desc = "loc:LungeStabAutoAimDesc",
+	Flag = "TwoTimeAutoAimFlag",
+	Value = false,
+	Callback = function(state)
+		TwoTime.State.Flags.AutoAim = state
+		if not state then TwoTime.OnBoostEnd() end
+	end,
+})
+
+MyUIElements.TwoTime:Toggle({
+	Title = "loc:LungeStabTeleport",
+	Desc = "loc:LungeStabTeleportDesc",
+	Flag = "TwoTimeTeleportFlag",
+	Value = false,
+	Callback = function(state)
+		TwoTime.State.Flags.Teleport = state
+		if not state then TwoTime.State.DidTeleport = false end
+	end,
+})
+
+MyUIElements.TwoTime:Toggle({
+	Title = "loc:AimRadiusShow",
+	Desc = "loc:AimRadiusShowDesc",
+	Flag = "TwoTimeAimRadiusShowFlag",
+	Value = false,
+	Callback = function(state)
+		TwoTime.State.Flags.ShowAimRadius = state
+		TwoTime.RefreshVisualVisibility()
+	end,
+})
+
+MyUIElements.TwoTime:Toggle({
+	Title = "loc:BackConeShow",
+	Desc = "loc:BackConeShowDesc",
+	Flag = "TwoTimeBackConeShowFlag",
+	Value = false,
+	Callback = function(state)
+		TwoTime.State.Flags.ShowBackCone = state
+		TwoTime.RefreshVisualVisibility()
+	end,
+})
+
+MyUIElements.TwoTime:Input({
+	Title = "loc:RadiusAim",
+	Desc = "loc:RadiusAimDesc",
+	Flag = "TwoTimeAimRadius_Input",
+	Placeholder = "10",
+	Value = "10",
+	Callback = function(value)
+		TwoTime.State.NumInput = tonumber(value)
+		if TwoTime.State.NumInput then
+			TwoTime.Config.AimRadius = math.clamp(TwoTime.State.NumInput, 5, 300)
+			TwoTime.RebuildVisuals()
+		end
+	end,
+})
+
+MyUIElements.TwoTime:Input({
+	Title = "loc:BackConeRadius",
+	Desc = "loc:BackConeRadiusDesc",
+	Flag = "TwoTimeBackConeRadius_Input",
+	Placeholder = "10",
+	Value = "10",
+	Callback = function(value)
+		TwoTime.State.NumInput = tonumber(value)
+		if TwoTime.State.NumInput then
+			TwoTime.Config.BackConeRadius = math.clamp(TwoTime.State.NumInput, 5, 300)
+			TwoTime.RebuildVisuals()
+		end
+	end,
+})
+
+MyUIElements.TwoTime:Input({
+	Title = "loc:BackAngle",
+	Desc = "loc:BackAngleDesc",
+	Flag = "TwoTimeBackAngle_Input",
+	Placeholder = "60",
+	Value = "60",
+	Callback = function(value)
+		TwoTime.State.NumInput = tonumber(value)
+		if TwoTime.State.NumInput then
+			TwoTime.Config.BackAngle = math.clamp(TwoTime.State.NumInput, 10, 360)
+			TwoTime.RebuildVisuals()
+		end
 	end,
 })
 
@@ -6896,6 +7723,52 @@ for _, key in pairs({"Sentry", "Dispenser", "Tripwire", "Tripmine", "Spray", "Vi
     })
 end
 
+local NewESPEntries = {
+    {Key = "Document", UI = ESPManager.UI.EspDocument, Color = Color3.fromRGB(255, 255, 255)},
+    {Key = "Ring", UI = ESPManager.UI.EspRing, Color = Color3.fromRGB(255, 215, 0)}
+}
+
+for _, itemData in pairs(NewESPEntries) do
+    ESPManager:AddEntry(itemData.Key, {
+        UI = itemData.UI,
+        Flags = {
+            Type = "ESP_"..itemData.Key.."_Type_Dropdown",
+            Text = "ESP_"..itemData.Key.."_Text_Format",
+            Color = "Esp_"..itemData.Key.."_Colorpicker",
+            Toggle = "ESP_"..itemData.Key.."_Toggle"
+        },
+        Toggle = {
+            Title = "loc:Esp" .. itemData.Key,
+            Desc = "loc:Esp" .. itemData.Key .. "Desc"
+        },
+        IdPrefix = itemData.Key .. "_",
+        DefaultColor = itemData.Color,
+        DefaultTypes = {Highlight = true, Text = true, Box = false, Tracer = false},
+        DefaultText = {Name = true, HP = false, Distance = true},
+        TextValues = ESPManager.Constants.TextBasic,
+        SourceFolder = Workspace,
+        AddDelay = 0.5,
+        Matcher = function(_, _, object)
+            if object:IsA("Model") then
+                local prompt = object:FindFirstChildWhichIsA("ProximityPrompt", true)
+                return prompt and prompt.ObjectText == itemData.Key
+            end
+            return false
+        end,
+        GetDisplayName = function()
+            return itemData.Key
+        end
+    })
+
+    ESPManager:AddFolderRoute(Workspace, {
+        EntryKey = itemData.Key,
+        Delay = 0.5,
+        Match = function(child)
+            return ESPManager.Entries[itemData.Key].Matcher(ESPManager, ESPManager.Entries[itemData.Key], child)
+        end
+    })
+end
+
 ESPManager:StartAllFolderRouters()
 ESPManager:StartPolling()
 
@@ -7154,7 +8027,7 @@ AppState = {
     Plr = localPlayer,
     IsSpawning = false,
     InFreecam = false,
-    ButtonVisible = true,
+    ButtonVisible = false,
     ButtonDraggable = false,
     IsDragging = false,
     PortalConnection = nil,
@@ -7847,6 +8720,938 @@ MyUIElements.RickPrime:Input({
         AppState.NewKey = string.upper(tostring(val))
         if Enum.KeyCode[AppState.NewKey] then
             PortalConfig.TriggerKey = Enum.KeyCode[AppState.NewKey]
+        end
+    end
+})
+
+HitboxDevilSS1 = {
+	Config = {
+		Enabled = false,
+		Mode = "Silent Hitbox",
+		Distance = 60,
+		SkillKeys = {"slash", "gashingwoundstart", "behead", "attack", "walkspeedoverridestart", "golemslash", "demonicpursuitstart", "ascentbitestart"},
+		TargetModes = { Survivors = true, Killers = false }
+	},
+	State = {
+		ActionCache = {}, 
+		Conns = {},
+		IsAttacking = false,
+		ActiveTrack = nil,
+		ActiveSound = nil,
+		ReachConn = nil,
+		DeathConn = nil,
+		Target = nil,
+		KeyMatched = false,
+		TempPart = nil,
+		OldPrimaryPart = nil,
+		CloneModel = nil,
+		CloneHum = nil,
+		CloneRoot = nil,
+		CloneAnimator = nil,
+		CloneTracks = {},
+		RealTracks = {},
+		IsBlinking = false,
+		NCC = nil,
+		OrigHum = nil,
+		OrigAnimator = nil,
+		MyRoot = nil
+	}
+}
+
+HitboxDevilSS1.NormalizeId = function(id) 
+	return tostring(id):match("%d+") 
+end
+
+HitboxDevilSS1.ExtractIds = function(val)
+	if type(val) == "string" or type(val) == "number" then
+		HitboxDevilSS1.State.ParsedId = HitboxDevilSS1.NormalizeId(val)
+		if HitboxDevilSS1.State.ParsedId then 
+			HitboxDevilSS1.State.ActionCache[HitboxDevilSS1.State.ParsedId] = true 
+		end
+	elseif type(val) == "table" then
+		for _, subVal in pairs(val) do 
+			HitboxDevilSS1.ExtractIds(subVal) 
+		end
+	end
+end
+
+HitboxDevilSS1.WalkTableAndCache = function(tbl, depth)
+	if depth > 4 then return end
+	for k, v in pairs(tbl) do
+		HitboxDevilSS1.State.KeyMatched = false
+		if type(k) == "string" then
+			HitboxDevilSS1.State.LowerK = k:lower()
+			for _, key in ipairs(HitboxDevilSS1.Config.SkillKeys) do
+				if HitboxDevilSS1.State.LowerK == key:lower() then
+					HitboxDevilSS1.ExtractIds(v)
+					HitboxDevilSS1.State.KeyMatched = true
+					break
+				end
+			end
+		end
+		if type(v) == "table" and not HitboxDevilSS1.State.KeyMatched then 
+			HitboxDevilSS1.WalkTableAndCache(v, depth + 1) 
+		end
+	end
+end
+
+HitboxDevilSS1.ScanKillerAssets = function()
+	HitboxDevilSS1.State.Assets = ReplicatedStorage:FindFirstChild("Assets")
+	if not HitboxDevilSS1.State.Assets then return end
+
+	HitboxDevilSS1.State.TargetFolders = {
+		HitboxDevilSS1.State.Assets:FindFirstChild("Killers"),
+		HitboxDevilSS1.State.Assets:FindFirstChild("Skins") and HitboxDevilSS1.State.Assets.Skins:FindFirstChild("Killers")
+	}
+
+	for _, folder in ipairs(HitboxDevilSS1.State.TargetFolders) do
+		if folder then
+			for _, module in ipairs(folder:GetDescendants()) do
+				if module:IsA("ModuleScript") then
+					HitboxDevilSS1.State.Ok, HitboxDevilSS1.State.Data = pcall(require, module)
+					if HitboxDevilSS1.State.Ok and type(HitboxDevilSS1.State.Data) == "table" then
+						HitboxDevilSS1.WalkTableAndCache(HitboxDevilSS1.State.Data, 0)
+					end
+				end
+			end
+		end
+	end
+end
+
+HitboxDevilSS1.UpdateTargetModes = function(list)
+	table.clear(HitboxDevilSS1.Config.TargetModes)
+	for _, v in ipairs(list) do 
+		HitboxDevilSS1.Config.TargetModes[v] = true 
+	end
+end
+
+HitboxDevilSS1.GetTarget = function()
+	HitboxDevilSS1.State.BestDist = HitboxDevilSS1.Config.Distance
+	HitboxDevilSS1.State.BestTarget = nil
+	HitboxDevilSS1.State.MyRoot = playerCharacter and playerCharacter:FindFirstChild("HumanoidRootPart")
+	if not HitboxDevilSS1.State.MyRoot then return nil end
+
+	HitboxDevilSS1.State.SearchFolders = {}
+	if HitboxDevilSS1.Config.TargetModes["Survivors"] then table.insert(HitboxDevilSS1.State.SearchFolders, Workspace:FindFirstChild("Survivors") or survivorsFolder) end
+	if HitboxDevilSS1.Config.TargetModes["Killers"] then table.insert(HitboxDevilSS1.State.SearchFolders, Workspace:FindFirstChild("Killers") or killersFolder) end
+
+	for _, folder in ipairs(HitboxDevilSS1.State.SearchFolders) do
+		if folder then
+			for _, model in ipairs(folder:GetChildren()) do
+				if model:IsA("Model") and model ~= playerCharacter then
+					HitboxDevilSS1.State.EHum = model:FindFirstChild("Humanoid")
+					HitboxDevilSS1.State.ERoot = model:FindFirstChild("HumanoidRootPart")
+					if HitboxDevilSS1.State.EHum and HitboxDevilSS1.State.ERoot and HitboxDevilSS1.State.EHum.Health > 0 then
+						HitboxDevilSS1.State.Dist = (HitboxDevilSS1.State.ERoot.Position - HitboxDevilSS1.State.MyRoot.Position).Magnitude
+						if HitboxDevilSS1.State.Dist < HitboxDevilSS1.State.BestDist then
+							HitboxDevilSS1.State.BestDist = HitboxDevilSS1.State.Dist
+							HitboxDevilSS1.State.BestTarget = HitboxDevilSS1.State.ERoot
+						end
+					end
+				end
+			end
+		end
+	end
+	return HitboxDevilSS1.State.BestTarget
+end
+
+HitboxDevilSS1.SetCharVisibility = function(char, visible)
+	if not char then return end
+	HitboxDevilSS1.State.TargetTrans = visible and 0 or 1
+	
+	for _, part in ipairs(char:GetDescendants()) do
+		if part:IsA("BasePart") or part:IsA("Decal") or part:IsA("Texture") then
+			HitboxDevilSS1.State.PName = string.lower(part.Name)
+			if HitboxDevilSS1.State.PName ~= "humanoidrootpart" and not string.find(HitboxDevilSS1.State.PName, "hitbox") then
+				part.LocalTransparencyModifier = HitboxDevilSS1.State.TargetTrans
+			end
+		end
+	end
+end
+
+HitboxDevilSS1.CreateNoCollision = function(part0, charModel)
+	for _, part1 in ipairs(charModel:GetDescendants()) do
+		if part1:IsA("BasePart") then
+			HitboxDevilSS1.State.NCC = Instance.new("NoCollisionConstraint")
+			HitboxDevilSS1.State.NCC.Part0 = part0
+			HitboxDevilSS1.State.NCC.Part1 = part1
+			HitboxDevilSS1.State.NCC.Parent = part0
+		end
+	end
+end
+
+HitboxDevilSS1.DestroyClone = function()
+	pcall(function() RunService:UnbindFromRenderStep("HitboxDevil_BlinkSync") end)
+	
+	table.clear(HitboxDevilSS1.State.CloneTracks)
+
+	if HitboxDevilSS1.State.CloneModel then
+		HitboxDevilSS1.State.CloneModel:Destroy()
+		HitboxDevilSS1.State.CloneModel = nil
+	end
+	
+	HitboxDevilSS1.State.CloneHum = nil
+	HitboxDevilSS1.State.CloneRoot = nil
+	HitboxDevilSS1.State.CloneAnimator = nil
+	
+	if playerCharacter then
+		HitboxDevilSS1.SetCharVisibility(playerCharacter, true)
+		HitboxDevilSS1.State.MyHum = playerCharacter:FindFirstChildOfClass("Humanoid")
+		if HitboxDevilSS1.State.MyHum and Camera then
+			Camera.CameraSubject = HitboxDevilSS1.State.MyHum
+		end
+	end
+end
+
+HitboxDevilSS1.CreateClone = function()
+	HitboxDevilSS1.DestroyClone()
+	if not playerCharacter or not HitboxDevilSS1.Config.Enabled or HitboxDevilSS1.Config.Mode ~= "Hitbox 10shedletsky" then return end
+	
+	playerCharacter.Archivable = true
+	HitboxDevilSS1.State.CloneModel = playerCharacter:Clone()
+	playerCharacter.Archivable = false
+	
+	for _, obj in ipairs(HitboxDevilSS1.State.CloneModel:GetDescendants()) do
+		if obj:IsA("Script") or obj:IsA("LocalScript") then 
+			obj:Destroy() 
+		elseif obj:IsA("BasePart") then
+			obj.CanTouch = false
+			obj.CanQuery = false
+			obj.Massless = true
+			
+			HitboxDevilSS1.State.ObjName = string.lower(obj.Name)
+			if HitboxDevilSS1.State.ObjName == "humanoidrootpart" or string.find(HitboxDevilSS1.State.ObjName, "hitbox") then
+				obj.Transparency = 1
+			end
+			
+			HitboxDevilSS1.CreateNoCollision(obj, playerCharacter)
+		end
+	end
+	
+	HitboxDevilSS1.State.CloneModel.Name = "BlinkClone_" .. localPlayer.Name
+	HitboxDevilSS1.State.CloneModel.Parent = Workspace
+	
+	HitboxDevilSS1.State.CloneHum = HitboxDevilSS1.State.CloneModel:FindFirstChildOfClass("Humanoid")
+	HitboxDevilSS1.State.CloneRoot = HitboxDevilSS1.State.CloneModel:FindFirstChild("HumanoidRootPart")
+	
+	if HitboxDevilSS1.State.CloneHum then
+		HitboxDevilSS1.State.CloneHum.DisplayDistanceType = Enum.HumanoidDisplayDistanceType.None 
+		HitboxDevilSS1.State.CloneAnimator = HitboxDevilSS1.State.CloneHum:FindFirstChildOfClass("Animator")
+		if not HitboxDevilSS1.State.CloneAnimator then
+			HitboxDevilSS1.State.CloneAnimator = Instance.new("Animator", HitboxDevilSS1.State.CloneHum)
+		end
+	end
+	
+	if HitboxDevilSS1.State.CloneRoot then
+		HitboxDevilSS1.State.CloneRoot.Anchored = false
+	end
+
+	RunService:BindToRenderStep("HitboxDevil_BlinkSync", 199, HitboxDevilSS1.BlinkSyncLoop)
+end
+
+HitboxDevilSS1.BlinkSyncLoop = function(dt)
+	if not HitboxDevilSS1.Config.Enabled or HitboxDevilSS1.Config.Mode ~= "Hitbox 10shedletsky" then 
+		return HitboxDevilSS1.DestroyClone() 
+	end
+
+	HitboxDevilSS1.SetCharVisibility(playerCharacter, false)
+	if HitboxDevilSS1.State.CloneHum and Camera and Camera.CameraSubject ~= HitboxDevilSS1.State.CloneHum then
+		Camera.CameraSubject = HitboxDevilSS1.State.CloneHum
+	end
+	
+	HitboxDevilSS1.State.MyRoot = playerCharacter and playerCharacter:FindFirstChild("HumanoidRootPart")
+	HitboxDevilSS1.State.OrigHum = playerCharacter and playerCharacter:FindFirstChildOfClass("Humanoid")
+	HitboxDevilSS1.State.OrigAnimator = HitboxDevilSS1.State.OrigHum and HitboxDevilSS1.State.OrigHum:FindFirstChildOfClass("Animator")
+
+	if HitboxDevilSS1.State.MyRoot and HitboxDevilSS1.State.CloneRoot then
+		if not HitboxDevilSS1.State.IsBlinking then
+			HitboxDevilSS1.State.CloneRoot.CFrame = HitboxDevilSS1.State.MyRoot.CFrame
+			HitboxDevilSS1.State.CloneRoot.AssemblyLinearVelocity = HitboxDevilSS1.State.MyRoot.AssemblyLinearVelocity
+		else
+			if HitboxDevilSS1.State.OrigHum then
+				HitboxDevilSS1.State.CloneHum:Move(HitboxDevilSS1.State.OrigHum.MoveDirection, false)
+			end
+		end
+	end
+
+	if HitboxDevilSS1.State.CloneAnimator and HitboxDevilSS1.State.OrigAnimator then
+		table.clear(HitboxDevilSS1.State.RealTracks)
+		
+		for _, track in ipairs(HitboxDevilSS1.State.OrigAnimator:GetPlayingAnimationTracks()) do
+			if track.Animation and track.Animation.AnimationId then
+				HitboxDevilSS1.State.AnimId = track.Animation.AnimationId
+				HitboxDevilSS1.State.RealTracks[HitboxDevilSS1.State.AnimId] = track
+
+				if not HitboxDevilSS1.State.CloneTracks[HitboxDevilSS1.State.AnimId] then
+					HitboxDevilSS1.State.CloneTracks[HitboxDevilSS1.State.AnimId] = HitboxDevilSS1.State.CloneAnimator:LoadAnimation(track.Animation)
+					HitboxDevilSS1.State.CloneTracks[HitboxDevilSS1.State.AnimId]:Play()
+				end
+
+				HitboxDevilSS1.State.CTrack = HitboxDevilSS1.State.CloneTracks[HitboxDevilSS1.State.AnimId]
+				HitboxDevilSS1.State.CTrack:AdjustSpeed(track.Speed)
+				HitboxDevilSS1.State.CTrack:AdjustWeight(track.WeightCurrent)
+			end
+		end
+
+		for id, cTrack in pairs(HitboxDevilSS1.State.CloneTracks) do
+			if not HitboxDevilSS1.State.RealTracks[id] then
+				cTrack:Stop()
+				HitboxDevilSS1.State.CloneTracks[id] = nil
+			end
+		end
+	end
+end
+
+HitboxDevilSS1.ManageTempPart = function(create)
+	if create then
+		if not HitboxDevilSS1.State.TempPart or not HitboxDevilSS1.State.TempPart.Parent then
+			HitboxDevilSS1.State.TempPart = Instance.new("Part")
+			HitboxDevilSS1.State.TempPart.Name = "HitboxDevil_TempRoot"
+			HitboxDevilSS1.State.TempPart.Size = Vector3.new(2, 2, 1)
+			HitboxDevilSS1.State.TempPart.Transparency = 1
+			HitboxDevilSS1.State.TempPart.CanCollide = false
+			HitboxDevilSS1.State.TempPart.Anchored = true
+			HitboxDevilSS1.State.TempPart.Parent = Workspace
+		end
+		if playerCharacter and playerCharacter.PrimaryPart ~= HitboxDevilSS1.State.TempPart then
+			HitboxDevilSS1.State.OldPrimaryPart = playerCharacter.PrimaryPart
+			playerCharacter.PrimaryPart = HitboxDevilSS1.State.TempPart
+		end
+	else
+		if playerCharacter and HitboxDevilSS1.State.OldPrimaryPart and HitboxDevilSS1.State.OldPrimaryPart.Parent then
+			playerCharacter.PrimaryPart = HitboxDevilSS1.State.OldPrimaryPart
+		end
+		if HitboxDevilSS1.State.TempPart then
+			HitboxDevilSS1.State.TempPart:Destroy()
+			HitboxDevilSS1.State.TempPart = nil
+		end
+	end
+end
+
+HitboxDevilSS1.StopReach = function()
+	HitboxDevilSS1.State.IsAttacking = false
+	HitboxDevilSS1.State.ActiveTrack = nil
+	HitboxDevilSS1.State.ActiveSound = nil
+	
+	if HitboxDevilSS1.State.ReachConn then
+		HitboxDevilSS1.State.ReachConn:Disconnect()
+		HitboxDevilSS1.State.ReachConn = nil
+	end
+	
+	if HitboxDevilSS1.Config.Mode == "Hitbox 10shedletsky" and HitboxDevilSS1.State.IsBlinking then
+		HitboxDevilSS1.State.IsBlinking = false
+		if HitboxDevilSS1.State.CloneRoot and playerCharacter then
+			HitboxDevilSS1.State.MyRoot = playerCharacter:FindFirstChild("HumanoidRootPart")
+			if HitboxDevilSS1.State.MyRoot then
+				HitboxDevilSS1.State.MyRoot.CFrame = HitboxDevilSS1.State.CloneRoot.CFrame
+				HitboxDevilSS1.State.MyRoot.AssemblyLinearVelocity = HitboxDevilSS1.State.CloneRoot.AssemblyLinearVelocity
+			end
+		end
+	else
+		HitboxDevilSS1.State.IsBlinking = false
+		HitboxDevilSS1.ManageTempPart(false)
+	end
+end
+
+HitboxDevilSS1.IsActionEnded = function(obj)
+	if not obj then return true end
+	if obj:IsA("AnimationTrack") then
+		return not obj.IsPlaying or (obj.Length > 0 and obj.TimePosition >= obj.Length * 0.9)
+	elseif obj:IsA("Sound") then
+		return not obj.IsPlaying or (obj.TimeLength > 0 and obj.TimePosition >= obj.TimeLength * 0.9)
+	end
+	return true
+end
+
+HitboxDevilSS1.ReachLoop = function()
+	if not HitboxDevilSS1.Config.Enabled or not HitboxDevilSS1.State.IsAttacking then 
+		return HitboxDevilSS1.StopReach() 
+	end
+
+	HitboxDevilSS1.State.ActiveObj = HitboxDevilSS1.State.ActiveTrack or HitboxDevilSS1.State.ActiveSound
+	HitboxDevilSS1.State.MyRoot = playerCharacter and playerCharacter:FindFirstChild("HumanoidRootPart")
+
+	if HitboxDevilSS1.IsActionEnded(HitboxDevilSS1.State.ActiveObj) or not HitboxDevilSS1.State.MyRoot then
+		return HitboxDevilSS1.StopReach()
+	end
+
+	HitboxDevilSS1.State.Target = HitboxDevilSS1.GetTarget()
+	if not HitboxDevilSS1.State.Target then 
+		return HitboxDevilSS1.StopReach() 
+	end
+
+	if HitboxDevilSS1.Config.Mode == "Silent Hitbox" then
+		if HitboxDevilSS1.State.TempPart then
+			HitboxDevilSS1.State.TempPart.CFrame = HitboxDevilSS1.State.Target.CFrame
+		end
+	elseif HitboxDevilSS1.Config.Mode == "Hitbox 10shedletsky" then
+		HitboxDevilSS1.State.IsBlinking = true
+		HitboxDevilSS1.State.MyRoot.AssemblyLinearVelocity = Vector3.zero
+		HitboxDevilSS1.State.MyRoot.CFrame = HitboxDevilSS1.State.Target.CFrame
+	end
+end
+
+HitboxDevilSS1.OnActionTriggered = function(id, trackOrSound)
+	if not HitboxDevilSS1.Config.Enabled then return end
+	HitboxDevilSS1.State.Normalized = HitboxDevilSS1.NormalizeId(id)
+	
+	if HitboxDevilSS1.State.Normalized and HitboxDevilSS1.State.ActionCache[HitboxDevilSS1.State.Normalized] then
+		
+		HitboxDevilSS1.State.Target = HitboxDevilSS1.GetTarget()
+		if not HitboxDevilSS1.State.Target then return end 
+
+		HitboxDevilSS1.StopReach() 
+		HitboxDevilSS1.State.IsAttacking = true
+		
+		if HitboxDevilSS1.Config.Mode == "Silent Hitbox" then
+			HitboxDevilSS1.ManageTempPart(true)
+		end
+		
+		if typeof(trackOrSound) == "Instance" and trackOrSound:IsA("AnimationTrack") then
+			HitboxDevilSS1.State.ActiveTrack = trackOrSound
+			trackOrSound.Stopped:Once(HitboxDevilSS1.StopReach)
+		elseif typeof(trackOrSound) == "Instance" and trackOrSound:IsA("Sound") then
+			HitboxDevilSS1.State.ActiveSound = trackOrSound
+			trackOrSound.Ended:Once(HitboxDevilSS1.StopReach)
+			trackOrSound.Stopped:Once(HitboxDevilSS1.StopReach)
+		end
+
+		HitboxDevilSS1.State.ReachConn = RunService.RenderStepped:Connect(HitboxDevilSS1.ReachLoop)
+	end
+end
+
+HitboxDevilSS1.HookPlayer = function(char)
+	if not char then return end
+	HitboxDevilSS1.StopReach()
+	HitboxDevilSS1.DestroyClone()
+	
+	for _, conn in ipairs(HitboxDevilSS1.State.Conns) do conn:Disconnect() end
+	table.clear(HitboxDevilSS1.State.Conns)
+	
+	HitboxDevilSS1.State.Hum = char:WaitForChild("Humanoid", 5)
+	HitboxDevilSS1.State.Animator = HitboxDevilSS1.State.Hum and HitboxDevilSS1.State.Hum:WaitForChild("Animator", 5)
+	
+	if HitboxDevilSS1.State.Hum then
+		if HitboxDevilSS1.State.DeathConn then HitboxDevilSS1.State.DeathConn:Disconnect() end
+		HitboxDevilSS1.State.DeathConn = HitboxDevilSS1.State.Hum.Died:Connect(function()
+			HitboxDevilSS1.StopReach()
+			HitboxDevilSS1.DestroyClone()
+		end)
+	end
+	
+	if HitboxDevilSS1.State.Animator then
+		table.insert(HitboxDevilSS1.State.Conns, HitboxDevilSS1.State.Animator.AnimationPlayed:Connect(function(track)
+			if track.Animation and track.Animation.AnimationId then
+				HitboxDevilSS1.OnActionTriggered(track.Animation.AnimationId, track)
+			end
+		end))
+	end
+	
+	table.insert(HitboxDevilSS1.State.Conns, char.DescendantAdded:Connect(function(child)
+		if child:IsA("Sound") then
+			table.insert(HitboxDevilSS1.State.Conns, child.Played:Connect(function()
+				HitboxDevilSS1.OnActionTriggered(child.SoundId, child)
+			end))
+			if child.Playing then HitboxDevilSS1.OnActionTriggered(child.SoundId, child) end
+		end
+	end))
+
+	if HitboxDevilSS1.Config.Enabled and HitboxDevilSS1.Config.Mode == "Hitbox 10shedletsky" then
+		task.defer(HitboxDevilSS1.CreateClone)
+	end
+end
+
+task.spawn(HitboxDevilSS1.ScanKillerAssets)
+HitboxDevilSS1.HookPlayer(playerCharacter)
+localPlayer.CharacterAdded:Connect(HitboxDevilSS1.HookPlayer)
+
+if MyUIElements and MyUIElements.Hitbox then
+	MyUIElements.Hitbox:Dropdown({
+		Title = "loc:SelectMode",
+		Desc = "loc:SelectModeDesc",
+		Flag = "SelectMode_Dropdown",
+		Values = {"Silent Hitbox", "Hitbox 10shedletsky"},
+		Value = "Silent Hitbox",
+		Multi = false,
+		AllowNone = false,
+		Callback = function(mode)
+			HitboxDevilSS1.Config.Mode = mode
+			HitboxDevilSS1.StopReach()
+			if mode == "Hitbox 10shedletsky" and HitboxDevilSS1.Config.Enabled then
+				HitboxDevilSS1.CreateClone()
+			else
+				HitboxDevilSS1.DestroyClone()
+			end
+		end
+	})
+
+	MyUIElements.Hitbox:Dropdown({
+		Title = "loc:ChooseTarget",
+		Desc = "loc:ChooseTargetDesc",
+		Flag = "HitboxReachTarget",
+		Values = {"Killers", "Survivors"},
+		Value = {"Survivors"}, 
+		Multi = true,
+		AllowNone = false,
+		Callback = function(value)
+			HitboxDevilSS1.UpdateTargetModes(value)
+		end
+	})
+
+	MyUIElements.Hitbox:Toggle({
+		Title = "loc:HitboxReach",
+		Desc = "loc:HitboxReachDesc",
+		Flag = "HitboxReach_Toggle",
+		Value = false,
+		Callback = function(state)
+			HitboxDevilSS1.Config.Enabled = state
+			if not state then 
+				HitboxDevilSS1.StopReach() 
+				HitboxDevilSS1.DestroyClone()
+			else
+				if HitboxDevilSS1.Config.Mode == "Hitbox 10shedletsky" then
+					HitboxDevilSS1.CreateClone()
+				end
+			end
+		end,
+	})
+
+	MyUIElements.Hitbox:Input({
+		Title = "loc:HitboxDistance",
+		Desc = "loc:HitboxDistanceDesc",
+		Flag = "HitboxDistance_Input",
+		Placeholder = "60",
+		Value = "60",
+		Callback = function(value)
+			HitboxDevilSS1.State.ParsedDist = tonumber(value)
+			if HitboxDevilSS1.State.ParsedDist then
+				HitboxDevilSS1.Config.Distance = HitboxDevilSS1.State.ParsedDist
+			end
+		end
+	})
+end
+
+ModSkinSystem = {
+    Active = false, 
+    Conn = nil, 
+    Saved = nil,
+    
+    Abilities = {"Slash", "Behead", "GashingWound", "RagingPace"},
+    BodyParts = {"Head", "Torso", "Right Leg", "Left Leg", "Right Arm", "Left Arm"},
+    Killers = ReplicatedStorage:WaitForChild("Assets"):WaitForChild("Killers"),
+    Grox = {
+        Active = false, TargetUser = localPlayer.Name,
+        Shirt = "http://www.roblox.com/asset/?id=136231880460166",
+        Pants = "http://www.roblox.com/asset/?id=83070761982740",
+        HeadAcc = 137083662158076, LMS = "rbxassetid://82350211287565",
+        Render = "rbxassetid://111265486005777", GunFire = "rbxassetid://131047542987599",
+        GunExplode = "rbxassetid://125378423737653", GunVolume = 0.7,
+        Conn = nil, SoundLoop = nil, LMSConn = nil
+    },
+
+    Tuber = {
+        Active = false, TargetName = "c00lkidd", Conn = nil, SoundLoop = nil, ThemeLoop = nil, NeckConn = nil, Assets = {},
+        KillTbl = {"rbxassetid://95829099724404", "rbxassetid://130499159104935", "rbxassetid://98150327458539", "rbxassetid://76125983874457", "rbxassetid://99081289911669", "rbxassetid://96130441593862", "rbxassetid://129971792713796", "rbxassetid://71598859342038", "rbxassetid://84205518608518", "rbxassetid://126510487087796", "rbxassetid://118752854049740", "rbxassetid://106784455859707", "rbxassetid://131717739827974", "rbxassetid://73651367921334", "rbxassetid://107647850299675"},
+        PDTbl = {"rbxassetid://83260878877136", "rbxassetid://129979761093198", "rbxassetid://98481947447411", "rbxassetid://77553956755455", "rbxassetid://124389575913805"},
+        WOTbl = {"rbxassetid://73762171929471", "rbxassetid://98389337191287", "rbxassetid://78461604068568"},
+        WOHitTbl = {"rbxassetid://97100466324703", "rbxassetid://74000375845213"},
+        WOColTbl = {"rbxassetid://111502315377475", "rbxassetid://84340345572285", "rbxassetid://120394605928086"},
+        WOTimeTbl = {"rbxassetid://134973085112081"},
+        StunTbl = {"rbxassetid://120845231654029", "rbxassetid://100629345519622"},
+        NewKill = {}, NewStun = {}, Audios = {}
+    }
+}
+
+ModSkinSystem.Jason = ModSkinSystem.Killers:FindFirstChild("Jason")
+ModSkinSystem.Slasher = ModSkinSystem.Killers:FindFirstChild("Slasher")
+if ModSkinSystem.Jason and ModSkinSystem.Slasher then
+    ModSkinSystem.SCon = require(ModSkinSystem.Slasher.Config)
+    ModSkinSystem.JCon = require(ModSkinSystem.Jason.Config)
+    ModSkinSystem.SBeh = require(ModSkinSystem.Slasher.Behavior)
+    ModSkinSystem.JBeh = require(ModSkinSystem.Jason.Behavior)
+end
+
+ModSkinSystem.D = function(...)
+    for _, v in ipairs({...}) do if v and v.Parent then v:Destroy() end end
+end
+
+ModSkinSystem.CreatePart = function(name, parent, weld, offset)
+    ModSkinSystem.TempPart = Instance.new("Part")
+    ModSkinSystem.TempPart.Name = name
+    ModSkinSystem.TempPart.Massless = true
+    ModSkinSystem.TempPart.Anchored = false
+    ModSkinSystem.TempPart.CanCollide = false
+    ModSkinSystem.TempPart.CanTouch = false
+    ModSkinSystem.TempPart.CanQuery = false
+    if weld then
+        ModSkinSystem.TempWeld = Instance.new("Weld")
+        ModSkinSystem.TempWeld.C0 = offset or CFrame.new(0, 0, 0)
+        ModSkinSystem.TempWeld.Part0 = ModSkinSystem.TempPart
+        ModSkinSystem.TempWeld.Part1 = weld
+        ModSkinSystem.TempWeld.Parent = ModSkinSystem.TempPart
+    end
+    ModSkinSystem.TempPart.Parent = parent
+    return ModSkinSystem.TempPart
+end
+
+ModSkinSystem.Accs = function(AccsName, parent, Mesh, Texture, Scale, CF, Welded, Angle)
+    ModSkinSystem.AccPart = ModSkinSystem.CreatePart(AccsName, parent)
+    ModSkinSystem.AccPart.Size = Vector3.new(1, 1, 1)
+    
+    ModSkinSystem.AccMesh = Instance.new("SpecialMesh")
+    ModSkinSystem.AccMesh.Name = "Mesh"
+    ModSkinSystem.AccMesh.MeshId = Mesh
+    ModSkinSystem.AccMesh.TextureId = Texture
+    ModSkinSystem.AccMesh.Scale = Scale or Vector3.new(1, 1, 1)
+    ModSkinSystem.AccMesh.Parent = ModSkinSystem.AccPart
+
+    ModSkinSystem.AccWeld = Instance.new("Weld")
+    ModSkinSystem.AccWeld.C0 = (CF or CFrame.new(0,0,0)) * (Angle or CFrame.Angles(0,0,0))
+    ModSkinSystem.AccWeld.Part0 = ModSkinSystem.AccPart
+    ModSkinSystem.AccWeld.Part1 = Welded
+    ModSkinSystem.AccWeld.Parent = ModSkinSystem.AccPart
+    return ModSkinSystem.AccPart
+end
+
+ModSkinSystem.Cloth = function(Id1, Id2, Id3, Parent)
+    if Id1 then Instance.new("Shirt", Parent).ShirtTemplate = Id1 end
+    if Id2 then Instance.new("Pants", Parent).PantsTemplate = Id2 end
+    if Id3 then Instance.new("ShirtGraphic", Parent).Graphic = Id3 end
+end
+
+ModSkinSystem.CM = function(BodyPart, ID, parent)
+    ModSkinSystem.Mesh = Instance.new("CharacterMesh", parent)
+    ModSkinSystem.Mesh.Name = BodyPart .. "Mesh"
+    ModSkinSystem.Mesh.MeshId = ID
+    ModSkinSystem.Mesh.BodyPart = Enum.BodyPart[BodyPart]
+end
+
+ModSkinSystem.Backup = function()
+    if not ModSkinSystem.Saved and ModSkinSystem.SCon and ModSkinSystem.SBeh then
+        ModSkinSystem.Saved = {
+            Icons = {}, Theme = ModSkinSystem.SCon.Sounds["TerrorRadiusThemes"],
+            Name = ModSkinSystem.SCon.DisplayName, Image = ModSkinSystem.SCon.RenderImage
+        }
+        for _, name in ipairs(ModSkinSystem.Abilities) do
+            if ModSkinSystem.SBeh.Abilities[name] then ModSkinSystem.Saved.Icons[name] = ModSkinSystem.SBeh.Abilities[name].Icon end
+        end
+    end
+end
+
+ModSkinSystem.ApplyConfig = function(enable)
+    if not (ModSkinSystem.SCon and ModSkinSystem.JCon and ModSkinSystem.SBeh and ModSkinSystem.JBeh) then return end
+    ModSkinSystem.Backup()
+    for _, name in ipairs(ModSkinSystem.Abilities) do
+        if ModSkinSystem.SBeh.Abilities[name] and ModSkinSystem.JBeh.Abilities[name] then
+            ModSkinSystem.SBeh.Abilities[name].Icon = enable and ModSkinSystem.JBeh.Abilities[name].Icon or ModSkinSystem.Saved.Icons[name]
+        end
+    end
+    ModSkinSystem.SCon.Sounds["TerrorRadiusThemes"] = enable and ModSkinSystem.JCon.Sounds.TerrorRadiusThemes or ModSkinSystem.Saved.Theme
+    ModSkinSystem.SCon.DisplayName = enable and "Jason" or ModSkinSystem.Saved.Name
+    ModSkinSystem.SCon.RenderImage = enable and ModSkinSystem.JCon.RenderImage or ModSkinSystem.Saved.Image
+end
+
+ModSkinSystem.DoJasonMorph = function(P)
+    if not ModSkinSystem.Active or not P or P.Name ~= "Slasher" or P:GetAttribute("SkinName") ~= "" then return end
+    for _, v in ipairs(ModSkinSystem.BodyParts) do
+        ModSkinSystem.Part = P:FindFirstChild(v)
+        if ModSkinSystem.Part then
+            ModSkinSystem.Part.Transparency = 0
+            ModSkinSystem.Part.BrickColor = BrickColor.new(v == "Head" and "Really black" or "Black")
+        end
+    end
+    ModSkinSystem.D(P:FindFirstChild("Slasher Export"), P:FindFirstChild("Chainsaw") and P.Chainsaw:FindFirstChild("Note"), P:FindFirstChild("Mask"))
+    if P:FindFirstChild("Machete") then P.Machete.Transparency = 1 end
+    if P:FindFirstChild("Chainsaw") then P.Chainsaw.Transparency = 1 end
+
+    ModSkinSystem.Cloth("http://www.roblox.com/asset/?id=1502643168", "http://www.roblox.com/asset/?id=1502651303", nil, P)
+
+    if P:FindFirstChild("Head") then ModSkinSystem.Accs("Mask", P, "http://www.roblox.com/asset/?id=5158270", "http://www.roblox.com/asset/?id=5158267", Vector3.new(0.13, 0.13, 0.1), CFrame.new(0, -0.6, 0), P.Head, CFrame.Angles(math.pi/2, 0, 0)) end
+    if P:FindFirstChild("Machete") then ModSkinSystem.Accs("OldMachete", P.Machete, "rbxassetid://441575918", "rbxassetid://441575955", Vector3.new(0.016, 0.016, 0.016), nil, P.Machete, CFrame.Angles(0, -math.pi/2, 0)) end
+    if P:FindFirstChild("Chainsaw") then ModSkinSystem.Accs("OldChainsaw", P.Chainsaw, "http://www.roblox.com/asset/?id=2766469", "rbxasset://textures/SwordTexture.png", Vector3.new(0.89, 0.89, 1.157), nil, P.Chainsaw, CFrame.Angles(-math.pi/2, math.pi/2, 0)) end
+end
+
+ModSkinSystem.RemoveName = function(char, name)
+    for _, v in ipairs(char:GetDescendants()) do if v.Name == name then ModSkinSystem.D(v) end end
+end
+
+ModSkinSystem.LoadGroxAcc = function(id, char, parentName, cf)
+    if not id or id == 0 then return end
+    ModSkinSystem.AccModel = nil
+    ModSkinSystem.Ok, ModSkinSystem.Result = pcall(function() return game:GetObjects("rbxassetid://" .. id)[1] end)
+    if ModSkinSystem.Ok and ModSkinSystem.Result then ModSkinSystem.AccModel = ModSkinSystem.Result else
+        ModSkinSystem.Ok, ModSkinSystem.Result = pcall(function() return InsertService:LoadAsset(id) end)
+        if ModSkinSystem.Ok and ModSkinSystem.Result then
+            ModSkinSystem.AccModel = ModSkinSystem.Result:GetChildren()[1]
+            ModSkinSystem.D(ModSkinSystem.Result)
+        end
+    end
+    if not ModSkinSystem.AccModel then return end
+    ModSkinSystem.AccModel.Parent = char
+    ModSkinSystem.Handle = ModSkinSystem.AccModel:FindFirstChild("Handle") or ModSkinSystem.AccModel:FindFirstChild("Mão")
+    ModSkinSystem.TargetParent = char:FindFirstChild(parentName)
+    if not (ModSkinSystem.Handle and ModSkinSystem.TargetParent) then return end
+    
+    ModSkinSystem.Att0 = ModSkinSystem.Handle:FindFirstChildOfClass("Attachment") or Instance.new("Attachment", ModSkinSystem.Handle)
+    ModSkinSystem.Att1 = Instance.new("Attachment", ModSkinSystem.TargetParent)
+    ModSkinSystem.Att1.CFrame = cf or CFrame.new()
+
+    ModSkinSystem.AP = Instance.new("AlignPosition", ModSkinSystem.Handle)
+    ModSkinSystem.AP.Attachment0 = ModSkinSystem.Att0
+    ModSkinSystem.AP.Attachment1 = ModSkinSystem.Att1
+    ModSkinSystem.AP.MaxForce, ModSkinSystem.AP.Responsiveness = 9e6, 200
+
+    ModSkinSystem.AO = Instance.new("AlignOrientation", ModSkinSystem.Handle)
+    ModSkinSystem.AO.Attachment0 = ModSkinSystem.Att0
+    ModSkinSystem.AO.Attachment1 = ModSkinSystem.Att1
+    ModSkinSystem.AO.MaxTorque, ModSkinSystem.AO.Responsiveness = 9e6, 200
+
+    ModSkinSystem.Handle.Anchored, ModSkinSystem.Handle.CanCollide, ModSkinSystem.Handle.Massless = false, false, true
+end
+
+ModSkinSystem.PlayGroxSfx = function(id, parent)
+    if not parent or not id or id == "" then return end
+    ModSkinSystem.TempSfx = Instance.new("Sound")
+    ModSkinSystem.TempSfx.SoundId, ModSkinSystem.TempSfx.Volume, ModSkinSystem.TempSfx.MaxDistance = id, ModSkinSystem.Grox.GunVolume, 80
+    ModSkinSystem.TempSfx.Parent = parent
+    ModSkinSystem.TempSfx:Play()
+    Debris:AddItem(ModSkinSystem.TempSfx, math.max(ModSkinSystem.TempSfx.TimeLength + 0.3, 2))
+end
+
+ModSkinSystem.HookGroxSounds = function(char)
+    if ModSkinSystem.Grox.SoundLoop then ModSkinSystem.Grox.SoundLoop:Disconnect() ModSkinSystem.Grox.SoundLoop = nil end
+    ModSkinSystem.Prim = char.PrimaryPart or char:FindFirstChild("HumanoidRootPart")
+    if not ModSkinSystem.Prim then return end
+
+    ModSkinSystem.HandleSound = function(v)
+        if not v:IsA("Sound") then return end
+        ModSkinSystem.SName, ModSkinSystem.ReplaceId = string.lower(v.Name), nil
+        if v.SoundId == "rbxassetid://121120408563206" then ModSkinSystem.ReplaceId = ModSkinSystem.Grox.GunFire
+        elseif v.SoundId == "rbxassetid://2814355346" or string.find(ModSkinSystem.SName, "explode") then ModSkinSystem.ReplaceId = ModSkinSystem.Grox.GunExplode
+        elseif string.find(ModSkinSystem.SName, "fire") or string.find(ModSkinSystem.SName, "shoot") then ModSkinSystem.ReplaceId = ModSkinSystem.Grox.GunFire end
+
+        if ModSkinSystem.ReplaceId then
+            v:Stop()
+            v.Volume = 0
+            ModSkinSystem.PlayGroxSfx(ModSkinSystem.ReplaceId, ModSkinSystem.Prim)
+        end
+    end
+    ModSkinSystem.Grox.SoundLoop = ModSkinSystem.Prim.ChildAdded:Connect(ModSkinSystem.HandleSound)
+    char.DescendantAdded:Connect(ModSkinSystem.HandleSound)
+end
+
+ModSkinSystem.ApplyGroxConfig = function()
+    if not ModSkinSystem.Grox.Active then return end
+    ModSkinSystem.Ok, ModSkinSystem.ChanceCfg = pcall(function() return require(ReplicatedStorage.Assets.Survivors.Chance.Config) end)
+    if not ModSkinSystem.Ok then ModSkinSystem.Ok, ModSkinSystem.ChanceCfg = pcall(function() return require(ReplicatedStorage.Assets.Skins.Survivors.Chance.Config) end) end
+    
+    if ModSkinSystem.Ok and ModSkinSystem.ChanceCfg then
+        ModSkinSystem.ChanceCfg.DisplayName, ModSkinSystem.ChanceCfg.RenderImage, ModSkinSystem.ChanceCfg.Quote = "GROX", ModSkinSystem.Grox.Render, "Ayo chill"
+        ModSkinSystem.ChanceCfg.Animations = ModSkinSystem.ChanceCfg.Animations or {}
+        ModSkinSystem.ChanceCfg.Animations.FlipCoinHeads, ModSkinSystem.ChanceCfg.Animations.AimGun, ModSkinSystem.ChanceCfg.Animations.GunFire = "rbxassetid://114902144256285", "rbxassetid://111512633767170", "rbxassetid://76035333728317"
+        ModSkinSystem.ChanceCfg.LastManStandingData = { ThemeID = ModSkinSystem.Grox.LMS, RoundTime = 78 }
+        ModSkinSystem.ChanceCfg.Sounds = ModSkinSystem.ChanceCfg.Sounds or {}
+        ModSkinSystem.ChanceCfg.Sounds.GunFireSuccessSFX, ModSkinSystem.ChanceCfg.Sounds.GunExplodeSFX = ModSkinSystem.Grox.GunFire, ModSkinSystem.Grox.GunExplode
+        if ModSkinSystem.ChanceCfg.LMSEffect then ModSkinSystem.ChanceCfg.LMSEffect.ImageId = function() return ModSkinSystem.Grox.Render end end
+    end
+end
+
+ModSkinSystem.DoGroxMorph = function(char)
+    if not ModSkinSystem.Grox.Active or not char or char.Name ~= "Chance" or char:GetAttribute("Username") ~= ModSkinSystem.Grox.TargetUser then return end
+    ModSkinSystem.RemoveName(char, "Chance") ModSkinSystem.RemoveName(char, "Hat") ModSkinSystem.RemoveName(char, "Cool") ModSkinSystem.RemoveName(char, "FakeCrown")
+    if char:FindFirstChild("Head") then char.Head.Transparency = 1 end
+    for _, v in ipairs(char:GetChildren()) do if v:IsA("Shirt") or v:IsA("Pants") or v:IsA("ShirtGraphic") then ModSkinSystem.D(v) end end
+    ModSkinSystem.Cloth(ModSkinSystem.Grox.Shirt, ModSkinSystem.Grox.Pants, nil, char)
+    
+    task.wait(0.3)
+    if ModSkinSystem.Grox.Active then
+        ModSkinSystem.LoadGroxAcc(ModSkinSystem.Grox.HeadAcc, char, "Head", CFrame.new(0, 0.45, 0))
+        ModSkinSystem.HookGroxSounds(char)
+    end
+end
+
+ModSkinSystem.SetupGroxLMS = function()
+    ModSkinSystem.ThemesFolder = Workspace:FindFirstChild("Themes")
+    if not ModSkinSystem.ThemesFolder then return end
+    ModSkinSystem.OnLastSurvivor = function(sound)
+        if not sound:IsA("Sound") or sound.Name ~= "LastSurvivor" then return end
+        ModSkinSystem.SurvsF = Workspace:FindFirstChild("Players") and Workspace.Players:FindFirstChild("Survivors")
+        ModSkinSystem.PlayingChance = false
+        if ModSkinSystem.SurvsF then
+            for _, child in ipairs(ModSkinSystem.SurvsF:GetChildren()) do
+                if child.Name == "Chance" and child:GetAttribute("Username") == ModSkinSystem.Grox.TargetUser then ModSkinSystem.PlayingChance = true break end
+            end
+        end
+        if ModSkinSystem.PlayingChance then task.defer(function() if sound.Parent and ModSkinSystem.Grox.Active then sound.SoundId = ModSkinSystem.Grox.LMS end end) end
+    end
+
+    if ModSkinSystem.Grox.LMSConn then ModSkinSystem.Grox.LMSConn:Disconnect() end
+    if ModSkinSystem.ThemesFolder:FindFirstChild("LastSurvivor") then ModSkinSystem.OnLastSurvivor(ModSkinSystem.ThemesFolder.LastSurvivor) end
+    ModSkinSystem.Grox.LMSConn = ModSkinSystem.ThemesFolder.ChildAdded:Connect(ModSkinSystem.OnLastSurvivor)
+end
+
+ModSkinSystem.CheckGrox = function()
+    if not ModSkinSystem.Grox.Active then return end
+    ModSkinSystem.SurvsFolder = Workspace:FindFirstChild("Players") and Workspace.Players:FindFirstChild("Survivors")
+    if not ModSkinSystem.SurvsFolder then return end
+    ModSkinSystem.TryApplyGrox = function(child)
+        if child.Name == "Chance" then
+            task.wait(0.8)
+            if ModSkinSystem.Grox.Active and child:GetAttribute("Username") == ModSkinSystem.Grox.TargetUser then ModSkinSystem.ApplyGroxConfig() ModSkinSystem.DoGroxMorph(child) end
+        end
+    end
+    for _, child in ipairs(ModSkinSystem.SurvsFolder:GetChildren()) do ModSkinSystem.TryApplyGrox(child) end
+    if ModSkinSystem.Grox.Conn then ModSkinSystem.Grox.Conn:Disconnect() end
+    ModSkinSystem.Grox.Conn = ModSkinSystem.SurvsFolder.ChildAdded:Connect(ModSkinSystem.TryApplyGrox)
+end
+
+ModSkinSystem.GetCustomAsset = function(link, name)
+    if ModSkinSystem.Tuber.Assets[name] then return ModSkinSystem.Tuber.Assets[name] end
+    if isfile and writefile and getcustomasset then
+        if not isfile(name) then writefile(name, game:HttpGet(link)) end
+        ModSkinSystem.Tuber.Assets[name] = getcustomasset(name)
+        return ModSkinSystem.Tuber.Assets[name]
+    end
+    return ""
+end
+
+ModSkinSystem.LoadTuberAssets = function()
+    if #ModSkinSystem.Tuber.NewKill > 0 then return end 
+    ModSkinSystem.Tuber.Audios.LMS = ModSkinSystem.GetCustomAsset("https://raw.githubusercontent.com/module-upvr/Others/refs/heads/main/TuberLMS.mp3", "TuberLMS.mp3")
+    ModSkinSystem.Tuber.Audios.PD = ModSkinSystem.GetCustomAsset("https://raw.githubusercontent.com/module-upvr/Others/refs/heads/main/TuberPD.mp3", "TuberPD.mp3")
+    ModSkinSystem.Tuber.Audios.WO = ModSkinSystem.GetCustomAsset("https://raw.githubusercontent.com/module-upvr/Others/refs/heads/main/TuberWO.mp3", "TuberWO.mp3")
+    ModSkinSystem.Tuber.Audios.WOCrash = ModSkinSystem.GetCustomAsset("https://raw.githubusercontent.com/module-upvr/Others/refs/heads/main/TuberWOCrash.mp3", "TuberWOCrash.mp3")
+    ModSkinSystem.Tuber.Audios.WOMiss = ModSkinSystem.GetCustomAsset("https://raw.githubusercontent.com/module-upvr/Others/refs/heads/main/TuberWOMiss.mp3", "TuberWOMiss.mp3")
+    ModSkinSystem.Tuber.Audios.Chase = ModSkinSystem.GetCustomAsset("https://raw.githubusercontent.com/module-upvr/Others/refs/heads/main/TuberChaseTheme.mp3", "TuberChaseTheme.mp3")
+    
+    for i = 1, 4 do table.insert(ModSkinSystem.Tuber.NewKill, ModSkinSystem.GetCustomAsset("https://raw.githubusercontent.com/module-upvr/Others/refs/heads/main/TuberKill".. (i==1 and "" or tostring(i)) ..".mp3", "TuberKill"..i..".mp3")) end
+    table.insert(ModSkinSystem.Tuber.NewStun, ModSkinSystem.GetCustomAsset("https://raw.githubusercontent.com/module-upvr/Others/refs/heads/main/TuberStun.mp3", "TuberStun.mp3"))
+    table.insert(ModSkinSystem.Tuber.NewStun, ModSkinSystem.GetCustomAsset("https://raw.githubusercontent.com/module-upvr/Others/refs/heads/main/TuberStun2.mp3", "TuherStun2.mp3"))
+end
+
+ModSkinSystem.ApplyTuberConfig = function(enable)
+    ModSkinSystem.Ok, ModSkinSystem.TuberCfg = pcall(function() return require(ReplicatedStorage.Assets.Killers.c00lkidd.Config) end)
+    if not ModSkinSystem.Ok or not ModSkinSystem.TuberCfg then return end
+    if enable then
+        ModSkinSystem.TuberCfg.Animations = ModSkinSystem.TuberCfg.Animations or {}
+        ModSkinSystem.TuberCfg.Animations.Idle, ModSkinSystem.TuberCfg.Animations.Walk, ModSkinSystem.TuberCfg.Animations.Run = "rbxassetid://72141724360065", "rbxassetid://131587098979198", "rbxassetid://140644979041384"
+        ModSkinSystem.TuberCfg.Animations.Attack, ModSkinSystem.TuberCfg.Animations.CorruptNature = "rbxassetid://86510482379594", "rbxassetid://124243639579224"
+        ModSkinSystem.TuberCfg.Animations.Execution = { KillerRig = "rbxassetid://80362588339860", PlayerRig = "rbxassetid://133811491007623" }
+    end
+end
+
+ModSkinSystem.DoTuberMorph = function(P)
+    if not ModSkinSystem.Tuber.Active or P.Name ~= ModSkinSystem.Tuber.TargetName or P:GetAttribute("SkinName") ~= "" then return end
+    for _, v in ipairs(ModSkinSystem.BodyParts) do
+        ModSkinSystem.Part = P:FindFirstChild(v)
+        if ModSkinSystem.Part then
+            ModSkinSystem.Part.Transparency, ModSkinSystem.Part.Color = 0, Color3.fromRGB(255,255,255)
+            ModSkinSystem.Part.Size = Vector3.new(math.round(ModSkinSystem.Part.Size.X / 1.121), math.round(ModSkinSystem.Part.Size.Y / 1.121), math.round(ModSkinSystem.Part.Size.Z / 1.121))
+        end
+    end
+
+    ModSkinSystem.D(P:FindFirstChild("cool"), P:FindFirstChild("HumanoidRootPart") and P.HumanoidRootPart:FindFirstChild("rbxassetid://98541221291764"))
+
+    if P:FindFirstChild("Head") and P.Head:FindFirstChild("Mesh") then
+        P.Head.Mesh.MeshId, P.Head.Mesh.Scale = "rbxassetid://8635368147", Vector3.new(1, 1, 1)
+        ModSkinSystem.Face = P.Head:FindFirstChildOfClass("Decal") or Instance.new("Decal", P.Head)
+        ModSkinSystem.Face.Texture = "rbxasset://textures/face.png"
+    end
+
+    if P:FindFirstChild("firebrand") and P.firebrand:FindFirstChild("Mesh") then
+        P.firebrand.Mesh.MeshId, P.firebrand.Mesh.TextureId = "http://www.roblox.com/asset/?id=95891318", "http://www.roblox.com/asset/?id=133863187"
+        P.firebrand.Mesh.VertexColor, P.firebrand.Mesh.Scale = Vector3.new(1, 1, 1), Vector3.new(0.8, 0.8, 0.8)
+    end
+    
+    if P:FindFirstChild("Left Arm") and P["Left Arm"]:FindFirstChild("firebrand") then P["Left Arm"].firebrand.C0 = CFrame.new(0.015, -1.8, -5.5) * CFrame.Angles(-math.pi, -math.pi/2, -math.pi/2) end
+
+    if P:FindFirstChild("Torso") and P.Torso:FindFirstChild("Neck") then
+        ModSkinSystem.TargetC0 = CFrame.new(0, 0.95, 0) * CFrame.Angles(-math.pi/2, 0, -math.pi)
+        P.Torso.Neck.C0 = ModSkinSystem.TargetC0
+        if ModSkinSystem.Tuber.NeckConn then ModSkinSystem.Tuber.NeckConn:Disconnect() end
+        ModSkinSystem.Tuber.NeckConn = P.Torso.Neck:GetPropertyChangedSignal("C0"):Connect(function() if P.Torso.Neck.C0 ~= ModSkinSystem.TargetC0 then P.Torso.Neck.C0 = ModSkinSystem.TargetC0 end end)
+    end
+
+    ModSkinSystem.Cloth("http://www.roblox.com/asset/?id=9415501529", "http://www.roblox.com/asset/?id=144076759", nil, P)
+    ModSkinSystem.CM("Torso", "82907945", P) ModSkinSystem.CM("LeftArm", "82907977", P) ModSkinSystem.CM("RightArm", "82908019", P) ModSkinSystem.CM("LeftLeg", "81487640", P) ModSkinSystem.CM("RightLeg", "81487710", P)
+
+    if P:FindFirstChild("Head") then
+        ModSkinSystem.Accs("Shades", P, "rbxassetid://4074491872", "http://www.roblox.com/asset/?id=4074505370", nil, CFrame.new(0, -0.325, 0.226), P.Head, nil)
+        ModSkinSystem.Accs("BaconHair", P, "http://www.roblox.com/asset/?id=83293901", "rbxassetid://6858317867", Vector3.new(1, 1.05, 1), CFrame.new(0, -0.25, 0.25), P.Head, nil)
+    end
+end
+
+ModSkinSystem.HookTuberSounds = function(char)
+    if ModSkinSystem.Tuber.SoundLoop then ModSkinSystem.Tuber.SoundLoop:Disconnect() ModSkinSystem.Tuber.SoundLoop = nil end
+    ModSkinSystem.HRP = char:FindFirstChild("HumanoidRootPart")
+    if not ModSkinSystem.HRP then return end
+    ModSkinSystem.Tuber.SoundLoop = ModSkinSystem.HRP.ChildAdded:Connect(function(v)
+        if not v:IsA("Sound") or v.Name ~= "VoicelineSFX" or not ModSkinSystem.Tuber.Active then return end
+        if table.find(ModSkinSystem.Tuber.KillTbl, v.SoundId) then v.SoundId = ModSkinSystem.Tuber.NewKill[math.random(1, 4)]
+        elseif table.find(ModSkinSystem.Tuber.PDTbl, v.SoundId) then v.SoundId = ModSkinSystem.Tuber.Audios.PD
+        elseif table.find(ModSkinSystem.Tuber.WOTbl, v.SoundId) then v.SoundId = ModSkinSystem.Tuber.Audios.WO
+        elseif table.find(ModSkinSystem.Tuber.WOColTbl, v.SoundId) then v.SoundId = ModSkinSystem.Tuber.Audios.WOCrash
+        elseif table.find(ModSkinSystem.Tuber.WOTimeTbl, v.SoundId) then v.SoundId = ModSkinSystem.Tuber.Audios.WOMiss
+        elseif table.find(ModSkinSystem.Tuber.StunTbl, v.SoundId) then v.SoundId = ModSkinSystem.Tuber.NewStun[math.random(1, 2)]
+        else v:Stop() ModSkinSystem.D(v) return end
+        v:Play()
+    end)
+end
+
+ModSkinSystem.HookTuberThemes = function()
+    if ModSkinSystem.Tuber.ThemeLoop then ModSkinSystem.Tuber.ThemeLoop:Disconnect() ModSkinSystem.Tuber.ThemeLoop = nil end
+    ModSkinSystem.ThemesF = Workspace:FindFirstChild("Themes")
+    if not ModSkinSystem.ThemesF then return end
+    ModSkinSystem.Tuber.ThemeLoop = ModSkinSystem.ThemesF.ChildAdded:Connect(function(v)
+        if not v:IsA("Sound") or not ModSkinSystem.Tuber.Active then return end
+        if v.Name == "LastSurvivor" or v.SoundId == "rbxassetid://80564889711353" then v.SoundId = ModSkinSystem.Tuber.Audios.LMS v:Play()
+        elseif v.SoundId == "rbxassetid://72867661507332" then v.SoundId = ModSkinSystem.Tuber.Audios.Chase v:Play() end
+    end)
+end
+
+MyUIElements.ModSkin:Toggle({
+    Title = "loc:SkinJason", Desc = "loc:SkinJasonDesc", Flag = "ModSkinSlasherJason", Value = false,
+    Callback = function(state)
+        ModSkinSystem.Active = state
+        ModSkinSystem.ApplyConfig(state)
+        if ModSkinSystem.Conn then ModSkinSystem.Conn:Disconnect() ModSkinSystem.Conn = nil end
+        if state then
+            ModSkinSystem.Conn = localPlayer.CharacterAdded:Connect(function(Rig) ModSkinSystem.DoJasonMorph(Rig) end)
+            if localPlayer.Character then ModSkinSystem.DoJasonMorph(localPlayer.Character) end
+        end
+    end
+})
+
+MyUIElements.ModSkin:Toggle({
+    Title = "loc:SkinGrox", Desc = "loc:SkinGroxDesc", Flag = "ModSkinChanceGrox", Value = false,
+    Callback = function(state)
+        ModSkinSystem.Grox.Active = state
+        if state then
+            ModSkinSystem.SetupGroxLMS() ModSkinSystem.CheckGrox()
+            if localPlayer.Character then task.spawn(function() task.wait(1) ModSkinSystem.CheckGrox() end) end
+        else
+            if ModSkinSystem.Grox.Conn then ModSkinSystem.Grox.Conn:Disconnect() ModSkinSystem.Grox.Conn = nil end
+            if ModSkinSystem.Grox.LMSConn then ModSkinSystem.Grox.LMSConn:Disconnect() ModSkinSystem.Grox.LMSConn = nil end
+            if ModSkinSystem.Grox.SoundLoop then ModSkinSystem.Grox.SoundLoop:Disconnect() ModSkinSystem.Grox.SoundLoop = nil end
+        end
+    end
+})
+
+MyUIElements.ModSkin:Toggle({
+    Title = "Skin Tubers93", Desc = "Đổi c00lkidd thành Tubers93", Flag = "ModSkinTuber", Value = false,
+    Callback = function(state)
+        ModSkinSystem.Tuber.Active = state
+        if state then
+            ModSkinSystem.LoadTuberAssets() ModSkinSystem.ApplyTuberConfig(true) ModSkinSystem.HookTuberThemes()
+            if ModSkinSystem.Tuber.Conn then ModSkinSystem.Tuber.Conn:Disconnect() end
+            ModSkinSystem.Tuber.Conn = localPlayer.CharacterAdded:Connect(function(Rig) ModSkinSystem.DoTuberMorph(Rig) ModSkinSystem.HookTuberSounds(Rig) end)
+            if localPlayer.Character then ModSkinSystem.DoTuberMorph(localPlayer.Character) ModSkinSystem.HookTuberSounds(localPlayer.Character) end
+        else
+            if ModSkinSystem.Tuber.Conn then ModSkinSystem.Tuber.Conn:Disconnect() ModSkinSystem.Tuber.Conn = nil end
+            if ModSkinSystem.Tuber.SoundLoop then ModSkinSystem.Tuber.SoundLoop:Disconnect() ModSkinSystem.Tuber.SoundLoop = nil end
+            if ModSkinSystem.Tuber.ThemeLoop then ModSkinSystem.Tuber.ThemeLoop:Disconnect() ModSkinSystem.Tuber.ThemeLoop = nil end
+            if ModSkinSystem.Tuber.NeckConn then ModSkinSystem.Tuber.NeckConn:Disconnect() ModSkinSystem.Tuber.NeckConn = nil end
+            ModSkinSystem.ApplyTuberConfig(false)
         end
     end
 })
@@ -10027,9 +11832,9 @@ function ConfigSys.CreateBtn(actionType, title, desc, e1, e2, e3, icon)
     })
 end
 
+ConfigSys.CreateBtn("Load", "loc:Load_Config", "loc:Load_Config_Desc", "loc:Config_Content6", "loc:Config_Content7", "loc:Config_Content8", "check")
 ConfigSys.CreateBtn("Make", "loc:Make_Config", "loc:Make_Config_Desc", "loc:Config_Content", "loc:Config_Content1", "loc:Config_Content2", "check")
 ConfigSys.CreateBtn("Update", "loc:Update_Config", "loc:Update_Config_Content", "loc:Config_Content3", "loc:Config_Content4", "loc:Config_Content5", "refresh-cw")
-ConfigSys.CreateBtn("Load", "loc:Load_Config", "loc:Load_Config_Desc", "loc:Config_Content6", "loc:Config_Content7", "loc:Config_Content8", "check")
 ConfigSys.CreateBtn("Delete", "loc:Delete_Config", "loc:Delete_Config_Desc", "loc:Config_Content9", "loc:Config_Content10", "loc:Config_Content11", "trash")
 
 getgenv().showpingandfps = getgenv().showpingandfps ~= false
